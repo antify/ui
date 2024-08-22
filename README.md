@@ -1,27 +1,14 @@
-# pvs-template
+# Antify UI
 
-This template should help get you started developing with Vue 3 in Vite.
+The antify ui is a vue component library for applications based on tailwindcss.
 
-## Project Setup
+# Development
 
-```sh
-pnpm i
+```
+pnpm i && pnpm dev
 ```
 
-### Compile and Hot-Reload for Development
+## Useful links:
 
-```sh
-pnpm dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-pnpm build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-pnpm test:unit
-```
+- Chromatic docu: https://www.chromatic.com/docs/
+- Storybook docu: https://storybook.js.org/docs/vue/get-started/introduction
