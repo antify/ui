@@ -47,6 +47,9 @@ import AntSelect from './inputs/AntSelect.vue';
 import AntSwitch from './inputs/AntSwitch.vue';
 import AntSwitcher from './inputs/AntSwitcher.vue';
 import AntTagInput from './inputs/AntTagInput.vue';
+import AntTextarea from './inputs/AntTextarea.vue';
+import AntTextInput from './inputs/AntTextInput.vue';
+import AntUnitInput from './inputs/AntUnitInput.vue';
 
 // Layouts
 import AntNavLeftLayout from './layouts/AntNavLeftLayout.vue';
@@ -122,6 +125,9 @@ export {
   AntSwitch,
   AntSwitcher,
   AntTagInput,
+  AntTextarea,
+  AntTextInput,
+  AntUnitInput,
   AntNavLeftLayout,
   AntNavbar,
   AntNavbarItem,
