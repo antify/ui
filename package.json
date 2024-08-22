@@ -1,7 +1,7 @@
 {
   "name": "@antify/ui",
   "version": "1.0.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "scripts": {
     "dev": "storybook dev -p 6006 --no-open",
