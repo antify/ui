@@ -88,6 +88,7 @@
     "chromatic": "^11.7.1",
     "jsdom": "^24.1.0",
     "npm-run-all2": "^6.2.0",
+    "standard-version": "^9.5.0",
     "storybook": "^8.2.9",
     "storybook-vue3-router": "^5.0.0",
     "typescript": "~5.4.0",
