@@ -1,0 +1,7 @@
+antify/codex:
+  - source: .editorconfig
+    dest: .editorconfig
+  - source: .eslintrc.cjs
+    dest: .eslintrc.cjs
+  - source: .github/workflows/sync-codex-files.yml
+    dest: .github/workflows/sync-codex-files.yml
