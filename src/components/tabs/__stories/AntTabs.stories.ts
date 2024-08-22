@@ -1,14 +1,17 @@
 import {type Meta, type StoryObj} from '@storybook/vue3';
 import AntTabs from '../AntTabs.vue';
+import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
+import AntFormGroup from '../../forms/AntFormGroup.vue';
 import {ref} from 'vue';
 import {faUserCircle} from '@fortawesome/free-regular-svg-icons';
 import {TabItemState} from '../__types/AntTabItem.types';
+import {vueRouter} from 'storybook-vue3-router';
 
 const meta: Meta<typeof AntTabs> = {
   title: 'Components/Tabs',
   component: AntTabs,
   parameters: {controls: {sort: 'requiredFirst'}},
-  decorators: [() => ({template: '<div class="border border-neutral-300 border-dashed"><story /></div>'})],
+  decorators: [vueRouter()],
   argTypes: {
     modelValue: {
       control: 'text',
@@ -32,7 +35,9 @@ export const Docs: Story = {
       return {args};
     },
     template: `
-      <AntTabs v-bind="args" v-model="args.modelValue"/>
+      <div class="dashed">
+        <AntTabs v-bind="args" v-model="args.modelValue"/>
+      </div>
     `
   }),
   args: {
@@ -64,7 +69,7 @@ export const FixedHeight: Story = {
       return {args};
     },
     template: `
-      <div class="h-20">
+      <div class="dashed h-20">
         <AntTabs v-bind="args" v-model="args.modelValue"/>
       </div>
     `
@@ -98,9 +103,9 @@ export const DifferentStates: Story = {
   }
 };
 
-export const Overview: Story = {
+export const Summary: Story = {
   render: (args) => ({
-    components: {AntTabs},
+    components: {AntTabs, AntFormGroupLabel, AntFormGroup},
     setup() {
       const value_1 = ref();
       const value_2 = ref();
@@ -112,7 +117,6 @@ export const Overview: Story = {
           label: 'My account',
         },
       ];
-
       const tabItems_2 = [
         {
           id: '1',
@@ -125,7 +129,6 @@ export const Overview: Story = {
           label: 'Downloads',
         },
       ];
-
       const tabItems_3 = [
         {
           id: '1',
@@ -161,25 +164,26 @@ export const Overview: Story = {
       };
     },
     template: `
-      <div>Default:</div>
-      <div class="flex flex-col gap-3 flex-nowrap">
-        <AntTabs v-model="value_1" :tab-items="tabItems_1"/>
-        <AntTabs v-model="value_2" :tab-items="tabItems_2"/>
-        <AntTabs v-model="value_3" :tab-items="tabItems_3"/>
-      </div>
+      <AntFormGroup>
+        <AntFormGroupLabel>Default</AntFormGroupLabel>
+        <AntFormGroup>
+          <div class="dashed"><AntTabs v-model="value_1" :tab-items="tabItems_1"/></div>
+          <div class="dashed"><AntTabs v-model="value_2" :tab-items="tabItems_2"/></div>
+          <div class="dashed"><AntTabs v-model="value_3" :tab-items="tabItems_3"/></div>
+        </AntFormGroup>
 
-      <div class="mt-8">Expanded:</div>
-      <div class="flex flex-col gap-3 flex-nowrap">
-        <AntTabs v-model="value_1" :tab-items="tabItems_1" expanded separators/>
-        <AntTabs v-model="value_2" :tab-items="tabItems_2" expanded separators/>
-        <AntTabs v-model="value_3" :tab-items="tabItems_3" expanded separators/>
-      </div>
+        <AntFormGroupLabel>Expanded</AntFormGroupLabel>
+        <AntFormGroup>
+          <div class="dashed"><AntTabs v-model="value_1" :tab-items="tabItems_1" expanded separators/></div>
+          <div class="dashed"><AntTabs v-model="value_2" :tab-items="tabItems_2" expanded separators/></div>
+          <div class="dashed"><AntTabs v-model="value_3" :tab-items="tabItems_3" expanded separators/></div>
+        </AntFormGroup>
 
-      <div class="mt-8">Larger container:</div>
-
-      <div class="h-16 bg-primary-500">
-        <AntTabs v-model="value_3" :tab-items="tabItems_3" expanded separators/>
-      </div>
+        <AntFormGroupLabel>Larger container</AntFormGroupLabel>
+        <div class="h-16 dashed">
+          <AntTabs v-model="value_3" :tab-items="tabItems_3" expanded separators/>
+        </div>
+      </AntFormGroup>
     `
   }),
   args: {}

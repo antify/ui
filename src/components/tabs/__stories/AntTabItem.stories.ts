@@ -1,12 +1,16 @@
 import {type Meta, type StoryObj} from '@storybook/vue3';
 import AntTabItem from '../AntTabItem.vue';
 import {TabItemState} from '../__types/AntTabItem.types';
+import {vueRouter} from 'storybook-vue3-router';
 
 const meta: Meta<typeof AntTabItem> = {
   title: 'Components/Tab Item',
   component: AntTabItem,
   parameters: {controls: {sort: 'requiredFirst'}},
-  decorators: [() => ({template: '<div class="border border-neutral-300 border-dashed"><story /></div>'})],
+  decorators: [
+    () => ({template: '<div class="dashed"><story /></div>'}),
+    vueRouter()
+  ],
   argTypes: {
     showIcon: {
       control: 'boolean',
