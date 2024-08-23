@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.4](https://github.com/antify/ui/compare/v1.0.3...v1.0.4) (2024-08-23)
+
+
+### Bug Fixes
+
+* export missing AntCard ([53f28c8](https://github.com/antify/ui/commit/53f28c8f70a96b2b012de640e6ca856f3aabef19))
+
 ### [1.0.3](https://github.com/antify/ui/compare/v1.0.2...v1.0.3) (2024-08-23)
 
 
