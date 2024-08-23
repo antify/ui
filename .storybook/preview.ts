@@ -9,6 +9,7 @@ setup((app) => {
 
 const preview: Preview = {
   parameters: {
+    chromatic: { disableSnapshot: true },
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -18,7 +19,4 @@ const preview: Preview = {
   },
 };
 
-export default {
-  chromatic: { disableSnapshot: true },
-  ...preview
-};
+export default preview;
