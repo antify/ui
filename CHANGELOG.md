@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.3](https://github.com/antify/ui/compare/v1.0.2...v1.0.3) (2024-08-23)
+
+
+### Bug Fixes
+
+* **CI:** Add missing prepack script ([e09454d](https://github.com/antify/ui/commit/e09454d7fa8426f28a2202091f30069a7a2975ab))
+
 ### [1.0.2](https://github.com/antify/ui/compare/v1.0.1...v1.0.2) (2024-08-22)
 
 
