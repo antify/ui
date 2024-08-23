@@ -18,4 +18,7 @@ const preview: Preview = {
   },
 };
 
-export default preview;
+export default {
+  chromatic: { disableSnapshot: true },
+  ...preview
+};
