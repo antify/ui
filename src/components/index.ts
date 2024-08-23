@@ -70,6 +70,7 @@ import AntTransitionCollapseHeight from './transitions/AntTransitionCollapseHeig
 import AntAccordion from './AntAccordion.vue';
 import AntAccordionItem from './AntAccordionItem.vue';
 import AntAlert from './AntAlert.vue';
+import AntCard from './AntCard.vue';
 import AntContent from './AntContent.vue';
 import AntDropdown from './AntDropdown.vue';
 import AntIcon from './AntIcon.vue';
@@ -137,6 +138,7 @@ export {
   AntAccordion,
   AntAccordionItem,
   AntAlert,
+  AntCard,
   AntContent,
   AntDropdown,
   AntIcon,
