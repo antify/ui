@@ -9,6 +9,11 @@ const props = withDefaults(defineProps<{
     content?: string;
     isOpen?: boolean;
     iconLeft?: boolean;
+    contentPadding?: boolean;
+    activeLabelClasses?: string;
+    activeIconClasses?: string;
+    inactiveLabelClasses?: string;
+    inactiveIconClasses?: string;
   }[];
   collapseStrategy?: CollapseStrategy;
 }>(), {
@@ -49,9 +54,21 @@ function onClose(index: number) {
         :label="item.label"
         :is-open="openItems.includes(index)"
         :icon-left="item.iconLeft"
+        :content-padding="item.contentPadding"
+        :activeLabelClasses="item.activeLabelClasses"
+        :activeIconClasses="item.activeIconClasses"
+        :inactiveLabelClasses="item.inactiveLabelClasses"
+        :inactiveIconClasses="item.inactiveIconClasses"
         @open="() => onOpen(index)"
         @close="() => onClose(index)"
       >
+        <template #icon-left="{isOpen}">
+          <slot
+            name="icon-left"
+            v-bind="{item, index, isOpen}"
+          />
+        </template>
+
         <slot
           name="item-content"
           v-bind="{item, index}"

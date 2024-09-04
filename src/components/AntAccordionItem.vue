@@ -3,15 +3,26 @@ import {faAngleDown, faAngleUp, faQuestionCircle} from '@fortawesome/free-solid-
 import AntIcon from './AntIcon.vue';
 import AntTransitionCollapseHeight from './transitions/AntTransitionCollapseHeight.vue';
 import {IconSize} from './__types/AntIcon.types';
+import {computed} from 'vue';
 
 const props = withDefaults(defineProps<{
   isOpen: boolean;
   label?: string;
   collapseTransition?: string;
-  iconLeft: boolean;
+  iconLeft?: boolean;
+  contentPadding?: boolean;
+  activeLabelClasses?: string;
+  activeIconClasses?: string;
+  inactiveLabelClasses?: string;
+  inactiveIconClasses?: string;
 }>(), {
   collapseTransition: 'slide',
   iconLeft: false,
+  contentPadding: true,
+  activeLabelClasses: 'bg-primary-500 text-primary-500-font',
+  activeIconClasses: 'text-primary-500-font',
+  inactiveLabelClasses: 'bg-white text-for-white-bg-font',
+  inactiveIconClasses: 'text-for-white-bg-font'
 });
 const emit = defineEmits(['close', 'open']);
 
@@ -23,12 +34,17 @@ function onClick() {
     emit('open');
   }
 }
+
+const labelClasses = computed(() => ({
+  [props.activeLabelClasses]: props.isOpen,
+  [props.inactiveLabelClasses]: !props.isOpen
+}))
 </script>
 
 <template>
   <div
     class="p-2 select-none cursor-pointer transition-colors"
-    :class="{'bg-primary-500 text-primary-500-font': isOpen, 'bg-white text-for-white-bg-font': !isOpen}"
+    :class="labelClasses"
     @click="onClick"
   >
     <slot
@@ -36,15 +52,17 @@ function onClick() {
       v-bind="{ isOpen: isOpen }"
     >
       <div
-        class="hover:text-gray-800 flex justify-between items-center"
+        class="flex justify-between items-center"
       >
         <div class="flex items-center gap-2">
-          <AntIcon
-            v-if="iconLeft"
-            :size="IconSize.sm"
-            :icon="faQuestionCircle"
-            :color="isOpen ? 'text-primary-500-font' : 'text-for-white-bg-font'"
-          />
+          <slot name="icon-left" v-bind="{isOpen}">
+            <AntIcon
+              v-if="iconLeft"
+              :size="IconSize.sm"
+              :icon="faQuestionCircle"
+              :color="isOpen ? activeIconClasses : inactiveIconClasses"
+            />
+          </slot>
 
           <span class="text-sm font-semibold">
             {{ label }}
@@ -53,7 +71,7 @@ function onClick() {
 
         <AntIcon
           :icon="isOpen ? faAngleUp : faAngleDown"
-          :color="isOpen ? 'text-primary-500-font' : undefined"
+          :color="isOpen ? activeIconClasses : inactiveIconClasses"
         />
       </div>
     </slot>
@@ -67,7 +85,8 @@ function onClick() {
       <Transition name="bounce">
         <div
           v-show="isOpen"
-          class="p-2 text-sm bg-white text-for-white-bg-font"
+          class="text-sm bg-white text-for-white-bg-font"
+          :class="{'p-2': contentPadding}"
         >
           <slot/>
         </div>
