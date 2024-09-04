@@ -8,7 +8,7 @@ import {computed} from 'vue';
 
 const props = withDefaults(defineProps<{
   icon?: IconDefinition
-  size: AntKeycapSize
+  size?: AntKeycapSize
 
 }>(), {
   size: AntKeycapSize.sm
@@ -16,22 +16,27 @@ const props = withDefaults(defineProps<{
 
 const classes = computed(() => {
   return {
-    'text-sm px-px min-w-5': props.size === AntKeycapSize.sm,
-    'text-2xs px-px py-0.5 min-w-[18px]': props.size === AntKeycapSize.xs,
+    'px-1': true,
+    'test-sm min-w-6 h-6 ': props.size === AntKeycapSize.md,
+    'test-xs min-w-5 h-5': props.size === AntKeycapSize.sm,
+    'text-2xs min-w-4 h-4': props.size === AntKeycapSize.xs,
   };
 });
 const iconClasses = computed(() => {
-  if (props.size === AntKeycapSize.sm) {
-    return IconSize.sm;
-  } else {
-    return IconSize.xs2;
+  switch (props.size) {
+    case AntKeycapSize.md:
+      return IconSize.md
+    case AntKeycapSize.sm:
+      return IconSize.sm
+    default:
+      return IconSize.xs;
   }
 });
 </script>
 
 <template>
   <span
-    class="inline-block bg-neutral-300 rounded-md text-center text-neutral-500-font font-medium"
+    class="inline-flex justify-center items-center bg-neutral-300 rounded-sm text-center text-neutral-300-font font-medium"
     :class="classes"
   >
     <AntIcon

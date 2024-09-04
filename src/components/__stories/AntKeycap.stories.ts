@@ -1,7 +1,7 @@
 import AntKeycap from '../AntKeycap.vue';
 import {type Meta, type StoryObj} from '@storybook/vue3';
 import {AntKeycapSize} from '../__types/AntKeycap.types';
-import {faChevronUp, faChevronDown} from '@fortawesome/free-solid-svg-icons';
+import {faPlus, faChevronUp} from '@fortawesome/free-solid-svg-icons';
 
 const meta: Meta<typeof AntKeycap> = {
   title: 'Components/Keycap',
@@ -57,21 +57,21 @@ export const Summary: Story = {
     chromatic: {disableSnapshot: false},
   },
   render: (args) => ({
-    components: {AntKeycap, faChevronUp, faChevronDown},
+    components: {AntKeycap},
     setup() {
-      return {args, faChevronUp, faChevronDown};
+      return {args, AntKeycapSize, faPlus};
     },
     template: `
-      <div class="p-4">
-        Press
-        <AntKeycap v-bind="args" :icon="faChevronUp"/>
-        or
-        <AntKeycap v-bind="args" :icon="faChevronDown"/>
-        to navigate. Press
-        <AntKeycap v-bind="args">ctl</AntKeycap>
-        +
-        <AntKeycap v-bind="args">K</AntKeycap>
-        to search.
+      <div class="flex gap-2 p-4">
+        <AntKeycap v-bind="args" :size="AntKeycapSize.xs">K</AntKeycap>
+        <AntKeycap v-bind="args" :size="AntKeycapSize.sm">K</AntKeycap>
+        <AntKeycap v-bind="args" :size="AntKeycapSize.md">K</AntKeycap>
+        <AntKeycap v-bind="args" :size="AntKeycapSize.xs">Strg</AntKeycap>
+        <AntKeycap v-bind="args" :size="AntKeycapSize.sm">Strg</AntKeycap>
+        <AntKeycap v-bind="args" :size="AntKeycapSize.md">Strg</AntKeycap>
+        <AntKeycap v-bind="args" :icon="faPlus" :size="AntKeycapSize.xs"/>
+        <AntKeycap v-bind="args" :icon="faPlus" :size="AntKeycapSize.sm"/>
+        <AntKeycap v-bind="args" :icon="faPlus" :size="AntKeycapSize.md"/>
       </div>
     `,
   }),
