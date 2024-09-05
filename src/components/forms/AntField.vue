@@ -49,7 +49,8 @@ const fieldClasses = computed(() => ({
   'gap-2': props.size === Size.md,
   'gap-1.5': (props.size === Size.sm || props.size === Size.xs),
   'gap-1': props.size === Size.xs2,
-  'h-full': props.expandedHeight
+  'h-full': props.expandedHeight,
+  'h-fit': !props.expandedHeight,
 }));
 const descriptionClasses = computed(() => ({
   'gap-2.5': props.size === Size.lg,
