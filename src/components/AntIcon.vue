@@ -3,10 +3,12 @@ import {computed, onMounted} from 'vue';
 import {handleEnumValidation} from '../handler';
 import {type IconDefinition} from '@fortawesome/free-solid-svg-icons';
 import {IconSize} from './__types/AntIcon.types';
+import {AntSkeleton} from "../../dist";
 
 const props = withDefaults(defineProps<{
   icon: IconDefinition;
   size?: IconSize;
+  skeleton?: boolean;
 
   /**
    * A css text-* class
@@ -14,7 +16,8 @@ const props = withDefaults(defineProps<{
   color?: string;
 }>(), {
   size: IconSize.sm,
-  color: 'text-for-white-bg-font'
+  color: 'text-for-white-bg-font',
+  skeleton: false,
 });
 
 const containerClasses = computed(() => ({
@@ -44,13 +47,15 @@ onMounted(() => {
 </script>
 
 <template>
-  <span
-    v-if="icon"
-    :class="containerClasses"
-  >
-    <FaIcon
+  <div class="relative" :class="containerClasses">
+    <span
+      v-if="icon"
+    >
+      <FaIcon
       :icon="icon"
       :class="iconClasses"
-    />
-  </span>
+      />
+    </span>
+    <AntSkeleton v-if="skeleton" absolute rounded/>
+  </div>
 </template>
