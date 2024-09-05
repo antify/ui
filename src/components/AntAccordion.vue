@@ -2,6 +2,7 @@
 import AntAccordionItem from './AntAccordionItem.vue';
 import {onMounted, ref} from 'vue';
 import {CollapseStrategy} from './__types/AntAccordion.types';
+import AntSkeleton from "./AntSkeleton.vue";
 
 const props = withDefaults(defineProps<{
   items: {
@@ -16,8 +17,10 @@ const props = withDefaults(defineProps<{
     inactiveIconClasses?: string;
   }[];
   collapseStrategy?: CollapseStrategy;
+  skeleton?: boolean;
 }>(), {
-  collapseStrategy: CollapseStrategy.single
+  collapseStrategy: CollapseStrategy.single,
+  skeleton: false
 });
 
 const openItems = ref<number[]>([]);
@@ -59,6 +62,7 @@ function onClose(index: number) {
         :activeIconClasses="item.activeIconClasses"
         :inactiveLabelClasses="item.inactiveLabelClasses"
         :inactiveIconClasses="item.inactiveIconClasses"
+        :skeleton="skeleton"
         @open="() => onOpen(index)"
         @close="() => onClose(index)"
       >
@@ -69,12 +73,16 @@ function onClose(index: number) {
           />
         </template>
 
-        <slot
-          name="item-content"
-          v-bind="{item, index}"
-        >
-          <div v-html="item.content"/>
-        </slot>
+        <div class="relative">
+          <slot
+            name="item-content"
+            v-bind="{item, index}"
+          >
+            <div v-html="item.content"/>
+
+            <AntSkeleton v-if="skeleton" absolute rounded/>
+          </slot>
+        </div>
       </AntAccordionItem>
     </slot>
   </div>

@@ -4,6 +4,7 @@ import AntIcon from './AntIcon.vue';
 import AntTransitionCollapseHeight from './transitions/AntTransitionCollapseHeight.vue';
 import {IconSize} from './__types/AntIcon.types';
 import {computed} from 'vue';
+import AntSkeleton from "../components/AntSkeleton.vue";
 
 const props = withDefaults(defineProps<{
   isOpen: boolean;
@@ -15,10 +16,12 @@ const props = withDefaults(defineProps<{
   activeIconClasses?: string;
   inactiveLabelClasses?: string;
   inactiveIconClasses?: string;
+  skeleton?: boolean;
 }>(), {
   collapseTransition: 'slide',
   iconLeft: false,
   contentPadding: true,
+  skeleton: false,
   activeLabelClasses: 'bg-primary-500 text-primary-500-font',
   activeIconClasses: 'text-primary-500-font',
   inactiveLabelClasses: 'bg-white text-for-white-bg-font',
@@ -28,6 +31,10 @@ const emit = defineEmits(['close', 'open']);
 
 // TODO:: Stehengeblieben: delays machen
 function onClick() {
+  if (props.skeleton) {
+    return
+  }
+
   if (props.isOpen) {
     emit('close');
   } else {
@@ -37,13 +44,14 @@ function onClick() {
 
 const labelClasses = computed(() => ({
   [props.activeLabelClasses]: props.isOpen,
-  [props.inactiveLabelClasses]: !props.isOpen
+  [props.inactiveLabelClasses]: !props.isOpen,
+  'cursor-pointer': !props.skeleton
 }))
 </script>
 
 <template>
   <div
-    class="p-2 select-none cursor-pointer transition-colors"
+    class="p-2 select-none transition-colors"
     :class="labelClasses"
     @click="onClick"
   >
@@ -61,17 +69,23 @@ const labelClasses = computed(() => ({
               :size="IconSize.sm"
               :icon="faQuestionCircle"
               :color="isOpen ? activeIconClasses : inactiveIconClasses"
+              :skeleton="skeleton"
             />
           </slot>
 
-          <span class="text-sm font-semibold">
-            {{ label }}
-          </span>
+
+          <div class="relative">
+            <div class="text-sm font-semibold">
+              {{ label }}
+            </div>
+            <AntSkeleton v-if="skeleton" absolute rounded/>
+          </div>
         </div>
 
         <AntIcon
           :icon="isOpen ? faAngleUp : faAngleDown"
           :color="isOpen ? activeIconClasses : inactiveIconClasses"
+          :skeleton="skeleton"
         />
       </div>
     </slot>
