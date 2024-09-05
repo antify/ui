@@ -20,12 +20,14 @@ const props = withDefaults(defineProps<{
   limiterMaxValue?: number;
   labelFor?: string;
   expanded?: boolean;
+  expandedHeight?: boolean;
 }>(), {
   state: InputState.base,
   skeleton: false,
   size: Size.md,
   messages: () => [],
-  expanded: true
+  expanded: true,
+  expandedHeight: false,
 });
 
 onMounted(() => {
@@ -47,6 +49,8 @@ const fieldClasses = computed(() => ({
   'gap-2': props.size === Size.md,
   'gap-1.5': (props.size === Size.sm || props.size === Size.xs),
   'gap-1': props.size === Size.xs2,
+  'h-full': props.expandedHeight,
+  'h-fit': !props.expandedHeight,
 }));
 const descriptionClasses = computed(() => ({
   'gap-2.5': props.size === Size.lg,
@@ -66,9 +70,10 @@ const descriptionClasses = computed(() => ({
       :size="size"
       :skeleton="skeleton"
       :for="labelFor"
+      class="h-full"
       @click-content="$emit('clickLabel')"
     >
-      <div class="w-full">
+      <div class="w-full h-full">
         <slot/>
       </div>
     </AntInputLabel>

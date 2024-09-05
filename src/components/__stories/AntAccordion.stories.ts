@@ -129,8 +129,16 @@ export const mixedVariants: Story = {
       >
         <template #icon-left="{item, index, isOpen}">
           <AntIcon
+            v-if="index === 0"
             :class="{'text-success-500-font': isOpen, 'text-success-200-font': !isOpen}"
             :icon="faEye"/>
+        </template>
+
+        <template #item-content="{index}">
+          <div v-if="index === 0">
+            This content comes from <code>#item-content</code> slot instead of <code>items.content</code> prop. <br>
+            This should not be in skeleton state. The user need to handle it self.
+          </div>
         </template>
       </AntAccordion>`,
   }),
@@ -138,7 +146,6 @@ export const mixedVariants: Story = {
     items: [
       {
         label: 'First entry',
-        content: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
       },
       {
         label: `Second entry`,
@@ -167,6 +174,8 @@ export const mixedVariants: Story = {
         inactiveIconClasses: 'text-danger-200-font',
         contentPadding: false
       },
-    ]
+    ],
+    skeleton: true,
+    collapseStrategy: CollapseStrategy.multiple
   }
 };
