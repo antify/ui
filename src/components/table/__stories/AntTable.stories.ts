@@ -173,7 +173,7 @@ export const Docs: Story = {
         type: AntTableRowTypes.link,
       }
     ],
-    data: testData
+    data: testData,
   }
 };
 
