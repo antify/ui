@@ -21,7 +21,7 @@ const props = withDefaults(defineProps<{
 });
 
 const containerClasses = computed(() => ({
-  'inline-flex items-center justify-center': true,
+  'inline-flex items-center justify-center relative': true,
   'w-3 h-3': props.size === IconSize.xs2,
   'w-4 h-4': props.size === IconSize.xs,
   'w-5 h-5': props.size === IconSize.sm,
@@ -47,15 +47,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="relative" :class="containerClasses">
-    <span
+  <span :class="containerClasses">
+    <FaIcon
       v-if="icon"
-    >
-      <FaIcon
       :icon="icon"
       :class="iconClasses"
-      />
-    </span>
+    />
     <AntSkeleton v-if="skeleton" absolute rounded/>
-  </div>
+  </span>
 </template>
