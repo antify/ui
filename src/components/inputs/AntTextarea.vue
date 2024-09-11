@@ -36,6 +36,7 @@ const props = withDefaults(defineProps<{
   limiter?: boolean;
   max?: number;
   messages?: string[];
+  resize?: boolean;
 }>(), {
   state: InputState.base,
   disabled: false,
@@ -45,6 +46,7 @@ const props = withDefaults(defineProps<{
   grouped: Grouped.none,
   showIcon: true,
   limiter: false,
+  resize: true,
   messages: () => []
 });
 const _modelValue = useVModel(props, 'modelValue', emit);
@@ -67,7 +69,7 @@ const inputClasses = computed(() => {
   };
 
   return {
-    'block transition-colors relative border-none outline w-full focus:z-10': true,
+    'block transition-colors relative border-none outline w-full focus:z-10 h-full': true,
     'outline-offset-[-1px] outline-1 focus:outline-offset-[-1px] focus:outline-1': true,
     'disabled:opacity-50 disabled:cursor-not-allowed': props.disabled,
     [variants[props.state]]: true,
@@ -90,7 +92,8 @@ const inputClasses = computed(() => {
     'rounded-none': props.grouped === Grouped.center,
     'rounded-tl-none rounded-bl-none rounded-tr-md rounded-br-md': props.grouped === Grouped.right,
     'rounded-md': props.grouped === Grouped.none,
-    'invisible': props.skeleton
+    'invisible': props.skeleton,
+    'resize-none': !props.resize
   };
 });
 const iconColor = computed(() => {
@@ -153,9 +156,10 @@ function onBlur(e: FocusEvent) {
     :limiter-max-value="limiter && max !== undefined ? max : undefined"
     :limiter-value="limiter ? _modelValue?.length : undefined"
     :messages="messages"
+    :expanded-height="!resize"
   >
     <div
-      class="block relative w-full"
+      class="block relative w-full h-full"
       :class="{...{'-mr-px': grouped !== Grouped.none}, ..._wrapperClass}"
     >
       <textarea

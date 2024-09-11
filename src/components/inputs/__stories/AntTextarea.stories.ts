@@ -53,10 +53,12 @@ export const Docs: Story = {
       return {args};
     },
     template: `
-      <AntTextarea
-        v-bind="args"
-        v-model="args.modelValue"
-      />
+      <div class="h-screen">
+        <AntTextarea
+          v-bind="args"
+          v-model="args.modelValue"
+        />
+      </div>
     `,
   }),
   args: {

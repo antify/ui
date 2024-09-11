@@ -94,7 +94,9 @@ onMounted(() => {
             <div
               class="border-neutral-300 border-b p-2 bg-neutral-100 rounded-t-md border-t border-l border-r text-neutral-100-font font-semibold"
             >
-              {{ title }}
+              <slot name="title">
+                {{ title }}
+              </slot>
             </div>
 
             <div
