@@ -2,14 +2,19 @@
 import {ref, useSlots, watch} from 'vue';
 import {faXmark} from '@fortawesome/free-solid-svg-icons';
 import AntButton from './buttons/AntButton.vue';
+import AntSkeleton from "./AntSkeleton.vue";
 
 const emit = defineEmits(['update:open', 'close']);
 const props = withDefaults(defineProps<{
   title: string,
   open: boolean,
-  fullscreen?: boolean
+  fullscreen?: boolean,
+  padding?: boolean
+  skeleton?: boolean
 }>(), {
-  fullscreen: false
+  fullscreen: false,
+  padding: false,
+  skeleton: false
 });
 const openModal = ref(props.open);
 const openBackground = ref(props.open);
@@ -56,18 +61,23 @@ function closeModal() {
             class="bg-white p-2 flex items-center justify-between text-for-white-bg-font text-lg font-medium"
           >
             <slot name="title">
-              {{ title }}
+              <div class="relative">
+                {{ title }}
+                <AntSkeleton v-if="skeleton" absolute rounded/>
+              </div>
             </slot>
 
             <AntButton
+              :skeleton="skeleton"
               :icon-left="faXmark"
-              :outlined="false"
-              filled
               @click="closeModal"
             />
           </div>
 
-          <div class="bg-white p-2 text-for-white-bg-font grow overflow-y-auto">
+          <div
+            class="bg-white text-for-white-bg-font grow overflow-y-auto"
+            :class="{'p-2': padding}"
+          >
             <slot/>
           </div>
 

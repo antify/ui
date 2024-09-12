@@ -40,6 +40,7 @@ export const Docs: Story = {
           <div class="p-64 flex justify-center items-center">
             <AntPopover popover-classes="w-64" v-bind="args">
               <template #content>{{ dummyText }}</template>
+              <template #title>{{ 'Title' }}</template>
               <template #default>
                 <AntButton @click="() => showPopover = !showPopover" filled>Click me</AntButton>
               </template>
@@ -49,6 +50,5 @@ export const Docs: Story = {
   }),
   args: {
     showPopover: true,
-    title: 'Title'
   },
 };
