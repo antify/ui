@@ -27,13 +27,15 @@ const props = withDefaults(
     loading?: boolean;
     selectableRows?: boolean;
     showLightVersion?: boolean;
-    size?: AntTableSize
+    size?: AntTableSize;
+    headerColor?: string;
   }>(), {
     rowKey: 'id',
     loading: false,
     selectableRows: false,
     showLightVersion: false,
-    size: AntTableSize.md
+    size: AntTableSize.md,
+    headerColor: 'bg-neutral-200'
   });
 
 const selected: Ref<Record<string, unknown> | undefined> = useVModel(props, 'selectedRow', emits);
@@ -96,7 +98,7 @@ function rowClick(elem: Record<string, unknown>): void {
         class="min-w-full max-h-full relative"
         :class="{'h-full': data.length === 0 && !_loading}"
       >
-        <thead class="bg-neutral-200 sticky top-0 z-10">
+        <thead class="sticky top-0 z-10" :class="headerColor">
         <tr>
           <slot name="headerFirstCell"/>
 
@@ -124,14 +126,14 @@ function rowClick(elem: Record<string, unknown>): void {
         <tbody class="bg-white relative">
         <!-- TODO:: Add some kind of virtual list for very large tree data (or required pagination??) -->
         <tr
-          v-for="(elem, index) in data"
+          v-for="(elem, rowIndex) in data"
           :id="elem[rowKey] as string"
-          :key="`table-row-${elem[rowKey]}-${index}`"
+          :key="`table-row-${elem[rowKey]}-${rowIndex}`"
           class="transition-all"
           :class="{
               'bg-primary-200 text-primary-200-font': elem === selected,
-              'bg-white text-for-white-bg-font': elem !== selected && index % 2 === 0,
-              'bg-neutral-100 text-neutral-100-font': elem !== selected && index % 2 !== 0,
+              'bg-white text-for-white-bg-font': elem !== selected && rowIndex % 2 === 0,
+              'bg-neutral-100 text-neutral-100-font': elem !== selected && rowIndex % 2 !== 0,
               'cursor-pointer': selectableRows
             }"
         >
@@ -140,10 +142,10 @@ function rowClick(elem: Record<string, unknown>): void {
             v-bind="{ elem }"
           />
 
-          <template v-for="(header, index) in _headers">
+          <template v-for="(header, colIndex) in _headers">
             <AntTd
               v-if="!_showLightVersion || (_showLightVersion && header.lightVersion)"
-              :key="`table-cell-${header.identifier}-${index}`"
+              :key="`table-cell-${header.identifier}-${colIndex}`"
               :header="header"
               :element="elem"
               :align="header.align"
@@ -153,21 +155,21 @@ function rowClick(elem: Record<string, unknown>): void {
               <template #beforeCellContent="props">
                 <slot
                   name="beforeCellContent"
-                  v-bind="props"
+                  v-bind="{...props, colIndex, rowIndex}"
                 />
               </template>
 
               <template #cellContent="props">
                 <slot
                   name="cellContent"
-                  v-bind="props"
+                  v-bind="{...props, colIndex, rowIndex}"
                 />
               </template>
 
               <template #afterCellContent="props">
                 <slot
                   name="afterCellContent"
-                  v-bind="props"
+                  v-bind="{...props, colIndex, rowIndex}"
                 />
               </template>
             </AntTd>
