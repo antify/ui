@@ -2,7 +2,7 @@
 import {ref, useSlots, watch} from 'vue';
 import {faXmark} from '@fortawesome/free-solid-svg-icons';
 import AntButton from './buttons/AntButton.vue';
-import {AntSkeleton} from "../../dist";
+import AntSkeleton from "./AntSkeleton.vue";
 
 const emit = defineEmits(['update:open', 'close']);
 const props = withDefaults(defineProps<{
