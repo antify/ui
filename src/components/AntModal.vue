@@ -58,10 +58,10 @@ function closeModal() {
           :class="{'w-full h-full': fullscreen, 'border border-neutral-300 rounded-md shadow-md': !fullscreen}"
         >
           <div
-            class="bg-white p-2 flex items-center justify-between text-for-white-bg-font text-lg font-medium"
+            class="bg-white p-2 flex items-center justify-between"
           >
             <slot name="title">
-              <div class="relative">
+              <div class="relative text-for-white-bg-font text-lg font-medium">
                 {{ title }}
                 <AntSkeleton v-if="skeleton" absolute rounded/>
               </div>

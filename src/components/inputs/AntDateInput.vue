@@ -95,7 +95,7 @@ function onClickCalendar() {
           :icon="_icon"
           :color="iconColor"
           :size="iconSize"
-          class="cursor-pointer"
+          :class="{'cursor-pointer': !disabled, 'opacity-50': disabled}"
           @click="onClickCalendar"
         />
       </template>
