@@ -86,6 +86,20 @@ const itemSize = computed(() => {
     return IconSize.sm;
   }
 });
+const iconColor = computed(() => {
+  switch (props.state) {
+    case InputState.base:
+      return 'text-primary-500-font';
+    case InputState.info:
+      return 'text-info-500-font';
+    case InputState.success:
+      return 'text-success-500-font'
+    case InputState.warning:
+      return 'text-warning-500-font';
+    default:
+      return 'text-danger-500-font';
+  }
+})
 
 /**
  * Delay value to change the checkboxes background color after
@@ -145,12 +159,17 @@ onMounted(() => {
           @blur="onBlur"
         />
 
-        <AntIcon
-          v-if="_modelValue"
-          :icon="faCheck"
-          class="absolute !text-white pointer-events-none"
-          :size="itemSize"
-        />
+        <div
+          class="absolute flex items-center justify-center !text-white pointer-events-none"
+          :class="size === Size.lg || size === Size.md || size === Size.sm ? 'h-5 w-5' : 'h-4 w-4'"
+        >
+          <AntIcon
+            v-if="_modelValue"
+            :icon="faCheck"
+            :size="itemSize"
+            :color="iconColor"
+          />
+        </div>
 
         <AntSkeleton
           v-if="skeleton"
