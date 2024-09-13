@@ -69,7 +69,7 @@ const inputClasses = computed(() => {
   };
 
   return {
-    'block transition-colors relative border-none outline w-full focus:z-10 h-full': true,
+    'block transition-colors relative border-none outline w-full focus:z-10 h-full text-black': true,
     'outline-offset-[-1px] outline-1 focus:outline-offset-[-1px] focus:outline-1': true,
     'disabled:opacity-50 disabled:cursor-not-allowed': props.disabled,
     [variants[props.state]]: true,

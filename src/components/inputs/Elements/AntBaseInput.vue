@@ -68,7 +68,7 @@ const inputClasses = computed(() => {
   };
 
   return {
-    'block transition-colors relative border-none outline w-full focus:z-10 text-black': true,
+    'block transition-colors relative border-none outline w-full focus:z-10 text-black font-regular': true,
     'outline-offset-[-1px] outline-1 focus:outline-offset-[-1px] focus:outline-1': true,
     'disabled:opacity-50 disabled:cursor-not-allowed': props.disabled,
     'text-right': props.type === BaseInputType.number,
