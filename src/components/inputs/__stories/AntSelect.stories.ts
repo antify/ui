@@ -1,8 +1,7 @@
 import {type Meta, type StoryObj} from '@storybook/vue3';
 import {Size} from '../../../enums/Size.enum';
 import AntSelect from '../AntSelect.vue';
-import {computed, reactive} from 'vue';
-import {useFieldValidator} from '@antify/validate';
+import {computed} from 'vue';
 import {type SelectOption} from '../__types/AntSelect.types';
 import {InputState} from '../../../enums';
 
@@ -82,49 +81,6 @@ export const Docs: Story = {
     label: 'Label',
     options,
     description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod'
-  },
-};
-export const withValidator: Story = {
-  render: (args) => ({
-    components: {AntSelect},
-    setup() {
-      const modelValue = computed({
-        // @ts-ignore
-        get: () => args.modelValue,
-        // @ts-ignore
-        set: (val) => args.modelValue = val
-      });
-      const validator = reactive(
-        useFieldValidator([
-          (val: string) => val !== null || 'This field should not be empty',
-          (val: string) => val === 'invalid' ? 'Value "Invalid" is not allowed' : true
-        ])
-      );
-
-      return {args, modelValue, validator, InputState};
-    },
-    template: `
-      <AntSelect
-        v-bind="args"
-        v-model="modelValue"
-        :state="args.state ? args.state : (validator.hasErrors() ? InputState.danger : undefined)"
-        :messages="Array.isArray(args.messages) ? args.messages : validator.getErrors()"
-        @validate="(val) => validator.validate(val)"
-      />`,
-  }),
-  args: {
-    ...Docs.args,
-    options: [
-      {
-        label: 'Valid',
-        value: 'valid',
-      },
-      {
-        label: 'Invalid',
-        value: 'invalid',
-      }
-    ],
-    nullable: true,
   },
 };
 export const nullable: Story = {

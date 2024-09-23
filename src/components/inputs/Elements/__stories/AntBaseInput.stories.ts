@@ -5,8 +5,6 @@ import AntBaseInput from '../AntBaseInput.vue';
 import AntButton from '../../../buttons/AntButton.vue';
 import AntIcon from '../../../AntIcon.vue';
 import {Grouped as _Grouped} from '../../../../enums/Grouped.enum';
-import {isRequiredRule, notBlankRule, useFieldValidator} from '@antify/validate';
-import {computed, reactive} from 'vue';
 import {faSearch, faEye} from '@fortawesome/free-solid-svg-icons';
 import {InputState} from '../../../../enums';
 import AntFormGroup from '../../../forms/AntFormGroup.vue';
@@ -90,28 +88,6 @@ export const Docs: Story = {
   args: {
     modelValue: null,
     placeholder: 'Placeholder'
-  },
-};
-
-export const withValidator: Story = {
-  render: (args) => ({
-    components: {AntBaseInput},
-    setup: () => {
-      const validator = reactive(useFieldValidator([isRequiredRule, notBlankRule]));
-
-      return {args, validator, InputState};
-    },
-    template: `
-      <AntBaseInput
-        v-model="args.modelValue"
-        v-bind="args"
-        :state="args.state ? args.state : (validator.hasErrors() ? InputState.danger : undefined)"
-        @validate="(val) => validator.validate(val)"
-      />`,
-  }),
-  args: {
-    ...Docs.args,
-    modelValue: ''
   },
 };
 

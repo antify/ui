@@ -1,10 +1,8 @@
-import {isRequiredRule, notBlankRule, useFieldValidator} from '@antify/validate';
 import {Grouped as _Grouped} from '../../../enums/Grouped.enum';
 import {type Meta, type StoryObj} from '@storybook/vue3';
 import {Size} from '../../../enums/Size.enum';
 import AntTextarea from '../AntTextarea.vue';
 import {InputState} from '../../../enums';
-import {reactive} from 'vue';
 
 const meta: Meta<typeof AntTextarea> = {
   title: 'Inputs/Textarea',
@@ -65,58 +63,6 @@ export const Docs: Story = {
     modelValue: null,
     label: 'Label',
     description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod'
-  },
-};
-
-export const withValidator: Story = {
-  render: (args) => ({
-    components: {AntTextarea},
-    setup: () => {
-      const validator = reactive(useFieldValidator([isRequiredRule, notBlankRule]));
-
-      return {args, validator, InputState};
-    },
-    template: `
-      <AntTextarea
-        v-bind="args"
-        v-model="args.modelValue"
-        :state="args.state ? args.state : (validator.hasErrors() ? InputState.danger : undefined)"
-        :messages="Array.isArray(args.messages) ? args.messages : validator.getErrors()"
-        @validate="val => validator.validate(val)"
-      />
-    `,
-  }),
-  args: {
-    modelValue: null,
-    label: 'Label',
-    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod'
-  },
-};
-
-export const limited: Story = {
-  render: (args) => ({
-    components: {AntTextarea},
-    setup: () => {
-      const validator = reactive(useFieldValidator(
-        (val) => val?.length <= 10 || 'Max. 10 characters allowed'));
-
-      return {args, validator, InputState};
-    },
-    template: `
-      <AntTextarea
-        v-bind="args"
-        v-model="args.modelValue"
-        :state="args.state ? args.state : (validator.hasErrors() ? InputState.danger : undefined)"
-        :messages="Array.isArray(args.messages) ? args.messages : validator.getErrors()"
-        @validate="(val) => validator.validate(val)"
-      />
-    `,
-  }),
-  args: {
-    ...Docs.args,
-    modelValue: 'A to long value',
-    limiter: true,
-    max: 10
   },
 };
 

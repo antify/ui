@@ -1,8 +1,7 @@
 import {type Meta, type StoryObj} from '@storybook/vue3';
 import AntSwitch from '../AntSwitch.vue';
-import {computed, reactive, ref} from 'vue';
+import {ref} from 'vue';
 import {InputState} from '../../../enums';
-import {useFieldValidator} from '@antify/validate';
 import {Size} from '../../../enums/Size.enum';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
@@ -38,44 +37,6 @@ export const Docs: Story = {
   }),
   args: {
     modelValue: false
-  },
-};
-
-export const withValidator: Story = {
-  render: (args) => ({
-    components: {AntSwitch},
-    setup() {
-      const value = computed({
-        // @ts-ignore
-        get: () => args.modelValue,
-        // @ts-ignore
-        set: (val) => args.modelValue = val
-      });
-
-      const validator = reactive(useFieldValidator([
-        (val: boolean) => {
-          return !val || 'Switch must be off';
-        }
-      ]));
-
-      return {args, value, validator, InputState};
-    },
-    template: `
-      <AntSwitch
-        v-bind="args"
-        v-model="value"
-        :state="args.state ? args.state : (validator.hasErrors() ? InputState.danger : undefined)"
-        :messages="Array.isArray(args.messages) ? args.messages : validator.getErrors()"
-        @validate="(val) => validator.validate(val)"
-      >
-        Value must be false
-      </AntSwitch>
-
-      <span class="text-sm text-gray-500">Reactive value: {{ value }}</span>
-    `
-  }),
-  args: {
-    ...Docs.args,
   },
 };
 
