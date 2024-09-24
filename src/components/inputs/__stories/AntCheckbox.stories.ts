@@ -2,7 +2,6 @@ import AntCheckbox from '../AntCheckbox.vue';
 import {computed, ref} from 'vue';
 import {type Meta, type StoryObj} from '@storybook/vue3';
 import {InputState, Size} from '../../../enums';
-import {useFieldValidator} from '@antify/validate';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
 
@@ -49,43 +48,6 @@ export const Docs: Story = {
       </div>
     `,
   }),
-};
-
-export const WithValidator: Story = {
-  render: (args: any) => ({
-    components: {AntCheckbox},
-    setup() {
-      const modelValue = computed<boolean>({
-        get() {
-          return args.modelValue;
-        },
-        set(val) {
-          // @ts-ignore
-          args.modelValue = val;
-        }
-      });
-      const validator = ref(useFieldValidator((val: boolean) => !val ? 'Check this box!' : true));
-
-      return {args, modelValue, validator, InputState};
-    },
-    template: `
-      <div class="m-2">
-        <AntCheckbox
-          v-bind="args"
-          v-model="modelValue"
-          :state="args.state ? args.state : (validator.hasErrors() ? InputState.danger : undefined)"
-          :messages="Array.isArray(args.messages) ? args.messages : validator.getErrors()"
-          @validate="(val) => validator.validate(val)"
-        >
-          Accept some kind of document before continuing
-        </AntCheckbox>
-        <span class="text-sm text-gray-500">Reactive value: {{ modelValue }}</span>
-      </div>
-    `,
-  }),
-  args: {
-    modelValue: false
-  }
 };
 
 export const Summary: Story = {

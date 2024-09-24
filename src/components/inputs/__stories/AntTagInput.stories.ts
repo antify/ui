@@ -1,11 +1,10 @@
 import AntTagInput from '../AntTagInput.vue';
 import type {Meta, StoryObj} from '@storybook/vue3';
-import {reactive, type Ref} from 'vue';
+import {type Ref} from 'vue';
 import {ref} from 'vue';
 import {InputState} from '../../../enums';
 import type {SelectOption} from '../__types';
 import {AntTagInputSize} from '../__types/AntTagInput.types';
-import {useFieldValidator} from '@antify/validate';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
 
@@ -30,7 +29,6 @@ const meta: Meta<typeof AntTagInput> = {
       table: {defaultValue: {summary: 'this.label'}},
     },
     createCallback: {
-      control: 'none',
       description: 'If allowCreate is true the createCallback needs to be specified. It will be called when the user creates a new tag. It should return a promise that resolves to a SelectOption.',
       table: {
         type: {
@@ -85,38 +83,6 @@ export const Docs: Story = {
     template: `
       <div style="width: 360px">
         <AntTagInput v-model="value" v-bind="args"/>
-      </div>
-    `
-  }),
-  args: {
-    options
-  }
-};
-
-export const withValidator: Story = {
-  render: (args) => ({
-    components: {AntTagInput},
-    setup() {
-      const value: Ref<string[] | null> = ref(null);
-      const validator = reactive(useFieldValidator((val) => val?.length <= 3 || 'Max 3 tags are allowed'));
-
-      return {
-        args,
-        value,
-        validator,
-        InputState
-      };
-    },
-    template: `
-      <div style="width: 360px">
-        <AntTagInput
-          v-model="value"
-          v-bind="args"
-          description="Choose max. 3 tags."
-          :state="args.state ? args.state : (validator.hasErrors() ? InputState.danger : undefined)"
-          :messages="Array.isArray(args.messages) ? args.messages : validator.getErrors()"
-          @validate="(val) => validator.validate(val)"
-        />
       </div>
     `
   }),

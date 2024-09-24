@@ -1,14 +1,11 @@
 import {type Meta, type StoryObj} from '@storybook/vue3';
 import {Size} from '../../../enums/Size.enum';
-import {isRequiredRule, notBlankRule, useFieldValidator} from '@antify/validate';
 import {InputState} from '../../../enums';
-import {reactive} from 'vue';
 import AntPasswordInput from '../AntPasswordInput.vue';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
 
 const meta: Meta<typeof AntPasswordInput> = {
-  components: {AntFormGroupLabel, AntFormGroup},
   title: 'Inputs/Password Input',
   component: AntPasswordInput,
   parameters: {controls: {sort: 'requiredFirst'}},
@@ -46,30 +43,6 @@ export const Docs: Story = {
       <AntPasswordInput
         v-bind="args"
         v-model="args.modelValue"
-      />`,
-  }),
-  args: {
-    modelValue: null,
-    label: 'Label',
-    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod'
-  },
-};
-
-export const WithValidator: Story = {
-  render: (args) => ({
-    components: {AntPasswordInput},
-    setup() {
-      const validator = reactive(useFieldValidator([isRequiredRule, notBlankRule]));
-
-      return {args, validator, InputState};
-    },
-    template: `
-      <AntPasswordInput
-        v-bind="args"
-        v-model="args.modelValue"
-        :state="args.state ? args.state : (validator.hasErrors() ? InputState.danger : undefined)"
-        :messages="Array.isArray(args.messages) ? args.messages : validator.getErrors()"
-        @validate="(val) => validator.validate(val)"
       />`,
   }),
   args: {

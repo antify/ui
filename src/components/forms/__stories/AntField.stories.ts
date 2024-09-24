@@ -2,9 +2,8 @@ import AntField from '../AntField.vue';
 import AntBaseInput from '../../inputs/Elements/AntBaseInput.vue';
 import {type Meta, type StoryObj} from '@storybook/vue3';
 import {Size} from '../../../enums/Size.enum';
-import {computed, reactive, ref} from 'vue';
+import {computed, ref} from 'vue';
 import {InputState} from '../../../enums';
-import {isRequiredRule, notBlankRule, useFieldValidator} from '@antify/validate';
 
 const meta: Meta<typeof AntField> = {
   title: 'Forms/Field',
@@ -50,32 +49,19 @@ export const Docs: Story = {
           args.size = val;
         }
       });
-      const state = computed({
-        get() {
-          return validator.hasErrors() ? InputState.danger : args.state;
-        },
-        set(val) {
-          args.state = val;
-        }
-      });
       const value = ref<string | null>(null);
-      const validator = reactive(useFieldValidator([isRequiredRule, notBlankRule]));
 
-      return {args, value, validator, skeleton, size, state, InputState};
+      return {args, value, skeleton, size, InputState};
     },
     template: `
       <AntField
         v-bind="args"
-        :messages="Array.isArray(args.messages) ? args.messages : validator.getErrors()"
-        :state="state"
       >
         <AntBaseInput
           v-model="value"
           :skeleton="skeleton"
           :size="size"
-          :state="state"
           placeholder="Placeholder"
-          @validate="(val) => validator.validate(val)"
         />
       </AntField>
     `,

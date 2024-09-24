@@ -2,7 +2,6 @@ import {ref} from 'vue';
 import AntRadioGroup from '../AntRadioGroup.vue';
 import {InputState, Size} from '../../../enums';
 import {type Meta, type StoryObj} from '@storybook/vue3';
-import {useFieldValidator} from '@antify/validate';
 import {Direction} from '../../../enums/Direction.enum';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
@@ -99,54 +98,6 @@ export const Docs: Story = {
   }),
   args: {
     radioButtons: simpleButtons
-  }
-};
-
-export const WithValidator: Story = {
-  render: (args) => ({
-    components: {AntRadioGroup},
-    setup() {
-      const value = ref(null);
-
-      const validator = ref(useFieldValidator([
-        (val: string) => val !== 'invalid-radio' || 'Choose other option!'
-      ]));
-
-      return {args, value, validator, InputState};
-    },
-    template: `
-      <AntRadioGroup
-        v-bind="args"
-        v-model="value"
-        :state="args.state ? args.state : (validator.hasErrors() ? InputState.danger : undefined)"
-        :messages="Array.isArray(args.messages) ? args.messages : validator.getErrors()"
-        @validate="(val) => validator.validate(val)"
-      />
-    `
-  }),
-  args: {
-    radioButtons: [
-      {
-        id: 'radio-1',
-        label: 'Radio 1',
-        value: 'radio-1',
-      },
-      {
-        id: 'radio-2',
-        label: 'Radio 2',
-        value: 'radio-2',
-      },
-      {
-        id: 'invalid-radio',
-        label: 'Invalid Radio',
-        value: 'invalid-radio',
-      },
-      {
-        id: 'radio-4',
-        label: 'Radio 4',
-        value: 'radio-4',
-      }
-    ]
   }
 };
 

@@ -4,8 +4,6 @@ import {Direction} from '../../../enums/Direction.enum';
 import AntDateInput from '../AntDateInput.vue';
 import {InputState} from '../../../enums';
 import {AntDateInputTypes} from '../__types/AntDateInput.types';
-import {isRequiredRule, useFieldValidator} from '@antify/validate';
-import {reactive} from 'vue';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
 
@@ -55,35 +53,6 @@ export const Docs: Story = {
     description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod'
   },
 };
-
-export const WithValidator: Story = {
-  render: (args) => ({
-    components: {AntDateInput},
-    setup() {
-      const validator = reactive(useFieldValidator([
-        isRequiredRule,
-        (val) => typeof val !== 'number' || val <= 8 || 'Value should not be bigger than 8'
-      ]));
-
-      return {args, validator, InputState};
-    },
-    template: `
-      <AntDateInput
-        v-bind="args"
-        v-model="args.modelValue"
-        :state="args.state ? args.state : (validator.hasErrors() ? InputState.danger : undefined)"
-        :messages="Array.isArray(args.messages) ? args.messages : validator.getErrors()"
-        @validate="(val) => validator.validate(val)"
-      />
-    `,
-  }),
-  args: {
-    modelValue: null,
-    label: 'Label',
-    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod'
-  },
-};
-
 
 export const Summary: Story = {
   parameters: {

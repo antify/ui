@@ -1,7 +1,6 @@
 import {type Meta, type StoryObj} from '@storybook/vue3';
-import {computed, reactive, ref} from 'vue';
+import {computed, ref} from 'vue';
 import {Size} from '../../../enums';
-import {useFieldValidator} from '@antify/validate';
 import {InputState} from '../../../enums';
 import AntSwitcher from '../AntSwitcher.vue';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
@@ -58,57 +57,6 @@ export const Docs: Story = {
     },
     template: `
       <AntSwitcher v-bind="args" v-model="modelValue"/>
-    `
-  }),
-  args: {
-    options: [
-      {
-        label: 'Entry 1',
-        value: 'entry-1'
-      },
-      {
-        label: 'Entry 2',
-        value: 'entry-2'
-      },
-      {
-        label: 'Entry 3',
-        value: 'entry-3'
-      },
-      {
-        label: 'Entry 4',
-        value: 'entry-4'
-      }
-    ],
-    modelValue: 'entry-1'
-  }
-};
-
-export const withValidator: Story = {
-  render: (args) => ({
-    components: {AntSwitcher},
-    setup() {
-      const modelValue = computed({
-        // @ts-ignore
-        get: () => args.modelValue,
-        // @ts-ignore
-        set: (val) => args.modelValue = val
-      });
-      const validator = reactive(useFieldValidator(
-        (val: string | number) => val === 'entry-1' ? 'Select something else' : true
-      ));
-
-      return {args, modelValue, validator, InputState};
-    },
-    template: `
-      <AntSwitcher
-        v-bind="args"
-        v-model="modelValue"
-        :state="args.state ? args.state : (validator.hasErrors() ? InputState.danger : undefined)"
-        :messages="Array.isArray(args.messages) ? args.messages : validator.getErrors()"
-        @validate="(val) => validator.validate(val)"
-      >
-        This value should be false
-      </AntSwitcher>
     `
   }),
   args: {
