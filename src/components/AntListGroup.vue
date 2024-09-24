@@ -3,9 +3,11 @@ import AntSkeleton from './AntSkeleton.vue';
 
 withDefaults(
   defineProps<{
-    skeleton?: boolean
+    skeleton?: boolean,
+    shadow?: boolean
   }>(), {
-    skeleton: false
+    skeleton: false,
+    shadow: false,
   }
 )
 </script>
@@ -16,7 +18,7 @@ withDefaults(
 
     <div
       class="flex flex-col rounded-md bg-neutral-300 gap-px relative border border-neutral-300 overflow-hidden"
-      :class="{'invisible': skeleton}"
+      :class="{'invisible': skeleton, 'shadow-md': shadow}"
     >
       <slot/>
     </div>

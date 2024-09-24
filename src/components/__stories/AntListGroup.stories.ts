@@ -21,7 +21,7 @@ export const Docs: Story = {
       return {args, faUser, faDownload, faMessage, faCog};
     },
     template: `
-          <div class="p-4">
+          <div class="p-4 bg-neutral-100">
             <AntListGroup v-bind="args">
               <AntListGroupItem to="/example" :icon-left="faUser">Profile</AntListGroupItem>
               <AntListGroupItem to="/example" :icon-left="faDownload">Downloads</AntListGroupItem>
