@@ -25,7 +25,7 @@ const classList = computed(() => ({
   'animate-skeleton min-h-[1px] min-w-[1px] inline-block': true,
   'absolute inset-0 w-full h-full z-40': props.absolute,
   'rounded-md': props.rounded && props.grouped === Grouped.none,
-  'rounded-xl': props.roundedFull && props.grouped === Grouped.none,
+  'rounded-full': props.roundedFull && props.grouped === Grouped.none,
   ...groupedClassList.value
 }));
 </script>
