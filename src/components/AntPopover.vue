@@ -3,16 +3,22 @@ import {computed, ref} from 'vue';
 import {Position} from '../enums/Position.enum';
 import {classesToObjectSyntax} from '../utils';
 import {arrow, autoUpdate, flip, offset, useFloating, shift, limitShift} from "@floating-ui/vue";
+import {vOnClickOutside} from '@vueuse/components';
+import {onKeyStroke} from "@vueuse/core";
 
 const props = withDefaults(defineProps<{
   showPopover: boolean,
   title?: string,
+  isClickable?: boolean,
   popoverClasses?: string | Record<string, boolean>
 }>(), {
+  isClickable: true,
   showPopover: false,
   preferredPosition: Position.top,
   popoverClasses: ''
 });
+
+const emit = defineEmits(['update:showPopover']);
 
 const reference = ref<HTMLElement | null>(null)
 const floating = ref<HTMLElement | null>(null)
@@ -20,19 +26,19 @@ const floatingArrow = ref<HTMLElement | null>(null);
 
 const {floatingStyles, middlewareData, placement} = useFloating(reference, floating, {
   transform: false,
-  placement: 'top',
+  placement: 'right',
   whileElementsMounted: autoUpdate,
   middleware: [
     offset(() => 16),
     shift({
       limiter: limitShift({
         offset: {
-          mainAxis: 57,
+          mainAxis: 62,
         }
       }),
     }),
     flip({
-      fallbackPlacements: ['bottom', 'left', 'right'],
+      fallbackPlacements: ['top', 'bottom', 'left'],
     }),
     arrow({element: floatingArrow})
   ]
@@ -60,17 +66,42 @@ const arrowTransform = computed(() => {
 });
 
 const _popoverClasses = computed(() => ({
-  'z-10 min-w-[10rem]': true,
+  'z-[90] min-w-[10rem]': true,
   ...classesToObjectSyntax(props.popoverClasses)
 }));
 const itemContainerClasses = computed(() => ({
   'relative flex items-center justify-center': true,
 }));
+
+onKeyStroke('Escape', (e: KeyboardEvent) => {
+  if (props.showPopover) {
+    e.preventDefault();
+    emit('update:showPopover', false);
+  }
+});
+
+const onClickOutside = [
+  (ev) => {
+    emit('update:showPopover', false);
+  },
+  {
+    ignore: [reference]
+  }
+]
+
+function onClickReference() {
+  if (props.isClickable) {
+    props.showPopover ? emit('update:showPopover', false) : emit('update:showPopover', true)
+  }
+}
 </script>
 
 <template>
   <div class="relative inline-flex justify-center items-end">
-    <div ref="reference">
+    <div
+      ref="reference"
+      @click="() => onClickReference()"
+    >
       <slot/>
     </div>
 
@@ -78,6 +109,7 @@ const itemContainerClasses = computed(() => ({
       <template v-if="showPopover">
         <teleport to="body">
           <div
+            v-on-click-outside="onClickOutside"
             :class="_popoverClasses"
             ref="floating"
             :style="floatingStyles"

@@ -8,11 +8,13 @@ import {autoUpdate, flip, offset, useFloating, shift} from "@floating-ui/vue";
 const props = withDefaults(defineProps<{
   showDropdown: boolean,
   dropdownClasses?: string | Record<string, boolean>,
-  contentPadding?: boolean
+  contentPadding?: boolean,
+  isClickable?: boolean,
 }>(), {
   showDropdown: false,
   contentPadding: true,
   dropdownClasses: '',
+  isClickable: true,
 });
 const emit = defineEmits(['update:showDropdown']);
 
@@ -33,7 +35,7 @@ const {floatingStyles} = useFloating(reference, floating, {
 });
 
 const _dropdownClasses = computed(() => ({
-  'absolute min-w-[10rem]': true,
+  'min-w-[10rem] z-[90]': true,
   ...classesToObjectSyntax(props.dropdownClasses)
 }));
 
@@ -52,16 +54,22 @@ const onClickOutside = [
     ignore: [reference]
   }
 ]
+
+function onClickReference() {
+  if (props.isClickable) {
+    props.showDropdown ? emit('update:showDropdown', false) : emit('update:showDropdown', true)
+  }
+}
 </script>
 
 <template>
   <div
-    class="relative inline-flex justify-center items-end z-40"
+    class="relative inline-flex justify-center items-end"
     data-e2e="dropdown"
   >
     <div
       ref="reference"
-      @click="() => props.showDropdown ? emit('update:showDropdown', false) : emit('update:showDropdown', true)"
+      @click="() => onClickReference()"
     >
       <slot/>
     </div>

@@ -89,7 +89,7 @@ const contentClasses = computed(() => {
   return {[variants[props.state]]: true};
 });
 const _tooltipClasses = computed(() => ({
-  'w-max inline-flex shadow-lg text-sm z-10 rounded-md': true,
+  'w-max inline-flex shadow-lg text-sm z-[90] rounded-md': true,
   ...classesToObjectSyntax(props.tooltipClasses)
 }));
 
