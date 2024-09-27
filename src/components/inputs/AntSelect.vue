@@ -25,7 +25,7 @@ import {vOnClickOutside} from '@vueuse/components';
 import AntButton from '../buttons/AntButton.vue';
 import {State, InputState} from '../../enums';
 import {IconSize} from '../__types';
-import AntDropDown from './Elements/AntDropDown.vue';
+import AntSelectMenu from './Elements/AntSelectMenu.vue';
 
 defineOptions({inheritAttrs: false});
 
@@ -100,9 +100,6 @@ const inputClasses = computed(() => {
     'rounded-none': props.grouped === Grouped.center,
     'rounded-md': props.grouped === Grouped.none,
     'rounded-tr-none rounded-br-none': props.nullable && _modelValue.value !== null,
-    'rounded-bl-none rounded-br-none': isOpen.value,
-    // Open
-    'shadow-md': isOpen.value,
     // Disabled
     'opacity-50 cursor-not-allowed': props.disabled,
   };
@@ -244,14 +241,26 @@ function onClickRemoveButton() {
           :name="name"
         >
 
+        <!-- Dropdown -->
+        <AntSelectMenu
+          ref="dropDownRef"
+          v-model="_modelValue"
+          v-model:open="isOpen"
+          v-model:focused="dropDownFocused"
+          :options="options"
+          :size="size"
+          :state="state"
+          :close-on-enter="true"
+          @select-element="(e) => _modelValue = e"
+        >
         <!-- Input -->
         <div
-          ref="inputRef"
           :class="inputClasses"
+          ref="inputRef"
           :tabindex="disabled || readonly ? -1 : 0"
           v-bind="$attrs"
           @mousedown="onClickSelectInput"
-          @click="inputRef?.focus()"
+          @click="() => inputRef?.focus()"
           @blur="onBlur"
         >
           <div
@@ -289,20 +298,7 @@ function onClickRemoveButton() {
             :class="arrowClasses"
           />
         </div>
-
-        <!-- Dropdown -->
-        <AntDropDown
-          ref="dropDownRef"
-          v-model="_modelValue"
-          v-model:open="isOpen"
-          v-model:focused="dropDownFocused"
-          :options="options"
-          :input-ref="inputRef"
-          :size="size"
-          :state="state"
-          :close-on-enter="true"
-          @select-element="(e) => _modelValue = e"
-        />
+        </AntSelectMenu>
       </div>
 
       <AntButton

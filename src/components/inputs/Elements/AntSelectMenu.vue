@@ -10,8 +10,9 @@
 import {computed, nextTick, onMounted, onUnmounted, ref, watch} from 'vue';
 import {InputState, Size} from '../../../enums';
 import type {SelectOption} from '../__types';
-import {useVModel} from '@vueuse/core';
+import {useVModel, useElementSize} from '@vueuse/core';
 import type {Validator} from '@antify/validate';
+import {autoUpdate, flip, offset, useFloating} from "@floating-ui/vue";
 
 const emit = defineEmits(['update:open', 'update:modelValue', 'update:focused', 'selectElement']);
 const props = withDefaults(defineProps<{
@@ -31,6 +32,19 @@ const props = withDefaults(defineProps<{
   closeOnEnter: false,
   autoSelectFirstOnOpen: true
 });
+const reference = ref<HTMLElement | null | undefined>(props.inputRef)
+const width = useElementSize(reference);
+const floating = ref<HTMLElement | null>(null)
+const {floatingStyles, middlewareData, placement} = useFloating(reference, floating, {
+  placement: 'bottom',
+  whileElementsMounted: autoUpdate,
+  middleware: [
+    offset(8),
+    flip({
+      fallbackPlacements: ['top'],
+    }),
+  ]
+});
 
 const _modelValue = useVModel(props, 'modelValue', emit);
 const isOpen = useVModel(props, 'open', emit);
@@ -46,8 +60,8 @@ const dropdownClasses = computed(() => {
   };
 
   return {
-    'absolute w-full border flex flex-col gap-px outline-none -mt-px overflow-hidden shadow-md z-40': true,
-    'rounded-bl-md rounded-br-md': true,
+    'w-full border flex flex-col gap-px outline-none -mt-px overflow-hidden shadow-md z-40': true,
+    'rounded-md': true,
     [variants[props.state]]: true,
     // Size
     'text-sm': props.size === Size.sm || props.size === Size.md
@@ -86,18 +100,22 @@ watch(isOpen, () => {
 
 onMounted(() => {
   nextTick(() => {
-    props.inputRef?.addEventListener('keydown', onKeyDownDropDown);
+    reference.value?.addEventListener('keydown', onKeyDownDropDown);
   });
 });
 
 onUnmounted(() => {
-  props.inputRef?.removeEventListener('keydown', onKeyDownDropDown);
+  reference.value?.removeEventListener('keydown', onKeyDownDropDown);
 });
 
 function onKeyDownDropDown(e: KeyboardEvent) {
   if (e.key === 'Enter') {
     if (props.closeOnEnter) {
       isOpen.value = false;
+    }
+
+    if (!isOpen.value) {
+      isOpen.value = true
     }
 
     emit('selectElement', focusedDropDownItem.value);
@@ -108,6 +126,7 @@ function onKeyDownDropDown(e: KeyboardEvent) {
   }
 
   if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+    e.preventDefault()
     isOpen.value = true;
 
     const index = props.options.findIndex(option => option.value === focusedDropDownItem.value);
@@ -121,6 +140,7 @@ function onKeyDownDropDown(e: KeyboardEvent) {
   }
 
   if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+    e.preventDefault()
     isOpen.value = true;
 
     const index = props.options.findIndex(option => option.value === focusedDropDownItem.value);
@@ -138,7 +158,7 @@ function onKeyDownDropDown(e: KeyboardEvent) {
 
 function getActiveDropDownItemClasses(option: SelectOption) {
   const variants: Record<InputState, string> = {
-    [InputState.base]: 'bg-neutral-50/25',
+    [InputState.base]: 'bg-neutral-100/25',
     [InputState.success]: 'bg-success-100/25',
     [InputState.info]: 'bg-info-100/25',
     [InputState.warning]: 'bg-warning-100/25',
@@ -150,7 +170,7 @@ function getActiveDropDownItemClasses(option: SelectOption) {
 
 function onClickDropDownItem(e: MouseEvent, value: string | number | null) {
   e.preventDefault();
-  props.inputRef?.focus();
+  reference.value?.focus();
 
   isOpen.value = false;
   emit('selectElement', value);
@@ -163,27 +183,38 @@ watch(_modelValue, (val) => {
 </script>
 
 <template>
-  <div
-    v-if="isOpen"
-    :class="dropdownClasses"
-  >
     <div
-      v-for="(option, index) in options"
-      :key="`option-${index}`"
-      :class="{...dropDownItemClasses, ...getActiveDropDownItemClasses(option)}"
-      @mousedown="(e) => onClickDropDownItem(e, option.value)"
-      @mouseover="() => focusedDropDownItem = option.value"
+      ref="reference"
+      class="relative"
     >
-      {{ option.label }}
+      <slot/>
     </div>
 
-    <div
-      v-if="options.length === 0"
-      :class="{...dropDownItemClasses}"
-    >
-      <slot name="empty">
-        No options available
-      </slot>
-    </div>
-  </div>
+    <teleport to="body">
+      <div
+        v-if="isOpen"
+        :class="dropdownClasses"
+        ref="floating"
+        :style="{width: `${width.width.value}px!important`, ...floatingStyles}"
+      >
+        <div
+          v-for="(option, index) in options"
+          :key="`option-${index}`"
+          :class="{...dropDownItemClasses, ...getActiveDropDownItemClasses(option)}"
+          @mousedown="(e) => onClickDropDownItem(e, option.value)"
+          @mouseover="() => focusedDropDownItem = option.value"
+        >
+          {{ option.label }}
+        </div>
+
+        <div
+          v-if="options.length === 0"
+          :class="{...dropDownItemClasses}"
+        >
+          <slot name="empty">
+            No options available
+          </slot>
+        </div>
+      </div>
+    </teleport>
 </template>

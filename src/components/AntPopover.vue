@@ -1,57 +1,120 @@
 <script lang="ts" setup>
-import {computed, onMounted} from 'vue';
-import {handleEnumValidation} from '../handler';
+import {computed, ref} from 'vue';
 import {Position} from '../enums/Position.enum';
 import {classesToObjectSyntax} from '../utils';
+import {arrow, autoUpdate, flip, offset, useFloating, shift, limitShift} from "@floating-ui/vue";
 
 const props = withDefaults(defineProps<{
   showPopover: boolean,
   title?: string,
-  position?: Position,
   popoverClasses?: string | Record<string, boolean>
 }>(), {
   showPopover: false,
-  position: Position.left,
+  preferredPosition: Position.top,
   popoverClasses: ''
 });
+
+const reference = ref<HTMLElement | null>(null)
+const floating = ref<HTMLElement | null>(null)
+const floatingArrow = ref<HTMLElement | null>(null);
+
+const {floatingStyles, middlewareData, placement} = useFloating(reference, floating, {
+  transform: false,
+  placement: 'top',
+  whileElementsMounted: autoUpdate,
+  middleware: [
+    offset(() => 16),
+    shift({
+      limiter: limitShift({
+        offset: {
+          mainAxis: 57,
+        }
+      }),
+    }),
+    flip({
+      fallbackPlacements: ['bottom', 'left', 'right'],
+    }),
+    arrow({element: floatingArrow})
+  ]
+});
+
+const side = computed(() => placement.value.split('-')[0]);
+const staticSide = computed(() => {
+  return {
+    top: "bottom",
+    right: "left",
+    bottom: "top",
+    left: "right"
+  }[side.value] as string
+})
+const arrowTransform = computed(() => {
+  if (placement.value === 'bottom') {
+    return 'rotate(0deg)'
+  } else if (placement.value === 'top') {
+    return 'rotate(180deg)'
+  } else if (placement.value === 'left') {
+    return 'rotate(90deg)'
+  } else {
+    return 'rotate(270deg)'
+  }
+});
+
 const _popoverClasses = computed(() => ({
-  'absolute min-w-[10rem]': true,
-  'bottom-0 mb-[50%] pb-3.5': props.position === Position.top,
-  'top-0 mt-[50%] pt-3.5': props.position === Position.bottom,
-  'right-0 mr-[100%] pr-3.5': props.position === Position.left,
-  'left-0 ml-[100%] pl-3.5': props.position === Position.right,
+  'z-10 min-w-[10rem]': true,
   ...classesToObjectSyntax(props.popoverClasses)
 }));
-const classes = computed(() => ({
-  'z-10 absolute flex': true,
-  'top-0 left-0 right-0 -m-[2.5px] justify-center': props.position === Position.bottom,
-  'bottom-0 left-0 right-0 -m-[2.5px] justify-center': props.position === Position.top,
-  'top-0 left-0 bottom-0 -ml-[2.5px]  items-end pb-1': props.position === Position.right,
-  'top-0 right-0 bottom-0 -mr-[2.5px] items-end pb-1': props.position === Position.left,
-}));
 const itemContainerClasses = computed(() => ({
-  'relative flex items-center': true,
-  'justify-center': props.position === Position.bottom,
-  'justify-center rotate-180': props.position === Position.top,
-  'justify-start -rotate-90': props.position === Position.right,
-  'justify-end rotate-90': props.position === Position.left,
+  'relative flex items-center justify-center': true,
 }));
-
-onMounted(() => {
-  handleEnumValidation(props.position, Position, 'Position');
-});
 </script>
 
 <template>
   <div class="relative inline-flex justify-center items-end">
-    <slot/>
+    <div ref="reference">
+      <slot/>
+    </div>
 
     <Transition name="bounce">
       <template v-if="showPopover">
-        <div :class="_popoverClasses">
-          <div class="shadow-lg border-neutral-300 rounded-md text-sm relative inline-flex flex-col relative">
+        <teleport to="body">
+          <div
+            :class="_popoverClasses"
+            ref="floating"
+            :style="floatingStyles"
+          >
+            <div class="shadow-lg border-neutral-300 rounded-md text-sm relative inline-flex flex-col">
+
+              <div
+                class="border-neutral-300 border-b p-2 bg-neutral-100 rounded-t-md border-t border-l border-r text-neutral-100-font font-semibold"
+              >
+                <slot name="title">
+                  {{ title }}
+                </slot>
+              </div>
+
+              <div
+                class="p-2 rounded-b-md text-for-white-bg-font border-neutral-300 border-l border-b border-r bg-white"
+              >
+                <slot name="content"/>
+              </div>
+            </div>
+
             <div
-              :class="classes"
+              class="flex items-center justify-center"
+              ref="floatingArrow"
+              :style="{
+            position: 'absolute',
+            left:
+              middlewareData.arrow?.x != null
+                ? `${middlewareData.arrow.x}px`
+                : '',
+            top:
+              middlewareData.arrow?.y != null
+                ? `${middlewareData.arrow.y}px`
+                : '',
+            [staticSide]: '-2.5px',
+            transform: arrowTransform
+            }"
             >
               <div
                 :class="itemContainerClasses"
@@ -66,12 +129,12 @@ onMounted(() => {
                 >
                   <path
                     d="M20.3284 1.82843L23.1569 4.65685C24.6571 6.15715 26.692 7 28.8137 7L6.18629 7C8.30802 7 10.3429 6.15715 11.8431 4.65686L14.6716 1.82843C16.2337 0.266331 18.7663 0.266328 20.3284 1.82843Z"
-                    :class="{'fill-neutral-100': position === Position.bottom, 'fill-white': position === Position.top || position === Position.right || position === Position.left}"
+                    :class="{'fill-neutral-100': placement === Position.bottom, 'fill-white': placement === Position.top || placement === Position.right || placement === Position.left}"
                   />
 
                   <path
                     d="M34.5 7L28.8137 7C26.692 7 24.6571 6.15715 23.1569 4.65685L20.3284 1.82843C18.7663 0.266328 16.2337 0.266331 14.6716 1.82843L11.8431 4.65686C10.3429 6.15715 8.30802 7 6.18629 7L0.5 7L34.5 7Z"
-                    :class="{'stroke-neutral-100': position === Position.bottom, 'stroke-white': position === Position.top || position === Position.right || position === Position.left}"
+                    :class="{'stroke-neutral-100': placement === Position.bottom, 'stroke-white': placement === Position.top || placement === Position.right || placement === Position.left}"
                   />
                 </svg>
 
@@ -90,22 +153,8 @@ onMounted(() => {
                 </svg>
               </div>
             </div>
-
-            <div
-              class="border-neutral-300 border-b p-2 bg-neutral-100 rounded-t-md border-t border-l border-r text-neutral-100-font font-semibold"
-            >
-              <slot name="title">
-                {{ title }}
-              </slot>
-            </div>
-
-            <div
-              class="p-2 rounded-b-md text-for-white-bg-font border-neutral-300 border-l border-b border-r bg-white"
-            >
-              <slot name="content"/>
-            </div>
           </div>
-        </div>
+        </teleport>
       </template>
     </Transition>
   </div>

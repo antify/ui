@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@floating-ui/vue':
+    specifier: ^1.1.5
+    version: 1.1.5(vue@3.4.38)
   '@fortawesome/free-regular-svg-icons':
     specifier: ^6.5.1
     version: 6.6.0
@@ -2134,6 +2137,34 @@ packages:
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0, npm: '>=6.14.13'}
     dev: true
 
+  /@floating-ui/core@1.6.8:
+    resolution: {integrity: sha512-7XJ9cPU+yI2QeLS+FCSlqNFZJq8arvswefkZrYI1yQBbftw6FyrZOxYSh+9S7z7TpeWlRt9zJ5IhM1WIL334jA==}
+    dependencies:
+      '@floating-ui/utils': 0.2.8
+    dev: false
+
+  /@floating-ui/dom@1.6.11:
+    resolution: {integrity: sha512-qkMCxSR24v2vGkhYDo/UzxfJN3D4syqSjyuTFz6C7XcpU1pASPRieNI0Kj5VP3/503mOfYiGY891ugBX1GlABQ==}
+    dependencies:
+      '@floating-ui/core': 1.6.8
+      '@floating-ui/utils': 0.2.8
+    dev: false
+
+  /@floating-ui/utils@0.2.8:
+    resolution: {integrity: sha512-kym7SodPp8/wloecOpcmSnWJsK7M0E5Wg8UcFA+uO4B9s5d0ywXOEro/8HM9x0rW+TljRzul/14UYz3TleT3ig==}
+    dev: false
+
+  /@floating-ui/vue@1.1.5(vue@3.4.38):
+    resolution: {integrity: sha512-ynL1p5Z+woPVSwgMGqeDrx6HrJfGIDzFyESFkyqJKilGW1+h/8yVY29Khn0LaU6wHBRwZ13ntG6reiHWK6jyzw==}
+    dependencies:
+      '@floating-ui/dom': 1.6.11
+      '@floating-ui/utils': 0.2.8
+      vue-demi: 0.14.10(vue@3.4.38)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
+    dev: false
+
   /@fortawesome/fontawesome-common-types@6.6.0:
     resolution: {integrity: sha512-xyX0X9mc0kyz9plIyryrRbl7ngsA9jz77mCZJsUkLl+ZKs0KWObgaEBoSgQiYWAsSmjz/yjl0F++Got0Mdp4Rw==}
     engines: {node: '>=6'}
@@ -2916,7 +2947,7 @@ packages:
       ts-dedent: 2.2.0
       type-fest: 2.19.0
       vue: 3.4.38(typescript@5.4.5)
-      vue-component-type-helpers: 2.0.29
+      vue-component-type-helpers: 2.1.6
     dev: true
 
   /@testing-library/dom@10.1.0:
@@ -8882,6 +8913,10 @@ packages:
 
   /vue-component-type-helpers@2.0.29:
     resolution: {integrity: sha512-58i+ZhUAUpwQ+9h5Hck0D+jr1qbYl4voRt5KffBx8qzELViQ4XdT/Tuo+mzq8u63teAG8K0lLaOiL5ofqW38rg==}
+    dev: true
+
+  /vue-component-type-helpers@2.1.6:
+    resolution: {integrity: sha512-ng11B8B/ZADUMMOsRbqv0arc442q7lifSubD0v8oDXIFoMg/mXwAPUunrroIDkY+mcD0dHKccdaznSVp8EoX3w==}
     dev: true
 
   /vue-demi@0.14.10(vue@3.4.38):

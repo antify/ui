@@ -114,12 +114,14 @@ onMounted(() => {
       <div class="flex gap-2">
         <div v-if="hasQuestionMark">
           <slot name="questionMarkText">
-            <AntTooltip :position="Position.bottom">
-              <AntIcon
-                :icon="faCircleQuestion"
-                :color="iconColor"
-                :size="IconSize.sm"
-              />
+            <AntTooltip >
+              <template #reference>
+                <AntIcon
+                  :icon="faCircleQuestion"
+                  :color="iconColor"
+                  :size="IconSize.sm"
+                />
+              </template>
 
               <template #content>
                 {{ questionMarkText }}

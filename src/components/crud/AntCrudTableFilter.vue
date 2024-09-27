@@ -81,25 +81,27 @@ watch(() => props.fullWidth, (val) => {
         v-model:show-dropdown="showDropdown"
         :position="Position.left"
       >
-        <div class="flex">
-          <AntButton
-            :state="hasFilter ? State.info : State.base"
-            :grouped="hasFilter ? Grouped.left : Grouped.none"
-            :skeleton="skeleton"
-            :icon-left="faFilter"
-            @click="() => showDropdown = !showDropdown"
-          />
+        <template #reference>
+          <div class="flex">
+            <AntButton
+              :state="hasFilter ? State.info : State.base"
+              :grouped="hasFilter ? Grouped.left : Grouped.none"
+              :skeleton="skeleton"
+              :icon-left="faFilter"
+              @click="() => showDropdown = !showDropdown"
+            />
 
-          <AntButton
-            v-if="hasFilter"
-            :state="State.info"
-            :grouped="Grouped.right"
-            :skeleton="skeleton"
-            :icon-left="faMultiply"
-            filled
-            @click="$emit('removeFilter')"
-          />
-        </div>
+            <AntButton
+              v-if="hasFilter"
+              :state="State.info"
+              :grouped="Grouped.right"
+              :skeleton="skeleton"
+              :icon-left="faMultiply"
+              filled
+              @click="$emit('removeFilter')"
+            />
+          </div>
+        </template>
 
         <template #content>
           <slot name="dropdownContent"/>
