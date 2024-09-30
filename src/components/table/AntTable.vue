@@ -92,110 +92,110 @@ function rowClick(elem: Record<string, unknown>): void {
     class="relative inline-block min-w-full align-middle h-full"
     data-e2e="table"
   >
-    <div class="overflow-hidden h-full overflow-x-auto overflow-y-auto">
-      <table
-        v-bind="$attrs"
-        class="min-w-full max-h-full relative"
-        :class="{'h-full': data.length === 0 && !_loading}"
-      >
-        <thead class="sticky top-0 z-10" :class="headerColor">
-        <tr>
-          <slot name="headerFirstCell"/>
+      <div class="overflow-hidden h-full overflow-x-auto overflow-y-auto">
+        <table
+          v-bind="$attrs"
+          class="min-w-full max-h-full relative"
+          :class="{'h-full': data.length === 0 && !_loading}"
+        >
+          <thead class="sticky top-0 z-10" :class="headerColor">
+          <tr>
+            <slot name="headerFirstCell"/>
 
-          <template v-for="(header, index) in _headers">
-            <AntTh
-              v-if="!_showLightVersion || (_showLightVersion && header.lightVersion)"
-              :key="`table-header-${header.identifier}-${index}`"
-              :header="header"
-              :size="size"
-              @sort="sortTable"
-            >
-              <template #headerContent>
-                <slot
-                  name="headerContent"
-                  v-bind="header"
-                />
-              </template>
-            </AntTh>
-          </template>
+            <template v-for="(header, index) in _headers">
+              <AntTh
+                v-if="!_showLightVersion || (_showLightVersion && header.lightVersion)"
+                :key="`table-header-${header.identifier}-${index}`"
+                :header="header"
+                :size="size"
+                @sort="sortTable"
+              >
+                <template #headerContent>
+                  <slot
+                    name="headerContent"
+                    v-bind="header"
+                  />
+                </template>
+              </AntTh>
+            </template>
 
-          <slot name="headerLastCell"></slot>
-        </tr>
-        </thead>
+            <slot name="headerLastCell"></slot>
+          </tr>
+          </thead>
 
-        <tbody class="bg-white relative">
-        <!-- TODO:: Add some kind of virtual list for very large tree data (or required pagination??) -->
-        <tr
-          v-for="(elem, rowIndex) in data"
-          :id="elem[rowKey] as string"
-          :key="`table-row-${elem[rowKey]}-${rowIndex}`"
-          class="transition-all"
-          :class="{
+          <tbody class="bg-white relative">
+          <!-- TODO:: Add some kind of virtual list for very large tree data (or required pagination??) -->
+          <tr
+            v-for="(elem, rowIndex) in data"
+            :id="elem[rowKey] as string"
+            :key="`table-row-${elem[rowKey]}-${rowIndex}`"
+            class="transition-all"
+            :class="{
               'bg-primary-200 text-primary-200-font': elem === selected,
               'bg-white text-for-white-bg-font': elem !== selected && rowIndex % 2 === 0,
               'bg-neutral-100 text-neutral-100-font': elem !== selected && rowIndex % 2 !== 0,
               'cursor-pointer': selectableRows
             }"
-        >
-          <slot
-            name="rowFirstCell"
-            v-bind="{ elem }"
-          />
-
-          <template v-for="(header, colIndex) in _headers">
-            <AntTd
-              v-if="!_showLightVersion || (_showLightVersion && header.lightVersion)"
-              :key="`table-cell-${header.identifier}-${colIndex}`"
-              :header="header"
-              :element="elem"
-              :align="header.align"
-              :size="size"
-              @click="rowClick(elem)"
-            >
-              <template #beforeCellContent="props">
-                <slot
-                  name="beforeCellContent"
-                  v-bind="{...props, colIndex, rowIndex}"
-                />
-              </template>
-
-              <template #cellContent="props">
-                <slot
-                  name="cellContent"
-                  v-bind="{...props, colIndex, rowIndex}"
-                />
-              </template>
-
-              <template #afterCellContent="props">
-                <slot
-                  name="afterCellContent"
-                  v-bind="{...props, colIndex, rowIndex}"
-                />
-              </template>
-            </AntTd>
-          </template>
-
-          <slot
-            name="rowLastCell"
-            v-bind="{ elem }"
-          />
-        </tr>
-
-        <tr v-if="data.length <= 0 && !_loading">
-          <td
-            colspan="100"
-            class="w-full h-full py-2 text-center text-for-white-bg-font text-lg"
           >
-            <slot name="emptyState">
-              <div class="flex items-center flex-col">
-                <span class="font-semibold">We couldn't find any entry</span>
-              </div>
-            </slot>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
+            <slot
+              name="rowFirstCell"
+              v-bind="{ elem }"
+            />
+
+            <template v-for="(header, colIndex) in _headers">
+              <AntTd
+                v-if="!_showLightVersion || (_showLightVersion && header.lightVersion)"
+                :key="`table-cell-${header.identifier}-${colIndex}`"
+                :header="header"
+                :element="elem"
+                :align="header.align"
+                :size="size"
+                @click="rowClick(elem)"
+              >
+                <template #beforeCellContent="props">
+                  <slot
+                    name="beforeCellContent"
+                    v-bind="{...props, colIndex, rowIndex}"
+                  />
+                </template>
+
+                <template #cellContent="props">
+                  <slot
+                    name="cellContent"
+                    v-bind="{...props, colIndex, rowIndex}"
+                  />
+                </template>
+
+                <template #afterCellContent="props">
+                  <slot
+                    name="afterCellContent"
+                    v-bind="{...props, colIndex, rowIndex}"
+                  />
+                </template>
+              </AntTd>
+            </template>
+
+            <slot
+              name="rowLastCell"
+              v-bind="{ elem }"
+            />
+          </tr>
+
+          <tr v-if="data.length <= 0 && !_loading">
+            <td
+              colspan="100"
+              class="w-full h-full py-2 text-center text-for-white-bg-font text-lg"
+            >
+              <slot name="emptyState">
+                <div class="flex items-center flex-col">
+                  <span class="font-semibold">We couldn't find any entry</span>
+                </div>
+              </slot>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
 
     <div
       v-if="data.length > 0 && _loading"

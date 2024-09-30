@@ -131,7 +131,7 @@ export const Docs: Story = {
         <AntTable v-bind="args" v-model="selected">
           <template #cellContent="{element: entry, header}">
             <div v-if="header.identifier === 'employeed'">
-              <AntSwitch :model-value="entry.employeed"/>
+              <AntSwitch v-model="entry.employeed"/>
             </div>
           </template>
         </AntTable>
