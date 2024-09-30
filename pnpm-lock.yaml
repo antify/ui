@@ -2916,7 +2916,7 @@ packages:
       ts-dedent: 2.2.0
       type-fest: 2.19.0
       vue: 3.4.38(typescript@5.4.5)
-      vue-component-type-helpers: 2.0.29
+      vue-component-type-helpers: 2.1.6
     dev: true
 
   /@testing-library/dom@10.1.0:
@@ -8882,6 +8882,10 @@ packages:
 
   /vue-component-type-helpers@2.0.29:
     resolution: {integrity: sha512-58i+ZhUAUpwQ+9h5Hck0D+jr1qbYl4voRt5KffBx8qzELViQ4XdT/Tuo+mzq8u63teAG8K0lLaOiL5ofqW38rg==}
+    dev: true
+
+  /vue-component-type-helpers@2.1.6:
+    resolution: {integrity: sha512-ng11B8B/ZADUMMOsRbqv0arc442q7lifSubD0v8oDXIFoMg/mXwAPUunrroIDkY+mcD0dHKccdaznSVp8EoX3w==}
     dev: true
 
   /vue-demi@0.14.10(vue@3.4.38):

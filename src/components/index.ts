@@ -86,6 +86,7 @@ import AntTag from './AntTag.vue';
 import AntToast from './AntToast.vue';
 import AntToaster from './AntToaster.vue';
 import AntTooltip from './AntTooltip.vue';
+import AntScrollElement from './AntTooltip.vue';
 
 export {
   AntActionButton,
@@ -153,5 +154,6 @@ export {
   AntTag,
   AntToast,
   AntToaster,
-  AntTooltip
+  AntTooltip,
+  AntScrollElement
 };

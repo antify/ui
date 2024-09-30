@@ -174,7 +174,7 @@ function onBlur(e: FocusEvent) {
 
       <div
         v-if="showIcon && icon"
-        class="absolute flex h-[95%] right-0 top-0 transition-all z-20"
+        class="absolute flex h-fit right-0 top-0 transition-all z-20"
         :class="{'p-1': size === Size.xs2, 'p-1.5': size === Size.sm || size === Size.xs, 'p-2': size === Size.md, 'p-2.5': size === Size.lg}"
       >
         <AntIcon
