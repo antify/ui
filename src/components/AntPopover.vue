@@ -85,22 +85,16 @@ const onClickOutside = [
     emit('update:showPopover', false);
   },
   {
-    ignore: [reference]
+    ignore: [floating]
   }
 ]
-
-function onClickReference() {
-  if (props.isClickable) {
-    props.showPopover ? emit('update:showPopover', false) : emit('update:showPopover', true)
-  }
-}
 </script>
 
 <template>
   <div class="relative inline-flex justify-center items-end">
     <div
+      v-on-click-outside="onClickOutside"
       ref="reference"
-      @click="() => onClickReference()"
     >
       <slot/>
     </div>
@@ -109,7 +103,6 @@ function onClickReference() {
       <template v-if="showPopover">
         <teleport to="body">
           <div
-            v-on-click-outside="onClickOutside"
             :class="_popoverClasses"
             ref="floating"
             :style="floatingStyles"

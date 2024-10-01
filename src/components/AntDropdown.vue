@@ -51,15 +51,9 @@ const onClickOutside = [
     emit('update:showDropdown', false);
   },
   {
-    ignore: [reference]
+    ignore: [floating]
   }
 ]
-
-function onClickReference() {
-  if (props.isClickable) {
-    props.showDropdown ? emit('update:showDropdown', false) : emit('update:showDropdown', true)
-  }
-}
 </script>
 
 <template>
@@ -69,7 +63,7 @@ function onClickReference() {
   >
     <div
       ref="reference"
-      @click="() => onClickReference()"
+      v-on-click-outside="onClickOutside"
     >
       <slot/>
     </div>
@@ -77,7 +71,6 @@ function onClickReference() {
     <Transition name="bounce">
       <teleport to="body">
         <div
-          v-on-click-outside="onClickOutside"
           v-if="showDropdown"
           :class="_dropdownClasses"
           ref="floating"

@@ -43,7 +43,7 @@ export const Docs: Story = {
       <div ref="scrollContainer" class="dashed overflow-scroll" :style="{height: '500px', width: '500px'}">
         <div class="flex justify-center items-center" :style="{height: '1000px', width: '1000px'}">
           <AntPopover popover-classes="w-64" v-bind="args" v-model:show-popover="showPopover">
-            <AntButton filled>Click me</AntButton>
+            <AntButton @click="() => showPopover = !showPopover" filled>Click me</AntButton>
 
             <template #content>{{ dummyText }}</template>
             <template #title>{{ 'Title' }}</template>

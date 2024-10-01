@@ -46,7 +46,7 @@ export const Docs: Story = {
       <div ref="scrollContainer" class="dashed overflow-scroll" :style="{height: '500px', width: '500px'}">
         <div class="flex justify-center items-center" :style="{height: '1000px', width: '1000px'}">
           <AntDropdown dropdown-classes="w-64" v-bind="args" v-model:show-dropdown="showDropdown">
-            <AntButton filled>Click me</AntButton>
+            <AntButton @click="() => showDropdown = !showDropdown" filled>Click me</AntButton>
 
             <template #content>
               Lorem ipsum dolor sit amet, consetetur sadipscing

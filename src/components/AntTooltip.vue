@@ -143,10 +143,10 @@ function onClick() {
         ref="floating"
         :style="{
       ...floatingStyles,
-      display: floatOpen
-      ? 'block'
-      : 'none',
-      }"
+        display: floatOpen
+          ? 'block'
+          : 'none',
+        }"
         data-e2e="tooltip-content"
       >
         <div
