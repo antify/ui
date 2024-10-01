@@ -1,7 +1,8 @@
 import {type Meta, type StoryObj} from '@storybook/vue3';
 import {Size} from '../../../enums/Size.enum';
 import AntSelect from '../AntSelect.vue';
-import {computed} from 'vue';
+import AntDropdown from "../Elements/AntSelectMenu.vue";
+import {computed, onMounted, ref, type Ref} from 'vue';
 import {type SelectOption} from '../__types/AntSelect.types';
 import {InputState} from '../../../enums';
 
@@ -62,7 +63,7 @@ const options: SelectOption[] = [
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntSelect},
+    components: {AntSelect, AntDropdown},
     setup() {
       const modelValue = computed({
         // @ts-ignore
@@ -70,11 +71,23 @@ export const Docs: Story = {
         // @ts-ignore
         set: (val) => args.modelValue = val
       });
+      const scrollContainer: Ref<HTMLElement | undefined> = ref(undefined)
 
-      return {args, modelValue};
+      onMounted(() => {
+        if (scrollContainer.value) {
+          scrollContainer.value.scrollTop =  (scrollContainer.value.scrollHeight - scrollContainer.value.clientHeight ) / 2;
+        }
+      })
+
+      return {args, modelValue, scrollContainer};
     },
     template: `
-      <AntSelect v-bind="args" v-model="modelValue"/>`,
+      <div ref="scrollContainer" class="overflow-y-auto h-[100vh] p-2.5 dashed">
+        <div class="flex items-center h-[200vh]">
+          <AntSelect v-bind="args" v-model="modelValue"/>
+        </div>
+      </div>
+    `,
   }),
   args: {
     modelValue: null,

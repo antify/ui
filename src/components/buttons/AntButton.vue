@@ -196,58 +196,54 @@ onMounted(() => {
     />
 
     <AntTooltip
-      :expanded="expanded"
-      :position="tooltipPosition"
       :state="tooltipState"
       :delay="tooltipDelay"
     >
-      <template #default>
-        <component
-          :is="is"
-          :class="classes"
-          :type="type"
-          :to="to"
-          :disabled="disabled || undefined"
-          :tabindex="noFocus || hasInputState ? '-1' : '0'"
-          @click="() => !props.readonly ? $emit('click') : null"
-          @blur="() => !props.readonly ? $emit('blur') : null"
+      <component
+        :is="is"
+        :class="classes"
+        :type="type"
+        :to="to"
+        :disabled="disabled || undefined"
+        :tabindex="noFocus || hasInputState ? '-1' : '0'"
+        @click="() => !props.readonly ? $emit('click') : null"
+        @blur="() => !props.readonly ? $emit('blur') : null"
+      >
+        <AntSpinner
+          v-if="spinner"
+          :size="size"
+          :state="state"
+          :inverted="!filled"
+        />
+
+        <slot
+          v-if="!spinner"
+          name="icon-left"
         >
-          <AntSpinner
-            v-if="spinner"
-            :size="size"
-            :state="state"
-            :inverted="!filled"
+          <AntIcon
+            v-if="iconLeft"
+            :icon="iconLeft"
+            :size="getIconSize"
+            :color="iconColor"
           />
+        </slot>
 
-          <slot
-            v-if="!spinner"
-            name="icon-left"
-          >
-            <AntIcon
-              v-if="iconLeft"
-              :icon="iconLeft"
-              :size="getIconSize"
-              :color="iconColor"
-            />
-          </slot>
+        <slot
+          v-if="!spinner"
+        />
 
-          <slot
-            v-if="!spinner"
+        <slot
+          v-if="!spinner"
+          name="icon-right"
+        >
+          <AntIcon
+            v-if="iconRight"
+            :icon="iconRight"
+            :size="getIconSize"
+            :color="iconColor"
           />
-
-          <slot
-            v-if="!spinner"
-            name="icon-right"
-          >
-            <AntIcon
-              v-if="iconRight"
-              :icon="iconRight"
-              :size="getIconSize"
-              :color="iconColor"
-            />
-          </slot>
-        </component>
-      </template>
+        </slot>
+      </component>
 
       <template #content>
         <slot name="tooltip-content"/>

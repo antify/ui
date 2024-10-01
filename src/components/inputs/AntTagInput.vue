@@ -8,7 +8,7 @@ import {computed, onMounted, type Ref, ref, watch} from 'vue';
 import AntTag from '../AntTag.vue';
 import AntIcon from '../AntIcon.vue';
 import {AntTagSize, IconSize} from '../__types';
-import AntDropDown from './Elements/AntDropDown.vue';
+import AntDropDown from './Elements/AntSelectMenu.vue';
 import AntSkeleton from '../AntSkeleton.vue';
 import {vOnClickOutside} from '@vueuse/components';
 import {AntTagInputSize} from './__types/AntTagInput.types';

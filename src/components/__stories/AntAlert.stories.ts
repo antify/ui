@@ -39,7 +39,7 @@ export const Docs: Story = {
     `,
   }),
   args: {
-    title: 'Lorem ipsum dolor'
+    title: 'Lorem ipsum dolor',
   },
 };
 

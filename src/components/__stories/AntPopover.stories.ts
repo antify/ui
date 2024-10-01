@@ -1,18 +1,13 @@
 import AntPopover from '../AntPopover.vue';
 import AntButton from '../buttons/AntButton.vue';
 import {type Meta, type StoryObj} from '@storybook/vue3';
-import {Position} from '../../enums/Position.enum';
-import {computed} from 'vue';
+import {computed, onMounted, ref, type Ref} from 'vue';
 
 const meta: Meta<typeof AntPopover> = {
   title: 'Components/Popover',
   component: AntPopover,
   parameters: {controls: {sort: 'requiredFirst'}},
   argTypes: {
-    position: {
-      control: {type: 'select'},
-      options: Object.values(Position),
-    },
   },
 };
 
@@ -33,20 +28,29 @@ export const Docs: Story = {
           args.showPopover = val;
         }
       });
+      const scrollContainer: Ref<HTMLElement | undefined> = ref(undefined)
 
-      return {args, showPopover, dummyText};
+      onMounted(() => {
+        if (scrollContainer.value) {
+          scrollContainer.value.scrollLeft =  (scrollContainer.value.scrollWidth - scrollContainer.value.clientWidth ) / 2;
+          scrollContainer.value.scrollTop =  (scrollContainer.value.scrollHeight - scrollContainer.value.clientHeight ) / 3;
+        }
+      })
+
+      return {args, showPopover, dummyText, scrollContainer};
     },
     template: `
-          <div class="p-64 flex justify-center items-center">
-            <AntPopover popover-classes="w-64" v-bind="args">
-              <template #content>{{ dummyText }}</template>
-              <template #title>{{ 'Title' }}</template>
-              <template #default>
-                <AntButton @click="() => showPopover = !showPopover" filled>Click me</AntButton>
-              </template>
-            </AntPopover>
-          </div>
-        `,
+      <div ref="scrollContainer" class="dashed overflow-scroll" :style="{height: '500px', width: '500px'}">
+        <div class="flex justify-center items-center" :style="{height: '1000px', width: '1000px'}">
+          <AntPopover popover-classes="w-64" v-bind="args" v-model:show-popover="showPopover">
+            <AntButton @click="() => showPopover = !showPopover" filled>Click me</AntButton>
+
+            <template #content>{{ dummyText }}</template>
+            <template #title>{{ 'Title' }}</template>
+          </AntPopover>
+        </div>
+      </div>
+    `,
   }),
   args: {
     showPopover: true,

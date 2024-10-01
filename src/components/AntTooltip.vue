@@ -1,57 +1,59 @@
 <script lang="ts" setup>
-import {computed, onMounted, ref, getCurrentInstance} from 'vue';
-import {handleEnumValidation} from '../handler';
-import {InputState, Position} from '../enums';
-import {classesToObjectSyntax} from '../utils';
+import {computed, ref} from 'vue';
+import {InputState} from '../enums';
+import {arrow, autoUpdate, flip, offset, useFloating} from "@floating-ui/vue";
 import {hasSlotContent} from '../utils';
+import {classesToObjectSyntax} from '../utils';
 
 const props = withDefaults(defineProps<{
-  position?: Position
+  state?: InputState,
+  delay?: number,
   tooltipClasses?: string | Record<string, boolean>
-  state?: InputState
-  expanded?: boolean
-  delay?: number
 }>(), {
-  position: Position.left,
-  tooltipClasses: '',
   state: InputState.base,
-  expanded: false,
-  delay: 800
+  delay: 600,
+  tooltipClasses: '',
 });
-const visible = ref(false);
-const _tooltipClasses = computed(() => ({
-  'absolute w-max inline-flex': true,
-  // Position
-  'bottom-full pb-3.5': props.position === Position.top,
-  'top-full pt-3.5': props.position === Position.bottom,
-  'right-full pr-3.5': props.position === Position.left,
-  'left-full pl-3.5': props.position === Position.right,
-  ...classesToObjectSyntax(props.tooltipClasses)
-}));
-const classes = computed(() => ({
-  'z-10 absolute flex': true,
-  'top-0 left-0 right-0 -m-[2px] justify-center': props.position === Position.bottom,
-  'bottom-0 left-0 right-0 -m-[2px] justify-center': props.position === Position.top,
-  'top-0 left-0 bottom-0 -ml-[2.2px] items-center': props.position === Position.right,
-  'top-0 right-0 bottom-0 -mr-[2.2px] items-center': props.position === Position.left,
-}));
-const itemContainerClasses = computed(() => ({
-  'relative flex items-center': true,
-  'justify-center': props.position === Position.bottom,
-  'justify-center rotate-180': props.position === Position.top,
-  'justify-center -rotate-90': props.position === Position.right,
-  'justify-center rotate-90': props.position === Position.left,
-}));
-const contentClasses = computed(() => {
-  const variants: Record<InputState, string> = {
-    [InputState.base]: 'text-for-white-bg-font bg-white border-neutral-300',
-    [InputState.danger]: 'text-danger-500-font bg-danger-500 border-danger-500',
-    [InputState.info]: 'text-info-500-font bg-info-500 border-info-500',
-    [InputState.success]: 'text-success-500-font bg-success-500 border-success-500',
-    [InputState.warning]: 'text-warning-500-font bg-warning-500 border-warning-500',
-  };
 
-  return {[variants[props.state]]: true};
+const floatOpen = ref<boolean>(false)
+const clickLock = ref(false);
+const timeout = ref<number | undefined>();
+
+const reference = ref<HTMLElement | null>(null)
+const floating = ref<HTMLElement | null>(null)
+const floatingArrow = ref<HTMLElement | null>(null);
+
+const {floatingStyles, middlewareData, placement} = useFloating(reference, floating, {
+  placement: 'top',
+  whileElementsMounted: autoUpdate,
+  middleware: [
+    offset(() => 16),
+    flip({
+      fallbackPlacements: ['bottom', 'left', 'right'],
+      fallbackAxisSideDirection: 'none',
+    }),
+    arrow({element: floatingArrow})
+  ]
+});
+const side = computed(() => placement.value.split('-')[0]);
+const staticSide = computed(() => {
+  return {
+    top: "bottom",
+    right: "left",
+    bottom: "top",
+    left: "right"
+  }[side.value] as string
+})
+const arrowTransform = computed(() => {
+  if (placement.value === 'bottom') {
+    return 'rotate(0deg)'
+  } else if (placement.value === 'top') {
+    return 'rotate(180deg)'
+  } else if (placement.value === 'left') {
+    return 'rotate(90deg)'
+  } else {
+    return 'rotate(270deg)'
+  }
 });
 const svgPathClasses = computed(() => {
   const variants: Record<InputState, string> = {
@@ -75,17 +77,24 @@ const arrowSvgPathClasses = computed(() => {
 
   return {[variants[props.state]]: true};
 });
-const timeout = ref<number | undefined>();
-const clickLock = ref(false);
-const uuid = ref(getCurrentInstance()?.uid);
+const contentClasses = computed(() => {
+  const variants: Record<InputState, string> = {
+    [InputState.base]: 'text-for-white-bg-font bg-white border-neutral-300',
+    [InputState.danger]: 'text-danger-500-font bg-danger-500 border-danger-500',
+    [InputState.info]: 'text-info-500-font bg-info-500 border-info-500',
+    [InputState.success]: 'text-success-500-font bg-success-500 border-success-500',
+    [InputState.warning]: 'text-warning-500-font bg-warning-500 border-warning-500',
+  };
 
-onMounted(() => {
-  handleEnumValidation(props.position, Position, 'position');
-  handleEnumValidation(props.state, InputState, 'state');
+  return {[variants[props.state]]: true};
 });
+const _tooltipClasses = computed(() => ({
+  'w-max inline-flex shadow-lg text-sm z-[90] rounded-md': true,
+  ...classesToObjectSyntax(props.tooltipClasses)
+}));
 
 function onMouseOver() {
-  if (visible.value || clickLock.value) {
+  if (floatOpen.value || clickLock.value) {
     return;
   }
 
@@ -95,52 +104,76 @@ function onMouseOver() {
    */
   clearTimeout(timeout.value);
 
-  timeout.value = setTimeout(() => visible.value = true, props.delay) as unknown as number;
+  timeout.value = setTimeout(() => floatOpen.value = true, props.delay) as unknown as number;
 }
 
 function onMouseLeave() {
   clearTimeout(timeout.value);
 
-  visible.value = false;
+  floatOpen.value = false;
   clickLock.value = false;
 }
 
 function onClick() {
   clearTimeout(timeout.value);
 
-  visible.value = false;
+  floatOpen.value = false;
   clickLock.value = true;
 }
 </script>
 
 <template>
   <div
-    :key="uuid"
-    class="relative justify-center items-center"
-    :class="{'flex w-full': props.expanded, 'inline-flex': !props.expanded}"
+    class="relative"
     data-e2e="tooltip"
-    @mouseover="() => onMouseOver()"
-    @mouseleave="() => onMouseLeave()"
   >
     <div
-      class="w-full"
+      ref="reference"
+      @mouseenter="() => onMouseOver()"
+      @mouseleave="() => onMouseLeave()"
       @click="() => onClick()"
     >
       <slot/>
     </div>
 
-    <div
-      v-if="visible && hasSlotContent($slots.content)"
-      :class="_tooltipClasses"
-    >
+    <teleport to="body">
       <div
-        class="shadow-lg text-sm relative"
+        v-if="floatOpen && hasSlotContent($slots.content)"
+        :class="_tooltipClasses"
+        ref="floating"
+        :style="{
+      ...floatingStyles,
+        display: floatOpen
+          ? 'block'
+          : 'none',
+        }"
+        data-e2e="tooltip-content"
       >
         <div
-          :class="classes"
+          class="p-2 rounded-md border"
+          :class="contentClasses"
+        >
+          <slot name="content"/>
+        </div>
+        <div
+          class="flex items-center justify-center"
+          ref="floatingArrow"
+          :style="{
+        position: 'absolute',
+        left:
+          middlewareData.arrow?.x != null
+            ? `${middlewareData.arrow.x}px`
+            : '',
+        top:
+          middlewareData.arrow?.y != null
+            ? `${middlewareData.arrow.y}px`
+            : '',
+        [staticSide]: '-2px',
+        transform: arrowTransform
+      }"
         >
           <div
-            :class="itemContainerClasses"
+            class="flex items-center justify-center"
           >
             <svg
               class="absolute mt-[.5px]"
@@ -176,14 +209,7 @@ function onClick() {
             </svg>
           </div>
         </div>
-
-        <div
-          class="p-2 rounded-md border"
-          :class="contentClasses"
-        >
-          <slot name="content"/>
-        </div>
       </div>
-    </div>
+    </teleport>
   </div>
 </template>
