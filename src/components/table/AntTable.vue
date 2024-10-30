@@ -129,12 +129,12 @@ function rowClick(elem: Record<string, unknown>): void {
           v-for="(elem, rowIndex) in data"
           :id="elem[rowKey] as string"
           :key="`table-row-${elem[rowKey]}-${rowIndex}`"
-          class="transition-all"
           :class="{
-              'bg-primary-200 text-primary-200-font': elem === selected,
+              'bg-primary-200 text-primary-200-font transition-colors': elem === selected,
               'bg-white text-for-white-bg-font': elem !== selected && rowIndex % 2 === 0,
               'bg-neutral-100 text-neutral-100-font': elem !== selected && rowIndex % 2 !== 0,
-              'cursor-pointer': selectableRows
+              'cursor-pointer': selectableRows,
+              'hover:bg-neutral-200': selectableRows && elem !== selected,
             }"
         >
           <slot
