@@ -8,18 +8,23 @@ import {
 import {computed} from 'vue';
 import {type RouteLocationRaw, useRoute} from 'vue-router';
 import {TabItemState} from './__types/AntTabItem.types';
+import {AntSkeleton} from "../../../dist";
 
 const props = withDefaults(defineProps<{
   label: string;
   active: boolean;
+  disabled?: boolean;
   state?: TabItemState
   showIcon?: boolean;
   icon?: IconDefinition;
   to?: RouteLocationRaw;
   expanded?: boolean;
+  skeleton?: boolean;
 }>(), {
   state: TabItemState.base,
   showIcon: true,
+  disabled: false,
+  skeleton: false,
 });
 const route = useRoute();
 
@@ -31,11 +36,11 @@ const icons = {
 const iconRight = computed<IconDefinition | null>(() => icons[props.state]);
 const _active = computed<boolean>(() => {
   if (typeof props.to === 'string') {
-    return route.path === props.to;
+    return route.path.startsWith(props.to);
   }
 
   if (typeof props.to === 'object' && props.to?.name !== undefined) {
-    return route.name === props.to.name;
+    return route.name.startsWith(props.to.name);
   }
 
   return props.active;
@@ -58,11 +63,13 @@ const containerClasses = computed(() => {
   };
 
   return {
-    'p-2 hover:cursor-pointer text-center flex items-center justify-center gap-2 bg-white transition-[background-color] relative text-sm': true,
+    'p-2 text-center flex items-center justify-center gap-2 bg-white transition-[background-color] relative text-sm': true,
     'grow': props.expanded,
-    [variants[props.state]]: true,
+    [variants[props.state]]: !props.disabled,
     [activeVariants[props.state]]: _active.value,
     [notActiveVariants[props.state]]: !_active.value,
+    'hover:cursor-pointer': !props.disabled,
+    'hover:cursor-not-allowed opacity-50': props.disabled,
   };
 });
 const borderBoxClasses = computed(() => {
@@ -90,7 +97,7 @@ const iconColor = computed(() => {
 
 <template>
   <component
-    :is="to !== undefined ? 'router-link' : 'div'"
+    :is="to !== undefined && !disabled ? 'router-link' : 'div'"
     :to="to"
     :class="containerClasses"
   >
@@ -102,7 +109,10 @@ const iconColor = computed(() => {
       />
     </slot>
 
-    <slot>{{ label }}</slot>
+    <div class="relative">
+      <slot>{{ label }}</slot>
+      <AntSkeleton v-if="skeleton" rounded absolute/>
+    </div>
 
     <AntIcon
       v-if="iconRight && showIcon"
