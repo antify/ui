@@ -11,7 +11,6 @@ const props = withDefaults(defineProps<{
   contentPadding?: boolean,
   isClickable?: boolean,
 }>(), {
-  showDropdown: false,
   contentPadding: true,
   dropdownClasses: '',
   isClickable: true,
@@ -58,11 +57,12 @@ const onClickOutside = [
 
 <template>
   <div
-    class="relative inline-flex justify-center items-end"
+    class="relative flex"
     data-e2e="dropdown"
   >
     <div
       ref="reference"
+      class="h-full w-full"
       v-on-click-outside="onClickOutside"
     >
       <slot/>
@@ -77,7 +77,7 @@ const onClickOutside = [
           :style="floatingStyles"
         >
           <div
-            class="shadow-lg border border-neutral-300 rounded-md text-sm relative inline-flex flex-col bg-white text-for-white-bg-font w-full"
+            class="shadow-lg border border-neutral-300 rounded-md text-sm relative inline-flex flex-col bg-white text-for-white-bg-font w-full overflow-hidden"
             :class="{'p-2': contentPadding}"
           >
             <slot name="content"/>

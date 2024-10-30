@@ -72,9 +72,9 @@ const inputClasses = computed(() => {
 const valueClass = computed(() => ({
   'relative w-fit full-height text-for-white-bg-font': true,
   'cursor-pointer': !hasInputState.value,
-  'cursor-not-allowed opacity-50': props.disabled,
   'text-sm': props.size === Size.lg || props.size === Size.md || props.size === Size.sm,
   'text-xs': props.size === Size.xs || props.size === Size.xs2,
+  'cursor-not-allowed opacity-50': props.disabled,
 }));
 const gapSize = computed(() => {
   switch (props.size) {
@@ -106,6 +106,7 @@ const innerRadioClass = computed(() => (
     'bg-danger-500': props.state === InputState.danger,
     'h-3 w-3': props.size === Size.lg || props.size === Size.md || props.size === Size.sm,
     'h-2 w-2': props.size === Size.xs || props.size === Size.xs2,
+    'cursor-not-allowed opacity-50': props.disabled,
   }
 ));
 

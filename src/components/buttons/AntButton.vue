@@ -196,6 +196,7 @@ onMounted(() => {
     />
 
     <AntTooltip
+      class="w-full"
       :state="tooltipState"
       :delay="tooltipDelay"
     >
