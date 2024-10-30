@@ -189,33 +189,33 @@ watch(_modelValue, (val) => {
     class="relative"
   >
     <slot/>
+
+    <teleport to="body">
+      <div
+        v-if="isOpen"
+        :class="dropdownClasses"
+        ref="floating"
+        :style="{width: `${width.width.value}px!important`, ...floatingStyles}"
+      >
+        <div
+          v-for="(option, index) in options"
+          :key="`option-${index}`"
+          :class="{...dropDownItemClasses, ...getActiveDropDownItemClasses(option)}"
+          @mousedown="(e) => onClickDropDownItem(e, option.value)"
+          @mouseover="() => focusedDropDownItem = option.value"
+        >
+          {{ option.label }}
+        </div>
+
+        <div
+          v-if="options.length === 0"
+          :class="{...dropDownItemClasses}"
+        >
+          <slot name="empty">
+            No options available
+          </slot>
+        </div>
+      </div>
+    </teleport>
   </div>
-
-  <teleport to="body">
-    <div
-      v-if="isOpen"
-      :class="dropdownClasses"
-      ref="floating"
-      :style="{width: `${width.width.value}px!important`, ...floatingStyles}"
-    >
-      <div
-        v-for="(option, index) in options"
-        :key="`option-${index}`"
-        :class="{...dropDownItemClasses, ...getActiveDropDownItemClasses(option)}"
-        @mousedown="(e) => onClickDropDownItem(e, option.value)"
-        @mouseover="() => focusedDropDownItem = option.value"
-      >
-        {{ option.label }}
-      </div>
-
-      <div
-        v-if="options.length === 0"
-        :class="{...dropDownItemClasses}"
-      >
-        <slot name="empty">
-          No options available
-        </slot>
-      </div>
-    </div>
-  </teleport>
 </template>
