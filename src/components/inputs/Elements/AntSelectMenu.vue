@@ -6,13 +6,13 @@
  * Fix overflow bug (See Ellipsis Text story)
  * TODO:: if the dropdown is open and the user types something, the element with a matching value should be focused.
  */
-
 import {computed, nextTick, onMounted, onUnmounted, ref, watch} from 'vue';
 import {InputState, Size} from '../../../enums';
 import type {SelectOption} from '../__types';
-import {useElementSize, useVModel} from '@vueuse/core';
+import {useElementSize, useVModel, onClickOutside} from '@vueuse/core';
 import type {Validator} from '@antify/validate';
 import {autoUpdate, flip, offset, useFloating} from "@floating-ui/vue";
+import {vOnClickOutside} from '@vueuse/components';
 
 const emit = defineEmits(['update:open', 'update:modelValue', 'update:focused', 'selectElement']);
 const props = withDefaults(defineProps<{
@@ -26,11 +26,13 @@ const props = withDefaults(defineProps<{
   inputRef?: HTMLElement | null;
   closeOnEnter?: boolean;
   autoSelectFirstOnOpen?: boolean;
+  closeOnSelectItem?: boolean;
 }>(), {
   state: InputState.base,
   focusOnOpen: true,
   closeOnEnter: false,
-  autoSelectFirstOnOpen: true
+  autoSelectFirstOnOpen: true,
+  closeOnSelectItem: true,
 });
 const reference = ref<HTMLElement | null | undefined>(props.inputRef)
 const width = useElementSize(reference);
@@ -46,10 +48,18 @@ const {floatingStyles, middlewareData, placement} = useFloating(reference, float
   ]
 });
 
+onClickOutside(floating, () => {
+  console.log(props.open);
+  if (!props.open) {
+    return;
+  }
+
+  emit('update:open', false);
+});
+
 const _modelValue = useVModel(props, 'modelValue', emit);
 const isOpen = useVModel(props, 'open', emit);
 const focusedDropDownItem = useVModel(props, 'focused', emit);
-
 const dropdownClasses = computed(() => {
   const variants: Record<InputState, string> = {
     [InputState.base]: 'bg-neutral-300 border-neutral-300',
@@ -166,14 +176,17 @@ function getActiveDropDownItemClasses(option: SelectOption) {
     [InputState.danger]: 'bg-danger-200',
   };
 
-  return option.value === focusedDropDownItem.value ? {'bg-white': false ,[variants[props.state]]: true} : {};
+  return option.value === focusedDropDownItem.value ? {'bg-white': false, [variants[props.state]]: true} : {};
 }
 
 function onClickDropDownItem(e: MouseEvent, value: string | number | null) {
   e.preventDefault();
   reference.value?.focus();
 
-  isOpen.value = false;
+  if (props.closeOnSelectItem) {
+    isOpen.value = false;
+  }
+
   emit('selectElement', value);
   _modelValue.value = value;
 }

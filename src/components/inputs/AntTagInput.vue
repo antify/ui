@@ -8,7 +8,7 @@ import {computed, onMounted, type Ref, ref, watch} from 'vue';
 import AntTag from '../AntTag.vue';
 import AntIcon from '../AntIcon.vue';
 import {AntTagSize, IconSize} from '../__types';
-import AntDropDown from './Elements/AntSelectMenu.vue';
+import AntSelectMenu from './Elements/AntSelectMenu.vue';
 import AntSkeleton from '../AntSkeleton.vue';
 import {vOnClickOutside} from '@vueuse/components';
 import {AntTagInputSize} from './__types/AntTagInput.types';
@@ -61,7 +61,6 @@ const dropDownOpen = ref(false);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const focusedDropDownItem: Ref<string | number | null> = ref(null);
 const tagInput = ref('');
-const filteredOptions = ref(props.options);
 const inputRef: Ref<HTMLElement | null> = ref(null);
 const inputContainerClasses = computed(() => {
   const variants: Record<InputState, string> = {
@@ -89,7 +88,6 @@ const inputContainerClasses = computed(() => {
     'rounded-none': props.grouped === Grouped.center,
     'rounded-tl-none rounded-bl-none rounded-tr-md rounded-br-md': props.grouped === Grouped.right,
     'rounded-md': props.grouped === Grouped.none,
-    'rounded-bl-none rounded-br-none': dropDownOpen.value && (!props.options || props.options.length > 0) && !props.readonly,
     'invisible': props.skeleton,
   };
 });
@@ -119,13 +117,23 @@ const skeletonGrouped = computed(() => {
     return Grouped.left;
   }
 });
+const filteredOptions = computed(() => {
+  return props.options.filter(option => {
+    // Remove all elements that are in modelValue from the filtered options
+    if (_modelValue.value && !props.allowDuplicates) {
+      return !_modelValue.value?.includes(option.value);
+    }
+
+    return option.label.toLowerCase().includes(tagInput.value.toLowerCase())
+  });
+})
 
 function onClickOutside() {
   if (!dropDownOpen.value) {
     return;
   }
-
-  dropDownOpen.value = false;
+  console.log("click outside");
+  // dropDownOpen.value = false;
 }
 
 async function checkCreateTag(item: string): Promise<void> {
@@ -153,14 +161,13 @@ function addTagFromOptions(item: string | number) {
     addTag(item);
 
     if (props.autoCloseAfterSelection) {
+      console.log("HIER");
       dropDownOpen.value = false;
     }
   }
 }
 
 function addTag(tagValue: string | number): void {
-  _modelValue.value = _modelValue.value || [];
-
   if (!props.allowDuplicates && _modelValue.value?.includes(tagValue) || !tagValue) {
     return;
   }
@@ -172,53 +179,22 @@ function addTag(tagValue: string | number): void {
   }
 
   tagInput.value = '';
-
-  filterDropDown();
 }
 
 function removeLastTag() {
   if (tagInput.value === '' && Array.isArray(_modelValue.value) && _modelValue.value.length > 0) {
     _modelValue.value.splice(-1, 1);
-
-    filterDropDown();
   }
 }
 
 function removeTag(tag: string | number) {
   if (_modelValue.value && !props.disabled && !props.skeleton && !props.readonly) {
     _modelValue.value.splice(_modelValue.value.findIndex((_value) => _value === tag), 1);
-
-    filterDropDown();
   }
 }
 
 function changeFocus() {
-  if (props.openOnFocus) {
-    dropDownOpen.value = true;
-  }
-}
-
-function filterDropDown() {
-  if (!props.options) {
-    return;
-  }
-
-  if (props.allowCreate) {
-    focusedDropDownItem.value = null;
-  }
-
   dropDownOpen.value = true;
-
-  filteredOptions.value = props.options.filter(option => option.label.toLowerCase().includes(tagInput.value.toLowerCase()));
-
-  // Remove all elements that are in modelValue from the filtered options
-  if (_modelValue.value && !props.allowDuplicates) {
-    filteredOptions.value = filteredOptions.value.filter(option => !_modelValue.value?.includes(option.value));
-  }
-
-  if (!props.allowCreate && filteredOptions.value.length > 0) {
-    focusedDropDownItem.value = filteredOptions.value[0]?.value;
-  }
 }
 
 function onBlur(e: FocusEvent) {
@@ -251,89 +227,90 @@ onMounted(() => {
 </script>
 
 <template>
-  <AntField
-    :label="label"
-    :size="size as unknown as Size"
-    :skeleton="_skeleton"
-    :description="description"
-    :state="state"
-    :expanded="expanded"
-    :messages="messages"
-  >
-    <div
-      v-on-click-outside="onClickOutside"
-      class="relative w-full"
+  <div>
+    <AntField
+      :label="label"
+      :size="size as unknown as Size"
+      :skeleton="_skeleton"
+      :description="description"
+      :state="state"
+      :expanded="expanded"
+      :messages="messages"
     >
-      <AntSkeleton
-        v-if="skeleton"
-        absolute
-        rounded
-        :grouped="skeletonGrouped"
-      />
-
       <div
-        :class="inputContainerClasses"
-        class="w-full flex items-center"
+        class="relative w-full"
       >
+        <AntSkeleton
+          v-if="skeleton"
+          absolute
+          rounded
+          :grouped="skeletonGrouped"
+        />
+
         <div
-          class="flex gap-2.5 items-center"
+          :class="inputContainerClasses"
+          class="w-full flex items-center"
+          v-on-click-outside="onClickOutside"
         >
-          <AntTag
-            v-for="(tag, index) in _modelValue"
-            :key="`tag-input-tag-${index}`"
-            :size="AntTagSize.xs3"
-            :state="state as unknown as TagState"
-            :dismiss="!readonly"
-            @close="removeTag(tag)"
+          <div
+            class="flex gap-2.5 items-center"
           >
-            {{ options.find((option: SelectOption) => option.value === tag)?.label }}
-          </AntTag>
+            <AntTag
+              v-for="(tag, index) in _modelValue"
+              :key="`tag-input-tag-${index}`"
+              :size="AntTagSize.xs3"
+              :state="state as unknown as TagState"
+              :dismiss="!readonly"
+              @close="removeTag(tag)"
+            >
+              {{ options.find((option: SelectOption) => option.value === tag)?.label }}
+            </AntTag>
+          </div>
+
+          <!-- Input -->
+          <div class="flex items-center w-32 shrink grow">
+            <AntIcon
+              :icon="icon"
+              :size="size === AntTagInputSize.sm ? IconSize.xs : IconSize.sm"
+            />
+
+            <input
+              ref="inputRef"
+              v-model="tagInput"
+              type="text"
+              :placeholder="placeholder"
+              :class="inputClasses"
+              :disabled="disabled"
+              :readonly="readonly"
+              @focus="changeFocus"
+              @keydown.delete="removeLastTag"
+              @keydown.enter.prevent="checkCreateTag(tagInput)"
+              @blur="onBlur"
+            />
+          </div>
         </div>
 
-        <!-- Input -->
-        <div class="flex items-center w-32 shrink grow">
-          <AntIcon
-            :icon="icon"
-            :size="size === AntTagInputSize.sm ? IconSize.xs : IconSize.sm"
-          />
-
-          <input
-            ref="inputRef"
-            v-model="tagInput"
-            type="text"
-            :placeholder="placeholder"
-            :class="inputClasses"
-            :disabled="disabled"
-            :readonly="readonly"
-            @focus="changeFocus"
-            @input="filterDropDown"
-            @keydown.delete="removeLastTag"
-            @keydown.enter.prevent="checkCreateTag(tagInput)"
-            @blur="onBlur"
-          />
-        </div>
+        <AntSelectMenu
+          v-if="!disabled && !readonly"
+          v-model:focused="focusedDropDownItem"
+          v-model:open="dropDownOpen"
+          :model-value="null"
+          :auto-select-first-on-open="!allowCreate"
+          :options="filteredOptions"
+          :input-ref="inputRef"
+          :size="size as unknown as Size"
+          :state="state"
+          :focus-on-open="false"
+          :close-on-select-item="false"
+          @select-element="addTagFromOptions"
+        >
+          <template #empty>
+            <span v-if="allowCreate">
+              No tag found, create now
+            </span>
+          </template>
+        </AntSelectMenu>
       </div>
-
-      <AntDropDown
-        v-if="filteredOptions && !disabled && !readonly"
-        ref="dropDownRef"
-        v-model:focused="focusedDropDownItem"
-        v-model:open="dropDownOpen"
-        :model-value="null"
-        :auto-select-first-on-open="!allowCreate"
-        :options="filteredOptions"
-        :input-ref="inputRef"
-        :size="size as unknown as Size"
-        :state="state"
-        :focus-on-open="false"
-        @select-element="addTagFromOptions"
-      >
-        <template #empty>
-          <span v-if="allowCreate">
-            No tag found, create now
-          </span>
-        </template>
-      </AntDropDown>
-    </div>
-  </AntField>
+    </AntField>
+  </div>
 </template>
