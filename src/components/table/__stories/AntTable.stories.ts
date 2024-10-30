@@ -100,7 +100,12 @@ export default meta;
 
 type Story = StoryObj<typeof AntTable>;
 
-const testData = [];
+const testData = ref<{
+  name: string,
+  age: number,
+  email: string,
+  employed: boolean
+}[]>([]);
 
 for (let i = 0; i < 100; i++) {
   const randomName = faker.person.firstName() + ' ' + faker.person.lastName();
@@ -108,13 +113,11 @@ for (let i = 0; i < 100; i++) {
   const randomEmail = faker.internet.email();
   const randomBoolean = faker.datatype.boolean();
 
-  testData.push({
+  testData.value.push({
     name: randomName,
     age: randomNumber,
     email: randomEmail,
-    employeed: randomBoolean,
-    linkLabel: 'Link here',
-    link: '/',
+    employed: randomBoolean,
   });
 }
 
@@ -123,15 +126,14 @@ export const Docs: Story = {
     components: {AntTable, AntSwitch},
     setup() {
       const selected = ref();
-
       return {args, selected};
     },
     template: `
       <div class="h-96 border border-dashed border-neutral-300">
-        <AntTable v-bind="args" v-model="selected">
+        <AntTable v-bind="args" v-model="selected" :selected-row="selected" @row-click="(val) => selected = val">
           <template #cellContent="{element: entry, header}">
             <div v-if="header.identifier === 'employeed'">
-              <AntSwitch :model-value="entry.employeed"/>
+              <AntSwitch v-model="entry.employeed"/>
             </div>
           </template>
         </AntTable>
@@ -165,15 +167,9 @@ export const Docs: Story = {
         identifier: 'employeed',
         rowClassList: '',
         type: AntTableRowTypes.slot,
-      },
-      {
-        title: 'Link',
-        identifier: 'linkLabel',
-        toProp: 'link',
-        type: AntTableRowTypes.link,
       }
     ],
-    data: testData,
+    data: testData.value,
   }
 };
 
@@ -286,6 +282,6 @@ export const Loading: Story = {
         type: AntTableRowTypes.link,
       }
     ],
-    data: testData
+    data: testData.value
   }
 };
