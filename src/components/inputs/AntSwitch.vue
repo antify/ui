@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AntField from '../forms/AntField.vue';
-import {computed, onMounted, watch} from 'vue';
+import {computed, watch} from 'vue';
 import AntSkeleton from '../AntSkeleton.vue';
 import {InputState, Size} from '../../enums';
 import {hasSlotContent} from '../../utils';
@@ -111,12 +111,7 @@ watch(() => props.skeleton, (val) => {
   }
 });
 watch(_value, () => {
-  if (props.messages.length > 0) {
-    emit('validate', props.modelValue);
-  }
-});
-onMounted(() => {
-  if (!props.skeleton && props.modelValue !== null) {
+  if ([InputState.danger, InputState.info, InputState.warning].includes(props.state)) {
     emit('validate', props.modelValue);
   }
 });
