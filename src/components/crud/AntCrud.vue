@@ -19,7 +19,7 @@ withDefaults(defineProps<{
         <slot name="search-section"/>
       </div>
 
-      <div class="bg-white flex-grow h-full overflow-hidden">
+      <div class="bg-white flex-grow h-px overflow-hidden">
         <slot name="table-section"/>
       </div>
 

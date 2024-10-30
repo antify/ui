@@ -28,6 +28,7 @@ withDefaults(defineProps<{
           :filled="false"
           :icon-left="faAngleLeft"
           :disabled="disabled"
+          :skeleton="skeleton"
           @click="$emit('back')"
         >
           Back
