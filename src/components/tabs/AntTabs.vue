@@ -9,8 +9,10 @@ const props = withDefaults(defineProps<{
   modelValue?: string;
   tabItems?: TabItem[];
   expanded?: boolean;
+  skeleton?: boolean;
 }>(), {
   expanded: false,
+  skeleton: false,
 });
 
 const currentActive = useVModel(props, 'modelValue', emits);
@@ -23,6 +25,10 @@ const containerClasses = computed(() => ({
 function clickTab(tabItem: TabItem) {
   if (tabItem.clickHandler) {
     tabItem.clickHandler();
+  }
+
+  if (tabItem.disabled){
+    return
   }
 
   currentActive.value = tabItem.id;
@@ -39,6 +45,8 @@ function clickTab(tabItem: TabItem) {
         @click="clickTab(tabItem)"
         :active="currentActive === tabItem.id"
         :expanded="expanded"
+        :disabled="tabItem.disabled"
+        :skeleton="skeleton"
       >
         <slot name="content" v-bind="{item: tabItem, isActive: currentActive === tabItem.id}"></slot>
       </AntTabItem>

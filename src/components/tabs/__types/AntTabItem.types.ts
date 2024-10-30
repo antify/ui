@@ -5,6 +5,7 @@ export type TabItem = {
   id: string;
   label: string;
   state?: TabItemState;
+  disabled?: boolean;
   showIcon?: boolean;
   icon?: IconDefinition;
   to?: string | RouteLocationRaw;
