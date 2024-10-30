@@ -27,7 +27,7 @@ import AntFormGroupLabel from './forms/AntFormGroupLabel.vue';
 
 // Input elements
 import AntBaseInput from './inputs/Elements/AntBaseInput.vue';
-import AntDropDown from './inputs/Elements/AntSelectMenu.vue';
+import AntSelectMenu from './inputs/Elements/AntSelectMenu.vue';
 import AntInputDescription from './inputs/Elements/AntInputDescription.vue';
 import AntInputLabel from './inputs/Elements/AntInputLabel.vue';
 import AntInputLimiter from './inputs/Elements/AntInputLimiter.vue';
@@ -108,7 +108,7 @@ export {
   AntFormGroup,
   AntFormGroupLabel,
   AntBaseInput,
-  AntDropDown,
+  AntSelectMenu,
   AntInputDescription,
   AntInputLabel,
   AntInputLimiter,

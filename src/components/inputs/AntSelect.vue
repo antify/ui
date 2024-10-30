@@ -140,6 +140,13 @@ const skeletonGrouped = computed(() => {
     return Grouped.left;
   }
 });
+const iconSize = computed(() => {
+  if (props.size === Size.lg || props.size === Size.md || props.size === Size.sm) {
+    return IconSize.sm;
+  }
+
+  return IconSize.xs;
+})
 const inputRef = ref<HTMLElement | null>(null);
 const dropDownRef = ref<HTMLElement | null>(null);
 const focusedDropDownItem = ref<string | number | null>(null);
@@ -287,14 +294,14 @@ function onClickRemoveButton() {
           <AntIcon
             v-if="isOpen"
             :icon="faChevronUp"
-            :size="IconSize.sm"
+            :size="iconSize"
             :class="arrowClasses"
           />
 
           <AntIcon
             v-else
             :icon="faChevronDown"
-            :size="IconSize.sm"
+            :size="iconSize"
             :class="arrowClasses"
           />
         </div>

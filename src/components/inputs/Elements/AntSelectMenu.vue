@@ -63,8 +63,6 @@ const dropdownClasses = computed(() => {
     'w-full border flex flex-col gap-px outline-none -mt-px overflow-hidden shadow-md z-[90]': true,
     'rounded-md': true,
     [variants[props.state]]: true,
-    // Size
-    'text-sm': props.size === Size.sm || props.size === Size.md
   };
 });
 const dropDownItemClasses = computed(() => {
@@ -80,8 +78,11 @@ const dropDownItemClasses = computed(() => {
     'select-none text-ellipsis overflow-hidden whitespace-nowrap': true,
     [variants[props.state]]: true,
     // Size
-    'p-1.5': props.size === Size.sm,
-    'p-2': props.size === Size.md,
+    'p-1 text-xs': props.size === Size.xs2,
+    'p-1.5 text-xs': props.size === Size.xs,
+    'p-1.5 text-sm': props.size === Size.sm,
+    'p-2 text-sm': props.size === Size.md,
+    'p-2.5 text-sm': props.size === Size.lg,
   };
 });
 
