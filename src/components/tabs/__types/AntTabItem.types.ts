@@ -15,6 +15,7 @@ export type TabItem = {
 
 export enum TabItemState {
   base = 'base',
+  info = 'info',
   warning = 'warning',
   danger = 'danger',
 }
