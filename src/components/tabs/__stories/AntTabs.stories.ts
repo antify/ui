@@ -97,12 +97,12 @@ export const HorizontalScrolling: Story = {
         </AntFormGroup>
 
         <AntFormGroupLabel>Default Large</AntFormGroupLabel>
-        <AntFormGroup class="dashed overflow-hidden">
+        <AntFormGroup class="dashed">
           <AntTabs v-bind="args" v-model="args.modelValue" />
         </AntFormGroup>
 
         <AntFormGroupLabel>Expanded Large</AntFormGroupLabel>
-        <AntFormGroup class="dashed overflow-hidden">
+        <AntFormGroup class="dashed">
           <AntTabs v-bind="args" v-model="args.modelValue" expanded />
         </AntFormGroup>
 
@@ -174,6 +174,7 @@ export const Summary: Story = {
       const value_1 = ref();
       const value_2 = ref();
       const value_3 = ref('2');
+      const value_4 = ref();
 
       const tabItems_1 = [
         {
@@ -217,14 +218,45 @@ export const Summary: Story = {
         },
       ];
 
+      const tabItems_4 = [
+        {
+          id: '1',
+          label: 'First tab',
+        },
+        {
+          id: '2',
+          label: 'Second tab',
+        },
+        {
+          id: '3',
+          label: 'Third tab',
+          state: TabItemState.warning,
+        },
+        {
+          id: '4',
+          label: 'Fourth tab',
+          state: TabItemState.danger,
+        },
+        {
+          id: '5',
+          label: 'Fifth tab',
+        },
+        {
+          id: '6',
+          label: 'Sixth tab',
+        },
+      ];
+
       return {
         args,
         value_1,
         value_2,
         value_3,
+        value_4,
         tabItems_1,
         tabItems_2,
         tabItems_3,
+        tabItems_4
       };
     },
     template: `
@@ -238,15 +270,25 @@ export const Summary: Story = {
 
         <AntFormGroupLabel>Expanded</AntFormGroupLabel>
         <AntFormGroup>
-          <div class="dashed"><AntTabs v-model="value_1" :tab-items="tabItems_1" expanded separators/></div>
-          <div class="dashed"><AntTabs v-model="value_2" :tab-items="tabItems_2" expanded separators/></div>
-          <div class="dashed"><AntTabs v-model="value_3" :tab-items="tabItems_3" expanded separators/></div>
+          <div class="dashed"><AntTabs v-model="value_1" :tab-items="tabItems_1" expanded/></div>
+          <div class="dashed"><AntTabs v-model="value_2" :tab-items="tabItems_2" expanded/></div>
+          <div class="dashed"><AntTabs v-model="value_3" :tab-items="tabItems_3" expanded/></div>
         </AntFormGroup>
 
         <AntFormGroupLabel>Larger container</AntFormGroupLabel>
         <div class="h-16 dashed">
-          <AntTabs v-model="value_3" :tab-items="tabItems_3" expanded separators/>
+          <AntTabs v-model="value_3" :tab-items="tabItems_3" expanded/>
         </div>
+
+        <AntFormGroupLabel>Default Small Parent Container</AntFormGroupLabel>
+        <AntFormGroup class="dashed max-w-[320px] overflow-hidden">
+          <AntTabs v-model="value_4" :tab-items="tabItems_4" />
+        </AntFormGroup>
+
+        <AntFormGroupLabel>Expanded Small Parent Container</AntFormGroupLabel>
+        <AntFormGroup class="dashed max-w-[320px] overflow-hidden">
+          <AntTabs v-model="value_4" :tab-items="tabItems_4" expanded />
+        </AntFormGroup>
       </AntFormGroup>
     `
   }),
