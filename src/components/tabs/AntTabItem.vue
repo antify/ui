@@ -62,7 +62,6 @@ const containerClasses = computed(() => {
   };
   const notActiveVariants: Record<TabItemState, string> = {
     [TabItemState.base]: 'text-for-white-bg-font',
-    [TabItemState.base]: 'text-for-white-bg-font',
     [TabItemState.info]: 'text-primary-500',
     [TabItemState.warning]: 'text-warning-500',
     [TabItemState.danger]: 'text-danger-500',
