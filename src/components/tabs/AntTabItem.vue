@@ -61,14 +61,14 @@ const containerClasses = computed(() => {
     [TabItemState.danger]: 'text-danger-500 border-danger-500',
   };
   const notActiveVariants: Record<TabItemState, string> = {
-    [TabItemState.base]: 'text-for-white-bg-font border-white',
+    [TabItemState.base]: 'text-for-white-bg-font',
     [TabItemState.info]: 'text-primary-500',
     [TabItemState.warning]: 'text-warning-500',
     [TabItemState.danger]: 'text-danger-500',
   };
 
   return {
-    'p-2 text-center flex items-center justify-center gap-2 bg-white transition-[background-color] relative text-sm': true,
+    'p-2 text-center flex items-center justify-center gap-2 bg-white transition-[background-color] relative text-sm text-nowrap': true,
     'grow': props.expanded,
     [variants[props.state]]: !props.disabled,
     [activeVariants[props.state]]: _active.value,

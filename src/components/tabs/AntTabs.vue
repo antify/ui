@@ -17,8 +17,10 @@ const props = withDefaults(defineProps<{
 
 const currentActive = useVModel(props, 'modelValue', emits);
 const containerClasses = computed(() => ({
-  'flex items-stretch bg-neutral-300 gap-px transition-all h-full': true,
-  'w-fit': !props.expanded,
+  'flex transition-all h-full': true,
+}));
+
+const scrollContainerClasses = computed(() => ({
   'w-full': props.expanded,
 }));
 
@@ -37,6 +39,7 @@ function clickTab(tabItem: TabItem) {
 
 <template>
   <div :class="containerClasses">
+    <div class="flex gap-px bg-neutral-300 border-l border-r border-neutral-300 overflow-x-auto" :class="scrollContainerClasses">
     <slot>
       <AntTabItem
         v-for="(tabItem, index) in tabItems"
@@ -51,5 +54,6 @@ function clickTab(tabItem: TabItem) {
         <slot name="content" v-bind="{item: tabItem, isActive: currentActive === tabItem.id}"></slot>
       </AntTabItem>
     </slot>
+    </div>
   </div>
 </template>
