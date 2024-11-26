@@ -13,6 +13,7 @@ import {AntSkeleton} from "../../../dist";
 const props = withDefaults(defineProps<{
   label: string;
   active: boolean;
+  isLastItem: boolean;
   disabled?: boolean;
   state?: TabItemState
   showIcon?: boolean;
@@ -25,6 +26,7 @@ const props = withDefaults(defineProps<{
   showIcon: true,
   disabled: false,
   skeleton: false,
+  isLastItem: true,
 });
 const route = useRoute();
 
@@ -57,14 +59,15 @@ const containerClasses = computed(() => {
     [TabItemState.danger]: 'text-danger-500 border-danger-500',
   };
   const notActiveVariants: Record<TabItemState, string> = {
-    [TabItemState.base]: 'text-for-white-bg-font border-white',
+    [TabItemState.base]: 'text-for-white-bg-font',
     [TabItemState.warning]: 'text-warning-500',
     [TabItemState.danger]: 'text-danger-500',
   };
 
   return {
-    'p-2 text-center flex items-center justify-center gap-2 bg-white transition-[background-color] relative text-sm': true,
+    'p-2 text-center flex items-center justify-center gap-2 bg-white transition-[background-color] relative text-sm text-nowrap': true,
     'grow': props.expanded,
+    'border-r border-neutral-300': !props.isLastItem,
     [variants[props.state]]: !props.disabled,
     [activeVariants[props.state]]: _active.value,
     [notActiveVariants[props.state]]: !_active.value,

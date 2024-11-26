@@ -77,6 +77,70 @@ export const FixedHeight: Story = {
   args: Docs.args
 };
 
+export const HorizontalScrolling: Story = {
+  render: (args) => ({
+    components: {AntTabs, AntFormGroupLabel, AntFormGroup},
+    setup() {
+      return {args};
+    },
+    template: `
+      <AntFormGroup>
+
+        <AntFormGroupLabel>Default Small</AntFormGroupLabel>
+        <AntFormGroup class="dashed max-w-[320px] overflow-hidden">
+          <AntTabs v-bind="args" v-model="args.modelValue" />
+        </AntFormGroup>
+
+        <AntFormGroupLabel>Expanded Small</AntFormGroupLabel>
+        <AntFormGroup class="dashed max-w-[320px] overflow-hidden">
+          <AntTabs v-bind="args" v-model="args.modelValue" expanded />
+        </AntFormGroup>
+
+        <AntFormGroupLabel>Default Large</AntFormGroupLabel>
+        <AntFormGroup class="dashed overflow-hidden">
+          <AntTabs v-bind="args" v-model="args.modelValue" />
+        </AntFormGroup>
+
+        <AntFormGroupLabel>Expanded Large</AntFormGroupLabel>
+        <AntFormGroup class="dashed overflow-hidden">
+          <AntTabs v-bind="args" v-model="args.modelValue" expanded />
+        </AntFormGroup>
+
+      </AntFormGroup>
+    `
+  }),
+  args: {
+    tabItems: [
+      {
+        id: '1',
+        label: 'First tab',
+      },
+      {
+        id: '2',
+        label: 'Second tab',
+      },
+      {
+        id: '3',
+        label: 'Third tab',
+        state: TabItemState.warning,
+      },
+      {
+        id: '4',
+        label: 'Fourth tab',
+        state: TabItemState.danger,
+      },
+      {
+        id: '5',
+        label: 'Fifth tab',
+      },
+      {
+        id: '6',
+        label: 'Sixth tab',
+      },
+    ]
+  }
+};
+
 export const DifferentStates: Story = {
   render: Docs.render,
   args: {
