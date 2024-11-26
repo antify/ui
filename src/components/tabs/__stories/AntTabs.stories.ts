@@ -99,6 +99,11 @@ export const DifferentStates: Story = {
         label: 'Fourth tab',
         state: TabItemState.danger,
       },
+      {
+        id: '5',
+        label: 'Fifth tab',
+        state: TabItemState.info,
+      },
     ]
   }
 };

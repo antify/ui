@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AntIcon from '../AntIcon.vue';
 import {
+  faCircleInfo,
   faExclamationCircle,
   faExclamationTriangle,
   type IconDefinition
@@ -30,6 +31,7 @@ const route = useRoute();
 
 const icons = {
   [TabItemState.base]: null,
+  [TabItemState.info]: faCircleInfo,
   [TabItemState.danger]: faExclamationCircle,
   [TabItemState.warning]: faExclamationTriangle,
 };
@@ -48,16 +50,19 @@ const _active = computed<boolean>(() => {
 const containerClasses = computed(() => {
   const variants: Record<TabItemState, string> = {
     [TabItemState.base]: 'hover:bg-neutral-100',
+    [TabItemState.info]: 'hover:bg-neutral-100',
     [TabItemState.warning]: 'hover:bg-warning-100',
     [TabItemState.danger]: 'hover:bg-danger-100',
   };
   const activeVariants: Record<TabItemState, string> = {
     [TabItemState.base]: 'text-primary-500 border-primary-500',
+    [TabItemState.info]: 'text-primary-500 border-primary-500',
     [TabItemState.warning]: 'text-warning-500 border-warning-500',
     [TabItemState.danger]: 'text-danger-500 border-danger-500',
   };
   const notActiveVariants: Record<TabItemState, string> = {
     [TabItemState.base]: 'text-for-white-bg-font border-white',
+    [TabItemState.info]: 'text-primary-500',
     [TabItemState.warning]: 'text-warning-500',
     [TabItemState.danger]: 'text-danger-500',
   };
@@ -75,6 +80,7 @@ const containerClasses = computed(() => {
 const borderBoxClasses = computed(() => {
   const variants: Record<TabItemState, string> = {
     [TabItemState.base]: 'bg-primary-500',
+    [TabItemState.info]: 'bg-primary-500',
     [TabItemState.warning]: 'bg-warning-500',
     [TabItemState.danger]: 'bg-danger-500',
   };
@@ -87,6 +93,7 @@ const borderBoxClasses = computed(() => {
 const iconColor = computed(() => {
   const variants = {
     [TabItemState.base]: 'text-neutral-100-font',
+    [TabItemState.info]: 'text-primary-500',
     [TabItemState.warning]: 'text-warning-500',
     [TabItemState.danger]: 'text-danger-500',
   };
