@@ -56,13 +56,13 @@ const containerClasses = computed(() => {
   };
   const activeVariants: Record<TabItemState, string> = {
     [TabItemState.base]: 'text-primary-500 border-primary-500',
-    [TabItemState.info]: 'text-primary-500 border-primary-500',
+    [TabItemState.info]: 'text-info-500 border-info-500',
     [TabItemState.warning]: 'text-warning-500 border-warning-500',
     [TabItemState.danger]: 'text-danger-500 border-danger-500',
   };
   const notActiveVariants: Record<TabItemState, string> = {
     [TabItemState.base]: 'text-for-white-bg-font',
-    [TabItemState.info]: 'text-primary-500',
+    [TabItemState.info]: 'text-info-500',
     [TabItemState.warning]: 'text-warning-500',
     [TabItemState.danger]: 'text-danger-500',
   };
@@ -80,7 +80,7 @@ const containerClasses = computed(() => {
 const borderBoxClasses = computed(() => {
   const variants: Record<TabItemState, string> = {
     [TabItemState.base]: 'bg-primary-500',
-    [TabItemState.info]: 'bg-primary-500',
+    [TabItemState.info]: 'bg-info-500',
     [TabItemState.warning]: 'bg-warning-500',
     [TabItemState.danger]: 'bg-danger-500',
   };
@@ -93,7 +93,7 @@ const borderBoxClasses = computed(() => {
 const iconColor = computed(() => {
   const variants = {
     [TabItemState.base]: 'text-neutral-100-font',
-    [TabItemState.info]: 'text-primary-500',
+    [TabItemState.info]: 'text-info-500',
     [TabItemState.warning]: 'text-warning-500',
     [TabItemState.danger]: 'text-danger-500',
   };
