@@ -245,6 +245,7 @@ export const Summary: Story = {
         {
           id: '5',
           label: 'Fifth tab',
+          state: TabItemState.info,
         },
         {
           id: '6',
@@ -283,6 +284,11 @@ export const Summary: Story = {
         <AntFormGroupLabel>Larger container</AntFormGroupLabel>
         <div class="h-16 dashed">
           <AntTabs v-model="value_3" :tab-items="tabItems_3" expanded/>
+        </div>
+
+        <AntFormGroupLabel>Different States</AntFormGroupLabel>
+        <div class="dashed">
+          <AntTabs v-model="value_4" :tab-items="tabItems_4" />
         </div>
 
         <AntFormGroupLabel>Default Small Parent Container</AntFormGroupLabel>
