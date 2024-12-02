@@ -18,6 +18,8 @@ const props = withDefaults(defineProps<{
 const floatOpen = ref<boolean>(false)
 const clickLock = ref(false);
 const timeout = ref<number | undefined>();
+const hoverFloat = ref<boolean>(false)
+const hoverReference = ref<boolean>(false)
 
 const reference = ref<HTMLElement | null>(null)
 const floating = ref<HTMLElement | null>(null)
@@ -94,10 +96,6 @@ const _tooltipClasses = computed(() => ({
 }));
 
 function onMouseOver() {
-  if (floatOpen.value || clickLock.value) {
-    return;
-  }
-
   /**
    * To prevent buggy behavior when hovering over multiple tooltips in quick succession,
    * we clear the timeout before setting a new one.
@@ -110,8 +108,29 @@ function onMouseOver() {
 function onMouseLeave() {
   clearTimeout(timeout.value);
 
-  floatOpen.value = false;
-  clickLock.value = false;
+  timeout.value = setTimeout(() => {
+    if (!hoverFloat.value) {
+      floatOpen.value = false
+      clickLock.value = false;
+    }
+  }, props.delay) as unknown as number;
+}
+
+function onMouseEnterTooltip() {
+  clearTimeout(timeout.value);
+
+  floatOpen.value = true;
+}
+
+function onMouseLeaveTooltip() {
+  clearTimeout(timeout.value);
+
+  timeout.value = setTimeout(() => {
+    if (!hoverReference.value) {
+      floatOpen.value = false
+      clickLock.value = false;
+    }
+  }, props.delay) as unknown as number;
 }
 
 function onClick() {
@@ -147,6 +166,8 @@ function onClick() {
           ? 'block'
           : 'none',
         }"
+        @mouseenter="() => onMouseEnterTooltip()"
+        @mouseleave="() => onMouseLeaveTooltip()"
         data-e2e="tooltip-content"
       >
         <div
