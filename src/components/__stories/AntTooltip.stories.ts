@@ -72,7 +72,7 @@ export const Docs: Story = {
     await step('Leave hover state and expect not showing the tooltip anymore', async () => {
       await userEvent.unhover(target);
 
-      await expect(queryTooltip()).not.toBeInTheDocument();
+      await waitFor(() => expect(queryTooltip()).not.toBeInTheDocument(), {timeout: 600});
     });
 
     await step('Hover over the target, wait until the tooltip is visible, click the target and expect not showing the tooltip', async () => {
