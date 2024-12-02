@@ -207,8 +207,8 @@ onMounted(() => {
         :to="to"
         :disabled="disabled || undefined"
         :tabindex="noFocus || hasInputState ? '-1' : '0'"
-        @click="() => !props.readonly ? $emit('click') : null"
-        @blur="() => !props.readonly ? $emit('blur') : null"
+        @click="(e: MouseEvent) => !props.readonly ? $emit('click', e) : null"
+        @blur="(e: FocusEvent) => !props.readonly ? $emit('blur', e) : null"
       >
         <AntSpinner
           v-if="spinner"
