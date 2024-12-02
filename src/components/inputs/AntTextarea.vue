@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {computed, onMounted, watch} from 'vue';
+import {computed, onMounted, ref, watch} from 'vue';
 import {Size} from '../../enums/Size.enum';
 import AntSkeleton from '../AntSkeleton.vue';
 import AntIcon from '../AntIcon.vue';
@@ -49,6 +49,7 @@ const props = withDefaults(defineProps<{
   resize: true,
   messages: () => []
 });
+
 const _modelValue = useVModel(props, 'modelValue', emit);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const icons = {
@@ -111,6 +112,7 @@ const iconColor = computed(() => {
 });
 const _wrapperClass = computed(() => classesToObjectSyntax(props.wrapperClass));
 const icon = computed(() => icons[props.state]);
+const textAreaRef = ref();
 const getIconSize = computed(() => {
   if (props.size === Size.xs || props.size === Size.xs2) {
     return IconSize.xs;
@@ -144,6 +146,11 @@ function onBlur(e: FocusEvent) {
   emit('validate', props.modelValue);
   emit('blur', e);
 }
+
+defineExpose({
+  getTextAreaRef: () => textAreaRef.value
+});
+
 </script>
 
 <template>
@@ -168,6 +175,7 @@ function onBlur(e: FocusEvent) {
         :placeholder="placeholder !== undefined ? placeholder : label"
         :disabled="disabled || skeleton"
         :readonly="readonly"
+        ref="textAreaRef"
         v-bind="$attrs"
         @blur="onBlur"
       />
