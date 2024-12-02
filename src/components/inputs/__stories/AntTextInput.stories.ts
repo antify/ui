@@ -70,6 +70,7 @@ export const Summary: Story = {
         <AntTextInput
           v-bind="args"
           v-model="args.modelValue"
+          readonly
         />
         <AntTextInput
           v-bind="args"

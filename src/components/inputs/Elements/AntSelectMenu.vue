@@ -49,7 +49,6 @@ const {floatingStyles, middlewareData, placement} = useFloating(reference, float
 });
 
 onClickOutside(floating, () => {
-  console.log(props.open);
   if (!props.open) {
     return;
   }
