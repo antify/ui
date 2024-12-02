@@ -34,6 +34,7 @@ const dialogOpen = ref(false);
     <slot name="tabs">
       <AntTabs
         :tab-items="tabItems"
+        :skeleton="skeleton"
       />
     </slot>
 
