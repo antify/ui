@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/antify/ui/compare/v1.2.0...v1.3.0) (2024-12-03)
+
+
+### Features
+
+* Add info state ([#41](https://github.com/antify/ui/issues/41)) ([1e51631](https://github.com/antify/ui/commit/1e516316bfee22fa95c6c2f61934d1e0a7bdd20b))
+* Implement scrollable tabs ([#42](https://github.com/antify/ui/issues/42)) ([668c86b](https://github.com/antify/ui/commit/668c86b1b29def4c0bb952832f7950c07ff8a5ff))
+
+
+### Bug Fixes
+
+* add MouseEvent for click and blur event ([#47](https://github.com/antify/ui/issues/47)) ([e25ddff](https://github.com/antify/ui/commit/e25ddff399a9cf0d7b6d37ba8a91110c466927df))
+* add ref prop to AntTextarea to ref the textare html element ([#50](https://github.com/antify/ui/issues/50)) ([44e426d](https://github.com/antify/ui/commit/44e426dc2fc5c05d2d6599945d8906a54808a7c1))
+* it is possible now to hover over the tooltip([#51](https://github.com/antify/ui/issues/51)) ([153997b](https://github.com/antify/ui/commit/153997bff1afdbd68ddbfaeac73d01ea69e26d12))
+* Remove duplicate line ([3f430ec](https://github.com/antify/ui/commit/3f430ecb5c07d70abb368eb2695da578e37b3710))
+* some adjustments for AntCrudDetailNav, AntDateInput, AntSelect and AntTextInput story ([#48](https://github.com/antify/ui/issues/48)) ([e7391c1](https://github.com/antify/ui/commit/e7391c1db7dbe18d1c490ff7b3c241b7c6b78444))
+* Update color for info state ([#45](https://github.com/antify/ui/issues/45)) ([13c4c61](https://github.com/antify/ui/commit/13c4c61caeab34981e81cedee2ccb2a366eee06e))
+* Update scroll implementation ([a04999f](https://github.com/antify/ui/commit/a04999f871e182e3defca9ae7064c3783e9057ae))
+
 ## [1.2.0](https://github.com/antify/ui/compare/v1.1.0...v1.2.0) (2024-10-30)
 
 
