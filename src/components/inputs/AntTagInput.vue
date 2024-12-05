@@ -64,7 +64,7 @@ const tagInput = ref('');
 const inputRef: Ref<HTMLElement | null> = ref(null);
 const inputContainerClasses = computed(() => {
   const variants: Record<InputState, string> = {
-    [InputState.base]: 'outline-neutral-300 focus-within:outline-neutral-300 focus-within:ring-primary-200 bg-white',
+    [InputState.base]: 'outline-base-300 focus-within:outline-base-300 focus-within:ring-primary-200 bg-white',
     [InputState.danger]: 'outline-danger-500 focus-within:outline-danger-500 focus-within:ring-danger-200 bg-danger-100',
     [InputState.info]: 'outline-info-500 focus-within:outline-info-500 focus-within:ring-info-200 bg-info-100',
     [InputState.success]: 'outline-success-500 focus-within:outline-success-500 focus-within:ring-success-200 bg-success-100',
@@ -93,7 +93,7 @@ const inputContainerClasses = computed(() => {
 });
 const inputClasses = computed(() => {
   const variants: Record<InputState, string> = {
-    [InputState.base]: 'placeholder:text-neutral-500',
+    [InputState.base]: 'placeholder:text-base-500',
     [InputState.danger]: 'placeholder:text-danger-700',
     [InputState.info]: 'placeholder:text-info-700',
     [InputState.success]: 'placeholder:text-success-700',

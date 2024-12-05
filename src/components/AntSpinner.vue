@@ -31,7 +31,7 @@ onMounted(() => {
 });
 const circleClass = computed(() => {
   const invertedVariants: Record<State, string> = {
-    [State.base]: 'fill-neutral-500',
+    [State.base]: 'fill-base-500',
     [State.primary]: 'fill-primary-700',
     [State.secondary]: 'fill-secondary-700',
     [State.danger]: 'fill-danger-700',
@@ -40,7 +40,7 @@ const circleClass = computed(() => {
     [State.warning]: 'fill-warning-700',
   };
   const notInvertedVariants: Record<State, string> = {
-    [State.base]: 'fill-neutral-100',
+    [State.base]: 'fill-base-100',
     [State.primary]: 'fill-primary-100',
     [State.secondary]: 'fill-secondary-100',
     [State.danger]: 'fill-danger-100',
@@ -56,7 +56,7 @@ const circleClass = computed(() => {
 });
 const spinningElementClass = computed(() => {
   const invertedVariants: Record<State, string> = {
-    [State.base]: 'fill-neutral-100',
+    [State.base]: 'fill-base-100',
     [State.primary]: 'fill-primary-100',
     [State.secondary]: 'fill-secondary-100',
     [State.danger]: 'fill-danger-100',
@@ -65,7 +65,7 @@ const spinningElementClass = computed(() => {
     [State.warning]: 'fill-warning-100',
   };
   const notInvertedVariants: Record<State, string> = {
-    [State.base]: 'fill-neutral-500',
+    [State.base]: 'fill-base-500',
     [State.primary]: 'fill-primary-500',
     [State.secondary]: 'fill-secondary-500',
     [State.danger]: 'fill-danger-500',

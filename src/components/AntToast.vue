@@ -35,7 +35,7 @@ const icons = {
 const _icon = computed(() => icons[props.state]);
 const classes = computed(() => {
   const variants: Record<InputState, string> = {
-    [InputState.base]: 'bg-neutral-100 border-neutral-500 text-neutral-500',
+    [InputState.base]: 'bg-base-100 border-base-500 text-base-500',
     [InputState.danger]: 'bg-danger-100 border-danger-500 text-danger-500',
     [InputState.info]: 'bg-info-100 border-info-500 text-info-500',
     [InputState.success]: 'bg-success-100 border-success-500 text-success-500',
@@ -50,7 +50,7 @@ const classes = computed(() => {
 const hasDefaultSlot = computed(() => useSlots()['default'] || false);
 const iconColor = computed(() => {
   const variants = {
-    [InputState.base]: 'text-neutral-100-font',
+    [InputState.base]: 'text-base-100-font',
     [InputState.danger]: 'text-danger-500',
     [InputState.info]: 'text-info-500',
     [InputState.success]: 'text-success-500',

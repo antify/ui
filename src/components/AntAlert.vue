@@ -48,7 +48,7 @@ const classes = computed(() => {
   const variants: Record<InputState, string> = {
     [InputState.danger]: 'bg-danger-100 text-danger-700',
     [InputState.info]: 'bg-info-100 text-info-700',
-    [InputState.base]: 'bg-neutral-100 text-neutral-100-font',
+    [InputState.base]: 'bg-base-100 text-base-100-font',
     [InputState.success]: 'bg-success-100 text-success-700',
     [InputState.warning]: 'bg-warning-100 text-warning-700',
   };
@@ -63,7 +63,7 @@ const hasDefaultSlot = computed(() => useSlots()['default'] || false);
 const hasQuestionMark = computed(() => (useSlots()['question-mark-text'] || false) || props.questionMarkText);
 const iconColor = computed(() => {
   const variants = {
-    [InputState.base]: 'text-neutral-100-font',
+    [InputState.base]: 'text-base-100-font',
     [InputState.danger]: 'text-danger-700',
     [InputState.info]: 'text-info-700',
     [InputState.success]: 'text-success-700',

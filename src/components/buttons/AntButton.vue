@@ -61,7 +61,7 @@ const groupedClassList = computed(() => ({
 }));
 const classes = computed(() => {
   const variants = {
-    [State.base]: 'ring-primary-200 outline-neutral-300',
+    [State.base]: 'ring-primary-200 outline-base-300',
     [State.danger]: 'ring-danger-200 outline-danger-500',
     [State.info]: 'ring-info-200 outline-info-500',
     [State.primary]: 'ring-primary-200 outline-primary-500',
@@ -79,7 +79,7 @@ const classes = computed(() => {
     [State.warning]: 'bg-white text-warning-500',
   };
   const notFilledHoverVariants = {
-    [State.base]: 'hover:bg-neutral-100',
+    [State.base]: 'hover:bg-base-100',
     [State.danger]: 'hover:bg-danger-100',
     [State.info]: 'hover:bg-info-100',
     [State.primary]: 'hover:bg-primary-100',
@@ -88,7 +88,7 @@ const classes = computed(() => {
     [State.warning]: 'hover:bg-warning-100',
   };
   const filledVariants = {
-    [State.base]: 'bg-neutral-50 text-neutral-50-font',
+    [State.base]: 'bg-base-50 text-base-50-font',
     [State.danger]: 'bg-danger-500 text-danger-500-font',
     [State.info]: 'bg-info-500 text-info-500-font',
     [State.primary]: 'bg-primary-500 text-primary-500-font',
@@ -97,7 +97,7 @@ const classes = computed(() => {
     [State.warning]: 'bg-warning-500 text-warning-500-font',
   };
   const filledHoverVariants = {
-    [State.base]: 'hover:bg-neutral-200',
+    [State.base]: 'hover:bg-base-200',
     [State.danger]: 'hover:bg-danger-600',
     [State.info]: 'hover:bg-info-600',
     [State.primary]: 'hover:bg-primary-600',

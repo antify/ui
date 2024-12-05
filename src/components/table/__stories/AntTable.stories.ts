@@ -129,7 +129,7 @@ export const Docs: Story = {
       return {args, selected};
     },
     template: `
-      <div class="h-96 border border-dashed border-neutral-300">
+      <div class="h-96 border border-dashed border-base-300">
         <AntTable v-bind="args" v-model="selected" :selected-row="selected" @row-click="(val) => selected = val">
           <template #cellContent="{element: entry, header}">
             <div v-if="header.identifier === 'employeed'">

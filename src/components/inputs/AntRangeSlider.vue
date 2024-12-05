@@ -30,7 +30,7 @@ const props = withDefaults(defineProps<{
 const _modelValue = useVModel(props, 'modelValue', emit);
 const inputClasses = computed(() => {
   const variants: Record<InputState, string> = {
-    [InputState.base]: 'text-neutral-base',
+    [InputState.base]: 'text-base-base',
     [InputState.danger]: 'text-danger-base',
     [InputState.info]: 'text-info-base',
     [InputState.success]: 'text-success-base',
@@ -38,7 +38,7 @@ const inputClasses = computed(() => {
   };
 
   return {
-    'ant-range-slider transition-colors relative border-none w-full focus:z-10 h-2 bg-neutral-300 rounded-md outline-none': true,
+    'ant-range-slider transition-colors relative border-none w-full focus:z-10 h-2 bg-base-300 rounded-md outline-none': true,
     'disabled:opacity-50 disabled:cursor-not-allowed': props.disabled,
     'invisible': props.skeleton,
     [variants[props.state]]: true

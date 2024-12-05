@@ -72,7 +72,7 @@ const itemClasses = computed(() => {
 
   const colorVariant = {
     [InputState.danger]: 'outline-danger-500 bg-danger-100',
-    [InputState.base]: 'outline-neutral-300 bg-white',
+    [InputState.base]: 'outline-base-300 bg-white',
     [InputState.info]: 'outline-info-500 bg-info-100',
     [InputState.success]: 'outline-success-500 bg-success-100',
     [InputState.warning]: 'outline-warning-500 bg-warning-100',

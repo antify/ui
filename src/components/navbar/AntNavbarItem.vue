@@ -11,7 +11,7 @@ const props = defineProps<{
 
 const itemClasses = computed(() => ({
   'w-full text-sm p-1.5 rounded-md cursor-pointer flex items-center flex-nowrap gap-1': true,
-  'transition-colors hover:bg-neutral-100': true,
+  'transition-colors hover:bg-base-100': true,
   'text-primary-500': props.navbarItem.active
 }));
 

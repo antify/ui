@@ -6,7 +6,7 @@ const meta: Meta<typeof AntCrudDetailActions> = {
   title: 'Crud/Crud Detail Actions',
   component: AntCrudDetailActions,
   parameters: {controls: {sort: 'requiredFirst'}},
-  decorators: [() => ({template: '<div class="border border-dashed border-neutral-300"><story/></div>'})],
+  decorators: [() => ({template: '<div class="border border-dashed border-base-300"><story/></div>'})],
   argTypes: {},
 };
 

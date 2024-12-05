@@ -41,7 +41,7 @@ const icons = {
 
 const iconColor = computed(() => {
   const variants = {
-    [InputState.base]: 'text-neutral-100-font',
+    [InputState.base]: 'text-base-100-font',
     [InputState.danger]: 'text-danger-500',
     [InputState.info]: 'text-info-500',
     [InputState.success]: 'text-success-500',
@@ -91,11 +91,11 @@ function confirmDialog() {
       <Transition :name="'bounce'">
         <div
           v-if="openDialog"
-          class="flex flex-col gap-px bg-neutral-300 overflow-hidden cursor-auto w-96 border border-neutral-300 rounded-md shadow-md"
+          class="flex flex-col gap-px bg-base-300 overflow-hidden cursor-auto w-96 border border-base-300 rounded-md shadow-md"
         >
           <div
             v-if="title || $slots['title']"
-            class="bg-neutral-100 p-2 flex items-center justify-between text-neutral-100-font text-sm font-semibold"
+            class="bg-base-100 p-2 flex items-center justify-between text-base-100-font text-sm font-semibold"
           >
             <slot name="title">
               {{ title }}
@@ -117,7 +117,7 @@ function confirmDialog() {
           </div>
 
           <div
-            class="bg-neutral-100 p-2 gap-2 text-for-white-bg-font flex w-full justify-end"
+            class="bg-base-100 p-2 gap-2 text-for-white-bg-font flex w-full justify-end"
           >
             <slot name="footer">
               <AntButton

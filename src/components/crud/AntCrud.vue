@@ -12,7 +12,7 @@ withDefaults(defineProps<{
     data-e2e="crud"
   >
     <div
-      class="left-content h-full flex flex-col bg-neutral-300 gap-px overflow-hidden"
+      class="left-content h-full flex flex-col bg-base-300 gap-px overflow-hidden"
       :class="{'w-[40rem]': showDetail, 'w-full': !showDetail}"
     >
       <div class="bg-white">
@@ -31,7 +31,7 @@ withDefaults(defineProps<{
     <Transition name="right-content">
       <div
         v-if="showDetail"
-        class="flex flex-col gap-px border-l border-neutral-300 overflow-hidden"
+        class="flex flex-col gap-px border-l border-base-300 overflow-hidden"
         :class="{'w-full': showDetail}"
       >
         <slot/>

@@ -7,7 +7,7 @@ const meta: Meta<typeof AntDialog> = {
   title: 'Components/Dialogs/Dialog',
   component: AntDialog,
   parameters: {controls: {sort: 'requiredFirst'}},
-  decorators: [() => ({template: '<div class="border border-dashed border-neutral-300"><story/></div>'})],
+  decorators: [() => ({template: '<div class="border border-dashed border-base-300"><story/></div>'})],
   argTypes: {
     state: {
       control: {type: 'select'},

@@ -6,7 +6,7 @@ const meta: Meta<typeof AntNavLeftLayout> = {
   title: 'Layouts/NavLeftLayout',
   component: AntNavLeftLayout,
   parameters: {controls: {sort: 'requiredFirst'}},
-  decorators: [() => ({template: '<div class="border border-dashed border-neutral-300"><story/></div>'})],
+  decorators: [() => ({template: '<div class="border border-dashed border-base-300"><story/></div>'})],
   argTypes: {},
 };
 

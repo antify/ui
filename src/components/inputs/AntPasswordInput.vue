@@ -51,7 +51,7 @@ const iconColor = computed(() => {
     case InputState.danger:
       return 'text-danger-700';
     default:
-      return 'text-neutral-500';
+      return 'text-base-500';
   }
 });
 

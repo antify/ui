@@ -62,7 +62,7 @@ const icons = {
 /*TODO #59:: If the scrollbar is showing than the pr is moving and the gap between icon and text is bigger and the icon is stuck in the scrollbar*/
 const inputClasses = computed(() => {
   const variants: Record<InputState, string> = {
-    [InputState.base]: 'outline-neutral-300 focus:ring-primary-200 bg-white placeholder:text-neutral-500',
+    [InputState.base]: 'outline-base-300 focus:ring-primary-200 bg-white placeholder:text-base-500',
     [InputState.danger]: 'outline-danger-500 focus:ring-danger-200 bg-danger-100 placeholder:text-danger-700',
     [InputState.info]: 'outline-info-500 focus:ring-info-200 bg-info-100 placeholder:text-info-700',
     [InputState.success]: 'outline-success-500 focus:ring-success-200 bg-success-100 placeholder:text-success-700',

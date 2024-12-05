@@ -61,7 +61,7 @@ const isOpen = useVModel(props, 'open', emit);
 const focusedDropDownItem = useVModel(props, 'focused', emit);
 const dropdownClasses = computed(() => {
   const variants: Record<InputState, string> = {
-    [InputState.base]: 'bg-neutral-300 border-neutral-300',
+    [InputState.base]: 'bg-base-300 border-base-300',
     [InputState.success]: 'bg-success-500 border-success-500',
     [InputState.info]: 'bg-info-500 border-info-500',
     [InputState.warning]: 'bg-warning-500 border-warning-500',
@@ -168,7 +168,7 @@ function onKeyDownDropDown(e: KeyboardEvent) {
 
 function getActiveDropDownItemClasses(option: SelectOption) {
   const variants: Record<InputState, string> = {
-    [InputState.base]: '!bg-neutral-100',
+    [InputState.base]: '!bg-base-100',
     [InputState.success]: 'bg-success-200',
     [InputState.info]: 'bg-info-200',
     [InputState.warning]: 'bg-warning-200',

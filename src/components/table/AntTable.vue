@@ -35,7 +35,7 @@ const props = withDefaults(
     selectableRows: false,
     showLightVersion: false,
     size: AntTableSize.md,
-    headerColor: 'bg-neutral-200'
+    headerColor: 'bg-base-200'
   });
 
 const selected: Ref<Record<string, unknown> | undefined> = useVModel(props, 'selectedRow', emits);
@@ -132,9 +132,9 @@ function rowClick(elem: Record<string, unknown>): void {
           :class="{
               'bg-primary-200 text-primary-200-font transition-colors': elem === selected,
               'bg-white text-for-white-bg-font': elem !== selected && rowIndex % 2 === 0,
-              'bg-neutral-100 text-neutral-100-font': elem !== selected && rowIndex % 2 !== 0,
+              'bg-base-100 text-base-100-font': elem !== selected && rowIndex % 2 !== 0,
               'cursor-pointer': selectableRows,
-              'hover:bg-neutral-200': selectableRows && elem !== selected,
+              'hover:bg-base-200': selectableRows && elem !== selected,
             }"
         >
           <slot
@@ -199,7 +199,7 @@ function rowClick(elem: Record<string, unknown>): void {
 
     <div
       v-if="data.length > 0 && _loading"
-      class="absolute bg-opacity-50 w-full top-0 bottom-0 bg-neutral-300 flex items-center justify-center"
+      class="absolute bg-opacity-50 w-full top-0 bottom-0 bg-base-300 flex items-center justify-center"
     >
       <AntSpinner
         class="!w-24 !h-24"
@@ -209,7 +209,7 @@ function rowClick(elem: Record<string, unknown>): void {
 
     <div
       v-if="!data || data.length <= 0 && _loading"
-      class="absolute bg-opacity-50 w-full top-[40px] bottom-0 bg-neutral-300 flex items-center justify-center"
+      class="absolute bg-opacity-50 w-full top-[40px] bottom-0 bg-base-300 flex items-center justify-center"
     >
       <AntSkeleton
         v-model="_loading"

@@ -71,7 +71,7 @@ const hasInputState = computed(() => props.skeleton || props.readonly || props.d
 const valueLabel = computed(() => props.options.find(option => option.value === _modelValue.value)?.label || null);
 const inputClasses = computed(() => {
   const variants: Record<InputState, string> = {
-    [InputState.base]: 'outline-neutral-300 bg-white focus:ring-primary-200',
+    [InputState.base]: 'outline-base-300 bg-white focus:ring-primary-200',
     [InputState.success]: 'outline-success-500 bg-success-100 focus:ring-success-200',
     [InputState.info]: 'outline-info-500 bg-info-100 focus:ring-info-200',
     [InputState.warning]: 'outline-warning-500 bg-warning-100 focus:ring-warning-200',
@@ -106,7 +106,7 @@ const inputClasses = computed(() => {
 });
 const placeholderClasses = computed(() => {
   const variants: Record<InputState, string> = {
-    [InputState.base]: 'text-neutral-500',
+    [InputState.base]: 'text-base-500',
     [InputState.success]: 'text-success-700',
     [InputState.info]: 'text-info-700',
     [InputState.warning]: 'text-warning-700',

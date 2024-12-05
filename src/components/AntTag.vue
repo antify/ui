@@ -24,7 +24,7 @@ const classes = computed(() => {
     [TagState.info]: 'bg-info-500 text-info-500-font',
     [TagState.primary]: 'bg-primary-500 text-primary-500-font',
     [TagState.secondary]: 'bg-secondary-500 text-secondary-500-font',
-    [TagState.base]: 'bg-neutral-300 text-neutral-300-font',
+    [TagState.base]: 'bg-base-300 text-base-300-font',
     [TagState.success]: 'bg-success-500 text-success-500-font',
     [TagState.warning]: 'bg-warning-500 text-warning-500-font',
   };
@@ -61,7 +61,7 @@ const iconState = computed(() => {
     case TagState.secondary:
       return 'text-secondary-500-font';
     default:
-      return 'text-neutral-300-font';
+      return 'text-base-300-font';
   }
 });
 const iconWrapperClass = computed(() => {

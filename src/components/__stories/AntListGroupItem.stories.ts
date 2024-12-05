@@ -35,7 +35,7 @@ export const Docs: Story = {
     setup() {
       return {args};
     },
-    template: '<div class="p-4 bg-neutral-100"><AntListGroupItem v-bind="args">Item</AntListGroupItem></div>',
+    template: '<div class="p-4 bg-base-100"><AntListGroupItem v-bind="args">Item</AntListGroupItem></div>',
   }),
   args: {},
 };

@@ -22,7 +22,7 @@ export const Docs: Story = {
       return {args};
     },
     template: `
-			<div class="outline outline-neutral-300">
+			<div class="outline outline-base-300">
 				<AntContent v-bind="args" class="h-40">
 					<div class="slot h-60">SLOT</div>
 				</AntContent>

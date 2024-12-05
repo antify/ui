@@ -27,7 +27,7 @@ const cardClass = computed(() => ({
 <template>
   <div
     :class="cardClass"
-    class="bg-white border border-neutral-300 rounded-md"
+    class="bg-white border border-base-300 rounded-md"
   >
     <slot/>
   </div>

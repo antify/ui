@@ -49,7 +49,7 @@ const inputClasses = computed(() => {
     [InputState.warning]: 'text-warning-500',
   };
   const inactiveColorVariant: Record<InputState, string> = {
-    [InputState.base]: 'outline-neutral-300',
+    [InputState.base]: 'outline-base-300',
     [InputState.danger]: 'outline-danger-500',
     [InputState.info]: 'outline-info-500',
     [InputState.success]: 'outline-success-500',
@@ -57,7 +57,7 @@ const inputClasses = computed(() => {
   };
 
   return {
-    'relative inline-flex flex-shrink-0 bg-neutral-100 border-0': true,
+    'relative inline-flex flex-shrink-0 bg-base-100 border-0': true,
     'outline outline-1 outline-offset-[-1px] rounded': true,
     'focus:ring-offset-0': true,
     'invisible': props.skeleton,

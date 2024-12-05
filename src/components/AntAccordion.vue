@@ -49,7 +49,7 @@ function onClose(index: number) {
 </script>
 
 <template>
-  <div class="w-full h-full flex flex-col bg-neutral-300 gap-px">
+  <div class="w-full h-full flex flex-col bg-base-300 gap-px">
     <slot>
       <AntAccordionItem
         v-for="(item, index) in items"

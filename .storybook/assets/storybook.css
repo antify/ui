@@ -1,13 +1,13 @@
 /** Used for placeholder slots */
 .slot {
-  @apply p-2.5 rounded-md border-2 border-dashed border-neutral-300 flex items-center justify-center text-neutral-300 font-medium text-2xl;
+  @apply p-2.5 rounded-md border-2 border-dashed border-base-300 flex items-center justify-center text-base-300 font-medium text-2xl;
 }
 
 .dashed {
-  @apply border border-dashed border-neutral-300;
+  @apply border border-dashed border-base-300;
 }
 
 /** Used for fixed defined boxes like a fake button */
 .box {
-  @apply border border-neutral-300 p-2.5 rounded-md text-for-white-bg-font font-medium;
+  @apply border border-base-300 p-2.5 rounded-md text-for-white-bg-font font-medium;
 }

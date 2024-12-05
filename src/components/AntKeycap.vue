@@ -37,7 +37,7 @@ const iconClasses = computed(() => {
 </script>
 
 <template>
-  <div class="inline-flex relative justify-center items-center bg-neutral-300 rounded-md text-center text-neutral-300-font font-medium" :class="classes">
+  <div class="inline-flex relative justify-center items-center bg-base-300 rounded-md text-center text-base-300-font font-medium" :class="classes">
       <AntIcon
       v-if="icon"
       :icon="icon"

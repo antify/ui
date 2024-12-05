@@ -77,7 +77,7 @@ const onClickOutside = [
           :style="floatingStyles"
         >
           <div
-            class="shadow-lg border border-neutral-300 rounded-md text-sm relative inline-flex flex-col bg-white text-for-white-bg-font w-full overflow-hidden"
+            class="shadow-lg border border-base-300 rounded-md text-sm relative inline-flex flex-col bg-white text-for-white-bg-font w-full overflow-hidden"
             :class="{'p-2': contentPadding}"
           >
             <slot name="content"/>

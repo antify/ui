@@ -38,7 +38,7 @@ const buttonClasses = computed(() => {
     'focus-within:ring-2': !hasInputState.value && (props.size === Size.sm || props.size === Size.xs || props.size === Size.xs2),
     'h-5 w-9': props.size === Size.lg || props.size === Size.md || props.size === Size.sm,
     'h-4 w-[30px]': props.size === Size.xs || props.size === Size.xs2,
-    'bg-neutral-300': !_value.value,
+    'bg-base-300': !_value.value,
     'invisible': props.skeleton,
     // Disabled
     'opacity-50 cursor-not-allowed': props.disabled,
@@ -65,7 +65,7 @@ const buttonClasses = computed(() => {
   return classes;
 });
 const ballClasses = computed(() => ({
-  'pointer-events-none inline-block rounded-full bg-neutral-100 shadow transform ring-0 transition ease-in-out duration-200': true,
+  'pointer-events-none inline-block rounded-full bg-base-100 shadow transform ring-0 transition ease-in-out duration-200': true,
   'h-4 w-4 translate-y-0.5': props.size === Size.lg || props.size === Size.md || props.size === Size.sm,
   'translate-x-[1.125rem]': _value.value && (props.size === Size.lg || props.size === Size.md || props.size === Size.sm),
   'translate-x-0.5': !_value.value && (props.size === Size.lg || props.size === Size.md || props.size === Size.sm),

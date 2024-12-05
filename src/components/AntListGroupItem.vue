@@ -19,7 +19,7 @@ const classes = computed(() => {
   const variants: Record<ListGroupItemState, string> = {
     [ListGroupItemState.danger]: 'bg-danger-500 text-danger-500-font hover:bg-danger-700',
     [ListGroupItemState.info]: 'bg-info-500 text-info-500-font hover:bg-info-700',
-    [ListGroupItemState.base]: 'bg-white text-for-white-bg-font hover:bg-neutral-200',
+    [ListGroupItemState.base]: 'bg-white text-for-white-bg-font hover:bg-base-200',
     [ListGroupItemState.primary]: 'bg-primary-500 text-primary-500-font hover:bg-primary-700',
     [ListGroupItemState.secondary]: 'bg-secondary-500 text-secondary-500-font hover:bg-secondary-700',
     [ListGroupItemState.success]: 'bg-success-500 text-success-500-font hover:bg-success-700',

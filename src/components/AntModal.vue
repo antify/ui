@@ -54,8 +54,8 @@ function closeModal() {
       <Transition :name="!fullscreen ? 'bounce' : 'bounce-slow'">
         <div
           v-if="openModal"
-          class="flex flex-col gap-px bg-neutral-300 overflow-hidden cursor-auto"
-          :class="{'w-full h-full': fullscreen, 'border border-neutral-300 rounded-md shadow-md': !fullscreen}"
+          class="flex flex-col gap-px bg-base-300 overflow-hidden cursor-auto"
+          :class="{'w-full h-full': fullscreen, 'border border-base-300 rounded-md shadow-md': !fullscreen}"
         >
           <div
             class="bg-white p-2 flex items-center justify-between"

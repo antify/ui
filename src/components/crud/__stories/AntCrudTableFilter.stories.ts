@@ -21,7 +21,7 @@ export const Docs: Story = {
       return {args};
     },
     template: `
-      <div class="border border-neutral-300 border-dashed">
+      <div class="border border-base-300 border-dashed">
         <AntCrudTableFilter
           v-model:search="args.search"
           v-bind="args"

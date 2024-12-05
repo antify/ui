@@ -39,7 +39,7 @@ function clickTab(tabItem: TabItem) {
 
 <template>
   <div :class="containerClasses">
-    <div class="flex gap-px bg-neutral-300 border-l border-r border-neutral-300 overflow-x-auto" :class="scrollContainerClasses">
+    <div class="flex gap-px bg-base-300 border-l border-r border-base-300 overflow-x-auto" :class="scrollContainerClasses">
     <slot>
       <AntTabItem
         v-for="(tabItem, index) in tabItems"

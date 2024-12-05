@@ -49,8 +49,8 @@ const _active = computed<boolean>(() => {
 });
 const containerClasses = computed(() => {
   const variants: Record<TabItemState, string> = {
-    [TabItemState.base]: 'hover:bg-neutral-100',
-    [TabItemState.info]: 'hover:bg-neutral-100',
+    [TabItemState.base]: 'hover:bg-base-100',
+    [TabItemState.info]: 'hover:bg-base-100',
     [TabItemState.warning]: 'hover:bg-warning-100',
     [TabItemState.danger]: 'hover:bg-danger-100',
   };
@@ -92,7 +92,7 @@ const borderBoxClasses = computed(() => {
 });
 const iconColor = computed(() => {
   const variants = {
-    [TabItemState.base]: 'text-neutral-100-font',
+    [TabItemState.base]: 'text-base-100-font',
     [TabItemState.info]: 'text-info-500',
     [TabItemState.warning]: 'text-warning-500',
     [TabItemState.danger]: 'text-danger-500',

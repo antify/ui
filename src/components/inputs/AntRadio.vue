@@ -47,7 +47,7 @@ const inputClasses = computed(() => {
     'rounded-full transition-colors ease-in-out duration-200 disabled:opacity-50': true,
     'focus:ring-2': !hasInputState.value && (props.size === Size.sm || props.size === Size.xs || props.size === Size.xs2),
     'focus:ring-4': !hasInputState.value && (props.size === Size.lg || props.size === Size.md),
-    'outline-neutral-300': props.state === InputState.base,
+    'outline-base-300': props.state === InputState.base,
     'outline-primary-500': props.state === InputState.base && isActive.value,
     'outline-info-500': props.state === InputState.info,
     'outline-success-500': props.state === InputState.success,

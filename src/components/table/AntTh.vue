@@ -16,7 +16,7 @@ const props = withDefaults(
 
 const headerClasses = computed(() => ({
   [props.header.headerClassList || '']: true,
-  'text-sm text-neutral-200-font uppercase font-semi-bold': true,
+  'text-sm text-base-200-font uppercase font-semi-bold': true,
   'text-left': !props.header.align || props.header.align === AntTableAlign.left,
   'text-center': props.header.align === AntTableAlign.center,
   'text-right': props.header.align === AntTableAlign.right,

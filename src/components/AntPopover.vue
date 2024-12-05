@@ -107,10 +107,10 @@ const onClickOutside = [
             ref="floating"
             :style="floatingStyles"
           >
-            <div class="shadow-lg border-neutral-300 rounded-md text-sm relative inline-flex flex-col">
+            <div class="shadow-lg border-base-300 rounded-md text-sm relative inline-flex flex-col">
 
               <div
-                class="border-neutral-300 border-b p-2 bg-neutral-100 rounded-t-md border-t border-l border-r text-neutral-100-font font-semibold"
+                class="border-base-300 border-b p-2 bg-base-100 rounded-t-md border-t border-l border-r text-base-100-font font-semibold"
               >
                 <slot name="title">
                   {{ title }}
@@ -118,7 +118,7 @@ const onClickOutside = [
               </div>
 
               <div
-                class="p-2 rounded-b-md text-for-white-bg-font border-neutral-300 border-l border-b border-r bg-white"
+                class="p-2 rounded-b-md text-for-white-bg-font border-base-300 border-l border-b border-r bg-white"
               >
                 <slot name="content"/>
               </div>
@@ -154,12 +154,12 @@ const onClickOutside = [
                 >
                   <path
                     d="M20.3284 1.82843L23.1569 4.65685C24.6571 6.15715 26.692 7 28.8137 7L6.18629 7C8.30802 7 10.3429 6.15715 11.8431 4.65686L14.6716 1.82843C16.2337 0.266331 18.7663 0.266328 20.3284 1.82843Z"
-                    :class="{'fill-neutral-100': placement === Position.bottom, 'fill-white': placement === Position.top || placement === Position.right || placement === Position.left}"
+                    :class="{'fill-base-100': placement === Position.bottom, 'fill-white': placement === Position.top || placement === Position.right || placement === Position.left}"
                   />
 
                   <path
                     d="M34.5 7L28.8137 7C26.692 7 24.6571 6.15715 23.1569 4.65685L20.3284 1.82843C18.7663 0.266328 16.2337 0.266331 14.6716 1.82843L11.8431 4.65686C10.3429 6.15715 8.30802 7 6.18629 7L0.5 7L34.5 7Z"
-                    :class="{'stroke-neutral-100': placement === Position.bottom, 'stroke-white': placement === Position.top || placement === Position.right || placement === Position.left}"
+                    :class="{'stroke-base-100': placement === Position.bottom, 'stroke-white': placement === Position.top || placement === Position.right || placement === Position.left}"
                   />
                 </svg>
 
@@ -173,7 +173,7 @@ const onClickOutside = [
                 >
                   <path
                     d="M34.5 7L28.8137 7C26.692 7 24.6571 6.15715 23.1569 4.65685L20.3284 1.82843C18.7663 0.266328 16.2337 0.266331 14.6716 1.82843L11.8431 4.65686C10.3429 6.15715 8.30802 7 6.18629 7L0.5 7"
-                    class="stroke-neutral-300"
+                    class="stroke-base-300"
                   />
                 </svg>
               </div>
