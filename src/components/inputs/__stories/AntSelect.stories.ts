@@ -61,6 +61,11 @@ const options: SelectOption[] = [
   },
 ];
 
+const manySelectOptions: SelectOption[] = [...Array(24).keys()].map((key) => ({
+  label: `Option ${Number(key) + 1}`,
+  value: Number(key) + 1,
+}));
+
 export const Docs: Story = {
   render: (args) => ({
     components: {AntSelect, AntDropdown},
@@ -96,6 +101,15 @@ export const Docs: Story = {
     description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod'
   },
 };
+
+export const manyOptions: Story = {
+  render: Docs.render,
+  args: {
+    ...Docs.args,
+    options: manySelectOptions,
+  },
+};
+
 export const nullable: Story = {
   render: Docs.render,
   args: {
@@ -161,14 +175,15 @@ export const summary: Story = {
   render: (args) => ({
     components: {AntSelect},
     setup() {
-      return {args};
+      return {args, manySelectOptions};
     },
     template: `
       <div class="p-4 flex flex-col gap-2.5">
-        <div class="flex w-2/5 gap-2.5">
+        <div class="flex gap-2.5">
           <AntSelect v-bind="args" :value="null"
                      placeholder="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"/>
           <AntSelect v-bind="args" value="5"/>
+          <AntSelect v-bind="args" :value="null" :options="manySelectOptions" />
         </div>
         <div class="flex gap-2.5">
           <AntSelect v-bind="args" :value="null" size="md" state="base"/>
@@ -229,6 +244,6 @@ export const summary: Story = {
     `,
   }),
   args: {
-    ...Docs.args
+    ...Docs.args,
   },
 };
