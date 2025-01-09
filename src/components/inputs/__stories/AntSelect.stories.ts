@@ -179,11 +179,10 @@ export const summary: Story = {
     },
     template: `
       <div class="p-4 flex flex-col gap-2.5">
-        <div class="flex gap-2.5">
+        <div class="flex w-2/5 gap-2.5">
           <AntSelect v-bind="args" :value="null"
                      placeholder="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"/>
           <AntSelect v-bind="args" value="5"/>
-          <AntSelect v-bind="args" :value="null" :options="manySelectOptions" />
         </div>
         <div class="flex gap-2.5">
           <AntSelect v-bind="args" :value="null" size="md" state="base"/>
