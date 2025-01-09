@@ -94,3 +94,11 @@ export const Docs: Story = {
   args: {
   },
 };
+
+export const disabled: Story = {
+  render: Docs.render,
+  args: {
+    ...Docs.args,
+    disabled: true
+  },
+};
