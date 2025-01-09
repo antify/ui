@@ -29,13 +29,15 @@ const props = withDefaults(
     showLightVersion?: boolean;
     size?: AntTableSize;
     headerColor?: string;
+    emptyStateText?: string;
   }>(), {
     rowKey: 'id',
     loading: false,
     selectableRows: false,
     showLightVersion: false,
     size: AntTableSize.md,
-    headerColor: 'bg-base-200'
+    headerColor: 'bg-base-200',
+    emptyStateText: 'We couldn\'t find any entry',
   });
 
 const selected: Ref<Record<string, unknown> | undefined> = useVModel(props, 'selectedRow', emits);
@@ -188,7 +190,7 @@ function rowClick(elem: Record<string, unknown>): void {
           >
             <slot name="emptyState">
               <div class="flex items-center flex-col">
-                <span class="font-semibold">We couldn't find any entry</span>
+                <span class="font-semibold">{{ emptyStateText }}</span>
               </div>
             </slot>
           </td>
