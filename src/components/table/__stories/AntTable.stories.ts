@@ -175,7 +175,37 @@ export const Docs: Story = {
 
 // TODO:: Stories for loading/custom/...
 export const Empty: Story = {
-  render: Docs.render,
+  render: (args) => ({
+    components: {AntTable, AntSwitch},
+    setup() {
+      const selected = ref();
+      return {args, selected};
+    },
+    template: `
+      <div class="flex flex-col gap-2">
+        <div class="h-96 border border-dashed border-base-300">
+          <AntTable v-bind="args" v-model="selected" :selected-row="selected" @row-click="(val) => selected = val">
+            <template #cellContent="{element: entry, header}">
+              <div v-if="header.identifier === 'employeed'">
+                <AntSwitch v-model="entry.employeed"/>
+              </div>
+            </template>
+          </AntTable>
+          </div>
+
+          <div class="h-96 border border-dashed border-base-300">
+            <AntTable v-bind="args" v-model="selected" :selected-row="selected" @row-click="(val) => selected = val" empty-state-text="Custom Empty State Text">
+              <template #cellContent="{element: entry, header}">
+                <div v-if="header.identifier === 'employeed'">
+                  <AntSwitch v-model="entry.employeed"/>
+                </div>
+              </template>
+            </AntTable>
+          </div>
+        </div>
+      </div>
+    `,
+  }),
   args: {
     headers: [
       {
@@ -210,6 +240,7 @@ export const Empty: Story = {
     data: []
   }
 };
+
 export const Skeleton: Story = {
   render: Docs.render,
   args: {
