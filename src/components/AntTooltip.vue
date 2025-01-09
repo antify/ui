@@ -9,10 +9,12 @@ const props = withDefaults(defineProps<{
   state?: InputState,
   delay?: number,
   tooltipClasses?: string | Record<string, boolean>
+  disabled?: boolean;
 }>(), {
   state: InputState.base,
   delay: 600,
   tooltipClasses: '',
+  disabled: false,
 });
 
 const floatOpen = ref<boolean>(false)
@@ -157,7 +159,7 @@ function onClick() {
 
     <teleport to="body">
       <div
-        v-if="floatOpen && hasSlotContent($slots.content)"
+        v-if="floatOpen && hasSlotContent($slots.content) && !disabled"
         :class="_tooltipClasses"
         ref="floating"
         :style="{
