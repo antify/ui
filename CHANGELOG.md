@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/antify/ui/compare/v2.0.0...v2.1.0) (2025-01-15)
+
+
+### Features
+
+* **AntSelect:** Restrict menu height ([e056478](https://github.com/antify/ui/commit/e056478f7220fc9df2803d598c803da61f210b7b))
+* **AntTable:** Add custom empty state text ([6c44cba](https://github.com/antify/ui/commit/6c44cba1d859d6596075215b0659f445b18c0ce8))
+* **AntTooltip:** Add disabled flag ([08f3304](https://github.com/antify/ui/commit/08f33048c6ac16e9fadb8fdb3d53fd1d41d7e52c))
+
+
+### Bug Fixes
+
+* **AntSelect:** Revert change of container size ([ef7d653](https://github.com/antify/ui/commit/ef7d6536b110b250127d33fd83b4ef3e03f04414))
+* filter button is visible if showFilter prop == true([#61](https://github.com/antify/ui/issues/61)) ([d15a7c6](https://github.com/antify/ui/commit/d15a7c66db9d282dd2bd01d1dde9f471384b5ace))
+
 ## [2.0.0](https://github.com/antify/ui/compare/v1.3.0...v2.0.0) (2024-12-05)
 
 
