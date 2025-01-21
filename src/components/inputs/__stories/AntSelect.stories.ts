@@ -127,12 +127,27 @@ export const skeleton: Story = {
   },
 };
 export const disabled: Story = {
-  render: Docs.render,
+  render: (args, ctx) => ({
+    // @ts-ignore
+    components: Docs.render(args, ctx).components,
+    // @ts-ignore
+    setup: Docs.render(args, ctx).setup,
+    template: `
+      <div ref="scrollContainer" class="overflow-y-auto h-[100vh] p-2.5 dashed">
+        <div class="flex flex-col gap-4 justify-center h-[200vh]">
+          <AntSelect v-bind="args" v-model="modelValue"/>
+          <AntSelect v-bind="args" v-model="modelValue" nullable/>
+        </div>
+      </div>
+    `,
+  }),
   args: {
     ...Docs.args,
-    disabled: true
+    modelValue: '1',
+    disabled: true,
   },
 };
+
 export const withPlaceholder: Story = {
   render: Docs.render,
   args: {
@@ -218,6 +233,13 @@ export const summary: Story = {
           <AntSelect v-bind="args" value="1" size="sm" state="success" disabled/>
           <AntSelect v-bind="args" value="1" size="sm" state="warning" disabled/>
           <AntSelect v-bind="args" value="1" size="sm" state="danger" disabled/>
+        </div>
+        <div class="flex gap-2.5">
+          <AntSelect v-bind="args" :value="1" v-model="modelValue" size="sm" state="base" disabled nullable/>
+          <AntSelect v-bind="args" :value="1" v-model="modelValue" size="sm" state="info" disabled nullable/>
+          <AntSelect v-bind="args" :value="1" v-model="modelValue" size="sm" state="success" disabled nullable/>
+          <AntSelect v-bind="args" :value="1" v-model="modelValue" size="sm" state="warning" disabled nullable/>
+          <AntSelect v-bind="args" :value="1" v-model="modelValue" size="sm" state="danger" disabled nullable/>
         </div>
         <div class="flex gap-2.5">
           <AntSelect v-bind="args" :value="null" grouped="none"/>
