@@ -34,7 +34,7 @@ const {floatingStyles} = useFloating(reference, floating, {
 });
 
 const _dropdownClasses = computed(() => ({
-  'min-w-[10rem] z-[90]': true,
+  'min-w-[10rem] z-[50]': true,
   ...classesToObjectSyntax(props.dropdownClasses)
 }));
 

@@ -23,7 +23,7 @@ const classes = computed(() => ({
 
 <template>
   <div
-    class="absolute flex flex-col space-y-2.5 p-2.5 z-[999999999]"
+    class="absolute flex flex-col space-y-2.5 p-2.5 z-[100]"
     :class="classes"
     data-e2e="toaster"
   >
