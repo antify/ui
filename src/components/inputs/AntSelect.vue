@@ -315,6 +315,7 @@ function onClickRemoveButton() {
         :grouped="[Grouped.left, Grouped.center].some(item => item === grouped) ? Grouped.center : Grouped.right"
         :size="size"
         :skeleton="skeleton"
+        :disabled="disabled"
         @click="onClickRemoveButton"
       />
     </div>
