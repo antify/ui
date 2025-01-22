@@ -47,7 +47,7 @@ function closeModal() {
   <Transition name="fade">
     <div
       v-if="openBackground"
-      class="absolute inset-0 flex items-center justify-center z-50 cursor-pointer overflow-hidden"
+      class="absolute inset-0 flex items-center justify-center z-[80] cursor-pointer overflow-hidden"
       :class="{'bg-black/50 backdrop-blur-sm': !fullscreen}"
       @click.self="closeModal"
     >
