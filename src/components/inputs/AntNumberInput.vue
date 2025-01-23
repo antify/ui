@@ -10,11 +10,17 @@ import {handleEnumValidation} from '../../handler';
 import {useVModel} from '@vueuse/core';
 import {Grouped} from '../../enums/Grouped.enum';
 import {BaseInputType} from './Elements/__types';
+import Big from 'big.js';
+Big.RM = Big.roundHalfEven;
 
 defineOptions({inheritAttrs: false});
 
+/**
+ * We use a string as the modelValue to ensure that numbers are correctly padded with a trailing 0 instead of cut off (e.g. 0.10 would be converted to 0.1).
+ * Additionally, the initial value (if none is given) gets set to "0" with the same amount of decimals as used in the steps.
+ */
 const props = withDefaults(defineProps<{
-  modelValue: number | null;
+  modelValue: string | null;
   label?: string;
   placeholder?: string;
   description?: string;
@@ -42,6 +48,7 @@ const props = withDefaults(defineProps<{
 });
 const emit = defineEmits(['update:modelValue', 'validate']);
 const _modelValue = useVModel(props, 'modelValue', emit);
+
 const isPrevButtonDisabled = computed(() => {
   if (props.disabled) {
     return true;
@@ -51,7 +58,7 @@ const isPrevButtonDisabled = computed(() => {
     return false;
   }
 
-  return props.min !== undefined ? _modelValue.value <= props.min : false;
+  return props.min !== undefined ? Number(_modelValue.value) <= props.min : false;
 });
 const isNextButtonDisabled = computed(() => {
   if (props.disabled) {
@@ -62,7 +69,7 @@ const isNextButtonDisabled = computed(() => {
     return false;
   }
 
-  return props.max !== undefined ? _modelValue.value >= props.max : false;
+  return props.max !== undefined ? Number(_modelValue.value) >= props.max : false;
 });
 
 onMounted(() => {
@@ -70,23 +77,44 @@ onMounted(() => {
   handleEnumValidation(props.state, InputState, 'state');
 });
 
+/**
+ * Returns the amount of decimal places of the given value.
+ * @param value Number to get decimal places from.
+ */
+function getDecimalPlaces(value: number | string) {
+  const strValue = String(value);
+  const decimalIndex = strValue.indexOf('.');
+
+  if (decimalIndex === -1) return 0;
+
+  return strValue.length - decimalIndex - 1;
+}
+
 function subtract() {
+  const modelDecimalPlaces = getDecimalPlaces(_modelValue.value || 0);
+  const stepDecimalPlaces = getDecimalPlaces(props.steps);
+  const decimalPlaces = Math.max(modelDecimalPlaces, stepDecimalPlaces);
+
   if (_modelValue.value === null) {
-    _modelValue.value = props.max || 0;
-  } else if (props.max !== undefined && _modelValue.value - props.steps > props.max) {
-    _modelValue.value = props.max;
+    _modelValue.value = String(props.max || new Big(0).toFixed(decimalPlaces));
+  } else if (props.max !== undefined && Number(_modelValue.value) - props.steps > props.max) {
+    _modelValue.value = String(props.max);
   } else {
-    _modelValue.value -= props.steps;
+    _modelValue.value = new Big(_modelValue.value).sub(props.steps).toFixed(decimalPlaces);
   }
 }
 
 function add() {
+  const modelDecimalPlaces = getDecimalPlaces(_modelValue.value || 0);
+  const stepDecimalPlaces = getDecimalPlaces(props.steps);
+  const decimalPlaces = Math.max(modelDecimalPlaces, stepDecimalPlaces);
+
   if (_modelValue.value === null) {
-    return _modelValue.value = props.min || 0;
-  } else if (props.min !== undefined && _modelValue.value + props.steps < props.min) {
-    return _modelValue.value = props.min;
+    return _modelValue.value = String(props.min || new Big(0).toFixed(decimalPlaces));
+  } else if (props.min !== undefined && Number(_modelValue.value) + props.steps < props.min) {
+    return _modelValue.value = String(props.min);
   } else {
-    _modelValue.value += props.steps;
+    _modelValue.value = new Big(_modelValue.value).add(props.steps).toFixed(decimalPlaces);
   }
 }
 
@@ -103,7 +131,7 @@ function onButtonBlur() {
     :description="description"
     :state="state"
     :limiter-max-value="limiter && max !== undefined ? max : undefined"
-    :limiter-value="limiter && _modelValue !== undefined && _modelValue !== null ? _modelValue : undefined"
+    :limiter-value="limiter && _modelValue !== undefined && _modelValue !== null ? Number(_modelValue) : undefined"
     :messages="messages"
   >
     <div
