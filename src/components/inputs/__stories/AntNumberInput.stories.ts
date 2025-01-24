@@ -55,7 +55,21 @@ export const Docs: Story = {
 };
 
 export const WithIndicators: Story = {
-  render: Docs.render,
+  render: (args) => ({
+    components: {AntNumberInput, AntFormGroup, AntFormGroupLabel},
+    setup() {
+      return {args};
+    },
+    template: `
+      <AntFormGroup>
+        <AntFormGroup direction="column">
+          <AntNumberInput v-bind="args" v-model="args.modelValue" label="Label"
+                          description="Lorem ipsum dolor sit amet"/>
+          <AntNumberInput v-bind="args" v-model="args.modelValue" label="Label"
+                          description="Lorem ipsum dolor sit amet" :steps="0.0001"/>
+        </AntFormGroup>
+      </AntFormGroup>`
+  }),
   args: {
     ...Docs.args,
     indicators: true

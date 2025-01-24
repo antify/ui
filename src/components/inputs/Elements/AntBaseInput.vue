@@ -228,6 +228,7 @@ function onClickClearIcon() {
       :disabled="disabled || skeleton"
       :readonly="readonly"
       :tabindex="hasInputState ? -1 : 0"
+      title=""
       v-bind="$attrs"
       @blur="onBlur"
     >
