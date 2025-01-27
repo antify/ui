@@ -108,7 +108,6 @@ const classes = computed(() => {
 
   return {
     'transition-all inline-flex items-center justify-center relative font-medium': true,
-    'focus:z-10': true,
     'active:shadow-[inset_0_4px_4px_rgba(0,0,0,0.25)]': !hasInputState.value,
     'p-1 text-xs gap-1': props.size === Size.xs2,
     'p-1.5 text-xs gap-1.5': props.size === Size.xs,

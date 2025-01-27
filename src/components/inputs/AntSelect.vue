@@ -79,7 +79,7 @@ const inputClasses = computed(() => {
   };
 
   return {
-    'flex items-center transition-colors border-none outline relative focus:z-10': true,
+    'flex items-center transition-colors border-none outline relative': true,
     'outline-offset-[-1px] outline-1 focus:outline-offset-[-1px] focus:outline-1': true,
     [variants[props.state]]: true,
     // Skeleton
