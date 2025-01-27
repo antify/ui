@@ -74,7 +74,3 @@ const cellClasses = computed(() => ({
     />
   </td>
 </template>
-
-<style scoped>
-
-</style>
