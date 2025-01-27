@@ -133,7 +133,7 @@ export const Docs: Story = {
         <AntTable v-bind="args" v-model="selected" :selected-row="selected" @row-click="(val) => selected = val">
           <template #cellContent="{element: entry, header}">
             <div v-if="header.identifier === 'employed'">
-              <AntSwitch v-model="entry.employeed"/>
+              <AntSwitch v-model="entry.employed"/>
             </div>
           </template>
         </AntTable>
@@ -186,8 +186,8 @@ export const Empty: Story = {
         <div class="h-96 border border-dashed border-base-300">
           <AntTable v-bind="args" v-model="selected" :selected-row="selected" @row-click="(val) => selected = val">
             <template #cellContent="{element: entry, header}">
-              <div v-if="header.identifier === 'employeed'">
-                <AntSwitch v-model="entry.employeed"/>
+              <div v-if="header.identifier === 'employed'">
+                <AntSwitch v-model="entry.employed"/>
               </div>
             </template>
           </AntTable>
@@ -196,14 +196,13 @@ export const Empty: Story = {
           <div class="h-96 border border-dashed border-base-300">
             <AntTable v-bind="args" v-model="selected" :selected-row="selected" @row-click="(val) => selected = val" empty-state-text="Custom Empty State Text">
               <template #cellContent="{element: entry, header}">
-                <div v-if="header.identifier === 'employeed'">
-                  <AntSwitch v-model="entry.employeed"/>
+                <div v-if="header.identifier === 'employed'">
+                  <AntSwitch v-model="entry.employed"/>
                 </div>
               </template>
             </AntTable>
           </div>
         </div>
-      </div>
     `,
   }),
   args: {
@@ -315,4 +314,94 @@ export const Loading: Story = {
     ],
     data: testData.value
   }
+};
+
+export const Collapsible: Story = {
+  render: (args) => ({
+    components: {AntTable, AntSwitch},
+    setup() {
+      const selected = ref();
+      return {args, selected};
+    },
+    template: `
+      <div class="h-96 border border-dashed border-base-300">
+        <AntTable v-bind="args" v-model="selected" :selected-row="selected" @row-click="(val) => selected = val">
+          <template #cellContent="{element: entry, header}">
+            <div v-if="header.identifier === 'employed'">
+              <AntSwitch v-model="entry.employed"/>
+            </div>
+          </template>
+
+          <template #afterRowContent="{element, rowIndex}">
+            <div class="p-4">
+              <pre>
+                {{element}}
+              </pre>
+            </div>
+          </template>
+        </AntTable>
+      </div>
+    `,
+  }),
+  args: Docs.args,
+};
+
+export const MultipleCollapseStrategy: Story = {
+  render: (args) => ({
+    components: {AntTable, AntSwitch},
+    setup() {
+      const selected = ref();
+      return {args, selected};
+    },
+    template: `
+      <div class="h-96 border border-dashed border-base-300">
+        <AntTable v-bind="args" v-model="selected" :selected-row="selected" @row-click="(val) => selected = val" collapse-strategy="multiple">
+          <template #cellContent="{element: entry, header}">
+            <div v-if="header.identifier === 'employed'">
+              <AntSwitch v-model="entry.employed"/>
+            </div>
+          </template>
+
+          <template #afterRowContent="{element, rowIndex}">
+            <div class="p-4">
+              <pre>
+                {{JSON.stringify(element, null, 2)}}
+              </pre>
+            </div>
+          </template>
+        </AntTable>
+      </div>
+    `,
+  }),
+  args: Docs.args,
+};
+
+export const DefaultCollapseOpen: Story = {
+  render: (args) => ({
+    components: {AntTable, AntSwitch},
+    setup() {
+      const selected = ref();
+      return {args, selected};
+    },
+    template: `
+      <div class="h-96 border border-dashed border-base-300">
+        <AntTable v-bind="args" v-model="selected" :selected-row="selected" @row-click="(val) => selected = val" :rows-collapsed="false">
+          <template #cellContent="{element: entry, header}">
+            <div v-if="header.identifier === 'employed'">
+              <AntSwitch v-model="entry.employed"/>
+            </div>
+          </template>
+
+          <template #afterRowContent="{element, rowIndex}">
+            <div class="p-4">
+              <pre>
+                {{JSON.stringify(element, null, 2)}}
+              </pre>
+            </div>
+          </template>
+        </AntTable>
+      </div>
+    `,
+  }),
+  args: Docs.args,
 };
