@@ -205,9 +205,8 @@ function toggleRowContent(index: number) {
                 </AntTd>
               </template>
 
-              <!-- Add a new td for the button -->
               <td class="text-right">
-                <AntButton @click="toggleRowContent(rowIndex)" :size="Size.xs2" :state="State.base">
+                <AntButton @click="toggleRowContent(rowIndex)" :size="Size.xs2">
                   <AntIcon :icon="openItems.includes(rowIndex) ? faAngleUp : faAngleDown" />
                 </AntButton>
               </td>
@@ -219,7 +218,7 @@ function toggleRowContent(index: number) {
             </tr>
 
             <tr>
-              <td v-if="openItems.includes(rowIndex)" :colspan="headers.length + 1" class="p-0">
+              <td :colspan="headers.length + 1" class="p-0">
                 <AntCollapsibleTableContent
                   :is-open="openItems.includes(rowIndex)"
                 >

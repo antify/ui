@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import {computed} from "vue";
 
 const props = withDefaults(defineProps<{
@@ -10,14 +9,17 @@ const props = withDefaults(defineProps<{
 });
 
 const rowContentClasses = computed(() => ({
-  "p-4 transition": true,
-  "h-0 py-0": !props.isOpen,
+  "grid transition-all duration-300 delay-0 ease-in-out": true,
+  "grid-rows-[0fr]": !props.isOpen,
+  "grid-rows-[1fr]": props.isOpen,
 }));
 
 </script>
 
 <template>
   <div :class="rowContentClasses">
-    <slot/>
+    <div class="overflow-hidden">
+      <slot/>
+    </div>
   </div>
 </template>

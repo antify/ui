@@ -141,9 +141,10 @@ export const Docs: Story = {
           </template>
 
           <template #rowContent="{element, rowIndex}">
+            <div class="p-4">
             <pre>{{JSON.stringify(element, null, 2)}}</pre>
+            </div>
           </template>
-
         </AntCollapsibleTable>
       </div>
     `,
