@@ -133,7 +133,7 @@ export const Docs: Story = {
     },
     template: `
       <div class="h-96 border border-dashed border-base-300">
-        <AntCollapsibleTable v-bind="args" v-model="selected" :selected-row="selected" collapse-strategy="single">
+        <AntCollapsibleTable v-bind="args" v-model="selected" :selected-row="selected" @row-click="(val) => selected = val" collapse-strategy="single">
           <template #cellContent="{element: entry, header}">
             <div v-if="header.identifier === 'employed'">
               <AntSwitch v-model="entry.employed"/>
