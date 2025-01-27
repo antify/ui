@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-import {AntTableSize, AntTableSortDirection, type TableHeader} from './__types/TableHeader.types';
+import {AntTableSize, AntTableSortDirection, type TableHeader} from './__types';
 import {computed, ref, type Ref, watch} from 'vue';
 import {useVModel} from '@vueuse/core';
 import AntTh from './AntTh.vue';
 import AntTd from './AntTd.vue';
 import AntSpinner from '../AntSpinner.vue';
 import AntSkeleton from '../AntSkeleton.vue';
-import {CollapseStrategy} from "@/components/table/__types";
-import AntCollapsibleTableContent from "@/components/table/AntCollapsibleTableRowContent.vue";
+import {CollapseStrategy} from "./__types";
+import AntCollapsibleTableRowContent from "./AntCollapsibleTableRowContent.vue";
 import {faAngleDown, faAngleUp} from "@fortawesome/free-solid-svg-icons";
 import AntIcon from "../AntIcon.vue";
-import {AntButton} from "../../../dist";
 import {Size, State} from "@/enums";
+import AntButton from '../buttons/AntButton.vue';
 
 defineOptions({inheritAttrs: false});
 
@@ -153,12 +153,12 @@ function toggleRowContent(index: number) {
 
         <tbody class="bg-white relative">
         <!-- TODO:: Add some kind of virtual list for very large tree data (or required pagination??) -->
-          <template
-            v-for="(elem, rowIndex) in data" :key="`table-row-${elem[rowKey]}-${rowIndex}`"
-          >
-            <tr
-              :id="elem[rowKey] as string"
-              :class="{
+        <template
+          v-for="(elem, rowIndex) in data" :key="`table-row-${elem[rowKey]}-${rowIndex}`"
+        >
+          <tr
+            :id="elem[rowKey] as string"
+            :class="{
                 'relative': true,
                 'bg-primary-200 text-primary-200-font transition-colors': elem === selected,
                 'bg-white text-for-white-bg-font': elem !== selected && rowIndex % 2 === 0,
@@ -166,80 +166,80 @@ function toggleRowContent(index: number) {
                 'cursor-pointer': selectableRows,
                 'hover:bg-base-200': selectableRows && elem !== selected,
               }"
-            >
-              <slot
-                name="rowFirstCell"
-                v-bind="{ elem }"
-              />
+          >
+            <slot
+              name="rowFirstCell"
+              v-bind="{ elem }"
+            />
 
-              <template v-for="(header, colIndex) in _headers">
-                <AntTd
-                  v-if="!_showLightVersion || (_showLightVersion && header.lightVersion)"
-                  :key="`table-cell-${header.identifier}-${colIndex}`"
-                  :header="header"
-                  :element="elem"
-                  :align="header.align"
-                  :size="size"
-                  @click="rowClick(elem)"
-                >
-                  <template #beforeCellContent="props">
-                    <slot
-                      name="beforeCellContent"
-                      v-bind="{...props, colIndex, rowIndex}"
-                    />
-                  </template>
+            <template v-for="(header, colIndex) in _headers">
+              <AntTd
+                v-if="!_showLightVersion || (_showLightVersion && header.lightVersion)"
+                :key="`table-cell-${header.identifier}-${colIndex}`"
+                :header="header"
+                :element="elem"
+                :align="header.align"
+                :size="size"
+                @click="rowClick(elem)"
+              >
+                <template #beforeCellContent="props">
+                  <slot
+                    name="beforeCellContent"
+                    v-bind="{...props, colIndex, rowIndex}"
+                  />
+                </template>
 
-                  <template #cellContent="props">
-                    <slot
-                      name="cellContent"
-                      v-bind="{...props, colIndex, rowIndex}"
-                    />
-                  </template>
+                <template #cellContent="props">
+                  <slot
+                    name="cellContent"
+                    v-bind="{...props, colIndex, rowIndex}"
+                  />
+                </template>
 
-                  <template #afterCellContent="props">
-                    <slot
-                      name="afterCellContent"
-                      v-bind="{...props, colIndex, rowIndex}"
-                    />
-                  </template>
-                </AntTd>
-              </template>
+                <template #afterCellContent="props">
+                  <slot
+                    name="afterCellContent"
+                    v-bind="{...props, colIndex, rowIndex}"
+                  />
+                </template>
+              </AntTd>
+            </template>
 
-              <td class="text-right">
-                <AntButton @click="toggleRowContent(rowIndex)" :size="Size.xs2">
-                  <AntIcon :icon="openItems.includes(rowIndex) ? faAngleUp : faAngleDown" />
-                </AntButton>
-              </td>
+            <td class="text-right">
+              <AntButton @click="toggleRowContent(rowIndex)" :size="Size.xs2">
+                <AntIcon :icon="openItems.includes(rowIndex) ? faAngleUp : faAngleDown"/>
+              </AntButton>
+            </td>
 
-              <slot
-                name="rowLastCell"
-                v-bind="{ elem }"
-              />
-            </tr>
+            <slot
+              name="rowLastCell"
+              v-bind="{ elem }"
+            />
+          </tr>
 
-            <tr>
-              <td :colspan="headers.length + 1" class="p-0">
-                <AntCollapsibleTableContent
-                  :is-open="openItems.includes(rowIndex)"
-                >
-                  <slot name="rowContent" v-bind="{ element: elem, rowIndex }"/>
-                </AntCollapsibleTableContent>
-              </td>
-            </tr>
-          </template>
-
-          <tr v-if="data.length <= 0 && !_loading">
-            <td
-              colspan="100"
-              class="w-full h-full py-2 text-center text-for-white-bg-font text-lg"
-            >
-              <slot name="emptyState">
-                <div class="flex items-center flex-col">
-                  <span class="font-semibold">{{ emptyStateText }}</span>
-                </div>
-              </slot>
+          <tr>
+            <td :colspan="headers.length + 1" class="p-0">
+              <AntCollapsibleTableRowContent
+                :is-open="openItems.includes(rowIndex)"
+              >
+                <slot name="rowContent" v-bind="{ element: elem, rowIndex }"/>
+              </AntCollapsibleTableRowContent>
             </td>
           </tr>
+        </template>
+
+        <tr v-if="data.length <= 0 && !_loading">
+          <td
+            colspan="100"
+            class="w-full h-full py-2 text-center text-for-white-bg-font text-lg"
+          >
+            <slot name="emptyState">
+              <div class="flex items-center flex-col">
+                <span class="font-semibold">{{ emptyStateText }}</span>
+              </div>
+            </slot>
+          </td>
+        </tr>
         </tbody>
       </table>
     </div>

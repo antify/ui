@@ -132,7 +132,7 @@ export const Docs: Story = {
       <div class="h-96 border border-dashed border-base-300">
         <AntTable v-bind="args" v-model="selected" :selected-row="selected" @row-click="(val) => selected = val">
           <template #cellContent="{element: entry, header}">
-            <div v-if="header.identifier === 'employeed'">
+            <div v-if="header.identifier === 'employed'">
               <AntSwitch v-model="entry.employeed"/>
             </div>
           </template>
@@ -163,8 +163,8 @@ export const Docs: Story = {
         type: AntTableRowTypes.text,
       },
       {
-        title: 'Employeed',
-        identifier: 'employeed',
+        title: 'Employed',
+        identifier: 'employed',
         rowClassList: '',
         type: AntTableRowTypes.slot,
       }
