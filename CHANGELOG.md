@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/antify/ui/compare/v2.1.0...v2.2.0) (2025-01-27)
+
+
+### Features
+
+* **AntCollapsibleTable:** Add smooth transition ([260280e](https://github.com/antify/ui/commit/260280e767741debd2f2644b4d2f5a859cb6b00f))
+* **AntNumberInput:** Add number formatting ([e3b28de](https://github.com/antify/ui/commit/e3b28de3d6e424a0bb261d18f6e11a06f3248c6f))
+* **AntNumberInput:** Add title attribute ([3e1dd18](https://github.com/antify/ui/commit/3e1dd18d98c18e1a890771f33884f9e6e01cbe01))
+* **AntSelect:** Add disabled state to button ([0239c84](https://github.com/antify/ui/commit/0239c8450fe56a19e8c7424b578298d4c33cf9f4))
+* **AntTable:** Add collapsible functionality ([9b6fad6](https://github.com/antify/ui/commit/9b6fad6156c0739551c0f03ab3499e3debede73e))
+* **AntTable:** Add collapsible rows ([700b76a](https://github.com/antify/ui/commit/700b76a5f5ca1147e2e69d02701da48bb39589fe))
+* Remove focus z-index ([31d80b8](https://github.com/antify/ui/commit/31d80b88e2fd06594ea5269e3d3f0dc5f1725484))
+
+
+### Bug Fixes
+
+* **AntToaster:** Add large z-index ([4e00cac](https://github.com/antify/ui/commit/4e00caca503052f59018aa6dc847d5007146650a))
+
 ## [2.1.0](https://github.com/antify/ui/compare/v2.0.0...v2.1.0) (2025-01-15)
 
 
