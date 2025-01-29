@@ -7,6 +7,7 @@ import {type Meta, type StoryObj} from '@storybook/vue3';
 import {ref} from 'vue';
 import {faker} from '@faker-js/faker';
 import AntSwitch from '../../inputs/AntSwitch.vue';
+import {expect, userEvent, waitFor, within} from "@storybook/test";
 
 const meta: Meta<typeof AntTable> = {
   components: {AntSelect, AntCheckboxGroup},
@@ -164,6 +165,40 @@ export const Docs: Story = {
       </div>
     `,
   }),
+  play: async ({ step, }) => {
+    const firstRow = document.querySelectorAll('[data-e2e="table-row"]')[0];
+    const employedCell = firstRow.querySelector('[data-e2e="table-cell-employed"]');
+    const employedSwitch = employedCell?.querySelector('[data-e2e="switch"]')?.querySelector('button');
+    const permissionsCell = firstRow.querySelector('[data-e2e="table-cell-permissions"]');
+    const permissionCheckboxWithLabel = permissionsCell?.querySelector('[data-e2e="checkbox"]');
+    const permissionCheckbox = permissionCheckboxWithLabel?.querySelector('[type="checkbox"]');
+    const permissionLabel = permissionCheckboxWithLabel?.querySelector('label');
+
+    await step('Click on a table cell and expect the row to be selected', async () => {
+      await userEvent.click(employedCell!);
+      await waitFor(() => expect(firstRow).toHaveClass('bg-primary-200'), {timeout: 600});
+    });
+
+    await step('Click on employed switch and expect the value to toggle', async () => {
+      const initialAriaChecked = JSON.parse(employedSwitch?.getAttribute('aria-checked')!);
+      await userEvent.click(employedSwitch!);
+
+      await waitFor(() => {
+        const toggledAriaChecked = JSON.parse(employedSwitch?.getAttribute('aria-checked')!);
+        expect(toggledAriaChecked).toBe(!initialAriaChecked);
+      }, {timeout: 600});
+    });
+
+    await step('Click on one of the permissions and expect the value to toggle', async () => {
+      const initialAriaChecked = JSON.parse(permissionCheckbox?.getAttribute('aria-checked')!);
+      await userEvent.click(permissionLabel!);
+
+      await waitFor(() => {
+        const toggledAriaChecked = JSON.parse(permissionCheckbox?.getAttribute('aria-checked')!);
+        expect(toggledAriaChecked).toBe(!initialAriaChecked);
+      }, {timeout: 600});
+    });
+  },
   args: {
     headers: [
       {

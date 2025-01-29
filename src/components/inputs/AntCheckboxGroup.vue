@@ -86,6 +86,7 @@ onMounted(() => {
 
 <template>
   <AntField
+    data-e2e="checkbox-group"
     :label="label"
     :description="description"
     :skeleton="skeleton"

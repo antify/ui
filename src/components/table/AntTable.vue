@@ -180,6 +180,7 @@ watch(() => props.data, (currVal, prevVal) => {
           v-for="(elem, rowIndex) in data" :key="`table-row-${elem[rowKey]}-${rowIndex}`"
         >
           <tr
+            data-e2e="table-row"
             :id="elem[rowKey] as string"
             :class="{
               'bg-primary-200 text-primary-200-font transition-colors': elem === selected,
@@ -198,6 +199,7 @@ watch(() => props.data, (currVal, prevVal) => {
               <AntTd
                 v-if="!_showLightVersion || (_showLightVersion && header.lightVersion)"
                 :key="`table-cell-${header.identifier}-${rowIndex}-${colIndex}`"
+                :data-e2e="`table-cell-${header.identifier}`"
                 :header="header"
                 :element="elem"
                 :align="header.align"
@@ -243,7 +245,7 @@ watch(() => props.data, (currVal, prevVal) => {
           </tr>
 
           <template v-if="!!$slots.afterRowContent">
-            <tr>
+            <tr data-e2e="table-after-row-content">
               <td :colspan="maxColSpan + 1" class="p-0">
                 <AntCollapsibleTableRowContent :is-open="openItems.includes(rowIndex)"
                 >
