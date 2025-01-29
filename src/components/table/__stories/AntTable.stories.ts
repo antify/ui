@@ -1,4 +1,7 @@
 import AntTable from '../AntTable.vue';
+import AntButton from '../../buttons/AntButton.vue';
+import AntSelect from '../../inputs/AntSelect.vue';
+import AntCheckboxGroup from '../../inputs/AntCheckboxGroup.vue';
 import {AntTableAlign, AntTableRowTypes, AntTableSize} from '../__types/TableHeader.types';
 import {type Meta, type StoryObj} from '@storybook/vue3';
 import {ref} from 'vue';
@@ -6,6 +9,7 @@ import {faker} from '@faker-js/faker';
 import AntSwitch from '../../inputs/AntSwitch.vue';
 
 const meta: Meta<typeof AntTable> = {
+  components: {AntSelect, AntCheckboxGroup},
   title: 'Components/Table',
   component: AntTable,
   parameters: {controls: {sort: 'requiredFirst'}},
@@ -105,28 +109,44 @@ const testData = ref<{
   age: number,
   email: string,
   employed: boolean
+  permissions: string[]
 }[]>([]);
 
-for (let i = 0; i < 100; i++) {
+function getRandomEntry() {
   const randomName = faker.person.firstName() + ' ' + faker.person.lastName();
   const randomNumber = faker.number.int({min: 18, max: 60});
   const randomEmail = faker.internet.email();
   const randomBoolean = faker.datatype.boolean();
+  const randomPermissions = faker.helpers.arrayElements(['read', 'write'], {min: 0, max: 2});
 
-  testData.value.push({
+  return {
     name: randomName,
     age: randomNumber,
     email: randomEmail,
     employed: randomBoolean,
-  });
+    permissions: randomPermissions,
+  };
+}
+
+for (let i = 0; i < 100; i++) {
+  testData.value.push(getRandomEntry());
 }
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntTable, AntSwitch},
+    components: {AntTable, AntSwitch, AntCheckboxGroup},
     setup() {
       const selected = ref();
-      return {args, selected};
+
+      const checkboxes = [{
+        label: 'Read',
+        value: 'read'
+      }, {
+        label: 'Write',
+        value: 'write'
+      }];
+
+      return {args, selected, checkboxes};
     },
     template: `
       <div class="h-96 border border-dashed border-base-300">
@@ -134,6 +154,10 @@ export const Docs: Story = {
           <template #cellContent="{element: entry, header}">
             <div v-if="header.identifier === 'employed'">
               <AntSwitch v-model="entry.employed"/>
+            </div>
+
+            <div v-if="header.identifier === 'permissions'">
+              <AntCheckboxGroup v-model="entry.permissions" :checkboxes="checkboxes" direction="row"/>
             </div>
           </template>
         </AntTable>
@@ -165,6 +189,12 @@ export const Docs: Story = {
       {
         title: 'Employed',
         identifier: 'employed',
+        rowClassList: '',
+        type: AntTableRowTypes.slot,
+      },
+      {
+        title: 'Permissions',
+        identifier: 'permissions',
         rowClassList: '',
         type: AntTableRowTypes.slot,
       }
@@ -318,10 +348,19 @@ export const Loading: Story = {
 
 export const Collapsible: Story = {
   render: (args) => ({
-    components: {AntTable, AntSwitch},
+    components: {AntTable, AntSwitch, AntCheckboxGroup},
     setup() {
       const selected = ref();
-      return {args, selected};
+
+      const checkboxes = [{
+        label: 'Read',
+        value: 'read'
+      }, {
+        label: 'Write',
+        value: 'write'
+      }];
+
+      return {args, selected, checkboxes};
     },
     template: `
       <div class="h-96 border border-dashed border-base-300">
@@ -329,6 +368,10 @@ export const Collapsible: Story = {
           <template #cellContent="{element: entry, header}">
             <div v-if="header.identifier === 'employed'">
               <AntSwitch v-model="entry.employed"/>
+            </div>
+
+            <div v-if="header.identifier === 'permissions'">
+              <AntCheckboxGroup v-model="entry.permissions" :checkboxes="checkboxes" direction="row"/>
             </div>
           </template>
 
@@ -348,10 +391,19 @@ export const Collapsible: Story = {
 
 export const MultipleCollapseStrategy: Story = {
   render: (args) => ({
-    components: {AntTable, AntSwitch},
+    components: {AntTable, AntSwitch, AntCheckboxGroup},
     setup() {
       const selected = ref();
-      return {args, selected};
+
+      const checkboxes = [{
+        label: 'Read',
+        value: 'read'
+      }, {
+        label: 'Write',
+        value: 'write'
+      }];
+
+      return {args, selected, checkboxes};
     },
     template: `
       <div class="h-96 border border-dashed border-base-300">
@@ -359,6 +411,10 @@ export const MultipleCollapseStrategy: Story = {
           <template #cellContent="{element: entry, header}">
             <div v-if="header.identifier === 'employed'">
               <AntSwitch v-model="entry.employed"/>
+            </div>
+
+            <div v-if="header.identifier === 'permissions'">
+              <AntCheckboxGroup v-model="entry.permissions" :checkboxes="checkboxes" direction="row"/>
             </div>
           </template>
 
@@ -378,17 +434,36 @@ export const MultipleCollapseStrategy: Story = {
 
 export const DefaultCollapseOpen: Story = {
   render: (args) => ({
-    components: {AntTable, AntSwitch},
+    components: {AntTable, AntSwitch, AntCheckboxGroup, AntButton},
     setup() {
       const selected = ref();
-      return {args, selected};
+      const data = ref(args.data.splice(0,5));
+
+      const checkboxes = [{
+        label: 'Read',
+        value: 'read'
+      }, {
+        label: 'Write',
+        value: 'write'
+      }];
+
+      function addRandomEntry() {
+        data.value = [...data.value, getRandomEntry()];
+      }
+
+      return {args, data, selected, checkboxes, addRandomEntry};
     },
     template: `
-      <div class="h-96 border border-dashed border-base-300">
-        <AntTable v-bind="args" v-model="selected" :selected-row="selected" @row-click="(val) => selected = val" :rows-collapsed="false">
+      <div class="h-96 border border-dashed border-base-300 flex flex-col gap-2">
+        <AntButton state="primary" @click="addRandomEntry" filled>Add Random Entry</AntButton>
+        <AntTable v-bind="args" :data="data" v-model="selected" :selected-row="selected" @row-click="(val) => selected = val" :rows-collapsed="true" collapse-strategy="single">
           <template #cellContent="{element: entry, header}">
             <div v-if="header.identifier === 'employed'">
               <AntSwitch v-model="entry.employed"/>
+            </div>
+
+            <div v-if="header.identifier === 'permissions'">
+              <AntCheckboxGroup v-model="entry.permissions" :checkboxes="checkboxes" direction="row"/>
             </div>
           </template>
 
