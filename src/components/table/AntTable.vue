@@ -202,7 +202,7 @@ watch(() => props.data, (currVal, prevVal) => {
                 :element="elem"
                 :align="header.align"
                 :size="size"
-                @click="(e) => rowClick(e, elem)"
+                @click="rowClick(elem)"
               >
                 <template #beforeCellContent="props">
                   <slot
