@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import {AntTableSize, AntTableSortDirection, type TableHeader} from './__types/TableHeader.types';
-import {computed, ref, type Ref, watch} from 'vue';
+import {computed, onMounted, ref, type Ref, watch} from 'vue';
 import {useVModel} from '@vueuse/core';
 import {Size, State} from '../../enums';
 import AntTh from './AntTh.vue';
 import AntTd from './AntTd.vue';
 import AntSpinner from '../AntSpinner.vue';
 import AntSkeleton from '../AntSkeleton.vue';
-import {hasSlotContent} from "@/utils";
+import {hasSlotContent} from "../../utils";
 import AntCollapsibleTableRowContent from "./AntCollapsibleTableRowContent.vue";
-import {CollapseStrategy} from "@/components/table/__types";
+import {CollapseStrategy} from "../../types";
 import {faAngleDown, faAngleUp} from "@fortawesome/free-solid-svg-icons";
 import AntButton from "../buttons/AntButton.vue";
 import AntIcon from "../AntIcon.vue";
@@ -96,9 +96,7 @@ function sortTable(header: TableHeader, newDirection: AntTableSortDirection) {
   emits('updateSort', header, newDirection);
 }
 
-function rowClick(e: MouseEvent, elem: Record<string, unknown>): void {
-  e.preventDefault();
-
+function rowClick(elem: Record<string, unknown>): void {
   selected.value = elem;
 
   emits('rowClick', elem);
@@ -108,7 +106,7 @@ function toggleRowContent(index: number) {
   const isOpen = openItems.value.includes(index);
 
   if (isOpen) {
-    openItems.value = props.collapseStrategy === CollapseStrategy.single && props.rowsCollapsed
+    openItems.value = props.collapseStrategy === CollapseStrategy.single
       ? []
       : openItems.value.filter(item => item !== index);
   } else {
@@ -118,10 +116,27 @@ function toggleRowContent(index: number) {
   }
 }
 
-// Open all row contents by default
-if (!props.rowsCollapsed) {
-  props.data.map((_, index) => openItems.value.push(index));
+function openRowsByDefault() {
+  if (!props.rowsCollapsed && props.data.length > 0) {
+    openItems.value = props.data.map((_, index) => index);
+  }
 }
+
+watch(() => props.data, (currVal, prevVal) => {
+  if (currVal.length > prevVal.length) {
+    // Add newest element to the list of open items so it is open by default
+    // Necessary when table content is changed dynamically
+    if (props.collapseStrategy === CollapseStrategy.single) {
+      openItems.value = [currVal.length - 1];
+    } else {
+      openItems.value = [...openItems.value, currVal.length - 1];
+    }
+  }
+})
+
+onMounted(() => {
+  openRowsByDefault();
+});
 </script>
 
 <template>
@@ -170,6 +185,7 @@ if (!props.rowsCollapsed) {
           v-for="(elem, rowIndex) in data" :key="`table-row-${elem[rowKey]}-${rowIndex}`"
         >
           <tr
+            data-e2e="table-row"
             :id="elem[rowKey] as string"
             :class="{
               'bg-primary-200 text-primary-200-font transition-colors': elem === selected,
@@ -187,12 +203,13 @@ if (!props.rowsCollapsed) {
             <template v-for="(header, colIndex) in _headers">
               <AntTd
                 v-if="!_showLightVersion || (_showLightVersion && header.lightVersion)"
-                :key="`table-cell-${header.identifier}-${colIndex}`"
+                :key="`table-cell-${header.identifier}-${rowIndex}-${colIndex}`"
+                :data-e2e="`table-cell-${header.identifier}`"
                 :header="header"
                 :element="elem"
                 :align="header.align"
                 :size="size"
-                @click="(e) => rowClick(e, elem)"
+                @click="rowClick(elem)"
               >
                 <template #beforeCellContent="props">
                   <slot
@@ -219,7 +236,7 @@ if (!props.rowsCollapsed) {
 
             <template v-if="!!$slots.afterRowContent">
               <td class="whitespace-nowrap text-sm font-medium relative px-2 py-0 h-9 text-right"
-                  @click="(e) => rowClick(e, elem)">
+                  @click="rowClick(elem)">
                 <AntButton @click="toggleRowContent(rowIndex)" :size="Size.xs2">
                   <AntIcon :icon="openItems.includes(rowIndex) ? faAngleUp : faAngleDown"/>
                 </AntButton>
@@ -233,7 +250,7 @@ if (!props.rowsCollapsed) {
           </tr>
 
           <template v-if="!!$slots.afterRowContent">
-            <tr>
+            <tr data-e2e="table-after-row-content">
               <td :colspan="maxColSpan + 1" class="p-0">
                 <AntCollapsibleTableRowContent :is-open="openItems.includes(rowIndex)"
                 >

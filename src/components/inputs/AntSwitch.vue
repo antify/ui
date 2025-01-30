@@ -130,6 +130,7 @@ function onBlur(e: FocusEvent) {
 
 <template>
   <AntField
+    data-e2e="switch"
     :label="label"
     :size="size"
     :description="description"
