@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {AntTableSize, AntTableSortDirection, type TableHeader} from './__types/TableHeader.types';
-import {computed, ref, type Ref, watch} from 'vue';
+import {computed, onMounted, ref, type Ref, watch} from 'vue';
 import {useVModel} from '@vueuse/core';
 import {Size, State} from '../../enums';
 import AntTh from './AntTh.vue';
@@ -116,9 +116,10 @@ function toggleRowContent(index: number) {
   }
 }
 
-// Open all row contents by default
-if (!props.rowsCollapsed) {
-  openItems.value = props.data.map((_, index) => index);
+function openRowsByDefault() {
+  if (!props.rowsCollapsed && props.data.length > 0) {
+    openItems.value = props.data.map((_, index) => index);
+  }
 }
 
 watch(() => props.data, (currVal, prevVal) => {
@@ -132,6 +133,10 @@ watch(() => props.data, (currVal, prevVal) => {
     }
   }
 })
+
+onMounted(() => {
+  openRowsByDefault();
+});
 </script>
 
 <template>
