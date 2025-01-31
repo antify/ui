@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.1](https://github.com/antify/ui/compare/v2.2.0...v2.2.1) (2025-01-31)
+
+
+### Bug Fixes
+
+* **AntTable:** Fix cell content not being clickable ([bc99b24](https://github.com/antify/ui/commit/bc99b24c9479175a5b7c49ee0be4498e3a2d497d))
+* **AntTable:** Remove event from click listener ([835c942](https://github.com/antify/ui/commit/835c9423dc4267551ff67891e1e9046734fb65dc))
+
 ## [2.2.0](https://github.com/antify/ui/compare/v2.1.0...v2.2.0) (2025-01-27)
 
 
