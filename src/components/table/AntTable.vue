@@ -141,7 +141,7 @@ onMounted(() => {
 
 <template>
   <div
-    class="relative inline-block min-w-full align-middle h-full"
+    class="relative inline-block w-full align-middle h-full"
     data-e2e="table"
   >
     <div class="overflow-hidden h-full overflow-x-auto overflow-y-auto">

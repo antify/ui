@@ -22,7 +22,7 @@ const openBackground = ref(props.open);
 watch(() => props.open, (val) => {
   function onKeydown(e: KeyboardEvent) {
     if (e.key === 'Escape') {
-      emit('update:open', false);
+      closeModal()
     }
   }
 

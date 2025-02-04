@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import {computed} from 'vue';
 import {Size} from '../enums/Size.enum';
+import AntSkeleton from "./AntSkeleton.vue";
 
 const props = withDefaults(defineProps<{
   size?: Size;
   padding?: boolean;
   expanded?: boolean;
+  skeleton?: boolean;
 }>(), {
   size: Size.md,
   padding: true,
-  expanded: false
+  expanded: false,
+  skeleton: false
 });
 
 const cardClass = computed(() => ({
@@ -27,8 +30,10 @@ const cardClass = computed(() => ({
 <template>
   <div
     :class="cardClass"
-    class="bg-white border border-base-300 rounded-md"
+    class="bg-white outline outline-offset-[-1px] outline-base-300 rounded-md relative"
   >
     <slot/>
+
+    <AntSkeleton v-if="skeleton" absolute rounded/>
   </div>
 </template>

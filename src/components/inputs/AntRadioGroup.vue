@@ -8,8 +8,6 @@ import {computed, onMounted, ref, watch} from 'vue';
 import {Direction} from '../../enums/Direction.enum';
 import {handleEnumValidation} from '../../handler';
 
-defineOptions({inheritAttrs: false});
-
 const emit = defineEmits(['update:modelValue', 'update:skeleton', 'validate']);
 const props = withDefaults(
   defineProps<{
