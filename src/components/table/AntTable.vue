@@ -6,13 +6,13 @@ import {Size, State} from '../../enums';
 import AntTh from './AntTh.vue';
 import AntTd from './AntTd.vue';
 import AntSpinner from '../AntSpinner.vue';
-import AntSkeleton from '../AntSkeleton.vue';
 import {hasSlotContent} from "../../utils";
 import AntCollapsibleTableRowContent from "./AntCollapsibleTableRowContent.vue";
 import {CollapseStrategy} from "../../types";
 import {faAngleDown, faAngleUp} from "@fortawesome/free-solid-svg-icons";
 import AntButton from "../buttons/AntButton.vue";
 import AntIcon from "../AntIcon.vue";
+import AntTableSkeleton from "@/components/table/AntTableSkeleton.vue";
 
 defineOptions({inheritAttrs: false});
 
@@ -37,7 +37,7 @@ const props = withDefaults(
     headerColor?: string;
     emptyStateText?: string;
     collapseStrategy?: CollapseStrategy;
-    rowsCollapsed?: boolean;
+    expandedRows?: boolean;
   }>(), {
     rowKey: 'id',
     loading: false,
@@ -47,10 +47,9 @@ const props = withDefaults(
     headerColor: 'bg-base-200',
     emptyStateText: 'We couldn\'t find any entry',
     collapseStrategy: CollapseStrategy.single,
-    rowsCollapsed: true,
+    expandedRows: false,
   });
 const slots = defineSlots();
-
 const openItems = ref<number[]>([]);
 const selected: Ref<Record<string, unknown> | undefined> = useVModel(props, 'selectedRow', emits);
 const _loading: Ref<boolean> = useVModel(props, 'loading', emits);
@@ -66,10 +65,7 @@ const _headers = computed(() => {
 });
 
 const maxColSpan = computed(() => _headers.value.length + (hasSlotContent(slots['rowFirstCell']) ? 1 : 0) + (hasSlotContent(slots['rowLastCell']) ? 1 : 0))
-
-watch(() => props.showLightVersion, (val) => {
-  setTimeout(() => _showLightVersion.value = val, val ? 200 : 400);
-});
+const skeleton = computed(() => !props.data || props.data.length === 0 && _loading.value)
 
 function sortTable(header: TableHeader, newDirection: AntTableSortDirection) {
   // TODO:: Sorting is always done externally, here should only be a emit sort with header and direction.
@@ -96,6 +92,16 @@ function sortTable(header: TableHeader, newDirection: AntTableSortDirection) {
   emits('updateSort', header, newDirection);
 }
 
+function getRowClasses(element: Record<string, unknown>, rowIndex: number) {
+  return {
+    'bg-primary-200 text-primary-200-font transition-colors': element === selected.value,
+    'bg-white text-for-white-bg-font': element !== selected.value && rowIndex % 2 === 0,
+    'bg-base-100 text-base-100-font': element !== selected.value && rowIndex % 2 !== 0,
+    'cursor-pointer': props.selectableRows,
+    'hover:bg-base-200': props.selectableRows && element !== selected.value,
+  };
+}
+
 function rowClick(elem: Record<string, unknown>): void {
   selected.value = elem;
 
@@ -117,10 +123,14 @@ function toggleRowContent(index: number) {
 }
 
 function openRowsByDefault() {
-  if (!props.rowsCollapsed && props.data.length > 0) {
+  if (props.expandedRows && props.data.length > 0) {
     openItems.value = props.data.map((_, index) => index);
   }
 }
+
+watch(() => props.showLightVersion, (val) => {
+  setTimeout(() => _showLightVersion.value = val, val ? 200 : 400);
+});
 
 watch(() => props.data, (currVal, prevVal) => {
   if (currVal.length > prevVal.length) {
@@ -144,7 +154,7 @@ onMounted(() => {
     class="relative inline-block w-full align-middle h-full"
     data-e2e="table"
   >
-    <div class="overflow-hidden h-full overflow-x-auto overflow-y-auto">
+    <div v-if="!skeleton" class="overflow-hidden h-full overflow-x-auto overflow-y-auto">
       <table
         v-bind="$attrs"
         class="min-w-full max-h-full relative"
@@ -187,13 +197,7 @@ onMounted(() => {
           <tr
             data-e2e="table-row"
             :id="elem[rowKey] as string"
-            :class="{
-              'bg-primary-200 text-primary-200-font transition-colors': elem === selected,
-              'bg-white text-for-white-bg-font': elem !== selected && rowIndex % 2 === 0,
-              'bg-base-100 text-base-100-font': elem !== selected && rowIndex % 2 !== 0,
-              'cursor-pointer': selectableRows,
-              'hover:bg-base-200': selectableRows && elem !== selected,
-            }"
+            :class="getRowClasses(elem, rowIndex)"
           >
             <slot
               name="rowFirstCell"
@@ -261,7 +265,7 @@ onMounted(() => {
           </template>
         </template>
 
-        <tr v-if="data.length <= 0 && !_loading">
+        <tr v-if="data.length === 0 && !_loading">
           <td
             colspan="100"
             class="w-full h-full py-2 text-center text-for-white-bg-font text-lg"
@@ -279,7 +283,7 @@ onMounted(() => {
 
     <div
       v-if="data.length > 0 && _loading"
-      class="absolute bg-opacity-50 w-full top-0 bottom-0 bg-base-300 flex items-center justify-center"
+      class="absolute bg-opacity-50 w-full top-0 bottom-0 bg-base-300 flex items-center justify-center z-10"
     >
       <AntSpinner
         class="!w-24 !h-24"
@@ -287,14 +291,13 @@ onMounted(() => {
       />
     </div>
 
-    <div
-      v-if="!data || data.length <= 0 && _loading"
-      class="absolute bg-opacity-50 w-full top-[40px] bottom-0 bg-base-300 flex items-center justify-center"
-    >
-      <AntSkeleton
-        v-model="_loading"
-        absolute
-      />
-    </div>
+    <AntTableSkeleton
+      v-if="skeleton"
+      :headers="_headers"
+      :size="size"
+      :get-row-classes="getRowClasses"
+      :header-color="headerColor"
+      :show-light-version="_showLightVersion"
+    />
   </div>
 </template>

@@ -491,7 +491,7 @@ export const DefaultCollapseOpen: Story = {
     template: `
       <div class="h-96 border border-dashed border-base-300 flex flex-col gap-2">
         <AntButton state="primary" @click="addRandomEntry" filled>Add Random Entry</AntButton>
-        <AntTable v-bind="args" :data="data" v-model="selected" :selected-row="selected" @row-click="(val) => selected = val" :rows-collapsed="false" collapse-strategy="multiple">
+        <AntTable v-bind="args" :data="data" v-model="selected" :selected-row="selected" @row-click="(val) => selected = val" collapse-strategy="multiple" expandedRows>
           <template #cellContent="{element: entry, header}">
             <div v-if="header.identifier === 'employed'">
               <AntSwitch v-model="entry.employed"/>
