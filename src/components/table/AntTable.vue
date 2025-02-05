@@ -12,7 +12,7 @@ import {CollapseStrategy} from "../../types";
 import {faAngleDown, faAngleUp} from "@fortawesome/free-solid-svg-icons";
 import AntButton from "../buttons/AntButton.vue";
 import AntIcon from "../AntIcon.vue";
-import AntTableSkeleton from "@/components/table/AntTableSkeleton.vue";
+import AntTableSkeleton from "./AntTableSkeleton.vue";
 
 defineOptions({inheritAttrs: false});
 
