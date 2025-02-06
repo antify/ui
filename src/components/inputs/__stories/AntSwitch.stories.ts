@@ -162,7 +162,6 @@ export const Summary: Story = {
         <AntFormGroup direction="row">
           <AntSwitch
             v-model="notValue"
-            class="w-28"
             :size="Size.lg"
             label="Label"
             description="Lorem ipsum dolor sit amet"
@@ -170,7 +169,6 @@ export const Summary: Story = {
           </AntSwitch>
           <AntSwitch
             v-model="value"
-            class="w-28"
             :size="Size.lg"
             label="Label"
             description="Lorem ipsum dolor sit amet"
@@ -178,7 +176,6 @@ export const Summary: Story = {
           </AntSwitch>
           <AntSwitch
             v-model="notValue"
-            class="w-28"
             :size="Size.md"
             label="Label"
             description="Lorem ipsum dolor sit amet"
@@ -186,7 +183,6 @@ export const Summary: Story = {
           </AntSwitch>
           <AntSwitch
             v-model="value"
-            class="w-28"
             :size="Size.md"
             label="Label"
             description="Lorem ipsum dolor sit amet"
@@ -194,7 +190,6 @@ export const Summary: Story = {
           </AntSwitch>
           <AntSwitch
             v-model="notValue"
-            class="w-28"
             :size="Size.sm"
             label="Label"
             description="Lorem ipsum dolor sit amet"
@@ -202,7 +197,6 @@ export const Summary: Story = {
           </AntSwitch>
           <AntSwitch
             v-model="value"
-            class="w-28"
             :size="Size.sm"
             label="Label"
             description="Lorem ipsum dolor sit amet"
@@ -210,7 +204,6 @@ export const Summary: Story = {
           </AntSwitch>
           <AntSwitch
             v-model="notValue"
-            class="w-28"
             :size="Size.xs"
             label="Label"
             description="Lorem ipsum dolor sit amet"
@@ -218,7 +211,6 @@ export const Summary: Story = {
           </AntSwitch>
           <AntSwitch
             v-model="value"
-            class="w-28"
             :size="Size.xs"
             label="Label"
             description="Lorem ipsum dolor sit amet"
@@ -226,7 +218,6 @@ export const Summary: Story = {
           </AntSwitch>
           <AntSwitch
             v-model="notValue"
-            class="w-28"
             :size="Size.xs2"
             label="Label"
             description="Lorem ipsum dolor sit amet"
@@ -234,7 +225,6 @@ export const Summary: Story = {
           </AntSwitch>
           <AntSwitch
             v-model="value"
-            class="w-28"
             :size="Size.xs2"
             label="Label"
             description="Lorem ipsum dolor sit amet"
@@ -312,29 +302,27 @@ export const Summary: Story = {
         </AntFormGroup>
         <AntFormGroupLabel>Description & (Description & Content)</AntFormGroupLabel>
         <AntFormGroup direction="row">
-          <AntSwitch v-model="notValue" class="w-28" description="Lorem ipsum dolor sit amet"/>
-          <AntSwitch v-model="value" class="w-28" description="Lorem ipsum dolor sit amet"/>
+          <AntSwitch v-model="notValue" description="Lorem ipsum dolor sit amet"/>
+          <AntSwitch v-model="value" description="Lorem ipsum dolor sit amet"/>
           <AntSwitch
             v-model="notValue"
-            class="w-28"
             description="Lorem ipsum dolor sit amet"
           >Content
           </AntSwitch>
           <AntSwitch
             v-model="value"
-            class="w-28"
             description="Lorem ipsum dolor sit amet"
           >Content
           </AntSwitch>
         </AntFormGroup>
         <AntFormGroupLabel>Label & Description & (Label & Description & Content)</AntFormGroupLabel>
         <AntFormGroup direction="row">
-          <AntSwitch v-model="notValue" class="w-28" description="Lorem ipsum dolor sit amet" label="Label"/>
-          <AntSwitch v-model="value" class="w-28" description="Lorem ipsum dolor sit amet" label="Label"/>
-          <AntSwitch v-model="notValue" class="w-28" description="Lorem ipsum dolor sit amet" label="Label"
+          <AntSwitch v-model="notValue" description="Lorem ipsum dolor sit amet" label="Label"/>
+          <AntSwitch v-model="value" description="Lorem ipsum dolor sit amet" label="Label"/>
+          <AntSwitch v-model="notValue" description="Lorem ipsum dolor sit amet" label="Label"
           >Content
           </AntSwitch>
-          <AntSwitch v-model="value" class="w-28" description="Lorem ipsum dolor sit amet" label="Label"
+          <AntSwitch v-model="value" description="Lorem ipsum dolor sit amet" label="Label"
           >Content
           </AntSwitch>
         </AntFormGroup>
