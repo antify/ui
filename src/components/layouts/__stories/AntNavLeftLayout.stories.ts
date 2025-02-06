@@ -1,12 +1,22 @@
-import {type Meta, type StoryObj} from '@storybook/vue3';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
 import AntTabs from '../../tabs/AntTabs.vue';
 import AntNavLeftLayout from '../AntNavLeftLayout.vue';
 
 const meta: Meta<typeof AntNavLeftLayout> = {
   title: 'Layouts/NavLeftLayout',
   component: AntNavLeftLayout,
-  parameters: {controls: {sort: 'requiredFirst'}},
-  decorators: [() => ({template: '<div class="border border-dashed border-base-300"><story/></div>'})],
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
+  decorators: [
+    () => ({
+      template: '<div class="border border-dashed border-base-300"><story/></div>',
+    }),
+  ],
   argTypes: {},
 };
 
@@ -22,7 +32,7 @@ export const Docs: Story = {
     },
     setup() {
       return {
-        args
+        args,
       };
     },
     template: `
@@ -40,15 +50,17 @@ export const Docs: Story = {
     navbarItems: [
       {
         label: 'User',
-        active: true
-      }, {
+        active: true,
+      },
+      {
         label: 'Invoice',
-      }, {
+      },
+      {
         label: 'Settings',
       },
-    ]
-  }
-}
+    ],
+  },
+};
 
 export const WithoutLogo: Story = {
   render: (args) => ({
@@ -58,7 +70,7 @@ export const WithoutLogo: Story = {
     },
     setup() {
       return {
-        args
+        args,
       };
     },
     template: `
@@ -68,6 +80,6 @@ export const WithoutLogo: Story = {
     `,
   }),
   args: {
-    ...Docs.args
+    ...Docs.args,
   },
 };

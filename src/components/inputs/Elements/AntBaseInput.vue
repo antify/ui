@@ -1,26 +1,49 @@
 <script lang="ts" setup>
-import {computed, onMounted, watch, useSlots} from 'vue';
-import {Size} from '../../../enums/Size.enum';
+import {
+  computed, onMounted, watch, useSlots,
+} from 'vue';
+import {
+  Size,
+} from '../../../enums/Size.enum';
 import AntSkeleton from '../../AntSkeleton.vue';
 import AntIcon from '../../AntIcon.vue';
-import {BaseInputType} from './__types/AntBaseInput.types';
-import {Grouped} from '../../../enums/Grouped.enum';
+import {
+  BaseInputType,
+} from './__types/AntBaseInput.types';
+import {
+  Grouped,
+} from '../../../enums/Grouped.enum';
 import {
   faCircleCheck,
   faCircleInfo,
   faExclamationCircle,
   faExclamationTriangle,
   faXmark,
-  type IconDefinition
+  type IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
-import {handleEnumValidation} from '../../../handler';
-import {classesToObjectSyntax, hasSlotContent} from '../../../utils';
-import {InputState} from '../../../enums';
-import {IconSize} from '../../__types';
+import {
+  handleEnumValidation,
+} from '../../../handler';
+import {
+  classesToObjectSyntax, hasSlotContent,
+} from '../../../utils';
+import {
+  InputState,
+} from '../../../enums';
+import {
+  IconSize,
+} from '../../__types';
 
-defineOptions({inheritAttrs: false});
+defineOptions({
+  inheritAttrs: false,
+});
 
-const emit = defineEmits(['update:modelValue', 'blur', 'validate', 'update:inputRef']);
+const emit = defineEmits([
+  'update:modelValue',
+  'blur',
+  'validate',
+  'update:inputRef',
+]);
 const props = withDefaults(defineProps<{
   modelValue: string | number | null;
   size?: Size;
@@ -47,7 +70,7 @@ const props = withDefaults(defineProps<{
   showIcon: true,
   default: false,
   nullable: false,
-  inputRef: null
+  inputRef: null,
 });
 const slot = useSlots();
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
@@ -108,12 +131,12 @@ const inputClasses = computed(() => {
     'rounded-none': props.grouped === Grouped.center,
     'rounded-tl-none rounded-bl-none rounded-tr-md rounded-br-md': props.grouped === Grouped.right,
     'rounded-md': props.grouped === Grouped.none,
-    'invisible': props.skeleton,
+    invisible: props.skeleton,
   };
 });
 const iconClasses = computed(() => ({
   'transition-[height]': true,
-  'opacity-50': props.disabled
+  'opacity-50': props.disabled,
 }));
 const iconColorClass = computed(() => {
   const variants: Record<InputState, string> = {
@@ -129,7 +152,7 @@ const iconColorClass = computed(() => {
 const _wrapperClass = computed(() => ({
   '-mr-px': props.grouped !== Grouped.none,
   'cursor-not-allowed': props.disabled,
-  ...classesToObjectSyntax(props.wrapperClass)
+  ...classesToObjectSyntax(props.wrapperClass),
 }));
 const icon = computed(() => icons[props.state]);
 const _modelValue = computed<string | number | null>({
@@ -155,14 +178,20 @@ const _inputRef = computed({
   },
   set(val) {
     emit('update:inputRef', val);
-  }
+  },
 });
 
 watch(_modelValue, (val) => {
-  if ([InputState.danger, InputState.warning, InputState.info].includes(props.state)) {
+  if ([
+    InputState.danger,
+    InputState.warning,
+    InputState.info,
+  ].includes(props.state)) {
     emit('validate', val);
   }
-}, {deep: true});
+}, {
+  deep: true,
+});
 watch(() => props.skeleton, (val) => {
   if (!val && props.modelValue !== null) {
     emit('validate', props.modelValue);

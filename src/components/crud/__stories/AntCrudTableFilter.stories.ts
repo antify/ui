@@ -1,13 +1,23 @@
 import AntCrudTableFilter from '../AntCrudTableFilter.vue';
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {vueRouter} from "storybook-vue3-router";
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  vueRouter,
+} from 'storybook-vue3-router';
 
 const meta: Meta<typeof AntCrudTableFilter> = {
   title: 'Crud/Crud Table Filter',
   component: AntCrudTableFilter,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {},
-  decorators: [vueRouter()]
+  decorators: [
+    vueRouter(),
+  ],
 };
 
 export default meta;
@@ -16,9 +26,13 @@ type Story = StoryObj<typeof AntCrudTableFilter>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntCrudTableFilter},
+    components: {
+      AntCrudTableFilter,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
       <div class="border border-base-300 border-dashed">

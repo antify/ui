@@ -1,7 +1,9 @@
 <script setup lang="ts">
 // TODO:: remove ts ignore
 // @ts-nocheck
-import {computed, ref, watch} from 'vue';
+import {
+  computed, ref, watch,
+} from 'vue';
 import AntButton from '../buttons/AntButton.vue';
 import AntIcon from '../AntIcon.vue';
 import {
@@ -11,17 +13,25 @@ import {
   faInfoCircle,
   type IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
-import {State, InputState} from '../../enums';
-import {IconSize} from '../__types';
+import {
+  State, InputState,
+} from '../../enums';
+import {
+  IconSize,
+} from '../__types';
 
-const emit = defineEmits(['update:open', 'close', 'confirm']);
+const emit = defineEmits([
+  'update:open',
+  'close',
+  'confirm',
+]);
 const props = withDefaults(defineProps<{
-  title?: string,
-  open: boolean,
-  confirmText?: string,
-  cancelText?: string,
-  showCancel?: boolean,
-  state?: InputState
+  title?: string;
+  open: boolean;
+  confirmText?: string;
+  cancelText?: string;
+  showCancel?: boolean;
+  state?: InputState;
 }>(), {
   state: InputState.base,
   confirmText: 'Confirm',
@@ -113,7 +123,7 @@ function confirmDialog() {
               />
             </slot>
 
-            <slot/>
+            <slot />
           </div>
 
           <div

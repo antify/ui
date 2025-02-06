@@ -1,5 +1,9 @@
-import {type IconDefinition} from '@fortawesome/free-solid-svg-icons';
-import {type RouteLocationRaw} from 'vue-router';
+import {
+  type IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  type RouteLocationRaw,
+} from 'vue-router';
 
 export type TabItem = {
   id: string;
@@ -11,7 +15,7 @@ export type TabItem = {
   to?: string | RouteLocationRaw;
   clickHandler?: () => void;
   [key: string]: unknown;
-}
+};
 
 export enum TabItemState {
   base = 'base',

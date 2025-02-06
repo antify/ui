@@ -1,8 +1,16 @@
-import {type Meta, type StoryObj} from '@storybook/vue3';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
 import AntSwitch from '../AntSwitch.vue';
-import {ref} from 'vue';
-import {InputState} from '../../../enums';
-import {Size} from '../../../enums/Size.enum';
+import {
+  ref,
+} from 'vue';
+import {
+  InputState,
+} from '../../../enums';
+import {
+  Size,
+} from '../../../enums/Size.enum';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
 
@@ -11,14 +19,18 @@ const meta: Meta<typeof AntSwitch> = {
   component: AntSwitch,
   argTypes: {
     state: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(InputState),
     },
     size: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(Size),
     },
-  }
+  },
 };
 
 export default meta;
@@ -27,30 +39,46 @@ type Story = StoryObj<typeof AntSwitch>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntSwitch},
+    components: {
+      AntSwitch,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
       <AntSwitch v-bind="args"/>
-    `
+    `,
   }),
   args: {
-    modelValue: false
+    modelValue: false,
   },
 };
 
 export const Summary: Story = {
   parameters: {
-    chromatic: {disableSnapshot: false},
+    chromatic: {
+      disableSnapshot: false,
+    },
   },
   render: (args) => ({
-    components: {AntSwitch, AntFormGroup, AntFormGroupLabel},
+    components: {
+      AntSwitch,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
     setup() {
       const value = ref(true);
       const notValue = ref(false);
 
-      return {args, value, notValue, InputState, Size};
+      return {
+        args,
+        value,
+        notValue,
+        InputState,
+        Size,
+      };
     },
     template: `
       <AntFormGroup>
@@ -311,6 +339,6 @@ export const Summary: Story = {
           </AntSwitch>
         </AntFormGroup>
       </AntFormGroup>
-    `
-  })
+    `,
+  }),
 };

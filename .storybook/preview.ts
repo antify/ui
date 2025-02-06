@@ -1,6 +1,10 @@
-import {type Preview, setup} from "@storybook/vue3";
+import {
+  type Preview, setup,
+} from '@storybook/vue3';
 import './assets/storybook.css';
-import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome';
+import {
+  FontAwesomeIcon,
+} from '@fortawesome/vue-fontawesome';
 
 setup((app) => {
   app.component('FaIcon', FontAwesomeIcon);
@@ -8,7 +12,9 @@ setup((app) => {
 
 const preview: Preview = {
   parameters: {
-    chromatic: { disableSnapshot: true },
+    chromatic: {
+      disableSnapshot: true,
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,

@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import {computed} from "vue";
+import {
+  computed,
+} from 'vue';
 
 const props = withDefaults(defineProps<{
   isOpen: boolean;
@@ -9,9 +11,9 @@ const props = withDefaults(defineProps<{
 });
 
 const rowContentClasses = computed(() => ({
-  "grid transition-all duration-300 delay-0 ease-in-out": true,
-  "grid-rows-[0fr]": !props.isOpen,
-  "grid-rows-[1fr]": props.isOpen,
+  'grid transition-all duration-300 delay-0 ease-in-out': true,
+  'grid-rows-[0fr]': !props.isOpen,
+  'grid-rows-[1fr]': props.isOpen,
 }));
 
 </script>
@@ -19,7 +21,7 @@ const rowContentClasses = computed(() => ({
 <template>
   <div :class="rowContentClasses">
     <div class="overflow-hidden">
-      <slot/>
+      <slot />
     </div>
   </div>
 </template>

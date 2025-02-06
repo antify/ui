@@ -1,27 +1,35 @@
 <script lang="ts" setup>
-import {computed, onMounted, useSlots} from 'vue';
-import {handleEnumValidation} from '../handler';
+import {
+  computed, onMounted, useSlots,
+} from 'vue';
+import {
+  handleEnumValidation,
+} from '../handler';
 import {
   faCheckCircle,
   faExclamationCircle,
   faExclamationTriangle,
   faInfoCircle,
-  faXmark
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import AntIcon from './AntIcon.vue';
 import AntButton from './buttons/AntButton.vue';
-import {State, InputState, Size} from '../enums';
-import {IconSize} from './__types/AntIcon.types';
+import {
+  State, InputState, Size,
+} from '../enums';
+import {
+  IconSize,
+} from './__types/AntIcon.types';
 
 const props = withDefaults(defineProps<{
-  title?: string,
-  state?: InputState,
-  showUndo?: boolean,
-  icon?: boolean
+  title?: string;
+  state?: InputState;
+  showUndo?: boolean;
+  icon?: boolean;
 }>(), {
   state: InputState.base,
   showUndo: false,
-  icon: true
+  icon: true,
 });
 
 const icons = {
@@ -99,7 +107,7 @@ onMounted(() => {
     </div>
 
     <div v-if="hasDefaultSlot">
-      <slot/>
+      <slot />
     </div>
 
     <div

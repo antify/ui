@@ -1,17 +1,25 @@
 <script lang="ts" setup>
-import {computed, onMounted} from 'vue';
-import {AntSpinnerSize} from './__types/AntSpinner.types';
-import {handleEnumValidation} from '../handler';
-import {State} from '../enums/State.enum';
+import {
+  computed, onMounted,
+} from 'vue';
+import {
+  AntSpinnerSize,
+} from './__types/AntSpinner.types';
+import {
+  handleEnumValidation,
+} from '../handler';
+import {
+  State,
+} from '../enums/State.enum';
 
 const props = withDefaults(defineProps<{
-  state?: State,
+  state?: State;
   size?: AntSpinnerSize;
   inverted?: boolean;
 }>(), {
   size: AntSpinnerSize.md,
   state: State.base,
-  inverted: false
+  inverted: false,
 });
 
 const classes = computed(() => ({

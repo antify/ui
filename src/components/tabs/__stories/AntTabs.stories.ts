@@ -1,27 +1,43 @@
-import {type Meta, type StoryObj} from '@storybook/vue3';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
 import AntTabs from '../AntTabs.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
-import {ref} from 'vue';
-import {faUserCircle} from '@fortawesome/free-regular-svg-icons';
-import {TabItemState} from '../__types/AntTabItem.types';
-import {vueRouter} from 'storybook-vue3-router';
+import {
+  ref,
+} from 'vue';
+import {
+  faUserCircle,
+} from '@fortawesome/free-regular-svg-icons';
+import {
+  TabItemState,
+} from '../__types/AntTabItem.types';
+import {
+  vueRouter,
+} from 'storybook-vue3-router';
 
 const meta: Meta<typeof AntTabs> = {
   title: 'Components/Tabs',
   component: AntTabs,
-  parameters: {controls: {sort: 'requiredFirst'}},
-  decorators: [vueRouter()],
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
+  decorators: [
+    vueRouter(),
+  ],
   argTypes: {
     modelValue: {
       control: 'text',
       table: {
         type: {
-          summary: 'string | undefined'
-        }
-      }
-    }
-  }
+          summary: 'string | undefined',
+        },
+      },
+    },
+  },
 };
 
 export default meta;
@@ -30,15 +46,19 @@ type Story = StoryObj<typeof AntTabs>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntTabs},
+    components: {
+      AntTabs,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
       <div class="dashed">
         <AntTabs v-bind="args" v-model="args.modelValue"/>
       </div>
-    `
+    `,
   }),
   args: {
     tabItems: [
@@ -58,30 +78,40 @@ export const Docs: Story = {
         id: '4',
         label: 'Fourth tab',
       },
-    ]
-  }
+    ],
+  },
 };
 
 export const FixedHeight: Story = {
   render: (args) => ({
-    components: {AntTabs},
+    components: {
+      AntTabs,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
       <div class="dashed h-20">
         <AntTabs v-bind="args" v-model="args.modelValue"/>
       </div>
-    `
+    `,
   }),
-  args: Docs.args
+  args: Docs.args,
 };
 
 export const HorizontalScrolling: Story = {
   render: (args) => ({
-    components: {AntTabs, AntFormGroupLabel, AntFormGroup},
+    components: {
+      AntTabs,
+      AntFormGroupLabel,
+      AntFormGroup,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
       <AntFormGroup>
@@ -107,7 +137,7 @@ export const HorizontalScrolling: Story = {
         </AntFormGroup>
 
       </AntFormGroup>
-    `
+    `,
   }),
   args: {
     tabItems: [
@@ -137,8 +167,8 @@ export const HorizontalScrolling: Story = {
         id: '6',
         label: 'Sixth tab',
       },
-    ]
-  }
+    ],
+  },
 };
 
 export const DifferentStates: Story = {
@@ -168,13 +198,17 @@ export const DifferentStates: Story = {
         label: 'Fifth tab',
         state: TabItemState.info,
       },
-    ]
-  }
+    ],
+  },
 };
 
 export const Summary: Story = {
   render: (args) => ({
-    components: {AntTabs, AntFormGroupLabel, AntFormGroup},
+    components: {
+      AntTabs,
+      AntFormGroupLabel,
+      AntFormGroup,
+    },
     setup() {
       const value_1 = ref();
       const value_2 = ref();
@@ -205,21 +239,21 @@ export const Summary: Story = {
           appendIcon: faUserCircle,
           prependIcon: faUserCircle,
           label: 'My account',
-          to: '/#'
+          to: '/#',
         },
         {
           id: '2',
           prependIcon: faUserCircle,
           appendIcon: faUserCircle,
           label: 'Downloads',
-          to: '/#'
+          to: '/#',
         },
         {
           id: '3',
           appendIcon: faUserCircle,
           prependIcon: faUserCircle,
           label: 'Messages',
-          to: '/#'
+          to: '/#',
         },
       ];
 
@@ -262,7 +296,7 @@ export const Summary: Story = {
         tabItems_1,
         tabItems_2,
         tabItems_3,
-        tabItems_4
+        tabItems_4,
       };
     },
     template: `
@@ -301,7 +335,7 @@ export const Summary: Story = {
           <AntTabs v-model="value_4" :tab-items="tabItems_4" expanded />
         </AntFormGroup>
       </AntFormGroup>
-    `
+    `,
   }),
-  args: {}
+  args: {},
 };

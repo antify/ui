@@ -83,7 +83,7 @@ function afterLeave(element) {
     @leave="leave"
     @after-leave="afterLeave"
   >
-    <slot/>
+    <slot />
   </transition>
 </template>
 

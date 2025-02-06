@@ -1,21 +1,33 @@
 <script lang="ts" setup>
-import {computed, onMounted} from 'vue';
-import {handleEnumValidation} from '../handler';
-import {faCircleXmark, type IconDefinition} from '@fortawesome/free-solid-svg-icons';
-import {AntTagSize, TagState} from './__types/AntTag.types';
+import {
+  computed, onMounted,
+} from 'vue';
+import {
+  handleEnumValidation,
+} from '../handler';
+import {
+  faCircleXmark, type IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  AntTagSize, TagState,
+} from './__types/AntTag.types';
 import AntIcon from './AntIcon.vue';
-import {IconSize} from './__types/AntIcon.types';
+import {
+  IconSize,
+} from './__types/AntIcon.types';
 
-defineEmits(['close']);
+defineEmits([
+  'close',
+]);
 const props = withDefaults(defineProps<{
-  state?: TagState,
+  state?: TagState;
   size?: AntTagSize;
   iconLeft?: IconDefinition;
-  dismiss?: boolean
+  dismiss?: boolean;
 }>(), {
   size: AntTagSize.md,
   state: TagState.base,
-  dismiss: false
+  dismiss: false,
 });
 
 const classes = computed(() => {
@@ -28,6 +40,7 @@ const classes = computed(() => {
     [TagState.success]: 'bg-success-500 text-success-500-font',
     [TagState.warning]: 'bg-warning-500 text-warning-500-font',
   };
+
   return {
     'rounded-md inline-flex items-center': true,
     'px-1 py-0.5 text-xs gap-0.5': props.size === AntTagSize.xs3,
@@ -67,7 +80,7 @@ const iconState = computed(() => {
 const iconWrapperClass = computed(() => {
   return {
     'w-4 h-4': props.size === AntTagSize.xs2 || props.size === AntTagSize.xs,
-    'w-5 h-5': props.size === AntTagSize.sm || props.size === AntTagSize.md || props.size === AntTagSize.lg
+    'w-5 h-5': props.size === AntTagSize.sm || props.size === AntTagSize.md || props.size === AntTagSize.lg,
   };
 });
 
@@ -91,11 +104,10 @@ onMounted(() => {
         :icon="iconLeft"
         :size="getIconSize"
         :color="iconState"
-      >
-      </anticon>
+      />
     </span>
 
-    <slot/>
+    <slot />
 
     <span
       v-if="dismiss"

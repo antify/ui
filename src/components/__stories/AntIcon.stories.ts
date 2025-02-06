@@ -1,24 +1,40 @@
 import AntIcon from '../AntIcon.vue';
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {faTag} from '@fortawesome/free-solid-svg-icons';
-import {IconSize} from '../__types/AntIcon.types';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  faTag,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  IconSize,
+} from '../__types/AntIcon.types';
 
 const meta: Meta<typeof AntIcon> = {
   title: 'Components/Icon',
   component: AntIcon,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     size: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(IconSize),
     },
     icon: {
-      control: {type: 'none'},
+      control: {
+        type: 'none',
+      },
       description:
         'Use Font-awesome Icons.',
     },
     color: {
-      control: {type: 'text'},
+      control: {
+        type: 'text',
+      },
       description: 'A text-* css class to change the color of the icon.',
     },
   },
@@ -30,9 +46,13 @@ type Story = StoryObj<typeof AntIcon>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntIcon},
+    components: {
+      AntIcon,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: '<AntIcon v-bind="args"/>',
   }),
@@ -43,9 +63,13 @@ export const Docs: Story = {
 
 export const Size: Story = {
   render: (args) => ({
-    components: {AntIcon},
+    components: {
+      AntIcon,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
       <div class="flex flex-col gap-2.5">
@@ -65,9 +89,13 @@ export const Size: Story = {
 
 export const Color: Story = {
   render: (args) => ({
-    components: {AntIcon},
+    components: {
+      AntIcon,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
       <div class="flex items-center gap-2.5">

@@ -1,4 +1,6 @@
-import {InputState} from '../../enums';
+import {
+  InputState,
+} from '../../enums';
 
 export type Toast = {
   id?: string;

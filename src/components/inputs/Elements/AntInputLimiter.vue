@@ -1,9 +1,17 @@
 <script lang="ts" setup>
-import {computed, onMounted} from 'vue';
-import {Size} from '../../../enums/Size.enum';
+import {
+  computed, onMounted,
+} from 'vue';
+import {
+  Size,
+} from '../../../enums/Size.enum';
 import AntSkeleton from '../../AntSkeleton.vue';
-import {handleEnumValidation} from '../../../handler';
-import {InputState} from '../../../enums';
+import {
+  handleEnumValidation,
+} from '../../../handler';
+import {
+  InputState,
+} from '../../../enums';
 
 const props = withDefaults(defineProps<{
   value: number;
@@ -14,7 +22,7 @@ const props = withDefaults(defineProps<{
 }>(), {
   skeleton: false,
   size: Size.md,
-  state: InputState.base
+  state: InputState.base,
 });
 
 const classes = computed(() => {

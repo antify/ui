@@ -1,20 +1,34 @@
 import AntKeycap from '../AntKeycap.vue';
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {AntKeycapSize} from '../__types/AntKeycap.types';
-import {faPlus, faChevronUp} from '@fortawesome/free-solid-svg-icons';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  AntKeycapSize,
+} from '../__types/AntKeycap.types';
+import {
+  faPlus, faChevronUp,
+} from '@fortawesome/free-solid-svg-icons';
 
 const meta: Meta<typeof AntKeycap> = {
   title: 'Components/Keycap',
   component: AntKeycap,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     icon: {
-      control: {type: 'none'},
+      control: {
+        type: 'none',
+      },
       description:
         'Will be displayed instead of the default slot if given.<br>Use Font-awesome Icons.',
     },
     size: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(AntKeycapSize),
     },
   },
@@ -26,14 +40,18 @@ type Story = StoryObj<typeof AntKeycap>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntKeycap},
+    components: {
+      AntKeycap,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: '<div class="p-4"><AntKeycap v-bind="args">F</AntKeycap></div>',
   }),
   args: {
-    size: AntKeycapSize.sm
+    size: AntKeycapSize.sm,
   },
 };
 
@@ -54,12 +72,20 @@ export const Icon: Story = {
 
 export const Summary: Story = {
   parameters: {
-    chromatic: {disableSnapshot: false},
+    chromatic: {
+      disableSnapshot: false,
+    },
   },
   render: (args) => ({
-    components: {AntKeycap},
+    components: {
+      AntKeycap,
+    },
     setup() {
-      return {args, AntKeycapSize, faPlus};
+      return {
+        args,
+        AntKeycapSize,
+        faPlus,
+      };
     },
     template: `
       <div class="flex gap-2 p-4">
