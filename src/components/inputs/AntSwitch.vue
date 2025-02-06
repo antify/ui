@@ -44,8 +44,8 @@ const buttonClasses = computed(() => {
   const classes: {
     [key: string]: boolean;
   } = {
-    'relative inline-flex flex-shrink-0': true,
-    'focus:outline-none': true,
+    'relative inline-flex shrink-0': true,
+    'focus:outline-hidden': true,
     'rounded-full ease-in-out duration-200': true,
     'focus-within:ring-4': !hasInputState.value && (props.size === Size.lg || props.size === Size.md),
     'focus-within:ring-2': !hasInputState.value && (props.size === Size.sm || props.size === Size.xs || props.size === Size.xs2),
@@ -78,7 +78,7 @@ const buttonClasses = computed(() => {
   return classes;
 });
 const ballClasses = computed(() => ({
-  'pointer-events-none inline-block rounded-full bg-base-100 shadow transform ring-0 transition ease-in-out duration-200': true,
+  'pointer-events-none inline-block rounded-full bg-base-100 shadow-sm transform ring-0 transition ease-in-out duration-200': true,
   'h-4 w-4 translate-y-0.5': props.size === Size.lg || props.size === Size.md || props.size === Size.sm,
   'translate-x-[1.125rem]': _value.value && (props.size === Size.lg || props.size === Size.md || props.size === Size.sm),
   'translate-x-0.5': !_value.value && (props.size === Size.lg || props.size === Size.md || props.size === Size.sm),

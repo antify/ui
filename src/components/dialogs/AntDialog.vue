@@ -94,7 +94,7 @@ function confirmDialog() {
   <Transition name="fade">
     <div
       v-if="openBackground"
-      class="absolute inset-0 flex items-center justify-center z-50 cursor-pointer overflow-hidden bg-black/50 backdrop-blur-sm"
+      class="absolute inset-0 flex items-center justify-center z-50 cursor-pointer overflow-hidden bg-black/50 backdrop-blur-xs"
       data-e2e="dialog"
       @click.self="closeDialog"
     >

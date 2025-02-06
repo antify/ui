@@ -80,7 +80,7 @@ onMounted(() => {
     <AntBaseInput
       v-model="_value"
       :type="type as unknown as BaseInputType"
-      wrapper-class="flex-grow"
+      wrapper-class="grow"
       :state="state"
       :size="size"
       :skeleton="skeleton"

@@ -175,7 +175,7 @@ function onButtonBlur() {
         v-model.number="_modelValue"
         :type="BaseInputType.number"
         :grouped="indicators ? Grouped.center : Grouped.none"
-        wrapper-class="flex-grow"
+        wrapper-class="grow"
         :state="state"
         :size="size"
         :skeleton="skeleton"

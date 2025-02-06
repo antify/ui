@@ -60,7 +60,7 @@ export const Docs: Story = {
     },
     template: `
       <div ref="scrollContainer" class="dashed  h-[50vh] w-[50vw] overflow-scroll">
-        <div class="flex flex-grow justify-center items-center h-screen w-[1000px]">
+        <div class="flex grow justify-center items-center h-screen w-[1000px]">
           <AntTooltip v-bind="args">
             <AntButton>Hover me</AntButton>
 

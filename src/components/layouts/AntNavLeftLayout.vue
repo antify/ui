@@ -35,7 +35,7 @@ const hasLogoImageSlot = computed(() => useSlots()['logo-image'] || false);
       />
     </div>
 
-    <div class="w-px flex-grow">
+    <div class="w-px grow">
       <slot />
     </div>
   </div>

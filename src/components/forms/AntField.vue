@@ -125,7 +125,7 @@ const descriptionClasses = computed(() => ({
 
       <div
         v-if="limiterMaxValue !== undefined && limiterValue !== undefined"
-        class="flex flex-grow justify-end"
+        class="flex grow justify-end"
       >
         <AntInputLimiter
           :value="limiterValue"

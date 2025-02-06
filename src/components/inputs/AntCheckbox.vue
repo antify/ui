@@ -75,8 +75,8 @@ const inputClasses = computed(() => {
   };
 
   return {
-    'relative inline-flex flex-shrink-0 bg-base-100 border-0': true,
-    'outline outline-1 outline-offset-[-1px] rounded': true,
+    'relative inline-flex shrink-0 bg-base-100 border-0': true,
+    'outline outline-1 outline-offset-[-1px] rounded-sm': true,
     'focus:ring-offset-0': true,
     invisible: props.skeleton,
     'cursor-pointer': !hasInputState.value,

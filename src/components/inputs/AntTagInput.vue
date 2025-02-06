@@ -123,7 +123,7 @@ const inputClasses = computed(() => {
   };
 
   return {
-    'outline-0 border:none ring:none bg-transparent w-full': true,
+    'outline-0 bg-transparent w-full': true,
     'opacity-50 cursor-not-allowed': props.disabled,
     [variants[props.state]]: true,
   };
