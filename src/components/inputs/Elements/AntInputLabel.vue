@@ -34,7 +34,7 @@ onMounted(() => {
 
 <template>
   <label
-    class="flex flex-col w-full"
+    class="flex flex-col w-fit"
     :class="gapSize"
   >
     <span
