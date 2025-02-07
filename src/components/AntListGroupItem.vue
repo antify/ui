@@ -1,9 +1,19 @@
 <script lang="ts" setup>
-import {computed, onMounted} from 'vue';
-import {type IconDefinition} from '@fortawesome/free-solid-svg-icons';
-import {ListGroupItemState} from './__types/AntListGroupItem.types';
-import {handleEnumValidation} from '../handler';
-import {type RouteLocationRaw} from 'vue-router';
+import {
+  computed, onMounted,
+} from 'vue';
+import {
+  type IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  ListGroupItemState,
+} from './__types/AntListGroupItem.types';
+import {
+  handleEnumValidation,
+} from '../handler';
+import {
+  type RouteLocationRaw,
+} from 'vue-router';
 import AntIcon from './AntIcon.vue';
 
 const props = withDefaults(defineProps<{
@@ -45,7 +55,7 @@ const contentWrapperClasses = computed(() => {
   return {
     'w-full p-2 flex gap-2 items-center justify-between': true,
     'cursor-pointer transition-colors': props.to !== undefined,
-    [variants[props.state]]: props.to !== undefined
+    [variants[props.state]]: props.to !== undefined,
   };
 });
 
@@ -66,17 +76,17 @@ onMounted(() => {
           v-if="iconLeft"
           name="icon-left"
         >
-          <AntIcon :icon="iconLeft"/>
+          <AntIcon :icon="iconLeft" />
         </slot>
 
-        <slot/>
+        <slot />
       </div>
 
       <slot
         v-if="iconRight"
         name="icon-right"
       >
-        <AntIcon :icon="iconRight"/>
+        <AntIcon :icon="iconRight" />
       </slot>
     </div>
   </component>

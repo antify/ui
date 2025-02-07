@@ -1,13 +1,29 @@
 <script setup lang="ts">
-import {type AntCheckboxType} from './__types/AntCheckbox.types';
-import {AntField} from './Elements';
-import {useVModel} from '@vueuse/core';
+import {
+  type AntCheckboxType,
+} from './__types/AntCheckbox.types';
+import {
+  AntField,
+} from './Elements';
+import {
+  useVModel,
+} from '@vueuse/core';
 import AntCheckbox from './AntCheckbox.vue';
-import {computed, onMounted, ref, watch} from 'vue';
-import {Direction} from '../../enums/Direction.enum';
-import {InputState, Size} from '../../enums';
+import {
+  computed, onMounted, ref, watch,
+} from 'vue';
+import {
+  Direction,
+} from '../../enums/Direction.enum';
+import {
+  InputState, Size,
+} from '../../enums';
 
-const emit = defineEmits(['update:modelValue', 'validate', 'blur']);
+const emit = defineEmits([
+  'update:modelValue',
+  'validate',
+  'blur',
+]);
 const props = withDefaults(
   defineProps<{
     modelValue: string[] | null;
@@ -16,11 +32,11 @@ const props = withDefaults(
     description?: string;
     direction?: Direction;
     state?: InputState;
-    size?: Size,
+    size?: Size;
     skeleton?: boolean;
     readonly?: boolean;
     disabled?: boolean;
-    messages?: string[]
+    messages?: string[];
   }>(),
   {
     direction: Direction.column,
@@ -29,22 +45,28 @@ const props = withDefaults(
     skeleton: false,
     readonly: false,
     disabled: false,
-    messages: () => []
-  }
+    messages: () => [],
+  },
 );
 const _modelValue = useVModel(props, 'modelValue', emit);
 const containerClasses = computed(() => ({
   'flex gap-2.5': true,
   'flex-row': props.direction === Direction.row,
-  'flex-col': props.direction === Direction.column
+  'flex-col': props.direction === Direction.column,
 }));
 const containerRef = ref<null | HTMLElement>(null);
 
 watch(_modelValue, (val) => {
-  if ([InputState.danger, InputState.warning, InputState.info].includes(props.state)) {
+  if ([
+    InputState.danger,
+    InputState.warning,
+    InputState.info,
+  ].includes(props.state)) {
     emit('validate', val);
   }
-}, {deep: true});
+}, {
+  deep: true,
+});
 watch(() => props.skeleton, (val) => {
   if (!val && props.modelValue !== null) {
     emit('validate', props.modelValue);
@@ -53,7 +75,9 @@ watch(() => props.skeleton, (val) => {
 
 function updateValue(value: string) {
   if (_modelValue.value === null) {
-    return _modelValue.value = [value];
+    return _modelValue.value = [
+      value,
+    ];
   }
 
   const index = _modelValue.value.indexOf(value);

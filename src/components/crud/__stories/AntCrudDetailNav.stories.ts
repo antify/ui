@@ -1,15 +1,25 @@
-import {type Meta, type StoryObj} from '@storybook/vue3';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
 import AntTabs from '../../tabs/AntTabs.vue';
 import AntCrudDetailNav from '../AntCrudDetailNav.vue';
-import {vueRouter} from 'storybook-vue3-router';
+import {
+  vueRouter,
+} from 'storybook-vue3-router';
 
 const meta: Meta<typeof AntCrudDetailNav> = {
   title: 'Crud/Crud Detail Nav',
   component: AntCrudDetailNav,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   decorators: [
-    () => ({template: '<div class="dashed"><story/></div>'}),
-    vueRouter()
+    () => ({
+      template: '<div class="dashed"><story/></div>',
+    }),
+    vueRouter(),
   ],
   argTypes: {},
 };
@@ -22,7 +32,7 @@ export const Docs: Story = {
   render: (args) => ({
     components: {
       AntTabs,
-      AntCrudDetailNav
+      AntCrudDetailNav,
     },
     setup() {
       return {
@@ -46,6 +56,6 @@ export const Docs: Story = {
         id: '3',
         label: 'Related data',
       },
-    ]
-  }
+    ],
+  },
 };

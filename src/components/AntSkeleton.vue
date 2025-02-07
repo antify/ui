@@ -1,6 +1,10 @@
 <script lang="ts" setup>
-import {Grouped} from '../enums/Grouped.enum';
-import {computed} from 'vue';
+import {
+  Grouped,
+} from '../enums/Grouped.enum';
+import {
+  computed,
+} from 'vue';
 
 const props = withDefaults(defineProps<{
   grouped?: Grouped;
@@ -13,7 +17,7 @@ const props = withDefaults(defineProps<{
   rounded: false,
   roundedFull: false,
   absolute: false,
-  minShowTime: 5000
+  minShowTime: 5000,
 });
 
 const groupedClassList = computed(() => ({
@@ -26,7 +30,7 @@ const classList = computed(() => ({
   'absolute inset-0 w-full h-full z-40': props.absolute,
   'rounded-md': props.rounded && props.grouped === Grouped.none,
   'rounded-full': props.roundedFull && props.grouped === Grouped.none,
-  ...groupedClassList.value
+  ...groupedClassList.value,
 }));
 </script>
 

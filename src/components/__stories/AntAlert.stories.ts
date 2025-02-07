@@ -1,16 +1,26 @@
 import AntAlert from '../AntAlert.vue';
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {InputState} from '../../enums';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  InputState,
+} from '../../enums';
 
 const meta: Meta<typeof AntAlert> = {
   title: 'Components/Alert',
   component: AntAlert,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     state: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(InputState),
-    }
+    },
   },
 };
 
@@ -20,13 +30,18 @@ type Story = StoryObj<typeof AntAlert>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntAlert},
+    components: {
+      AntAlert,
+    },
     setup() {
       function logClick() {
         console.log('Clicked close icon');
       }
 
-      return {args, logClick};
+      return {
+        args,
+        logClick,
+      };
     },
     template: `
 			<AntAlert v-bind="args" @close="logClick">
@@ -72,7 +87,7 @@ export const WithoutContent: Story = {
     `,
   }),
   args: {
-    ...Docs.args
+    ...Docs.args,
   },
 };
 
@@ -80,7 +95,7 @@ export const WithQuestionIcon: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    questionMarkText: 'Lorem ipsum dolor'
+    questionMarkText: 'Lorem ipsum dolor',
   },
 };
 
@@ -88,6 +103,6 @@ export const Skeleton: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    skeleton: true
+    skeleton: true,
   },
 };

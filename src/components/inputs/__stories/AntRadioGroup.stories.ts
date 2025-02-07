@@ -1,15 +1,27 @@
-import {ref} from 'vue';
+import {
+  ref,
+} from 'vue';
 import AntRadioGroup from '../AntRadioGroup.vue';
-import {InputState, Size} from '../../../enums';
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {Direction} from '../../../enums/Direction.enum';
+import {
+  InputState, Size,
+} from '../../../enums';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  Direction,
+} from '../../../enums/Direction.enum';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 
 const meta: Meta<typeof AntRadioGroup> = {
   title: 'Inputs/Radio Group',
   component: AntRadioGroup,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     label: {
       description: 'The label for the radio widget',
@@ -29,7 +41,7 @@ const meta: Meta<typeof AntRadioGroup> = {
   disabled?: boolean;
   state?: InputState;
 }
-`
+`,
         },
       },
     },
@@ -38,20 +50,26 @@ const meta: Meta<typeof AntRadioGroup> = {
         'Reactive value, contains the currently selected radio-button value',
       table: {
         type: {
-          summary: 'string | null'
-        }
-      }
+          summary: 'string | null',
+        },
+      },
     },
     direction: {
-      control: {type: 'select'},
-      options: Object.values(Direction)
+      control: {
+        type: 'select',
+      },
+      options: Object.values(Direction),
     },
     state: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(InputState),
     },
     size: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(Size),
     },
   },
@@ -81,35 +99,53 @@ const simpleButtons = [
     id: 'radio-4',
     label: 'Radio 4',
     value: 'radio-4',
-  }
+  },
 ];
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntRadioGroup},
+    components: {
+      AntRadioGroup,
+    },
     setup() {
       const value = ref<string>('');
-      return {args, value};
+
+      return {
+        args,
+        value,
+      };
     },
     template: `
       <AntRadioGroup v-bind="args" v-model="value"/>
       <span class="text-xs text-gray-500">Reactive value: {{ value }}</span>
-    `
+    `,
   }),
   args: {
-    radioButtons: simpleButtons
-  }
+    radioButtons: simpleButtons,
+  },
 };
 
 export const summary: Story = {
   parameters: {
-    chromatic: {disableSnapshot: false},
+    chromatic: {
+      disableSnapshot: false,
+    },
   },
   render: (args) => ({
-    components: {AntRadioGroup, AntFormGroupLabel, AntFormGroup},
+    components: {
+      AntRadioGroup,
+      AntFormGroupLabel,
+      AntFormGroup,
+    },
     setup() {
       const value = ref<string>('radio-3');
-      return {args, value, InputState, Size};
+
+      return {
+        args,
+        value,
+        InputState,
+        Size,
+      };
     },
     template: `
       <AntFormGroup>
@@ -206,9 +242,9 @@ export const summary: Story = {
         <AntFormGroupLabel>With label + description</AntFormGroupLabel>
         <AntRadioGroup v-bind="args" v-model="value" label="Label" description="Lorem ipsum dolor sit amet"/>
       </AntFormGroup>
-    `
+    `,
   }),
   args: {
     ...Docs.args,
-  }
+  },
 };

@@ -1,10 +1,18 @@
 <script lang="ts" setup>
-import {computed, onMounted} from 'vue';
-import {Size} from '../../../enums/Size.enum';
+import {
+  computed, onMounted,
+} from 'vue';
+import {
+  Size,
+} from '../../../enums/Size.enum';
 import AntSkeleton from '../../AntSkeleton.vue';
-import {handleEnumValidation} from '../../../handler';
+import {
+  handleEnumValidation,
+} from '../../../handler';
 
-defineEmits(['clickContent']);
+defineEmits([
+  'clickContent',
+]);
 
 const props = withDefaults(defineProps<{
   label?: string;
@@ -57,6 +65,6 @@ onMounted(() => {
       />
     </span>
 
-    <slot/>
+    <slot />
   </label>
 </template>

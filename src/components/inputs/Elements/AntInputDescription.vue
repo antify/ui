@@ -1,18 +1,26 @@
 <script lang="ts" setup>
-import {computed, onMounted} from 'vue';
-import {Size} from '../../../enums/Size.enum';
+import {
+  computed, onMounted,
+} from 'vue';
+import {
+  Size,
+} from '../../../enums/Size.enum';
 import AntSkeleton from '../../AntSkeleton.vue';
-import {handleEnumValidation} from '../../../handler';
-import {InputState} from '../../../enums';
+import {
+  handleEnumValidation,
+} from '../../../handler';
+import {
+  InputState,
+} from '../../../enums';
 
 const props = withDefaults(defineProps<{
-  state?: InputState,
+  state?: InputState;
   size?: Size;
   skeleton?: boolean;
 }>(), {
   skeleton: false,
   size: Size.md,
-  state: InputState.base
+  state: InputState.base,
 });
 
 const classes = computed(() => {
@@ -31,7 +39,7 @@ const classes = computed(() => {
     'text-sm': props.size === Size.sm,
     'text-md': props.size === Size.md,
     'text-lg': props.size === Size.lg,
-    [variants[props.state]]: true
+    [variants[props.state]]: true,
   };
 });
 
@@ -46,7 +54,7 @@ onMounted(() => {
     :class="classes"
   >
     <span :class="{'invisible': skeleton}">
-      <slot/>
+      <slot />
     </span>
 
     <AntSkeleton

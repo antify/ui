@@ -1,7 +1,15 @@
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {computed, ref} from 'vue';
-import {Size} from '../../../enums';
-import {InputState} from '../../../enums';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  computed, ref,
+} from 'vue';
+import {
+  Size,
+} from '../../../enums';
+import {
+  InputState,
+} from '../../../enums';
 import AntSwitcher from '../AntSwitcher.vue';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
@@ -23,19 +31,23 @@ type SwitcherOption = {
   value: string | number;
   [key: string]: unknown;
 }
-          `
-        }
-      }
+          `,
+        },
+      },
     },
     state: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(InputState),
     },
     size: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(Size),
     },
-  }
+  },
 };
 
 export default meta;
@@ -44,60 +56,77 @@ type Story = StoryObj<typeof AntSwitcher>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntSwitcher},
+    components: {
+      AntSwitcher,
+    },
     setup() {
       const modelValue = computed({
         // @ts-ignore
         get: () => args.modelValue,
         // @ts-ignore
-        set: (val) => args.modelValue = val
+        set: (val) => args.modelValue = val,
       });
 
-      return {args, modelValue};
+      return {
+        args,
+        modelValue,
+      };
     },
     template: `
       <AntSwitcher v-bind="args" v-model="modelValue"/>
-    `
+    `,
   }),
   args: {
     options: [
       {
         label: 'Entry 1',
-        value: 'entry-1'
+        value: 'entry-1',
       },
       {
         label: 'Entry 2',
-        value: 'entry-2'
+        value: 'entry-2',
       },
       {
         label: 'Entry 3',
-        value: 'entry-3'
+        value: 'entry-3',
       },
       {
         label: 'Entry 4',
-        value: 'entry-4'
-      }
+        value: 'entry-4',
+      },
     ],
-    modelValue: 'entry-1'
-  }
+    modelValue: 'entry-1',
+  },
 };
 
 export const Summary: Story = {
   parameters: {
-    chromatic: {disableSnapshot: false},
+    chromatic: {
+      disableSnapshot: false,
+    },
   },
   render: (args) => ({
-    components: {AntSwitcher, AntFormGroup, AntFormGroupLabel},
+    components: {
+      AntSwitcher,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
     setup() {
       const modelValue = computed({
         // @ts-ignore
         get: () => args.modelValue,
         // @ts-ignore
-        set: (val) => args.modelValue = val
+        set: (val) => args.modelValue = val,
       });
       const skeleton = ref(true);
 
-      return {args, modelValue, InputState, skeleton, Size};
+      return {
+        args,
+        modelValue,
+        InputState,
+        skeleton,
+        Size,
+      };
     },
     template: `
       <AntFormGroup>
@@ -168,27 +197,27 @@ export const Summary: Story = {
         <AntSwitcher v-bind="args" v-model="modelValue" label="Label" class="w-60"
                      description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"/>
       </AntFormGroup>
-    `
+    `,
   }),
   args: {
     options: [
       {
         label: 'Entry 1',
-        value: 'entry-1'
+        value: 'entry-1',
       },
       {
         label: 'Entry 2',
-        value: 'entry-2'
+        value: 'entry-2',
       },
       {
         label: 'Entry 3',
-        value: 'entry-3'
+        value: 'entry-3',
       },
       {
         label: 'Entry 4',
-        value: 'entry-4'
-      }
+        value: 'entry-4',
+      },
     ],
-    modelValue: 'entry-1'
-  }
+    modelValue: 'entry-1',
+  },
 };

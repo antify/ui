@@ -2,18 +2,35 @@ import AntTable from '../AntTable.vue';
 import AntButton from '../../buttons/AntButton.vue';
 import AntSelect from '../../inputs/AntSelect.vue';
 import AntCheckboxGroup from '../../inputs/AntCheckboxGroup.vue';
-import {AntTableAlign, AntTableRowTypes, AntTableSize} from '../__types/TableHeader.types';
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {ref} from 'vue';
-import {faker} from '@faker-js/faker';
+import {
+  AntTableAlign, AntTableRowTypes, AntTableSize,
+} from '../__types/TableHeader.types';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  ref,
+} from 'vue';
+import {
+  faker,
+} from '@faker-js/faker';
 import AntSwitch from '../../inputs/AntSwitch.vue';
-import {expect, userEvent, waitFor, within} from "@storybook/test";
+import {
+  expect, userEvent, waitFor, within,
+} from '@storybook/test';
 
 const meta: Meta<typeof AntTable> = {
-  components: {AntSelect, AntCheckboxGroup},
+  components: {
+    AntSelect,
+    AntCheckboxGroup,
+  },
   title: 'Components/Table',
   component: AntTable,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     headers: {
       description: 'List of header definitions. <br>If this value get changed from outside, because the table size should change, the change will take 350 ms to have a more smooth transition.',
@@ -40,63 +57,99 @@ const meta: Meta<typeof AntTable> = {
         'List of rows to be displayed in the table. The properties of the elements need to be equal to the identifier of a table row for it to be displayed<br>They will be updated as they are beeing moved inside the table.',
     },
     selectedRow: {
-      description: 'Reactive value that contains the selected row.'
+      description: 'Reactive value that contains the selected row.',
     },
     rowKey: {
-      description: 'Prop name of a unique identifier in your data structure.'
+      description: 'Prop name of a unique identifier in your data structure.',
     },
     loading: {
-      description: 'If true will display skeleton rows instead of an empty table if there is no data provided, otherwise it will display an overlay.'
+      description: 'If true will display skeleton rows instead of an empty table if there is no data provided, otherwise it will display an overlay.',
     },
     size: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(AntTableSize),
-      table: {defaultValue: {summary: AntTableSize.md}},
+      table: {
+        defaultValue: {
+          summary: AntTableSize.md,
+        },
+      },
     },
     // Slots
     afterCellContent: {
       description:
         'Slot to add custom elements to all cells. Gets {elem, header} as property.',
-      table: {type: {summary: 'HTML'}},
+      table: {
+        type: {
+          summary: 'HTML',
+        },
+      },
     },
     beforeCellContent: {
       description:
         'Slot to add custom elements to all cells. Gets {elem, header} as property.',
-      table: {type: {summary: 'HTML'}},
+      table: {
+        type: {
+          summary: 'HTML',
+        },
+      },
     },
     emptyState: {
       description: 'Place for custom empty states.',
-      table: {type: {summary: 'HTML'}},
+      table: {
+        type: {
+          summary: 'HTML',
+        },
+      },
     },
     headerContent: {
       description:
         'Overwrite for the default header items. Gets header as property.',
-      table: {type: {summary: 'HTML'}},
+      table: {
+        type: {
+          summary: 'HTML',
+        },
+      },
     },
     headerFirstCell: {
       description: 'Space to add cells to the header.',
-      table: {type: {summary: 'HTML'}},
+      table: {
+        type: {
+          summary: 'HTML',
+        },
+      },
     },
     headerLastCell: {
       description: 'Space to add cells to the header.',
-      table: {type: {summary: 'HTML'}},
+      table: {
+        type: {
+          summary: 'HTML',
+        },
+      },
     },
     rowFirstCell: {
-      description: 'Space to add cells to the beginning of a row. Be aware that you have to add headerFirstCells as well otherwise the headers will not match up to your cells.'
+      description: 'Space to add cells to the beginning of a row. Be aware that you have to add headerFirstCells as well otherwise the headers will not match up to your cells.',
     },
     rowLastCell: {
       description:
         'Space to add cells to all rows. Gets the current element as property.',
-      table: {type: {summary: 'HTML'}},
+      table: {
+        type: {
+          summary: 'HTML',
+        },
+      },
     },
     cellContent: {
       description: 'Is used if the ROW_TYPE = "SLOT". Gets the current element and the header element to identifier witch cell is currently displayed.',
       table: {
-        type: {summary: 'HTML'}
-      }
+        type: {
+          summary: 'HTML',
+        },
+      },
     },
     showLightVersion: {
-      description: 'Switch between the normal version, which contains all columns, and the light version, which only contains all columns with the property `lightVersion` set to `true`.'
+      description: 'Switch between the normal version, which contains all columns, and the light version, which only contains all columns with the property `lightVersion` set to `true`.',
     },
   },
 };
@@ -106,19 +159,28 @@ export default meta;
 type Story = StoryObj<typeof AntTable>;
 
 const testData = ref<{
-  name: string,
-  age: number,
-  email: string,
-  employed: boolean
-  permissions: string[]
+  name: string;
+  age: number;
+  email: string;
+  employed: boolean;
+  permissions: string[];
 }[]>([]);
 
 function getRandomEntry() {
   const randomName = faker.person.firstName() + ' ' + faker.person.lastName();
-  const randomNumber = faker.number.int({min: 18, max: 60});
+  const randomNumber = faker.number.int({
+    min: 18,
+    max: 60,
+  });
   const randomEmail = faker.internet.email();
   const randomBoolean = faker.datatype.boolean();
-  const randomPermissions = faker.helpers.arrayElements(['read', 'write'], {min: 0, max: 2});
+  const randomPermissions = faker.helpers.arrayElements([
+    'read',
+    'write',
+  ], {
+    min: 0,
+    max: 2,
+  });
 
   return {
     name: randomName,
@@ -135,19 +197,30 @@ for (let i = 0; i < 100; i++) {
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntTable, AntSwitch, AntCheckboxGroup},
+    components: {
+      AntTable,
+      AntSwitch,
+      AntCheckboxGroup,
+    },
     setup() {
       const selected = ref();
 
-      const checkboxes = [{
-        label: 'Read',
-        value: 'read'
-      }, {
-        label: 'Write',
-        value: 'write'
-      }];
+      const checkboxes = [
+        {
+          label: 'Read',
+          value: 'read',
+        },
+        {
+          label: 'Write',
+          value: 'write',
+        },
+      ];
 
-      return {args, selected, checkboxes};
+      return {
+        args,
+        selected,
+        checkboxes,
+      };
     },
     template: `
       <div class="h-96 border border-dashed border-base-300">
@@ -165,7 +238,9 @@ export const Docs: Story = {
       </div>
     `,
   }),
-  play: async ({ step, }) => {
+  play: async ({
+    step,
+  }) => {
     const firstRow = document.querySelectorAll('[data-e2e="table-row"]')[0];
     const employedCell = firstRow.querySelector('[data-e2e="table-cell-employed"]');
     const employedSwitch = employedCell?.querySelector('[data-e2e="switch"]')?.querySelector('button');
@@ -176,7 +251,9 @@ export const Docs: Story = {
 
     await step('Click on a table cell and expect the row to be selected', async () => {
       await userEvent.click(employedCell!);
-      await waitFor(() => expect(firstRow).toHaveClass('bg-primary-200'), {timeout: 600});
+      await waitFor(() => expect(firstRow).toHaveClass('bg-primary-200'), {
+        timeout: 600,
+      });
     });
 
     await step('Click on employed switch and expect the value to toggle', async () => {
@@ -186,7 +263,9 @@ export const Docs: Story = {
       await waitFor(() => {
         const toggledAriaChecked = JSON.parse(employedSwitch?.getAttribute('aria-checked')!);
         expect(toggledAriaChecked).toBe(!initialAriaChecked);
-      }, {timeout: 600});
+      }, {
+        timeout: 600,
+      });
     });
 
     await step('Click on one of the permissions and expect the value to toggle', async () => {
@@ -196,7 +275,9 @@ export const Docs: Story = {
       await waitFor(() => {
         const toggledAriaChecked = JSON.parse(permissionCheckbox?.getAttribute('aria-checked')!);
         expect(toggledAriaChecked).toBe(!initialAriaChecked);
-      }, {timeout: 600});
+      }, {
+        timeout: 600,
+      });
     });
   },
   args: {
@@ -232,19 +313,26 @@ export const Docs: Story = {
         identifier: 'permissions',
         rowClassList: '',
         type: AntTableRowTypes.slot,
-      }
+      },
     ],
     data: testData.value,
-  }
+  },
 };
 
 // TODO:: Stories for loading/custom/...
 export const Empty: Story = {
   render: (args) => ({
-    components: {AntTable, AntSwitch},
+    components: {
+      AntTable,
+      AntSwitch,
+    },
     setup() {
       const selected = ref();
-      return {args, selected};
+
+      return {
+        args,
+        selected,
+      };
     },
     template: `
       <div class="flex flex-col gap-2">
@@ -299,10 +387,10 @@ export const Empty: Story = {
         identifier: 'linkLabel',
         toProp: 'link',
         type: AntTableRowTypes.link,
-      }
+      },
     ],
-    data: []
-  }
+    data: [],
+  },
 };
 
 export const Skeleton: Story = {
@@ -337,10 +425,10 @@ export const Skeleton: Story = {
         identifier: 'linkLabel',
         toProp: 'link',
         type: AntTableRowTypes.link,
-      }
+      },
     ],
-    data: []
-  }
+    data: [],
+  },
 };
 
 export const Loading: Story = {
@@ -375,27 +463,38 @@ export const Loading: Story = {
         identifier: 'linkLabel',
         toProp: 'link',
         type: AntTableRowTypes.link,
-      }
+      },
     ],
-    data: testData.value
-  }
+    data: testData.value,
+  },
 };
 
 export const Collapsible: Story = {
   render: (args) => ({
-    components: {AntTable, AntSwitch, AntCheckboxGroup},
+    components: {
+      AntTable,
+      AntSwitch,
+      AntCheckboxGroup,
+    },
     setup() {
       const selected = ref();
 
-      const checkboxes = [{
-        label: 'Read',
-        value: 'read'
-      }, {
-        label: 'Write',
-        value: 'write'
-      }];
+      const checkboxes = [
+        {
+          label: 'Read',
+          value: 'read',
+        },
+        {
+          label: 'Write',
+          value: 'write',
+        },
+      ];
 
-      return {args, selected, checkboxes};
+      return {
+        args,
+        selected,
+        checkboxes,
+      };
     },
     template: `
       <div class="h-96 border border-dashed border-base-300">
@@ -426,19 +525,30 @@ export const Collapsible: Story = {
 
 export const MultipleCollapseStrategy: Story = {
   render: (args) => ({
-    components: {AntTable, AntSwitch, AntCheckboxGroup},
+    components: {
+      AntTable,
+      AntSwitch,
+      AntCheckboxGroup,
+    },
     setup() {
       const selected = ref();
 
-      const checkboxes = [{
-        label: 'Read',
-        value: 'read'
-      }, {
-        label: 'Write',
-        value: 'write'
-      }];
+      const checkboxes = [
+        {
+          label: 'Read',
+          value: 'read',
+        },
+        {
+          label: 'Write',
+          value: 'write',
+        },
+      ];
 
-      return {args, selected, checkboxes};
+      return {
+        args,
+        selected,
+        checkboxes,
+      };
     },
     template: `
       <div class="h-96 border border-dashed border-base-300">
@@ -469,24 +579,41 @@ export const MultipleCollapseStrategy: Story = {
 
 export const DefaultCollapseOpen: Story = {
   render: (args) => ({
-    components: {AntTable, AntSwitch, AntCheckboxGroup, AntButton},
+    components: {
+      AntTable,
+      AntSwitch,
+      AntCheckboxGroup,
+      AntButton,
+    },
     setup() {
       const selected = ref();
       const data = ref(args.data.splice(0,5));
 
-      const checkboxes = [{
-        label: 'Read',
-        value: 'read'
-      }, {
-        label: 'Write',
-        value: 'write'
-      }];
+      const checkboxes = [
+        {
+          label: 'Read',
+          value: 'read',
+        },
+        {
+          label: 'Write',
+          value: 'write',
+        },
+      ];
 
       function addRandomEntry() {
-        data.value = [...data.value, getRandomEntry()];
+        data.value = [
+          ...data.value,
+          getRandomEntry(),
+        ];
       }
 
-      return {args, data, selected, checkboxes, addRandomEntry};
+      return {
+        args,
+        data,
+        selected,
+        checkboxes,
+        addRandomEntry,
+      };
     },
     template: `
       <div class="h-96 border border-dashed border-base-300 flex flex-col gap-2">

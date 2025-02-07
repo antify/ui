@@ -1,9 +1,9 @@
 <script setup lang="ts">
 withDefaults(defineProps<{
-  padding?: boolean
+  padding?: boolean;
 }>(), {
-  padding: true
-})
+  padding: true,
+});
 </script>
 
 <template>
@@ -11,6 +11,6 @@ withDefaults(defineProps<{
     :class="{ 'p-2.5': padding }"
     class="bg-white overflow-auto"
   >
-    <slot/>
+    <slot />
   </div>
 </template>

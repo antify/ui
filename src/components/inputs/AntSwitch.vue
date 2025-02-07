@@ -1,11 +1,22 @@
 <script setup lang="ts">
 import AntField from '../forms/AntField.vue';
-import {computed, watch} from 'vue';
+import {
+  computed, watch,
+} from 'vue';
 import AntSkeleton from '../AntSkeleton.vue';
-import {InputState, Size} from '../../enums';
-import {hasSlotContent} from '../../utils';
+import {
+  InputState, Size,
+} from '../../enums';
+import {
+  hasSlotContent,
+} from '../../utils';
 
-const emit = defineEmits(['update:modelValue', 'input', 'blur', 'validate']);
+const emit = defineEmits([
+  'update:modelValue',
+  'input',
+  'blur',
+  'validate',
+]);
 const props = withDefaults(defineProps<{
   modelValue: boolean | null;
   label?: string;
@@ -14,35 +25,37 @@ const props = withDefaults(defineProps<{
   readonly?: boolean;
   disabled?: boolean;
   size?: Size;
-  state?: InputState
-  messages?: string[]
+  state?: InputState;
+  messages?: string[];
 }>(), {
   size: Size.md,
   state: InputState.base,
-  messages: () => []
+  messages: () => [],
 });
 const _value = computed({
   get: () => props.modelValue,
   set: (val: boolean | null) => {
     emit('update:modelValue', val);
     emit('input', val);
-  }
+  },
 });
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const buttonClasses = computed(() => {
-  const classes: { [key: string]: boolean } = {
-    'relative inline-flex flex-shrink-0': true,
-    'focus:outline-none': true,
+  const classes: {
+    [key: string]: boolean;
+  } = {
+    'relative inline-flex shrink-0': true,
+    'focus:outline-hidden': true,
     'rounded-full ease-in-out duration-200': true,
     'focus-within:ring-4': !hasInputState.value && (props.size === Size.lg || props.size === Size.md),
     'focus-within:ring-2': !hasInputState.value && (props.size === Size.sm || props.size === Size.xs || props.size === Size.xs2),
     'h-5 w-9': props.size === Size.lg || props.size === Size.md || props.size === Size.sm,
     'h-4 w-[30px]': props.size === Size.xs || props.size === Size.xs2,
     'bg-base-300': !_value.value,
-    'invisible': props.skeleton,
+    invisible: props.skeleton,
     // Disabled
     'opacity-50 cursor-not-allowed': props.disabled,
-    'cursor-default': props.readonly
+    'cursor-default': props.readonly,
   };
   const colorVariant = {
     [InputState.base]: 'focus-within:ring-primary-200',
@@ -65,14 +78,14 @@ const buttonClasses = computed(() => {
   return classes;
 });
 const ballClasses = computed(() => ({
-  'pointer-events-none inline-block rounded-full bg-base-100 shadow transform ring-0 transition ease-in-out duration-200': true,
+  'pointer-events-none inline-block rounded-full bg-base-100 shadow-sm transform ring-0 transition ease-in-out duration-200': true,
   'h-4 w-4 translate-y-0.5': props.size === Size.lg || props.size === Size.md || props.size === Size.sm,
   'translate-x-[1.125rem]': _value.value && (props.size === Size.lg || props.size === Size.md || props.size === Size.sm),
   'translate-x-0.5': !_value.value && (props.size === Size.lg || props.size === Size.md || props.size === Size.sm),
   'h-3.5 w-3.5  translate-y-[1px]': props.size === Size.xs || props.size === Size.xs2,
   'translate-x-[.925rem]': _value.value && (props.size === Size.xs || props.size === Size.xs2),
   'translate-x-[1px]': !_value.value && (props.size === Size.xs || props.size === Size.xs2),
-  'invisible': props.skeleton
+  invisible: props.skeleton,
 }));
 const valueClasses = computed(() => ({
   'text-for-white-bg-font': true,
@@ -111,7 +124,11 @@ watch(() => props.skeleton, (val) => {
   }
 });
 watch(_value, () => {
-  if ([InputState.danger, InputState.info, InputState.warning].includes(props.state)) {
+  if ([
+    InputState.danger,
+    InputState.info,
+    InputState.warning,
+  ].includes(props.state)) {
     emit('validate', props.modelValue);
   }
 });
@@ -156,7 +173,7 @@ function onBlur(e: FocusEvent) {
             aria-hidden="true"
             :class="ballClasses"
           >
-            <slot name="icon"/>
+            <slot name="icon" />
           </span>
         </button>
 
@@ -173,7 +190,7 @@ function onBlur(e: FocusEvent) {
         :class="props.size === Size.lg || props.size === Size.md ||props.size === Size.sm ? 'h-5' : 'h-4'"
       >
         <span :class="valueClasses">
-          <slot/>
+          <slot />
         </span>
 
         <AntSkeleton

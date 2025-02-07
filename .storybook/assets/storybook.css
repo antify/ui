@@ -1,3 +1,5 @@
+@import '../../src/index.css';
+
 /** Used for placeholder slots */
 .slot {
   @apply p-2.5 rounded-md border-2 border-dashed border-base-300 flex items-center justify-center text-base-300 font-medium text-2xl;

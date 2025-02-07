@@ -3,4 +3,4 @@ export type AntCheckboxType = {
   value: string;
   disabled?: boolean;
   readonly?: boolean;
-}
+};

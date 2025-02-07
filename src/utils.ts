@@ -1,5 +1,9 @@
-import type {Slot, VNode} from 'vue';
-import {Fragment} from 'vue';
+import type {
+  Slot, VNode,
+} from 'vue';
+import {
+  Fragment,
+} from 'vue';
 
 /**
  * Convert html class syntax given as undefined, string ("text-base bg-primary-500") or

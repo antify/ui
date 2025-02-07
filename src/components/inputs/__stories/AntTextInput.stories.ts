@@ -1,34 +1,68 @@
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {Size} from '../../../enums/Size.enum';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  Size,
+} from '../../../enums/Size.enum';
 import AntTextInput from '../AntTextInput.vue';
-import {TextInputType} from '../__types/AntTextInput.types';
-import {InputState} from '../../../enums';
+import {
+  TextInputType,
+} from '../__types/AntTextInput.types';
+import {
+  InputState,
+} from '../../../enums';
 
 const meta: Meta<typeof AntTextInput> = {
   title: 'Inputs/Text Input',
   component: AntTextInput,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     modelValue: {
       control: 'text',
-      table: {type: {summary: 'string|null'}},
+      table: {
+        type: {
+          summary: 'string|null',
+        },
+      },
     },
     state: {
-      control: {type: 'select'},
-      options: Object.values(InputState)
+      control: {
+        type: 'select',
+      },
+      options: Object.values(InputState),
     },
     size: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(Size),
-      table: {defaultValue: {summary: Size.md}},
+      table: {
+        defaultValue: {
+          summary: Size.md,
+        },
+      },
     },
     placeholder: {
-      table: {defaultValue: {summary: 'this.label'}},
+      table: {
+        defaultValue: {
+          summary: 'this.label',
+        },
+      },
     },
     type: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(TextInputType),
-      table: {defaultValue: {summary: TextInputType.text}},
+      table: {
+        defaultValue: {
+          summary: TextInputType.text,
+        },
+      },
     },
   },
 };
@@ -39,9 +73,13 @@ type Story = StoryObj<typeof AntTextInput>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntTextInput},
+    components: {
+      AntTextInput,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
       <AntTextInput
@@ -52,18 +90,25 @@ export const Docs: Story = {
   args: {
     modelValue: null,
     label: 'Label',
-    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod'
+    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
   },
 };
 
 export const Summary: Story = {
   parameters: {
-    chromatic: {disableSnapshot: false},
+    chromatic: {
+      disableSnapshot: false,
+    },
   },
   render: (args) => ({
-    components: {AntTextInput},
+    components: {
+      AntTextInput,
+    },
     setup() {
-      return {args, InputState};
+      return {
+        args,
+        InputState,
+      };
     },
     template: `
       <div class="flex gap-2.5">
@@ -124,6 +169,6 @@ export const Summary: Story = {
   args: {
     modelValue: null,
     label: 'Label',
-    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod'
+    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
   },
 };

@@ -1,22 +1,36 @@
 import AntSaveButton from '../AntSaveButton.vue';
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {Position, Grouped as _Grouped, Size} from '../../../enums';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  Position, Grouped as _Grouped, Size,
+} from '../../../enums';
 
 const meta: Meta<typeof AntSaveButton> = {
   title: 'Components/Buttons/Save Button',
   component: AntSaveButton,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     size: {
-      control: {type: 'select'},
-      options: Object.values(Size)
+      control: {
+        type: 'select',
+      },
+      options: Object.values(Size),
     },
     grouped: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(_Grouped),
     },
     tooltipPosition: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(Position),
     },
   },
@@ -28,14 +42,18 @@ type Story = StoryObj<typeof AntSaveButton>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntSaveButton},
+    components: {
+      AntSaveButton,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: '<AntSaveButton v-bind="args"/>',
   }),
   args: {
-    tooltipPosition: Position.right
+    tooltipPosition: Position.right,
   },
 };
 
@@ -43,7 +61,7 @@ export const IconVariant: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    iconVariant: true
+    iconVariant: true,
   },
 };
 
@@ -51,7 +69,7 @@ export const Disabled: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    disabled: true
+    disabled: true,
   },
 };
 
@@ -59,7 +77,7 @@ export const Grouped: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    grouped: _Grouped.left
+    grouped: _Grouped.left,
   },
 };
 
@@ -67,7 +85,7 @@ export const Skeleton: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    skeleton: true
+    skeleton: true,
   },
 };
 
@@ -75,7 +93,7 @@ export const Expanded: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    expanded: true
+    expanded: true,
   },
 };
 

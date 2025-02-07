@@ -1,25 +1,43 @@
 import AntInputLabel from '../AntInputLabel.vue';
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {Size} from '../../../../enums/Size.enum';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  Size,
+} from '../../../../enums/Size.enum';
 import AntBaseInput from '../AntBaseInput.vue';
 
 const meta: Meta<typeof AntInputLabel> = {
   title: 'Inputs/Elements/Ant Input Label',
   component: AntInputLabel,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     label: {
-      control: 'text'
+      control: 'text',
     },
     size: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(Size),
-      table: {defaultValue: {summary: Size.md}},
+      table: {
+        defaultValue: {
+          summary: Size.md,
+        },
+      },
     },
     skeleton: {
       control: 'boolean',
-      table: {defaultValue: {summary: false}},
-    }
+      table: {
+        defaultValue: {
+          summary: false,
+        },
+      },
+    },
   },
 };
 
@@ -30,25 +48,34 @@ type Story = StoryObj<typeof AntInputLabel>;
 // More on component templates: https://storybook.js.org/docs/vue/writing-stories/introduction#using-args
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntInputLabel},
-    setup: () => ({args}),
+    components: {
+      AntInputLabel,
+    },
+    setup: () => ({
+      args,
+    }),
     template: '<div class="p-4"><AntInputLabel v-bind="args"></AntInputLabel></div>',
   }),
   args: {
-    label: 'Label'
+    label: 'Label',
   },
 };
 
 export const WithContent: Story = {
   render: (args) => ({
-    components: {AntInputLabel, AntBaseInput},
+    components: {
+      AntInputLabel,
+      AntBaseInput,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: '<div class="p-4"><AntInputLabel v-bind="args"><AntBaseInput value="Example" :size="args.size"></AntBaseInput></AntInputLabel></div>',
   }),
   args: {
     ...Docs.args,
-    label: 'Label'
+    label: 'Label',
   },
 };

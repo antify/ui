@@ -1,6 +1,6 @@
 <script setup lang="ts">
 withDefaults(defineProps<{
-  showDetail?: boolean,
+  showDetail?: boolean;
 }>(), {
   showDetail: false,
 });
@@ -16,15 +16,15 @@ withDefaults(defineProps<{
       :class="{'w-[40rem]': showDetail, 'w-full': !showDetail}"
     >
       <div class="bg-white">
-        <slot name="search-section"/>
+        <slot name="search-section" />
       </div>
 
-      <div class="bg-white flex-grow h-px overflow-hidden">
-        <slot name="table-section"/>
+      <div class="bg-white grow h-px overflow-hidden">
+        <slot name="table-section" />
       </div>
 
       <div class="bg-white">
-        <slot name="table-nav-section"/>
+        <slot name="table-nav-section" />
       </div>
     </div>
 
@@ -34,7 +34,7 @@ withDefaults(defineProps<{
         class="flex flex-col gap-px border-l border-base-300 overflow-hidden"
         :class="{'w-full': showDetail}"
       >
-        <slot/>
+        <slot />
       </div>
     </Transition>
   </div>

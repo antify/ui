@@ -1,46 +1,63 @@
 <script lang="ts" setup>
-import {AntField} from './Elements';
-import {InputState, Size} from '../../enums';
+import {
+  AntField,
+} from './Elements';
+import {
+  InputState, Size,
+} from '../../enums';
 import AntSkeleton from '../AntSkeleton.vue';
-import {computed, onMounted, watch} from 'vue';
-import {type AntRadioTypes} from './__types/AntRadio.types';
-import {handleEnumValidation} from '../../handler';
+import {
+  computed, onMounted, watch,
+} from 'vue';
+import {
+  type AntRadioTypes,
+} from './__types/AntRadio.types';
+import {
+  handleEnumValidation,
+} from '../../handler';
 
-defineOptions({inheritAttrs: false});
+defineOptions({
+  inheritAttrs: false,
+});
 
-const emit = defineEmits(['update:modelValue', 'update:skeleton', 'validate', 'blur']);
-const props = withDefaults(
-  defineProps<{
-    modelValue: string | null;
-    value: AntRadioTypes;
-    description?: string;
-    skeleton?: boolean;
-    state?: InputState;
-    size?: Size;
-    readonly?: boolean;
-    disabled?: boolean;
-    messages?: string[];
-  }>(), {
-    state: InputState.base,
-    size: Size.md,
-    readonly: false,
-    disabled: false,
-    messages: () => []
-  }
-);
+const emit = defineEmits([
+  'update:modelValue',
+  'update:skeleton',
+  'validate',
+  'blur',
+]);
+const props = withDefaults(defineProps<{
+  modelValue: string | null;
+  value: AntRadioTypes;
+  description?: string;
+  skeleton?: boolean;
+  state?: InputState;
+  size?: Size;
+  readonly?: boolean;
+  disabled?: boolean;
+  messages?: string[];
+}>(), {
+  state: InputState.base,
+  size: Size.md,
+  readonly: false,
+  disabled: false,
+  messages: () => [],
+});
 const _modelValue = computed({
   get(): string | null | AntRadioTypes {
     return props.modelValue;
   },
   set(val: string | null | AntRadioTypes) {
     emit('update:modelValue', val ? typeof val === 'string' ? val : val.value : null);
-  }
+  },
 });
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const isActive = computed(() => _modelValue.value === props.value.value);
 const inputClasses = computed(() => {
-  const classes: { [key: string]: boolean } = {
-    'relative inline-flex flex-shrink-0': true,
+  const classes: {
+    [key: string]: boolean;
+  } = {
+    'relative inline-flex shrink-0': true,
     'focus:ring-offset-0 outline outline-offset-[-1px] outline-1 focus:outline-offset-[-1px] focus:outline-1 rounded-full': true,
     'flex items-center justify-center rounded-full appearance-none': true,
     'cursor-pointer': !hasInputState.value,
@@ -114,10 +131,16 @@ const innerRadioClass = computed(() => (
  * Validate default value if given after delayed data fetching.
  */
 watch(_modelValue, (val) => {
-  if ([InputState.danger, InputState.warning, InputState.info].includes(props.state)) {
+  if ([
+    InputState.danger,
+    InputState.warning,
+    InputState.info,
+  ].includes(props.state)) {
     emit('validate', val);
   }
-}, {deep: true});
+}, {
+  deep: true,
+});
 watch(() => props.skeleton, (val) => {
   if (!val && props.modelValue !== null) {
     emit('validate', props.modelValue);
@@ -175,7 +198,7 @@ onMounted(() => {
           :aria-checked="isActive"
           :disabled="disabled || readonly"
           @blur="onBlur"
-        />
+        >
 
         <AntSkeleton
           v-if="skeleton"

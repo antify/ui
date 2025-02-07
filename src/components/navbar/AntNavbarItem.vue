@@ -1,18 +1,24 @@
 <script setup lang="ts">
-import type {NavbarItemTypes} from './__types/NavbarItem.types';
-import {computed, ref} from 'vue';
+import type {
+  NavbarItemTypes,
+} from './__types/NavbarItem.types';
+import {
+  computed, ref,
+} from 'vue';
 import AntIcon from '../AntIcon.vue';
-import {faChevronDown, faChevronUp} from '@fortawesome/free-solid-svg-icons';
+import {
+  faChevronDown, faChevronUp,
+} from '@fortawesome/free-solid-svg-icons';
 import AntTransitionCollapseHeight from '../transitions/AntTransitionCollapseHeight.vue';
 
 const props = defineProps<{
-  navbarItem: NavbarItemTypes
+  navbarItem: NavbarItemTypes;
 }>();
 
 const itemClasses = computed(() => ({
   'w-full text-sm p-1.5 rounded-md cursor-pointer flex items-center flex-nowrap gap-1': true,
   'transition-colors hover:bg-base-100': true,
-  'text-primary-500': props.navbarItem.active
+  'text-primary-500': props.navbarItem.active,
 }));
 
 const open = ref(false);
@@ -42,7 +48,7 @@ function itemClick(): void {
       :color="navbarItem.active ? 'text-primary-500' : 'text-for-white-bg-font'"
     />
 
-    <div class="flex-grow select-none">
+    <div class="grow select-none">
       {{ navbarItem.label }}
     </div>
 

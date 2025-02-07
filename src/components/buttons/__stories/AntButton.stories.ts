@@ -1,59 +1,95 @@
 import AntButton from '../AntButton.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
-import {faCaretRight, faCaretLeft} from '@fortawesome/free-solid-svg-icons';
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {Size} from '../../../enums/Size.enum';
-import {Grouped as _Grouped} from '../../../enums/Grouped.enum';
-import {State, InputState, Position} from '../../../enums';
-import {within} from '@storybook/test';
+import {
+  faCaretRight, faCaretLeft,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  Size,
+} from '../../../enums/Size.enum';
+import {
+  Grouped as _Grouped,
+} from '../../../enums/Grouped.enum';
+import {
+  State, InputState, Position,
+} from '../../../enums';
+import {
+  within,
+} from '@storybook/test';
 
 const meta: Meta<typeof AntButton> = {
   component: AntButton,
   title: 'Components/Buttons/Button',
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     state: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(State),
     },
     grouped: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(_Grouped),
       description: 'Where is this fields position in a group',
     },
     size: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(Size),
       description: 'Defines the size of the button',
     },
     iconLeft: {
-      control: {type: 'none'},
+      control: {
+        type: 'none',
+      },
       description:
         'Will be displayed left to the label or the default slot.<br>Use Font-awesome Icons.',
     },
     iconRight: {
-      control: {type: 'none'},
+      control: {
+        type: 'none',
+      },
       description:
         'Will be displayed right to the label or the default slot.<br>Use Font-awesome Icons.',
     },
     to: {
-      control: {type: 'RouteLocationRaw'},
+      control: {
+        type: 'RouteLocationRaw',
+      },
       description: 'If provided transforms the button into an a-tag with the provided link. Style is still the same as a button.',
-      table: {type: {summary: 'string|object'}}
+      table: {
+        type: {
+          summary: 'string|object',
+        },
+      },
     },
     submit: {
       description: 'Change the button type to type="submit"',
     },
     tooltipPosition: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(Position),
-      description: 'The tooltips position. Tooltip is only shown if a tooltip-content slot is provided.'
+      description: 'The tooltips position. Tooltip is only shown if a tooltip-content slot is provided.',
     },
     tooltipState: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(InputState),
-      description: 'The tooltips color type. Tooltip is only shown if a tooltip-content slot is provided.'
+      description: 'The tooltips color type. Tooltip is only shown if a tooltip-content slot is provided.',
     },
   },
 };
@@ -64,9 +100,13 @@ type Story = StoryObj<typeof AntButton>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntButton},
+    components: {
+      AntButton,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: '<AntButton v-bind="args">Button</AntButton>',
   }),
@@ -77,7 +117,7 @@ export const Filled: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    filled: true
+    filled: true,
   },
 };
 
@@ -85,7 +125,7 @@ export const Link: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    to: '/example'
+    to: '/example',
   },
 };
 
@@ -95,13 +135,13 @@ export const Icons: Story = {
     components: {
       AntButton,
       AntFormGroup,
-      AntFormGroupLabel
+      AntFormGroupLabel,
     },
     setup() {
       return {
         args,
         faCaretLeft,
-        faCaretRight
+        faCaretRight,
       };
     },
     template: `
@@ -138,7 +178,7 @@ export const Skeleton: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    skeleton: true
+    skeleton: true,
   },
 };
 
@@ -146,7 +186,7 @@ export const ReadOnly: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    readonly: true
+    readonly: true,
   },
 };
 
@@ -154,7 +194,7 @@ export const Expanded: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    expanded: true
+    expanded: true,
   },
 };
 
@@ -163,15 +203,19 @@ export const WithoutBorder: Story = {
   args: {
     ...Docs.args,
     filled: true,
-    outlined: false
+    outlined: false,
   },
 };
 
 export const WithTooltip: Story = {
   render: (args) => ({
-    components: {AntButton},
+    components: {
+      AntButton,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
 			<AntButton v-bind="args">
@@ -180,7 +224,9 @@ export const WithTooltip: Story = {
 				<template #tooltip-content>This is a button</template>
 			</AntButton>`,
   }),
-  play: async ({canvasElement, step}) => {
+  play: async ({
+    canvasElement, step,
+  }) => {
     const canvas = within(canvasElement);
 
     // await step('Hover over the button, click it and expect not showing the tooltip', async () => {
@@ -215,22 +261,28 @@ export const WithTooltip: Story = {
     tooltipDelay: 800,
   },
   parameters: {
-    chromatic: {disableSnapshot: false},
-  }
+    chromatic: {
+      disableSnapshot: false,
+    },
+  },
 };
 
 export const Summary: Story = {
   parameters: {
-    chromatic: {disableSnapshot: false},
+    chromatic: {
+      disableSnapshot: false,
+    },
   },
   render: (args) => ({
     components: {
       AntButton,
       AntFormGroupLabel,
-      AntFormGroup
+      AntFormGroup,
     },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
 			<div class="flex flex-col gap-2.5">
@@ -355,6 +407,6 @@ export const Summary: Story = {
   }),
   args: {
     iconLeft: faCaretLeft,
-    iconRight: faCaretRight
-  }
+    iconRight: faCaretRight,
+  },
 };

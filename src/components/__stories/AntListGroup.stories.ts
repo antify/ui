@@ -1,12 +1,20 @@
 import AntListGroup from '../AntListGroup.vue';
 import AntListGroupItem from '../AntListGroupItem.vue';
-import {type Meta, type StoryObj} from "@storybook/vue3";
-import {faDownload, faMessage, faUser, faCog} from "@fortawesome/free-solid-svg-icons";
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  faDownload, faMessage, faUser, faCog,
+} from '@fortawesome/free-solid-svg-icons';
 
 const meta: Meta<typeof AntListGroup> = {
   title: 'Components/List Group',
   component: AntListGroup,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {},
 };
 
@@ -16,9 +24,18 @@ type Story = StoryObj<typeof AntListGroup>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntListGroup, AntListGroupItem},
+    components: {
+      AntListGroup,
+      AntListGroupItem,
+    },
     setup() {
-      return {args, faUser, faDownload, faMessage, faCog};
+      return {
+        args,
+        faUser,
+        faDownload,
+        faMessage,
+        faCog,
+      };
     },
     template: `
           <div class="p-4 bg-base-100">
@@ -34,11 +51,10 @@ export const Docs: Story = {
   args: {},
 };
 
-
 export const Skeleton: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    skeleton: true
+    skeleton: true,
   },
 };

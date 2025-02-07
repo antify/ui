@@ -1,16 +1,24 @@
 <script lang="ts" setup>
-import {computed} from 'vue';
+import {
+  computed,
+} from 'vue';
 import AntToast from './AntToast.vue';
-import {CornerPosition} from '../enums/Position.enum';
-import type {Toast} from "../components/__types";
+import {
+  CornerPosition,
+} from '../enums/Position.enum';
+import type {
+  Toast,
+} from '../components/__types';
 
-defineEmits(['close']);
+defineEmits([
+  'close',
+]);
 
 const props = withDefaults(defineProps<{
   position?: CornerPosition;
   toasts: Toast[];
 }>(), {
-  position: CornerPosition.bottomLeft
+  position: CornerPosition.bottomLeft,
 });
 
 const classes = computed(() => ({

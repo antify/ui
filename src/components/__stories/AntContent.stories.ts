@@ -1,10 +1,16 @@
 import AntContent from '../AntContent.vue';
-import {type Meta, type StoryObj} from '@storybook/vue3';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
 
 const meta: Meta<typeof AntContent> = {
   title: 'Components/Content',
   component: AntContent,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {},
 };
 
@@ -14,12 +20,18 @@ type Story = StoryObj<typeof AntContent>;
 
 export const Docs: Story = {
   parameters: {
-    chromatic: {disableSnapshot: false},
+    chromatic: {
+      disableSnapshot: false,
+    },
   },
   render: (args) => ({
-    components: {AntContent},
+    components: {
+      AntContent,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
 			<div class="outline outline-base-300">
@@ -28,5 +40,5 @@ export const Docs: Story = {
 				</AntContent>
 			</div>`,
   }),
-  args: {}
-}
+  args: {},
+};

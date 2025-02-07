@@ -1,13 +1,25 @@
 <script lang="ts" setup>
-import {computed, onMounted, ref} from 'vue';
+import {
+  computed, onMounted, ref,
+} from 'vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
-import {Size} from '../../enums/Size.enum';
-import {handleEnumValidation} from '../../handler';
-import {faSearch} from '@fortawesome/free-solid-svg-icons';
-import {BaseInputType} from './Elements/__types';
+import {
+  Size,
+} from '../../enums/Size.enum';
+import {
+  handleEnumValidation,
+} from '../../handler';
+import {
+  faSearch,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  BaseInputType,
+} from './Elements/__types';
 import AntField from '../forms/AntField.vue';
 
-const emits = defineEmits(['update:modelValue']);
+const emits = defineEmits([
+  'update:modelValue',
+]);
 const props = withDefaults(defineProps<{
   modelValue: string | null;
   label?: string;
@@ -25,7 +37,7 @@ const props = withDefaults(defineProps<{
   readonly: false,
   size: Size.md,
   inputTimeout: 300,
-  placeholder: 'Search'
+  placeholder: 'Search',
 });
 
 const timeout = ref<ReturnType<typeof setTimeout> | null>(null);

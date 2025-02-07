@@ -1,11 +1,15 @@
 <script setup lang="ts">
 
-import {computed} from 'vue';
-import type {NavbarItemTypes} from './__types/NavbarItem.types';
+import {
+  computed,
+} from 'vue';
+import type {
+  NavbarItemTypes,
+} from './__types/NavbarItem.types';
 import AntNavbarItem from './AntNavbarItem.vue';
 
 defineProps<{
-  navbarItems: NavbarItemTypes[]
+  navbarItems: NavbarItemTypes[];
 }>();
 
 const containerClasses = computed(() => ({

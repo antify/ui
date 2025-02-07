@@ -1,12 +1,22 @@
-import {type Meta, type StoryObj} from '@storybook/vue3';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
 import AntTabs from '../../tabs/AntTabs.vue';
 import AntCrudDetailActions from '../AntCrudDetailActions.vue';
 
 const meta: Meta<typeof AntCrudDetailActions> = {
   title: 'Crud/Crud Detail Actions',
   component: AntCrudDetailActions,
-  parameters: {controls: {sort: 'requiredFirst'}},
-  decorators: [() => ({template: '<div class="border border-dashed border-base-300"><story/></div>'})],
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
+  decorators: [
+    () => ({
+      template: '<div class="border border-dashed border-base-300"><story/></div>',
+    }),
+  ],
   argTypes: {},
 };
 
@@ -18,7 +28,7 @@ export const Docs: Story = {
   render: (args) => ({
     components: {
       AntTabs,
-      AntCrudDetailActions
+      AntCrudDetailActions,
     },
     setup() {
       return {
@@ -27,5 +37,5 @@ export const Docs: Story = {
     },
     template: '<AntCrudDetailActions v-bind="args"/>',
   }),
-  args: {}
-}
+  args: {},
+};

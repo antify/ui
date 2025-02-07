@@ -1,30 +1,40 @@
 <script lang="ts" setup>
-import {computed, onMounted, useSlots} from 'vue';
-import {handleEnumValidation} from '../handler';
+import {
+  computed, onMounted, useSlots,
+} from 'vue';
+import {
+  handleEnumValidation,
+} from '../handler';
 import {
   faCheckCircle,
   faCircleQuestion,
   faExclamationCircle,
   faExclamationTriangle,
   faInfoCircle,
-  faXmark
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import AntIcon from './AntIcon.vue';
 import AntTooltip from './AntTooltip.vue';
 import AntSkeleton from './AntSkeleton.vue';
-import {InputState, Position} from '../enums';
-import {IconSize} from './__types';
+import {
+  InputState, Position,
+} from '../enums';
+import {
+  IconSize,
+} from './__types';
 
-defineEmits(['close']);
+defineEmits([
+  'close',
+]);
 
 const props = withDefaults(defineProps<{
-  title?: string | null,
-  state?: InputState,
-  icon?: boolean,
-  expanded?: boolean,
-  questionMarkText?: string | null,
-  skeleton?: boolean,
-  dismissBtn?: boolean,
+  title?: string | null;
+  state?: InputState;
+  icon?: boolean;
+  expanded?: boolean;
+  questionMarkText?: string | null;
+  skeleton?: boolean;
+  dismissBtn?: boolean;
 }>(), {
   title: null,
   state: InputState.base,
@@ -114,7 +124,7 @@ onMounted(() => {
       <div class="flex gap-2">
         <div v-if="hasQuestionMark">
           <slot name="questionMarkText">
-            <AntTooltip >
+            <AntTooltip>
               <template #reference>
                 <AntIcon
                   :icon="faCircleQuestion"
@@ -142,7 +152,7 @@ onMounted(() => {
     </div>
 
     <div v-if="hasDefaultSlot">
-      <slot/>
+      <slot />
     </div>
   </div>
 </template>

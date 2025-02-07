@@ -1,8 +1,14 @@
 <script setup lang="ts">
-import {computed, useSlots} from 'vue';
+import {
+  computed, useSlots,
+} from 'vue';
 import AntNavbar from '../navbar/AntNavbar.vue';
-import type {RouteLocationRaw} from 'vue-router';
-import type {NavbarItemTypes} from '../navbar/__types/NavbarItem.types';
+import type {
+  RouteLocationRaw,
+} from 'vue-router';
+import type {
+  NavbarItemTypes,
+} from '../navbar/__types/NavbarItem.types';
 
 defineProps<{
   navbarItems: NavbarItemTypes[];
@@ -21,7 +27,7 @@ const hasLogoImageSlot = computed(() => useSlots()['logo-image'] || false);
         :to="logoRoute"
         class="bg-white min-h-[60px] flex justify-center items-center p-2.5"
       >
-        <slot name="logo-image"/>
+        <slot name="logo-image" />
       </component>
 
       <AntNavbar
@@ -29,8 +35,8 @@ const hasLogoImageSlot = computed(() => useSlots()['logo-image'] || false);
       />
     </div>
 
-    <div class="w-px flex-grow">
-      <slot/>
+    <div class="w-px grow">
+      <slot />
     </div>
   </div>
 </template>

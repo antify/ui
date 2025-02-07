@@ -1,39 +1,71 @@
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {Size} from '../../../enums/Size.enum';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  Size,
+} from '../../../enums/Size.enum';
 import AntUnitInput from '../AntUnitInput.vue';
-import {faEuroSign} from '@fortawesome/free-solid-svg-icons';
-import {InputState} from '../../../enums';
+import {
+  faEuroSign,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  InputState,
+} from '../../../enums';
 
 const meta: Meta<typeof AntUnitInput> = {
   title: 'Inputs/Unit Input',
   component: AntUnitInput,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     modelValue: {
-      table: {type: {summary: 'number|null'}},
+      table: {
+        type: {
+          summary: 'number|null',
+        },
+      },
     },
     unit: {
       control: 'text',
       description:
         'Will be displayed right to the input.<br>Use text or Font-awesome Icons.',
-      table: {type: {summary: 'string|IconDefinition'}},
+      table: {
+        type: {
+          summary: 'string|IconDefinition',
+        },
+      },
     },
     state: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(InputState),
     },
     size: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(Size),
     },
     placeholder: {
-      table: {defaultValue: {summary: 'this.label'}},
+      table: {
+        defaultValue: {
+          summary: 'this.label',
+        },
+      },
     },
     wrapperClass: {
       control: 'text',
       description:
         'Class for the first element because the attribute "class" would affect the input element.',
-      table: {type: {summary: 'string|object'}},
+      table: {
+        type: {
+          summary: 'string|object',
+        },
+      },
     },
   },
 };
@@ -44,9 +76,13 @@ type Story = StoryObj<typeof AntUnitInput>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntUnitInput},
+    components: {
+      AntUnitInput,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
       <AntUnitInput
@@ -59,7 +95,7 @@ export const Docs: Story = {
     modelValue: null,
     unit: '€',
     label: 'Label',
-    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod'
+    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
   },
 };
 

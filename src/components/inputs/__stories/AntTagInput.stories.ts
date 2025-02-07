@@ -1,10 +1,22 @@
 import AntTagInput from '../AntTagInput.vue';
-import type {Meta, StoryObj} from '@storybook/vue3';
-import {type Ref} from 'vue';
-import {ref} from 'vue';
-import {InputState} from '../../../enums';
-import type {SelectOption} from '../__types';
-import {AntTagInputSize} from '../__types/AntTagInput.types';
+import type {
+  Meta, StoryObj,
+} from '@storybook/vue3';
+import {
+  type Ref,
+} from 'vue';
+import {
+  ref,
+} from 'vue';
+import {
+  InputState,
+} from '../../../enums';
+import type {
+  SelectOption,
+} from '../__types';
+import {
+  AntTagInputSize,
+} from '../__types/AntTagInput.types';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
 
@@ -14,19 +26,35 @@ const meta: Meta<typeof AntTagInput> = {
   argTypes: {
     modelValue: {
       control: 'text',
-      table: {type: {summary: 'string|null'}},
+      table: {
+        type: {
+          summary: 'string|null',
+        },
+      },
     },
     state: {
-      control: {type: 'select'},
-      options: Object.values(InputState)
+      control: {
+        type: 'select',
+      },
+      options: Object.values(InputState),
     },
     size: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(AntTagInputSize),
-      table: {defaultValue: {summary: AntTagInputSize.md}},
+      table: {
+        defaultValue: {
+          summary: AntTagInputSize.md,
+        },
+      },
     },
     placeholder: {
-      table: {defaultValue: {summary: 'this.label'}},
+      table: {
+        defaultValue: {
+          summary: 'this.label',
+        },
+      },
     },
     createCallback: {
       description: 'If allowCreate is true the createCallback needs to be specified. It will be called when the user creates a new tag. It should return a promise that resolves to a SelectOption.',
@@ -39,10 +67,10 @@ item: string - the label of the new tag
 
 Returns:
 Promise<SelectOption> - the new tag as a SelectOption
-          `
-        }
-      }
-    }
+          `,
+        },
+      },
+    },
   },
 };
 
@@ -71,7 +99,9 @@ const options: SelectOption[] = [
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntTagInput},
+    components: {
+      AntTagInput,
+    },
     setup() {
       const value: Ref<string[]> = ref([]);
 
@@ -84,11 +114,11 @@ export const Docs: Story = {
       <div style="width: 360px">
         <AntTagInput v-model="value" v-bind="args"/>
       </div>
-    `
+    `,
   }),
   args: {
-    options
-  }
+    options,
+  },
 };
 
 export const AllowCreate: Story = {
@@ -98,17 +128,27 @@ export const AllowCreate: Story = {
     allowCreate: true,
     createCallback(item: string): Promise<SelectOption> {
       return new Promise((resolve) => {
-        resolve({label: item, value: `${Math.random()}-${item}`});
+        resolve({
+          label: item,
+          value: `${Math.random()}-${item}`,
+        });
       });
     },
-  }
+  },
 };
 
 export const summary: Story = {
   render: (args) => ({
-    components: {AntTagInput, AntFormGroup, AntFormGroupLabel},
+    components: {
+      AntTagInput,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
     setup() {
-      const value: Ref<string[]> = ref(['1', '2']);
+      const value: Ref<string[]> = ref([
+        '1',
+        '2',
+      ]);
       const noValue: Ref<string[]> = ref([]);
 
       return {
@@ -116,7 +156,7 @@ export const summary: Story = {
         value,
         noValue,
         InputState,
-        AntTagInputSize
+        AntTagInputSize,
       };
     },
     template: `
@@ -200,10 +240,9 @@ export const summary: Story = {
         <AntTagInput v-bind="args" v-model="noValue" class="w-48" label="Label" value="Value"
                      description="Lorem ipsum dolor sit amet."/>
       </AntFormGroup>
-    `
+    `,
   }),
   args: {
-    ...Docs.args
-  }
+    ...Docs.args,
+  },
 };
-

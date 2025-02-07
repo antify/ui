@@ -15,7 +15,7 @@ export enum AntTableAlign {
 export enum AntTableSortDirection {
   asc = 'asc',
   desc = 'desc',
-  neutral = 'neutral'
+  neutral = 'neutral',
 }
 
 export type TableHeader = {
@@ -38,5 +38,5 @@ export type TableHeader = {
 export enum AntTableSize {
   lg = 'lg',
   md = 'md',
-  sm = 'sm'
+  sm = 'sm',
 }

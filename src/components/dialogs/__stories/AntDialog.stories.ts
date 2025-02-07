@@ -1,34 +1,57 @@
 import AntDialog from '../AntDialog.vue';
-import {type Meta, type StoryObj} from '@storybook/vue3';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
 import AntButton from '../../buttons/AntButton.vue';
-import {InputState} from '../../../enums';
+import {
+  InputState,
+} from '../../../enums';
 
 const meta: Meta<typeof AntDialog> = {
   title: 'Components/Dialogs/Dialog',
   component: AntDialog,
-  parameters: {controls: {sort: 'requiredFirst'}},
-  decorators: [() => ({template: '<div class="border border-dashed border-base-300"><story/></div>'})],
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
+  decorators: [
+    () => ({
+      template: '<div class="border border-dashed border-base-300"><story/></div>',
+    }),
+  ],
   argTypes: {
     state: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(InputState),
     },
     title: {
       control: 'text',
-      table: {type: {summary: 'string|null'}},
-    }
-  }
+      table: {
+        type: {
+          summary: 'string|null',
+        },
+      },
+    },
+  },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof AntDialog>
+type Story = StoryObj<typeof AntDialog>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntDialog, AntButton},
+    components: {
+      AntDialog,
+      AntButton,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
       <div
@@ -57,10 +80,10 @@ export const Docs: Story = {
           dolore
         </AntDialog>
       </div>
-    `
+    `,
   }),
   args: {
     open: false,
-    title: 'Lorem ipsum dolor'
+    title: 'Lorem ipsum dolor',
   },
 };

@@ -13,53 +13,75 @@
  * TODO:: if the dropdown is open and the user types something, the element with a matching value should be focused.
  */
 import AntField from '../forms/AntField.vue';
-import {type SelectOption} from './__types/AntSelect.types';
-import {computed, onMounted, ref, watch} from 'vue';
-import {Size} from '../../enums/Size.enum';
-import {handleEnumValidation} from '../../handler';
-import {Grouped} from '../../enums/Grouped.enum';
+import {
+  type SelectOption,
+} from './__types/AntSelect.types';
+import {
+  computed, onMounted, ref, watch,
+} from 'vue';
+import {
+  Size,
+} from '../../enums/Size.enum';
+import {
+  handleEnumValidation,
+} from '../../handler';
+import {
+  Grouped,
+} from '../../enums/Grouped.enum';
 import AntIcon from '../AntIcon.vue';
-import {faChevronDown, faChevronUp, faMultiply} from '@fortawesome/free-solid-svg-icons';
+import {
+  faChevronDown, faChevronUp, faMultiply,
+} from '@fortawesome/free-solid-svg-icons';
 import AntSkeleton from '../AntSkeleton.vue';
-import {vOnClickOutside} from '@vueuse/components';
+import {
+  vOnClickOutside,
+} from '@vueuse/components';
 import AntButton from '../buttons/AntButton.vue';
-import {State, InputState} from '../../enums';
-import {IconSize} from '../__types';
+import {
+  State, InputState,
+} from '../../enums';
+import {
+  IconSize,
+} from '../__types';
 import AntSelectMenu from './Elements/AntSelectMenu.vue';
 
-defineOptions({inheritAttrs: false});
+defineOptions({
+  inheritAttrs: false,
+});
 
-const props = withDefaults(
-  defineProps<{
-    modelValue: string | number | null;
-    options: SelectOption[];
-    label?: string;
-    description?: string;
-    placeholder?: string;
-    size?: Size;
-    state?: InputState;
-    disabled?: boolean;
-    readonly?: boolean;
-    skeleton?: boolean;
-    nullable?: boolean;
-    grouped?: Grouped;
-    name?: string;
-    wrapperClass?: string | Record<string, boolean>;
-    expanded?: boolean;
-    messages?: string[]
-  }>(), {
-    state: InputState.base,
-    grouped: Grouped.none,
-    size: Size.md,
-    disabled: false,
-    readonly: false,
-    skeleton: false,
-    nullable: false,
-    expanded: true,
-    messages: () => []
-  }
-);
-const emit = defineEmits(['update:modelValue', 'blur', 'validate']);
+const props = withDefaults(defineProps<{
+  modelValue: string | number | null;
+  options: SelectOption[];
+  label?: string;
+  description?: string;
+  placeholder?: string;
+  size?: Size;
+  state?: InputState;
+  disabled?: boolean;
+  readonly?: boolean;
+  skeleton?: boolean;
+  nullable?: boolean;
+  grouped?: Grouped;
+  name?: string;
+  wrapperClass?: string | Record<string, boolean>;
+  expanded?: boolean;
+  messages?: string[];
+}>(), {
+  state: InputState.base,
+  grouped: Grouped.none,
+  size: Size.md,
+  disabled: false,
+  readonly: false,
+  skeleton: false,
+  nullable: false,
+  expanded: true,
+  messages: () => [],
+});
+const emit = defineEmits([
+  'update:modelValue',
+  'blur',
+  'validate',
+]);
 const isOpen = ref(false);
 const _modelValue = computed({
   get: () => props.modelValue,
@@ -83,7 +105,7 @@ const inputClasses = computed(() => {
     'outline-offset-[-1px] outline-1 focus:outline-offset-[-1px] focus:outline-1': true,
     [variants[props.state]]: true,
     // Skeleton
-    'invisible': props.skeleton,
+    invisible: props.skeleton,
     // Disabled
     'disabled:opacity-50 disabled:cursor-not-allowed': true,
     // Size
@@ -127,7 +149,9 @@ const arrowClasses = computed(() => {
     [InputState.danger]: 'text-danger-100-font',
   };
 
-  return {[variants[props.state]]: true};
+  return {
+    [variants[props.state]]: true,
+  };
 });
 const skeletonGrouped = computed(() => {
   if (!props.nullable || (props.nullable && _modelValue.value === null)) {
@@ -146,7 +170,7 @@ const iconSize = computed(() => {
   }
 
   return IconSize.xs;
-})
+});
 const inputRef = ref<HTMLElement | null>(null);
 const dropDownRef = ref<HTMLElement | null>(null);
 const focusedDropDownItem = ref<string | number | null>(null);
@@ -260,51 +284,51 @@ function onClickRemoveButton() {
           :close-on-enter="true"
           @select-element="(e) => _modelValue = e"
         >
-        <!-- Input -->
-        <div
-          :class="inputClasses"
-          ref="inputRef"
-          :tabindex="disabled || readonly ? -1 : 0"
-          v-bind="$attrs"
-          @mousedown="onClickSelectInput"
-          @click="() => inputRef?.focus()"
-          @blur="onBlur"
-        >
+          <!-- Input -->
           <div
-            v-if="_modelValue === null && placeholder !== undefined"
-            :class="placeholderClasses"
+            ref="inputRef"
+            :class="inputClasses"
+            :tabindex="disabled || readonly ? -1 : 0"
+            v-bind="$attrs"
+            @mousedown="onClickSelectInput"
+            @click="() => inputRef?.focus()"
+            @blur="onBlur"
           >
-            {{ placeholder }}
+            <div
+              v-if="_modelValue === null && placeholder !== undefined"
+              :class="placeholderClasses"
+            >
+              {{ placeholder }}
+            </div>
+
+            <div
+              v-else-if="_modelValue === null && label !== undefined"
+              :class="placeholderClasses"
+            >
+              {{ label }}
+            </div>
+
+            <div
+              v-else
+              class="select-none text-ellipsis overflow-hidden whitespace-nowrap w-full text-black"
+            >
+              {{ valueLabel }}
+            </div>
+
+            <AntIcon
+              v-if="isOpen"
+              :icon="faChevronUp"
+              :size="iconSize"
+              :class="arrowClasses"
+            />
+
+            <AntIcon
+              v-else
+              :icon="faChevronDown"
+              :size="iconSize"
+              :class="arrowClasses"
+            />
           </div>
-
-          <div
-            v-else-if="_modelValue === null && label !== undefined"
-            :class="placeholderClasses"
-          >
-            {{ label }}
-          </div>
-
-          <div
-            v-else
-            class="select-none text-ellipsis overflow-hidden whitespace-nowrap w-full text-black"
-          >
-            {{ valueLabel }}
-          </div>
-
-          <AntIcon
-            v-if="isOpen"
-            :icon="faChevronUp"
-            :size="iconSize"
-            :class="arrowClasses"
-          />
-
-          <AntIcon
-            v-else
-            :icon="faChevronDown"
-            :size="iconSize"
-            :class="arrowClasses"
-          />
-        </div>
         </AntSelectMenu>
       </div>
 

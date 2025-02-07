@@ -3,19 +3,27 @@
 import AntSearch from '../inputs/AntSearch.vue';
 import AntCreateButton from '../buttons/AntCreateButton.vue';
 import AntDropdown from '../AntDropdown.vue';
-import {computed, ref, watch} from 'vue';
+import {
+  computed, ref, watch,
+} from 'vue';
 import AntButton from '../buttons/AntButton.vue';
-import {faFilter, faMultiply} from '@fortawesome/free-solid-svg-icons';
-import {State, Grouped, Position} from '../../enums';
-import {useRoute, useRouter} from 'vue-router';
+import {
+  faFilter, faMultiply,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  State, Grouped, Position,
+} from '../../enums';
+import {
+  useRoute, useRouter,
+} from 'vue-router';
 
 const props = withDefaults(defineProps<{
-  fullWidth?: boolean,
-  showFilter?: boolean,
-  searchQuery?: string,
-  hasFilter?: boolean,
-  canCreate?: boolean,
-  skeleton?: boolean,
+  fullWidth?: boolean;
+  showFilter?: boolean;
+  searchQuery?: string;
+  hasFilter?: boolean;
+  canCreate?: boolean;
+  skeleton?: boolean;
 }>(), {
   fullWidth: true,
   showFilter: true,
@@ -24,7 +32,11 @@ const props = withDefaults(defineProps<{
   canCreate: true,
   skeleton: false,
 });
-const emit = defineEmits(['search', 'create', 'removeFilter']);
+const emit = defineEmits([
+  'search',
+  'create',
+  'removeFilter',
+]);
 const router = useRouter();
 const route = useRoute();
 
@@ -35,7 +47,7 @@ const search = computed({
   set: (value) => {
     const query = {
       ...route.query,
-      [props.searchQuery]: value
+      [props.searchQuery]: value,
     };
 
     if (!value) {
@@ -45,12 +57,12 @@ const search = computed({
     (async () => {
       await router.replace({
         ...route,
-        query
+        query,
       });
 
       emit('search', value);
     })();
-  }
+  },
 });
 
 watch(() => props.fullWidth, (val) => {
@@ -66,8 +78,8 @@ watch(() => props.fullWidth, (val) => {
     data-e2e="crud-table-filter"
   >
     <div
-      class="flex gap-2.5 flex-grow"
-      :class="{'flex-grow': !_fullWidth}"
+      class="flex gap-2.5 grow"
+      :class="{'grow': !_fullWidth}"
     >
       <div :class="{'w-80': _fullWidth, 'w-full': !_fullWidth}">
         <AntSearch
@@ -102,7 +114,7 @@ watch(() => props.fullWidth, (val) => {
         </div>
 
         <template #content>
-          <slot name="dropdownContent"/>
+          <slot name="dropdownContent" />
         </template>
       </AntDropdown>
     </div>

@@ -1,17 +1,35 @@
 <script lang="ts" setup>
-import {computed, onMounted, ref} from 'vue';
+import {
+  computed, onMounted, ref,
+} from 'vue';
 import AntField from '../forms/AntField.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
 import AntIcon from '../AntIcon.vue';
-import {Size} from '../../enums/Size.enum';
-import {faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons';
-import {useVModel} from '@vueuse/core';
-import {InputState} from '../../enums';
-import {BaseInputType} from './Elements/__types';
-import {handleEnumValidation} from '../../handler';
-import {IconSize} from '../__types/AntIcon.types';
+import {
+  Size,
+} from '../../enums/Size.enum';
+import {
+  faEye, faEyeSlash,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  useVModel,
+} from '@vueuse/core';
+import {
+  InputState,
+} from '../../enums';
+import {
+  BaseInputType,
+} from './Elements/__types';
+import {
+  handleEnumValidation,
+} from '../../handler';
+import {
+  IconSize,
+} from '../__types/AntIcon.types';
 
-defineOptions({inheritAttrs: false});
+defineOptions({
+  inheritAttrs: false,
+});
 
 const props = withDefaults(defineProps<{
   modelValue: string | null;
@@ -28,9 +46,12 @@ const props = withDefaults(defineProps<{
   disabled: false,
   skeleton: false,
   size: Size.md,
-  messages: () => []
+  messages: () => [],
 });
-const emit = defineEmits(['update:modelValue', 'validate']);
+const emit = defineEmits([
+  'update:modelValue',
+  'validate',
+]);
 const _modelValue = useVModel(props, 'modelValue', emit);
 const isVisible = ref(false);
 const iconSize = computed(() => {

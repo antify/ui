@@ -1,36 +1,53 @@
 <script lang="ts" setup>
 import AntRadio from './AntRadio.vue';
-import {useVModel} from '@vueuse/core';
-import {AntField} from './Elements';
-import {type AntRadioTypes} from './__types/AntRadio.types';
-import {InputState, Size} from '../../enums';
-import {computed, onMounted, ref, watch} from 'vue';
-import {Direction} from '../../enums/Direction.enum';
-import {handleEnumValidation} from '../../handler';
+import {
+  useVModel,
+} from '@vueuse/core';
+import {
+  AntField,
+} from './Elements';
+import {
+  type AntRadioTypes,
+} from './__types/AntRadio.types';
+import {
+  InputState, Size,
+} from '../../enums';
+import {
+  computed, onMounted, ref, watch,
+} from 'vue';
+import {
+  Direction,
+} from '../../enums/Direction.enum';
+import {
+  handleEnumValidation,
+} from '../../handler';
 
-const emit = defineEmits(['update:modelValue', 'update:skeleton', 'validate']);
-const props = withDefaults(
-  defineProps<{
-    modelValue: string | null;
-    radioButtons: AntRadioTypes[];
-    label?: string;
-    description?: string;
-    direction?: Direction;
-    state?: InputState;
-    size?: Size;
-    skeleton?: boolean;
-    disabled?: boolean;
-    readonly?: boolean;
-    messages?: string[];
-  }>(), {
-    direction: Direction.column,
-    state: InputState.base,
-    size: Size.md,
-    skeleton: false,
-    disabled: false,
-    readonly: false,
-    messages: () => []
-  });
+const emit = defineEmits([
+  'update:modelValue',
+  'update:skeleton',
+  'validate',
+]);
+const props = withDefaults(defineProps<{
+  modelValue: string | null;
+  radioButtons: AntRadioTypes[];
+  label?: string;
+  description?: string;
+  direction?: Direction;
+  state?: InputState;
+  size?: Size;
+  skeleton?: boolean;
+  disabled?: boolean;
+  readonly?: boolean;
+  messages?: string[];
+}>(), {
+  direction: Direction.column,
+  state: InputState.base,
+  size: Size.md,
+  skeleton: false,
+  disabled: false,
+  readonly: false,
+  messages: () => [],
+});
 const _modelValue = useVModel(props, 'modelValue', emit);
 const containerClasses = computed(() => ({
   'flex justify-start': true,
@@ -58,12 +75,22 @@ const fieldSize = computed(() => {
 });
 
 watch(_modelValue, (val) => {
-  if ([InputState.danger, InputState.warning, InputState.info].includes(props.state)) {
+  if ([
+    InputState.danger,
+    InputState.warning,
+    InputState.info,
+  ].includes(props.state)) {
     emit('validate', val);
   }
-}, {deep: true});
+}, {
+  deep: true,
+});
 watch(_modelValue, (val) => {
-  if ([InputState.danger, InputState.warning, InputState.info].includes(props.state)) {
+  if ([
+    InputState.danger,
+    InputState.warning,
+    InputState.info,
+  ].includes(props.state)) {
     emit('validate', val);
   }
 });

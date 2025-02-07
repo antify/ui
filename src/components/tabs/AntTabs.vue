@@ -1,10 +1,18 @@
 <script setup lang="ts">
 import AntTabItem from './AntTabItem.vue';
-import {type TabItem} from './__types/AntTabItem.types';
-import {useVModel} from '@vueuse/core';
-import {computed} from 'vue';
+import {
+  type TabItem,
+} from './__types/AntTabItem.types';
+import {
+  useVModel,
+} from '@vueuse/core';
+import {
+  computed,
+} from 'vue';
 
-const emits = defineEmits(['update:modelValue']);
+const emits = defineEmits([
+  'update:modelValue',
+]);
 const props = withDefaults(defineProps<{
   modelValue?: string;
   tabItems?: TabItem[];
@@ -29,8 +37,8 @@ function clickTab(tabItem: TabItem) {
     tabItem.clickHandler();
   }
 
-  if (tabItem.disabled){
-    return
+  if (tabItem.disabled) {
+    return;
   }
 
   currentActive.value = tabItem.id;
@@ -39,21 +47,27 @@ function clickTab(tabItem: TabItem) {
 
 <template>
   <div :class="containerClasses">
-    <div class="flex gap-px bg-base-300 border-l border-r border-base-300 overflow-x-auto" :class="scrollContainerClasses">
-    <slot>
-      <AntTabItem
-        v-for="(tabItem, index) in tabItems"
-        :key="`tab-item-${index}`"
-        v-bind="tabItem"
-        @click="clickTab(tabItem)"
-        :active="currentActive === tabItem.id"
-        :expanded="expanded"
-        :disabled="tabItem.disabled"
-        :skeleton="skeleton"
-      >
-        <slot name="content" v-bind="{item: tabItem, isActive: currentActive === tabItem.id}"></slot>
-      </AntTabItem>
-    </slot>
+    <div
+      class="flex gap-px bg-base-300 border-l border-r border-base-300 overflow-x-auto"
+      :class="scrollContainerClasses"
+    >
+      <slot>
+        <AntTabItem
+          v-for="(tabItem, index) in tabItems"
+          :key="`tab-item-${index}`"
+          v-bind="tabItem"
+          :active="currentActive === tabItem.id"
+          :expanded="expanded"
+          :disabled="tabItem.disabled"
+          :skeleton="skeleton"
+          @click="clickTab(tabItem)"
+        >
+          <slot
+            name="content"
+            v-bind="{item: tabItem, isActive: currentActive === tabItem.id}"
+          />
+        </AntTabItem>
+      </slot>
     </div>
   </div>
 </template>

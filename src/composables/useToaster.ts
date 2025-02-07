@@ -1,20 +1,28 @@
-import {ref} from 'vue';
-import {InputState} from '../enums';
-import {type Toast} from '../components/__types/AntToaster.types';
+import {
+  ref,
+} from 'vue';
+import {
+  InputState,
+} from '../enums';
+import {
+  type Toast,
+} from '../components/__types/AntToaster.types';
 
 export const useToaster = () => {
   const toasts = ref<Toast[]>([]);
 
   return {
     getToasts() {
-      return [...toasts.value].reverse();
+      return [
+        ...toasts.value,
+      ].reverse();
     },
     toast(toast: Toast) {
       const id = `${Date.now()}`;
 
       toasts.value.push({
         ...toast,
-        id
+        id,
       });
 
       setTimeout(() => {
@@ -33,16 +41,28 @@ export const useToaster = () => {
       }
     },
     toastSuccess(message: string) {
-      this.toast({title: message, type: InputState.success});
+      this.toast({
+        title: message,
+        type: InputState.success,
+      });
     },
     toastError(message: string) {
-      this.toast({title: message, type: InputState.danger});
+      this.toast({
+        title: message,
+        type: InputState.danger,
+      });
     },
     toastWarning(message: string) {
-      this.toast({title: message, type: InputState.warning});
+      this.toast({
+        title: message,
+        type: InputState.warning,
+      });
     },
     toastInfo(message: string) {
-      this.toast({title: message, type: InputState.info});
+      this.toast({
+        title: message,
+        type: InputState.info,
+      });
     },
     toastDeleted() {
       // TODO:: translate

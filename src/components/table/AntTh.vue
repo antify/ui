@@ -1,18 +1,22 @@
 <script setup lang="ts">
 
-import {AntTableAlign, AntTableSize, AntTableSortDirection, type TableHeader} from './__types/TableHeader.types';
-import {computed, ref, type Ref} from 'vue';
+import {
+  AntTableAlign, AntTableSize, AntTableSortDirection, type TableHeader,
+} from './__types/TableHeader.types';
+import {
+  computed, ref, type Ref,
+} from 'vue';
 import AntTableSortButton from './AntTableSortButton.vue';
 
-defineEmits(['sort']);
-const props = withDefaults(
-  defineProps<{
-    header: TableHeader
-    size?: AntTableSize
-  }>(), {
-    size: AntTableSize.md
-  }
-);
+defineEmits([
+  'sort',
+]);
+const props = withDefaults(defineProps<{
+  header: TableHeader;
+  size?: AntTableSize;
+}>(), {
+  size: AntTableSize.md,
+});
 
 const headerClasses = computed(() => ({
   [props.header.headerClassList || '']: true,
@@ -22,7 +26,7 @@ const headerClasses = computed(() => ({
   'text-right': props.header.align === AntTableAlign.right,
   'px-2.5 py-0 h-10': props.size === AntTableSize.lg,
   'px-2 py-0 h-9': props.size === AntTableSize.md,
-  'px-1.5 py-0 h-8': props.size === AntTableSize.sm
+  'px-1.5 py-0 h-8': props.size === AntTableSize.sm,
 }));
 
 const cellClasses = computed(() => ({
@@ -41,15 +45,18 @@ const sortDirection: Ref<AntTableSortDirection> = ref(AntTableSortDirection.neut
 function getNewSortDirection(): AntTableSortDirection {
   if (sortDirection.value === AntTableSortDirection.neutral) {
     sortDirection.value = AntTableSortDirection.asc;
+
     return AntTableSortDirection.asc;
   }
 
   if (sortDirection.value === AntTableSortDirection.asc) {
     sortDirection.value = AntTableSortDirection.desc;
+
     return AntTableSortDirection.desc;
   }
 
   sortDirection.value = AntTableSortDirection.neutral;
+
   return AntTableSortDirection.neutral;
 }
 </script>

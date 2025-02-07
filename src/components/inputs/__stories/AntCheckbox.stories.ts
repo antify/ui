@@ -1,21 +1,35 @@
 import AntCheckbox from '../AntCheckbox.vue';
-import {computed, ref} from 'vue';
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {InputState, Size} from '../../../enums';
+import {
+  computed, ref,
+} from 'vue';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  InputState, Size,
+} from '../../../enums';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
 
 const meta: Meta<typeof AntCheckbox> = {
   title: 'Inputs/Checkbox',
   component: AntCheckbox,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     state: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(InputState),
     },
     size: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(Size),
     },
   },
@@ -27,7 +41,9 @@ type Story = StoryObj<typeof AntCheckbox>;
 
 export const Docs: Story = {
   render: (args: any) => ({
-    components: {AntCheckbox},
+    components: {
+      AntCheckbox,
+    },
     setup() {
       const value = computed<boolean>({
         get() {
@@ -36,10 +52,13 @@ export const Docs: Story = {
         set(val) {
           // @ts-ignore
           args.modelValue = val;
-        }
+        },
       });
 
-      return {args, value};
+      return {
+        args,
+        value,
+      };
     },
     template: `
       <div class="m-2">
@@ -52,10 +71,16 @@ export const Docs: Story = {
 
 export const Summary: Story = {
   parameters: {
-    chromatic: {disableSnapshot: false},
+    chromatic: {
+      disableSnapshot: false,
+    },
   },
   render: (args) => ({
-    components: {AntCheckbox, AntFormGroup, AntFormGroupLabel},
+    components: {
+      AntCheckbox,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
     setup() {
       const offValue = ref(false);
       const onValue = ref(true);
@@ -65,7 +90,7 @@ export const Summary: Story = {
         offValue,
         onValue,
         InputState,
-        Size
+        Size,
       };
     },
     template: `
@@ -352,6 +377,6 @@ export const Summary: Story = {
           </AntCheckbox>
         </AntFormGroup>
       </AntFormGroup>
-    `
-  })
+    `,
+  }),
 };

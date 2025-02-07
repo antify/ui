@@ -4,40 +4,52 @@
  * TODO:: test me in storybook through vue router
  * TODO:: fix ts errors
  */
-import {useRouter, useRoute} from 'vue-router';
+import {
+  useRouter, useRoute,
+} from 'vue-router';
 import AntPagination from '../AntPagination.vue';
-import {computed, ref, watch} from 'vue';
+import {
+  computed, ref, watch,
+} from 'vue';
 import AntSelect from '../inputs/AntSelect.vue';
 import AntSkeleton from '../AntSkeleton.vue';
-import {type SelectOption} from '../inputs/__types';
+import {
+  type SelectOption,
+} from '../inputs/__types';
 
-const emit = defineEmits(['changeItemsPerPage', 'changePage']);
+const emit = defineEmits([
+  'changeItemsPerPage',
+  'changePage',
+]);
 const props = withDefaults(
   defineProps<{
-    count: number | null,
-    pageQuery?: string,
-    itemsPerPageQuery?: string,
-    fullWidth?: boolean,
-    validItemsPerPage?: number[],
-    skeleton?: boolean
+    count: number | null;
+    pageQuery?: string;
+    itemsPerPageQuery?: string;
+    fullWidth?: boolean;
+    validItemsPerPage?: number[];
+    skeleton?: boolean;
   }>(),
   {
     pageQuery: 'p',
     itemsPerPageQuery: 'ipp',
     fullWidth: true,
-    validItemsPerPage: () => [20, 50, 100, 200],
-    skeleton: false
-  }
+    validItemsPerPage: () => [
+      20,
+      50,
+      100,
+      200,
+    ],
+    skeleton: false,
+  },
 );
 
 const route = useRoute();
 const router = useRouter();
-const itemsPerPageOptions = computed(() =>
-  props.validItemsPerPage.map(item => ({
-    label: `${item}`,
-    value: item
-  }) as SelectOption)
-);
+const itemsPerPageOptions = computed(() => props.validItemsPerPage.map(item => ({
+  label: `${item}`,
+  value: item,
+}) as SelectOption));
 const page = computed(() => {
   const _page = route.query[props.pageQuery] >= 1 ? Number.parseInt(route.query[props.pageQuery]) : 1;
 
@@ -54,19 +66,21 @@ const itemsPerPage = computed({
       props.validItemsPerPage[0];
   },
   set(val) {
-    const query = {...route.query};
+    const query = {
+      ...route.query,
+    };
     query[props.itemsPerPageQuery] = `${val}`;
     delete query[props.pageQuery];
 
     (async () => {
       await router.push({
         ...route,
-        query
+        query,
       });
 
       emit('changeItemsPerPage', val);
     })();
-  }
+  },
 });
 const fromItems = computed(() => (itemsPerPage.value * (page.value - 1)) + 1);
 const toItems = computed(() => {

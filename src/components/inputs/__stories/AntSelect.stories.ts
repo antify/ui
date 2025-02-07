@@ -1,18 +1,36 @@
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {Size} from '../../../enums/Size.enum';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  Size,
+} from '../../../enums/Size.enum';
 import AntSelect from '../AntSelect.vue';
-import AntDropdown from "../Elements/AntSelectMenu.vue";
-import {computed, onMounted, ref, type Ref} from 'vue';
-import {type SelectOption} from '../__types/AntSelect.types';
-import {InputState} from '../../../enums';
+import AntDropdown from '../Elements/AntSelectMenu.vue';
+import {
+  computed, onMounted, ref, type Ref,
+} from 'vue';
+import {
+  type SelectOption,
+} from '../__types/AntSelect.types';
+import {
+  InputState,
+} from '../../../enums';
 
 const meta: Meta<typeof AntSelect> = {
   title: 'Inputs/Select',
   component: AntSelect,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     modelValue: {
-      table: {type: {summary: 'string|null'}},
+      table: {
+        type: {
+          summary: 'string|null',
+        },
+      },
     },
     options: {
       description: 'List of SelectOptions',
@@ -24,16 +42,28 @@ const meta: Meta<typeof AntSelect> = {
       },
     },
     state: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(InputState),
     },
     size: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(Size),
-      table: {defaultValue: {summary: Size.md}},
+      table: {
+        defaultValue: {
+          summary: Size.md,
+        },
+      },
     },
     placeholder: {
-      table: {defaultValue: {summary: 'this.label'}},
+      table: {
+        defaultValue: {
+          summary: 'this.label',
+        },
+      },
     },
   },
 };
@@ -61,30 +91,39 @@ const options: SelectOption[] = [
   },
 ];
 
-const manySelectOptions: SelectOption[] = [...Array(24).keys()].map((key) => ({
+const manySelectOptions: SelectOption[] = [
+  ...Array(24).keys(),
+].map((key) => ({
   label: `Option ${Number(key) + 1}`,
   value: Number(key) + 1,
 }));
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntSelect, AntDropdown},
+    components: {
+      AntSelect,
+      AntDropdown,
+    },
     setup() {
       const modelValue = computed({
         // @ts-ignore
         get: () => args.modelValue,
         // @ts-ignore
-        set: (val) => args.modelValue = val
+        set: (val) => args.modelValue = val,
       });
-      const scrollContainer: Ref<HTMLElement | undefined> = ref(undefined)
+      const scrollContainer: Ref<HTMLElement | undefined> = ref(undefined);
 
       onMounted(() => {
         if (scrollContainer.value) {
-          scrollContainer.value.scrollTop =  (scrollContainer.value.scrollHeight - scrollContainer.value.clientHeight ) / 2;
+          scrollContainer.value.scrollTop = (scrollContainer.value.scrollHeight - scrollContainer.value.clientHeight ) / 2;
         }
-      })
+      });
 
-      return {args, modelValue, scrollContainer};
+      return {
+        args,
+        modelValue,
+        scrollContainer,
+      };
     },
     template: `
       <div ref="scrollContainer" class="overflow-y-auto h-[100vh] p-2.5 dashed">
@@ -98,7 +137,7 @@ export const Docs: Story = {
     modelValue: null,
     label: 'Label',
     options,
-    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod'
+    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
   },
 };
 
@@ -115,7 +154,7 @@ export const nullable: Story = {
   args: {
     ...Docs.args,
     modelValue: '1',
-    nullable: true
+    nullable: true,
   },
 };
 export const skeleton: Story = {
@@ -123,7 +162,7 @@ export const skeleton: Story = {
   args: {
     ...Docs.args,
     nullable: true,
-    skeleton: true
+    skeleton: true,
   },
 };
 export const disabled: Story = {
@@ -152,7 +191,7 @@ export const withPlaceholder: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    placeholder: 'Lorem ipsum dolor sit amet'
+    placeholder: 'Lorem ipsum dolor sit amet',
   },
 };
 export const ellipsisText: Story = {
@@ -180,17 +219,24 @@ export const ellipsisText: Story = {
   }),
   args: {
     ...Docs.args,
-    nullable: true
+    nullable: true,
   },
 };
 export const summary: Story = {
   parameters: {
-    chromatic: {disableSnapshot: false},
+    chromatic: {
+      disableSnapshot: false,
+    },
   },
   render: (args) => ({
-    components: {AntSelect},
+    components: {
+      AntSelect,
+    },
     setup() {
-      return {args, manySelectOptions};
+      return {
+        args,
+        manySelectOptions,
+      };
     },
     template: `
       <div class="p-4 flex flex-col gap-2.5">
