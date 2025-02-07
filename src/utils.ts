@@ -69,3 +69,16 @@ export function hasSlotContent(slot: Slot<any> | undefined): boolean {
 
   return !isVnodeEmpty(slot());
 }
+
+/**
+ * Returns the amount of decimal places of the given value.
+ * @param value Number to get decimal places from.
+ */
+export function getDecimalPlaces(value: number | string) {
+  const strValue = String(value);
+  const decimalIndex = strValue.indexOf('.');
+
+  if (decimalIndex === -1) return 0;
+
+  return strValue.length - decimalIndex - 1;
+}

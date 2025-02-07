@@ -1,26 +1,29 @@
 <script lang="ts" setup>
-import {computed, onMounted} from 'vue';
+import {computed, onMounted,} from 'vue';
 import AntButton from '../buttons/AntButton.vue';
 import AntField from '../forms/AntField.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
-import {Size} from '../../enums/Size.enum';
-import {faPlus, faMinus} from '@fortawesome/free-solid-svg-icons';
-import {State, InputState} from '../../enums/State.enum';
-import {handleEnumValidation} from '../../handler';
-import {useVModel} from '@vueuse/core';
-import {Grouped} from '../../enums/Grouped.enum';
-import {BaseInputType} from './Elements/__types';
+import {Size,} from '../../enums/Size.enum';
+import {faMinus, faPlus,} from '@fortawesome/free-solid-svg-icons';
+import {InputState, State,} from '../../enums/State.enum';
+import {handleEnumValidation,} from '../../handler';
+import {Grouped,} from '../../enums/Grouped.enum';
+import {BaseInputType,} from './Elements/__types';
 import Big from 'big.js';
+import {getDecimalPlaces} from "../../utils";
+
 Big.RM = Big.roundHalfEven;
 
-defineOptions({inheritAttrs: false});
+defineOptions({
+  inheritAttrs: false,
+});
 
 /**
  * We use a string as the modelValue to ensure that numbers are correctly padded with a trailing 0 instead of cut off (e.g. 0.10 would be converted to 0.1).
  * Additionally, the initial value (if none is given) gets set to "0" with the same amount of decimals as used in the steps.
  */
 const props = withDefaults(defineProps<{
-  modelValue: string | null;
+  modelValue: number | null;
   label?: string;
   placeholder?: string;
   description?: string;
@@ -44,10 +47,25 @@ const props = withDefaults(defineProps<{
   steps: 1,
   limiter: false,
   messages: () => [],
-  indicators: false
+  indicators: false,
 });
-const emit = defineEmits(['update:modelValue', 'validate']);
-const _modelValue = useVModel(props, 'modelValue', emit);
+const emit = defineEmits([
+  'update:modelValue',
+  'validate',
+]);
+
+const _modelValue = computed({
+  get: () => {
+    const modelDecimalPlaces = getDecimalPlaces(props.modelValue || 0);
+    const stepDecimalPlaces = getDecimalPlaces(props.steps);
+    const decimalPlaces = Math.max(modelDecimalPlaces, stepDecimalPlaces);
+
+    return String(new Big(props.modelValue || 0).toFixed(decimalPlaces));
+  },
+  set: (val: string) => {
+    emit('update:modelValue', Number(val));
+  },
+});
 
 const isPrevButtonDisabled = computed(() => {
   if (props.disabled) {
@@ -76,19 +94,6 @@ onMounted(() => {
   handleEnumValidation(props.size, Size, 'size');
   handleEnumValidation(props.state, InputState, 'state');
 });
-
-/**
- * Returns the amount of decimal places of the given value.
- * @param value Number to get decimal places from.
- */
-function getDecimalPlaces(value: number | string) {
-  const strValue = String(value);
-  const decimalIndex = strValue.indexOf('.');
-
-  if (decimalIndex === -1) return 0;
-
-  return strValue.length - decimalIndex - 1;
-}
 
 function subtract() {
   const modelDecimalPlaces = getDecimalPlaces(_modelValue.value || 0);
@@ -154,7 +159,7 @@ function onButtonBlur() {
         v-model.number="_modelValue"
         :type="BaseInputType.number"
         :grouped="indicators ? Grouped.center : Grouped.none"
-        wrapper-class="flex-grow"
+        wrapper-class="grow"
         :state="state"
         :size="size"
         :skeleton="skeleton"

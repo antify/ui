@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-import {onMounted} from 'vue';
+import {computed, onMounted} from 'vue';
 import AntButton from '../buttons/AntButton.vue';
 import AntField from '../forms/AntField.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
 import {Size} from '../../enums/Size.enum';
 import {type IconDefinition} from '@fortawesome/free-solid-svg-icons';
-import {useVModel} from '@vueuse/core';
-import {State, InputState} from '../../enums';
+import {InputState, State} from '../../enums';
 import {Grouped} from '../../enums/Grouped.enum';
 import {BaseInputType} from './Elements/__types';
 import {handleEnumValidation} from '../../handler';
+import Big from "big.js";
 
 defineOptions({inheritAttrs: false});
 
@@ -29,6 +29,7 @@ const props = withDefaults(defineProps<{
   skeleton?: boolean;
   wrapperClass?: string | Record<string, boolean>;
   messages?: string[];
+  decimalPlaces?: number;
 }>(), {
   state: InputState.base,
   disabled: false,
@@ -36,10 +37,19 @@ const props = withDefaults(defineProps<{
   skeleton: false,
   size: Size.md,
   limiter: false,
-  messages: () => []
+  messages: () => [],
+  decimalPlaces: 2,
 });
 const emit = defineEmits(['update:modelValue', 'validate']);
-const _modelValue = useVModel(props, 'modelValue', emit);
+
+const _modelValue = computed({
+  get: () => {
+    return String(new Big(props.modelValue || 0).toFixed(Math.max(0, props.decimalPlaces)));
+  },
+  set: (val: string) => {
+    emit('update:modelValue', Number(val));
+  },
+});
 
 onMounted(() => {
   handleEnumValidation(props.state, InputState, 'state');
@@ -55,7 +65,7 @@ onMounted(() => {
     :description="description"
     :state="state"
     :limiter-max-value="limiter && max !== undefined ? max : undefined"
-    :limiter-value="limiter && _modelValue !== undefined && _modelValue !== null ? _modelValue : undefined"
+    :limiter-value="limiter && _modelValue !== undefined && _modelValue !== null ? Number(_modelValue) : undefined"
     :messages="messages"
   >
     <div
