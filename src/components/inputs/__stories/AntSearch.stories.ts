@@ -1,21 +1,37 @@
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {Size} from '../../../enums/Size.enum';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  Size,
+} from '../../../enums/Size.enum';
 import AntSearch from '../AntSearch.vue';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
-import {ref} from 'vue';
+import {
+  ref,
+} from 'vue';
 
 const meta: Meta<typeof AntSearch> = {
   title: 'Inputs/Search',
   component: AntSearch,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     modelValue: {
       control: 'text',
-      table: {type: {summary: 'string|null'}},
+      table: {
+        type: {
+          summary: 'string|null',
+        },
+      },
     },
     size: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(Size),
     },
     inputTimeout: {
@@ -27,7 +43,11 @@ const meta: Meta<typeof AntSearch> = {
         'Read and write the value into url as urldecoded string. Using the given string as query name.',
     },
     placeholder: {
-      table: {defaultValue: {summary: 'Search'}},
+      table: {
+        defaultValue: {
+          summary: 'Search',
+        },
+      },
     },
   },
 };
@@ -38,9 +58,13 @@ type Story = StoryObj<typeof AntSearch>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntSearch},
+    components: {
+      AntSearch,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
       <AntSearch v-bind="args" v-model="args.modelValue"/>
@@ -55,12 +79,21 @@ export const Docs: Story = {
 
 export const summary: Story = {
   render: (args) => ({
-    components: {AntSearch, AntFormGroup, AntFormGroupLabel},
+    components: {
+      AntSearch,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
     setup() {
       const value = ref('Keyword');
       const noValue = ref('');
 
-      return {args, Size, value, noValue};
+      return {
+        args,
+        Size,
+        value,
+        noValue,
+      };
     },
     template: `
       <AntFormGroup>

@@ -1,9 +1,17 @@
 <script lang="ts" setup>
-import {computed, onMounted} from 'vue';
-import {handleEnumValidation} from '../handler';
-import {type IconDefinition} from '@fortawesome/free-solid-svg-icons';
-import {IconSize} from './__types/AntIcon.types';
-import AntSkeleton from "./AntSkeleton.vue";
+import {
+  computed, onMounted,
+} from 'vue';
+import {
+  handleEnumValidation,
+} from '../handler';
+import {
+  type IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  IconSize,
+} from './__types/AntIcon.types';
+import AntSkeleton from './AntSkeleton.vue';
 
 const props = withDefaults(defineProps<{
   icon: IconDefinition;
@@ -53,6 +61,10 @@ onMounted(() => {
       :icon="icon"
       :class="iconClasses"
     />
-    <AntSkeleton v-if="skeleton" absolute rounded/>
+    <AntSkeleton
+      v-if="skeleton"
+      absolute
+      rounded
+    />
   </span>
 </template>

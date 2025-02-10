@@ -1,14 +1,24 @@
 <script lang="ts" setup>
-import {computed, ref} from 'vue';
-import {InputState} from '../enums';
-import {arrow, autoUpdate, flip, offset, useFloating} from "@floating-ui/vue";
-import {hasSlotContent} from '../utils';
-import {classesToObjectSyntax} from '../utils';
+import {
+  computed, ref,
+} from 'vue';
+import {
+  InputState,
+} from '../enums';
+import {
+  arrow, autoUpdate, flip, offset, useFloating,
+} from '@floating-ui/vue';
+import {
+  hasSlotContent,
+} from '../utils';
+import {
+  classesToObjectSyntax,
+} from '../utils';
 
 const props = withDefaults(defineProps<{
-  state?: InputState,
-  delay?: number,
-  tooltipClasses?: string | Record<string, boolean>
+  state?: InputState;
+  delay?: number;
+  tooltipClasses?: string | Record<string, boolean>;
   disabled?: boolean;
 }>(), {
   state: InputState.base,
@@ -17,46 +27,54 @@ const props = withDefaults(defineProps<{
   disabled: false,
 });
 
-const floatOpen = ref<boolean>(false)
+const floatOpen = ref<boolean>(false);
 const clickLock = ref(false);
 const timeout = ref<number | undefined>();
-const hoverFloat = ref<boolean>(false)
-const hoverReference = ref<boolean>(false)
+const hoverFloat = ref<boolean>(false);
+const hoverReference = ref<boolean>(false);
 
-const reference = ref<HTMLElement | null>(null)
-const floating = ref<HTMLElement | null>(null)
+const reference = ref<HTMLElement | null>(null);
+const floating = ref<HTMLElement | null>(null);
 const floatingArrow = ref<HTMLElement | null>(null);
 
-const {floatingStyles, middlewareData, placement} = useFloating(reference, floating, {
+const {
+  floatingStyles, middlewareData, placement,
+} = useFloating(reference, floating, {
   placement: 'top',
   whileElementsMounted: autoUpdate,
   middleware: [
     offset(() => 16),
     flip({
-      fallbackPlacements: ['bottom', 'left', 'right'],
+      fallbackPlacements: [
+        'bottom',
+        'left',
+        'right',
+      ],
       fallbackAxisSideDirection: 'none',
     }),
-    arrow({element: floatingArrow})
-  ]
+    arrow({
+      element: floatingArrow,
+    }),
+  ],
 });
 const side = computed(() => placement.value.split('-')[0]);
 const staticSide = computed(() => {
   return {
-    top: "bottom",
-    right: "left",
-    bottom: "top",
-    left: "right"
-  }[side.value] as string
-})
+    top: 'bottom',
+    right: 'left',
+    bottom: 'top',
+    left: 'right',
+  }[side.value] as string;
+});
 const arrowTransform = computed(() => {
   if (placement.value === 'bottom') {
-    return 'rotate(0deg)'
+    return 'rotate(0deg)';
   } else if (placement.value === 'top') {
-    return 'rotate(180deg)'
+    return 'rotate(180deg)';
   } else if (placement.value === 'left') {
-    return 'rotate(90deg)'
+    return 'rotate(90deg)';
   } else {
-    return 'rotate(270deg)'
+    return 'rotate(270deg)';
   }
 });
 const svgPathClasses = computed(() => {
@@ -68,7 +86,9 @@ const svgPathClasses = computed(() => {
     [InputState.warning]: 'fill-warning-500 stroke-warning-500',
   };
 
-  return {[variants[props.state]]: true};
+  return {
+    [variants[props.state]]: true,
+  };
 });
 const arrowSvgPathClasses = computed(() => {
   const variants: Record<InputState, string> = {
@@ -79,7 +99,9 @@ const arrowSvgPathClasses = computed(() => {
     [InputState.warning]: 'stroke-warning-500',
   };
 
-  return {[variants[props.state]]: true};
+  return {
+    [variants[props.state]]: true,
+  };
 });
 const contentClasses = computed(() => {
   const variants: Record<InputState, string> = {
@@ -90,11 +112,13 @@ const contentClasses = computed(() => {
     [InputState.warning]: 'text-warning-500-font bg-warning-500 border-warning-500',
   };
 
-  return {[variants[props.state]]: true};
+  return {
+    [variants[props.state]]: true,
+  };
 });
 const _tooltipClasses = computed(() => ({
   'w-max inline-flex shadow-lg text-sm z-[90] rounded-md': true,
-  ...classesToObjectSyntax(props.tooltipClasses)
+  ...classesToObjectSyntax(props.tooltipClasses),
 }));
 
 function onMouseOver() {
@@ -112,7 +136,7 @@ function onMouseLeave() {
 
   timeout.value = setTimeout(() => {
     if (!hoverFloat.value) {
-      floatOpen.value = false
+      floatOpen.value = false;
       clickLock.value = false;
     }
   }, props.delay) as unknown as number;
@@ -129,7 +153,7 @@ function onMouseLeaveTooltip() {
 
   timeout.value = setTimeout(() => {
     if (!hoverReference.value) {
-      floatOpen.value = false
+      floatOpen.value = false;
       clickLock.value = false;
     }
   }, props.delay) as unknown as number;
@@ -154,46 +178,46 @@ function onClick() {
       @mouseleave="() => onMouseLeave()"
       @click="() => onClick()"
     >
-      <slot/>
+      <slot />
     </div>
 
     <teleport to="body">
       <div
         v-if="floatOpen && hasSlotContent($slots.content) && !disabled"
-        :class="_tooltipClasses"
         ref="floating"
+        :class="_tooltipClasses"
         :style="{
-      ...floatingStyles,
-        display: floatOpen
-          ? 'block'
-          : 'none',
+          ...floatingStyles,
+          display: floatOpen
+            ? 'block'
+            : 'none',
         }"
+        data-e2e="tooltip-content"
         @mouseenter="() => onMouseEnterTooltip()"
         @mouseleave="() => onMouseLeaveTooltip()"
-        data-e2e="tooltip-content"
       >
         <div
           class="p-2 rounded-md border"
           :class="contentClasses"
         >
-          <slot name="content"/>
+          <slot name="content" />
         </div>
         <div
-          class="flex items-center justify-center"
           ref="floatingArrow"
+          class="flex items-center justify-center"
           :style="{
-        position: 'absolute',
-        left:
-          middlewareData.arrow?.x != null
-            ? `${middlewareData.arrow.x}px`
-            : '',
-        top:
-          middlewareData.arrow?.y != null
-            ? `${middlewareData.arrow.y}px`
-            : '',
-        [staticSide]: '-2px',
-        transform: arrowTransform
-      }"
+            position: 'absolute',
+            left:
+              middlewareData.arrow?.x != null
+                ? `${middlewareData.arrow.x}px`
+                : '',
+            top:
+              middlewareData.arrow?.y != null
+                ? `${middlewareData.arrow.y}px`
+                : '',
+            [staticSide]: '-2px',
+            transform: arrowTransform
+          }"
         >
           <div
             class="flex items-center justify-center"

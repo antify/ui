@@ -1,24 +1,38 @@
-import {type Meta, type StoryObj} from '@storybook/vue3';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
 import AntCard from '../AntCard.vue';
-import {Size} from '../../enums';
+import {
+  Size,
+} from '../../enums';
 import AntFormGroup from '../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../forms/AntFormGroupLabel.vue';
 
 const meta: Meta<typeof AntCard> = {
   title: 'Components/Card',
   component: AntCard,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     size: {
-      control: {type: 'select'},
-      options: Object.values(Size)
+      control: {
+        type: 'select',
+      },
+      options: Object.values(Size),
     },
     padding: {
-      control: {type: 'boolean'},
+      control: {
+        type: 'boolean',
+      },
     },
     expanded: {
-      control: {type: 'boolean'},
-    }
+      control: {
+        type: 'boolean',
+      },
+    },
   },
 };
 
@@ -28,9 +42,14 @@ type Story = StoryObj<typeof AntCard>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntCard},
+    components: {
+      AntCard,
+    },
     setup() {
-      return {args, Size};
+      return {
+        args,
+        Size,
+      };
     },
     template: `
       <AntCard v-bind="args">
@@ -43,17 +62,26 @@ export const Docs: Story = {
       </AntCard>
     `,
   }),
-  args: {}
+  args: {},
 };
 
 export const Summary: Story = {
   parameters: {
-    chromatic: {disableSnapshot: false},
+    chromatic: {
+      disableSnapshot: false,
+    },
   },
   render: (args) => ({
-    components: {AntCard, AntFormGroup, AntFormGroupLabel},
+    components: {
+      AntCard,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
     setup() {
-      return {args, Size};
+      return {
+        args,
+        Size,
+      };
     },
     template: `
       <AntFormGroup direction="column">
@@ -90,5 +118,5 @@ export const Summary: Story = {
         </AntFormGroup>
       </AntFormGroup>`,
   }),
-  args: {}
+  args: {},
 };

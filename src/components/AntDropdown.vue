@@ -1,26 +1,40 @@
 <script lang="ts" setup>
-import {computed, ref} from 'vue';
-import {classesToObjectSyntax} from '../utils';
-import {vOnClickOutside} from '@vueuse/components';
-import {onKeyStroke} from '@vueuse/core';
-import {autoUpdate, flip, offset, useFloating, shift} from "@floating-ui/vue";
+import {
+  computed, ref,
+} from 'vue';
+import {
+  classesToObjectSyntax,
+} from '../utils';
+import {
+  vOnClickOutside,
+} from '@vueuse/components';
+import {
+  onKeyStroke,
+} from '@vueuse/core';
+import {
+  autoUpdate, flip, offset, useFloating, shift,
+} from '@floating-ui/vue';
 
 const props = withDefaults(defineProps<{
-  showDropdown: boolean,
-  dropdownClasses?: string | Record<string, boolean>,
-  contentPadding?: boolean,
-  isClickable?: boolean,
+  showDropdown: boolean;
+  dropdownClasses?: string | Record<string, boolean>;
+  contentPadding?: boolean;
+  isClickable?: boolean;
 }>(), {
   contentPadding: true,
   dropdownClasses: '',
   isClickable: true,
 });
-const emit = defineEmits(['update:showDropdown']);
+const emit = defineEmits([
+  'update:showDropdown',
+]);
 
-const reference = ref<HTMLElement | null>(null)
-const floating = ref<HTMLElement | null>(null)
+const reference = ref<HTMLElement | null>(null);
+const floating = ref<HTMLElement | null>(null);
 
-const {floatingStyles} = useFloating(reference, floating, {
+const {
+  floatingStyles,
+} = useFloating(reference, floating, {
   transform: false,
   placement: 'bottom-start',
   whileElementsMounted: autoUpdate,
@@ -28,14 +42,16 @@ const {floatingStyles} = useFloating(reference, floating, {
     offset(8),
     shift(),
     flip({
-      fallbackPlacements: ['top-start'],
+      fallbackPlacements: [
+        'top-start',
+      ],
     }),
-  ]
+  ],
 });
 
 const _dropdownClasses = computed(() => ({
   'min-w-[10rem] z-[50]': true,
-  ...classesToObjectSyntax(props.dropdownClasses)
+  ...classesToObjectSyntax(props.dropdownClasses),
 }));
 
 onKeyStroke('Escape', (e: KeyboardEvent) => {
@@ -50,9 +66,11 @@ const onClickOutside = [
     emit('update:showDropdown', false);
   },
   {
-    ignore: [floating]
-  }
-]
+    ignore: [
+      floating,
+    ],
+  },
+];
 </script>
 
 <template>
@@ -62,25 +80,25 @@ const onClickOutside = [
   >
     <div
       ref="reference"
-      class="h-full w-full"
       v-on-click-outside="onClickOutside"
+      class="h-full w-full"
     >
-      <slot/>
+      <slot />
     </div>
 
     <Transition name="bounce">
       <teleport to="body">
         <div
           v-if="showDropdown"
-          :class="_dropdownClasses"
           ref="floating"
+          :class="_dropdownClasses"
           :style="floatingStyles"
         >
           <div
             class="shadow-lg border border-base-300 rounded-md text-sm relative inline-flex flex-col bg-white text-for-white-bg-font w-full overflow-hidden"
             :class="{'p-2': contentPadding}"
           >
-            <slot name="content"/>
+            <slot name="content" />
           </div>
         </div>
       </teleport>

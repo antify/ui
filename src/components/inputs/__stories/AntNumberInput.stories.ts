@@ -1,32 +1,62 @@
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {Size} from '../../../enums/Size.enum';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  Size,
+} from '../../../enums/Size.enum';
 import AntNumberInput from '../AntNumberInput.vue';
-import {InputState} from '../../../enums/State.enum';
-import {ref} from 'vue';
+import {
+  InputState,
+} from '../../../enums/State.enum';
+import {
+  ref,
+} from 'vue';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
 
 const meta: Meta<typeof AntNumberInput> = {
   title: 'Inputs/Number Input',
   component: AntNumberInput,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     modelValue: {
-      control: {type: 'number'},
-      table: {type: {summary: 'number|null'}},
+      control: {
+        type: 'number',
+      },
+      table: {
+        type: {
+          summary: 'number|null',
+        },
+      },
     },
     state: {
-      control: {type: 'select'},
-      options: Object.values(InputState)
+      control: {
+        type: 'select',
+      },
+      options: Object.values(InputState),
     },
     size: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(Size),
-      table: {defaultValue: {summary: Size.md}},
+      table: {
+        defaultValue: {
+          summary: Size.md,
+        },
+      },
     },
     placeholder: {
-      table: {defaultValue: {summary: 'this.label'}},
-    }
+      table: {
+        defaultValue: {
+          summary: 'this.label',
+        },
+      },
+    },
   },
 };
 
@@ -36,29 +66,39 @@ type Story = StoryObj<typeof AntNumberInput>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntNumberInput},
+    components: {
+      AntNumberInput,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
       <AntNumberInput
         v-bind="args"
         v-model="args.modelValue"
-      />`
+      />`,
   }),
   args: {
     modelValue: null,
     steps: 1,
     label: 'Label',
-    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod'
+    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
   },
 };
 
 export const WithIndicators: Story = {
   render: (args) => ({
-    components: {AntNumberInput, AntFormGroup, AntFormGroupLabel},
+    components: {
+      AntNumberInput,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
       <AntFormGroup>
@@ -68,24 +108,35 @@ export const WithIndicators: Story = {
           <AntNumberInput v-bind="args" v-model="args.modelValue" label="Label"
                           description="Lorem ipsum dolor sit amet" :steps="0.0001"/>
         </AntFormGroup>
-      </AntFormGroup>`
+      </AntFormGroup>`,
   }),
   args: {
     ...Docs.args,
-    indicators: true
+    indicators: true,
   },
 };
 
 export const Summary: Story = {
   parameters: {
-    chromatic: {disableSnapshot: false},
+    chromatic: {
+      disableSnapshot: false,
+    },
   },
   render: (args) => ({
-    components: {AntNumberInput, AntFormGroup, AntFormGroupLabel},
+    components: {
+      AntNumberInput,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
     setup() {
       const value = ref(100.50);
 
-      return {args, value, InputState, Size};
+      return {
+        args,
+        value,
+        InputState,
+        Size,
+      };
     },
     template: `
       <AntFormGroup>
@@ -208,9 +259,9 @@ export const Summary: Story = {
                           description="Lorem ipsum dolor sit amet"/>
         </AntFormGroup>
       </AntFormGroup>
-    `
+    `,
   }),
   args: {
     modelValue: null,
-  }
+  },
 };

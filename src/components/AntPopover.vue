@@ -1,30 +1,46 @@
 <script lang="ts" setup>
-import {computed, ref} from 'vue';
-import {Position} from '../enums/Position.enum';
-import {classesToObjectSyntax} from '../utils';
-import {arrow, autoUpdate, flip, offset, useFloating, shift, limitShift} from "@floating-ui/vue";
-import {vOnClickOutside} from '@vueuse/components';
-import {onKeyStroke} from "@vueuse/core";
+import {
+  computed, ref,
+} from 'vue';
+import {
+  Position,
+} from '../enums/Position.enum';
+import {
+  classesToObjectSyntax,
+} from '../utils';
+import {
+  arrow, autoUpdate, flip, offset, useFloating, shift, limitShift,
+} from '@floating-ui/vue';
+import {
+  vOnClickOutside,
+} from '@vueuse/components';
+import {
+  onKeyStroke,
+} from '@vueuse/core';
 
 const props = withDefaults(defineProps<{
-  showPopover: boolean,
-  title?: string,
-  isClickable?: boolean,
-  popoverClasses?: string | Record<string, boolean>
+  showPopover: boolean;
+  title?: string;
+  isClickable?: boolean;
+  popoverClasses?: string | Record<string, boolean>;
 }>(), {
   isClickable: true,
   showPopover: false,
   preferredPosition: Position.top,
-  popoverClasses: ''
+  popoverClasses: '',
 });
 
-const emit = defineEmits(['update:showPopover']);
+const emit = defineEmits([
+  'update:showPopover',
+]);
 
-const reference = ref<HTMLElement | null>(null)
-const floating = ref<HTMLElement | null>(null)
+const reference = ref<HTMLElement | null>(null);
+const floating = ref<HTMLElement | null>(null);
 const floatingArrow = ref<HTMLElement | null>(null);
 
-const {floatingStyles, middlewareData, placement} = useFloating(reference, floating, {
+const {
+  floatingStyles, middlewareData, placement,
+} = useFloating(reference, floating, {
   transform: false,
   placement: 'right',
   whileElementsMounted: autoUpdate,
@@ -34,40 +50,46 @@ const {floatingStyles, middlewareData, placement} = useFloating(reference, float
       limiter: limitShift({
         offset: {
           mainAxis: 62,
-        }
+        },
       }),
     }),
     flip({
-      fallbackPlacements: ['top', 'bottom', 'left'],
+      fallbackPlacements: [
+        'top',
+        'bottom',
+        'left',
+      ],
     }),
-    arrow({element: floatingArrow})
-  ]
+    arrow({
+      element: floatingArrow,
+    }),
+  ],
 });
 
 const side = computed(() => placement.value.split('-')[0]);
 const staticSide = computed(() => {
   return {
-    top: "bottom",
-    right: "left",
-    bottom: "top",
-    left: "right"
-  }[side.value] as string
-})
+    top: 'bottom',
+    right: 'left',
+    bottom: 'top',
+    left: 'right',
+  }[side.value] as string;
+});
 const arrowTransform = computed(() => {
   if (placement.value === 'bottom') {
-    return 'rotate(0deg)'
+    return 'rotate(0deg)';
   } else if (placement.value === 'top') {
-    return 'rotate(180deg)'
+    return 'rotate(180deg)';
   } else if (placement.value === 'left') {
-    return 'rotate(90deg)'
+    return 'rotate(90deg)';
   } else {
-    return 'rotate(270deg)'
+    return 'rotate(270deg)';
   }
 });
 
 const _popoverClasses = computed(() => ({
   'z-[90] min-w-[10rem]': true,
-  ...classesToObjectSyntax(props.popoverClasses)
+  ...classesToObjectSyntax(props.popoverClasses),
 }));
 const itemContainerClasses = computed(() => ({
   'relative flex items-center justify-center': true,
@@ -85,30 +107,31 @@ const onClickOutside = [
     emit('update:showPopover', false);
   },
   {
-    ignore: [floating]
-  }
-]
+    ignore: [
+      floating,
+    ],
+  },
+];
 </script>
 
 <template>
   <div class="relative inline-flex justify-center items-end">
     <div
-      v-on-click-outside="onClickOutside"
       ref="reference"
+      v-on-click-outside="onClickOutside"
     >
-      <slot/>
+      <slot />
     </div>
 
     <Transition name="bounce">
       <template v-if="showPopover">
         <teleport to="body">
           <div
-            :class="_popoverClasses"
             ref="floating"
+            :class="_popoverClasses"
             :style="floatingStyles"
           >
             <div class="shadow-lg border-base-300 rounded-md text-sm relative inline-flex flex-col">
-
               <div
                 class="border-base-300 border-b p-2 bg-base-100 rounded-t-md border-t border-l border-r text-base-100-font font-semibold"
               >
@@ -120,26 +143,26 @@ const onClickOutside = [
               <div
                 class="p-2 rounded-b-md text-for-white-bg-font border-base-300 border-l border-b border-r bg-white"
               >
-                <slot name="content"/>
+                <slot name="content" />
               </div>
             </div>
 
             <div
-              class="flex items-center justify-center"
               ref="floatingArrow"
+              class="flex items-center justify-center"
               :style="{
-            position: 'absolute',
-            left:
-              middlewareData.arrow?.x != null
-                ? `${middlewareData.arrow.x}px`
-                : '',
-            top:
-              middlewareData.arrow?.y != null
-                ? `${middlewareData.arrow.y}px`
-                : '',
-            [staticSide]: '-2.5px',
-            transform: arrowTransform
-            }"
+                position: 'absolute',
+                left:
+                  middlewareData.arrow?.x != null
+                    ? `${middlewareData.arrow.x}px`
+                    : '',
+                top:
+                  middlewareData.arrow?.y != null
+                    ? `${middlewareData.arrow.y}px`
+                    : '',
+                [staticSide]: '-2.5px',
+                transform: arrowTransform
+              }"
             >
               <div
                 :class="itemContainerClasses"

@@ -1,27 +1,49 @@
-import {Grouped as _Grouped} from '../../../enums/Grouped.enum';
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {Size} from '../../../enums/Size.enum';
+import {
+  Grouped as _Grouped,
+} from '../../../enums/Grouped.enum';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  Size,
+} from '../../../enums/Size.enum';
 import AntTextarea from '../AntTextarea.vue';
-import {InputState} from '../../../enums';
+import {
+  InputState,
+} from '../../../enums';
 
 const meta: Meta<typeof AntTextarea> = {
   title: 'Inputs/Textarea',
   component: AntTextarea,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     state: {
-      control: {type: 'select'},
-      options: Object.values(InputState)
+      control: {
+        type: 'select',
+      },
+      options: Object.values(InputState),
     },
     size: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(Size),
     },
     placeholder: {
-      table: {defaultValue: {summary: 'this.label'}},
+      table: {
+        defaultValue: {
+          summary: 'this.label',
+        },
+      },
     },
     grouped: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(_Grouped),
       description: 'Where is this fields position in a group',
     },
@@ -29,13 +51,21 @@ const meta: Meta<typeof AntTextarea> = {
       control: 'text',
       description:
         'Class for the first element because the attribute "class" would affect the input element.',
-      table: {type: {summary: 'string|object'}},
+      table: {
+        type: {
+          summary: 'string|object',
+        },
+      },
     },
     showIcon: {
       control: 'boolean',
       description:
         'Some InputStates can has an icon. Control with this property if it get shown or not.',
-      table: {type: {summary: 'Type'}},
+      table: {
+        type: {
+          summary: 'Type',
+        },
+      },
     },
   },
 };
@@ -46,9 +76,13 @@ type Story = StoryObj<typeof AntTextarea>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntTextarea},
+    components: {
+      AntTextarea,
+    },
     setup: () => {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
       <div class="h-screen">
@@ -62,13 +96,15 @@ export const Docs: Story = {
   args: {
     modelValue: null,
     label: 'Label',
-    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod'
+    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
   },
 };
 
 export const summary: Story = {
   parameters: {
-    chromatic: {disableSnapshot: false},
+    chromatic: {
+      disableSnapshot: false,
+    },
   },
   render: (args, ctx) => ({
     // @ts-ignore

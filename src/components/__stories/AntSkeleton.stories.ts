@@ -1,16 +1,26 @@
 import AntSkeleton from '../AntSkeleton.vue';
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {Grouped as _Grouped} from '../../enums/Grouped.enum';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  Grouped as _Grouped,
+} from '../../enums/Grouped.enum';
 
 const meta: Meta<typeof AntSkeleton> = {
   title: 'Components/Skeleton',
   component: AntSkeleton,
   argTypes: {
     grouped: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(_Grouped),
       description: 'Where is this fields position in a group',
-      table: {defaultValue: {summary: _Grouped.none}},
+      table: {
+        defaultValue: {
+          summary: _Grouped.none,
+        },
+      },
     },
   },
 };
@@ -21,9 +31,13 @@ type Story = StoryObj<typeof AntSkeleton>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntSkeleton},
+    components: {
+      AntSkeleton,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
       <AntSkeleton
@@ -38,7 +52,7 @@ export const Rounded: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    rounded: true
+    rounded: true,
   },
 };
 
@@ -46,6 +60,6 @@ export const Grouped: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    grouped: _Grouped.left
+    grouped: _Grouped.left,
   },
 };

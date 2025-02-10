@@ -1,19 +1,27 @@
 <script lang="ts" setup>
 // TODO:: Fix typo KeyCap with upperchar C
 import AntIcon from './AntIcon.vue';
-import AntSkeleton from "./AntSkeleton.vue";
-import {type IconDefinition} from '@fortawesome/free-solid-svg-icons';
-import {IconSize} from './__types';
-import {AntKeycapSize} from './__types/AntKeycap.types';
-import {computed} from 'vue';
+import AntSkeleton from './AntSkeleton.vue';
+import {
+  type IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  IconSize,
+} from './__types';
+import {
+  AntKeycapSize,
+} from './__types/AntKeycap.types';
+import {
+  computed,
+} from 'vue';
 
 const props = withDefaults(defineProps<{
-  icon?: IconDefinition
-  size?: AntKeycapSize
-  skeleton?: boolean
+  icon?: IconDefinition;
+  size?: AntKeycapSize;
+  skeleton?: boolean;
 }>(), {
   size: AntKeycapSize.sm,
-  skeleton: false
+  skeleton: false,
 });
 
 const classes = computed(() => {
@@ -27,9 +35,9 @@ const classes = computed(() => {
 const iconClasses = computed(() => {
   switch (props.size) {
     case AntKeycapSize.md:
-      return IconSize.md
+      return IconSize.md;
     case AntKeycapSize.sm:
-      return IconSize.sm
+      return IconSize.sm;
     default:
       return IconSize.xs;
   }
@@ -37,14 +45,21 @@ const iconClasses = computed(() => {
 </script>
 
 <template>
-  <div class="inline-flex relative justify-center items-center bg-base-300 rounded-md text-center text-base-300-font font-medium" :class="classes">
-      <AntIcon
+  <div
+    class="inline-flex relative justify-center items-center bg-base-300 rounded-md text-center text-base-300-font font-medium"
+    :class="classes"
+  >
+    <AntIcon
       v-if="icon"
       :icon="icon"
       :size="iconClasses"
-      />
+    />
 
-      <slot v-else/>
-    <AntSkeleton v-if="skeleton" absolute rounded/>
+    <slot v-else />
+    <AntSkeleton
+      v-if="skeleton"
+      absolute
+      rounded
+    />
   </div>
 </template>

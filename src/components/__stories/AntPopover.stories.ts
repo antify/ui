@@ -1,14 +1,21 @@
 import AntPopover from '../AntPopover.vue';
 import AntButton from '../buttons/AntButton.vue';
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {computed, onMounted, ref, type Ref} from 'vue';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  computed, onMounted, ref, type Ref,
+} from 'vue';
 
 const meta: Meta<typeof AntPopover> = {
   title: 'Components/Popover',
   component: AntPopover,
-  parameters: {controls: {sort: 'requiredFirst'}},
-  argTypes: {
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
   },
+  argTypes: {},
 };
 
 export default meta;
@@ -17,27 +24,35 @@ type Story = StoryObj<typeof AntPopover>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntPopover, AntButton},
+    components: {
+      AntPopover,
+      AntButton,
+    },
     setup() {
       const dummyText = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.';
       const showPopover = computed({
         get() {
-          return args.showPopover
+          return args.showPopover;
         },
         set(val) {
           args.showPopover = val;
-        }
+        },
       });
-      const scrollContainer: Ref<HTMLElement | undefined> = ref(undefined)
+      const scrollContainer: Ref<HTMLElement | undefined> = ref(undefined);
 
       onMounted(() => {
         if (scrollContainer.value) {
-          scrollContainer.value.scrollLeft =  (scrollContainer.value.scrollWidth - scrollContainer.value.clientWidth ) / 2;
-          scrollContainer.value.scrollTop =  (scrollContainer.value.scrollHeight - scrollContainer.value.clientHeight ) / 3;
+          scrollContainer.value.scrollLeft = (scrollContainer.value.scrollWidth - scrollContainer.value.clientWidth ) / 2;
+          scrollContainer.value.scrollTop = (scrollContainer.value.scrollHeight - scrollContainer.value.clientHeight ) / 3;
         }
-      })
+      });
 
-      return {args, showPopover, dummyText, scrollContainer};
+      return {
+        args,
+        showPopover,
+        dummyText,
+        scrollContainer,
+      };
     },
     template: `
       <div ref="scrollContainer" class="dashed overflow-scroll" :style="{height: '500px', width: '500px'}">

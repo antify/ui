@@ -1,16 +1,26 @@
 import AntToast from '../AntToast.vue';
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {InputState} from '../../enums';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  InputState,
+} from '../../enums';
 
 const meta: Meta<typeof AntToast> = {
   title: 'Components/Toast',
   component: AntToast,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     state: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(InputState),
-    }
+    },
   },
 };
 
@@ -20,7 +30,9 @@ type Story = StoryObj<typeof AntToast>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntToast},
+    components: {
+      AntToast,
+    },
     setup() {
       function logClick() {
         console.log('Clicked close icon');
@@ -30,7 +42,11 @@ export const Docs: Story = {
         console.log('Clicked undo button');
       }
 
-      return {args, logClick, logUndoClick};
+      return {
+        args,
+        logClick,
+        logUndoClick,
+      };
     },
     template: `
       <div class="p-4">
@@ -46,7 +62,7 @@ export const Docs: Story = {
   }),
   args: {
     title: 'Lorem ipsum dolor',
-    showUndo: true
+    showUndo: true,
   },
 };
 
@@ -71,6 +87,6 @@ export const WithoutContent: Story = {
   }),
   args: {
     ...Docs.args,
-    showUndo: false
+    showUndo: false,
   },
 };

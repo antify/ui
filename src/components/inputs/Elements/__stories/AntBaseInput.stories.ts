@@ -1,60 +1,114 @@
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {Size} from '../../../../enums/Size.enum';
-import {BaseInputType} from '../__types/AntBaseInput.types';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  Size,
+} from '../../../../enums/Size.enum';
+import {
+  BaseInputType,
+} from '../__types/AntBaseInput.types';
 import AntBaseInput from '../AntBaseInput.vue';
 import AntButton from '../../../buttons/AntButton.vue';
 import AntIcon from '../../../AntIcon.vue';
-import {Grouped as _Grouped} from '../../../../enums/Grouped.enum';
-import {faSearch, faEye} from '@fortawesome/free-solid-svg-icons';
-import {InputState} from '../../../../enums';
+import {
+  Grouped as _Grouped,
+} from '../../../../enums/Grouped.enum';
+import {
+  faSearch, faEye,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  InputState,
+} from '../../../../enums';
 import AntFormGroup from '../../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../../forms/AntFormGroupLabel.vue';
-import {Direction} from '../../../../enums/Direction.enum';
+import {
+  Direction,
+} from '../../../../enums/Direction.enum';
 
 const meta: Meta<typeof AntBaseInput> = {
   computed: {
     Direction() {
       return Direction;
-    }
+    },
   },
-  components: {AntFormGroup},
+  components: {
+    AntFormGroup,
+  },
   title: 'Inputs/Elements/Base Input',
   component: AntBaseInput,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     modelValue: {
-      control: {type: 'text'},
-      table: {type: {summary: 'string|number|null'}},
+      control: {
+        type: 'text',
+      },
+      table: {
+        type: {
+          summary: 'string|number|null',
+        },
+      },
     },
     type: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(BaseInputType),
-      table: {defaultValue: {summary: BaseInputType.text}},
+      table: {
+        defaultValue: {
+          summary: BaseInputType.text,
+        },
+      },
     },
     state: {
-      control: {type: 'select'},
-      options: Object.values(InputState)
+      control: {
+        type: 'select',
+      },
+      options: Object.values(InputState),
     },
     size: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(Size),
-      table: {defaultValue: {summary: Size.md}},
+      table: {
+        defaultValue: {
+          summary: Size.md,
+        },
+      },
     },
     placeholder: {
       control: 'text',
-      table: {defaultValue: {summary: 'this.label'}},
+      table: {
+        defaultValue: {
+          summary: 'this.label',
+        },
+      },
     },
     grouped: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(_Grouped),
       description: 'Where is this fields position in a group',
-      table: {defaultValue: {summary: _Grouped.none}},
+      table: {
+        defaultValue: {
+          summary: _Grouped.none,
+        },
+      },
     },
     wrapperClass: {
       control: 'text',
       description:
         'Class for the first element because the attribute "class" would affect the input element.',
-      table: {type: {summary: 'string|object'}},
+      table: {
+        type: {
+          summary: 'string|object',
+        },
+      },
     },
     showIcon: {
       control: 'boolean',
@@ -62,10 +116,12 @@ const meta: Meta<typeof AntBaseInput> = {
         'Some InputStates can have an icon. Control with this property if it gets shown or not.',
     },
     iconLeft: {
-      control: {type: 'none'},
+      control: {
+        type: 'none',
+      },
       description:
         'Will be displayed left to the input text.<br>Use Font-awesome Icons.',
-    }
+    },
   },
 };
 
@@ -75,9 +131,13 @@ type Story = StoryObj<typeof AntBaseInput>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntBaseInput},
+    components: {
+      AntBaseInput,
+    },
     setup: () => {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
       <AntBaseInput
@@ -87,7 +147,7 @@ export const Docs: Story = {
   }),
   args: {
     modelValue: null,
-    placeholder: 'Placeholder'
+    placeholder: 'Placeholder',
   },
 };
 
@@ -95,7 +155,7 @@ export const Nullable: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    nullable: true
+    nullable: true,
   },
 };
 
@@ -109,9 +169,15 @@ export const IconLeft: Story = {
 
 export const IconRight: Story = {
   render: (args) => ({
-    components: {AntBaseInput, AntIcon},
+    components: {
+      AntBaseInput,
+      AntIcon,
+    },
     setup: () => {
-      return {args, faEye};
+      return {
+        args,
+        faEye,
+      };
     },
     template: `
       <AntBaseInput
@@ -124,18 +190,30 @@ export const IconRight: Story = {
       </AntBaseInput>`,
   }),
   args: {
-    ...Docs.args
+    ...Docs.args,
   },
 };
 
 export const Summary: Story = {
   parameters: {
-    chromatic: {disableSnapshot: false},
+    chromatic: {
+      disableSnapshot: false,
+    },
   },
   render: (args) => ({
-    components: {AntBaseInput, AntButton, AntFormGroup, AntFormGroupLabel},
+    components: {
+      AntBaseInput,
+      AntButton,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
     setup: () => {
-      return {args, faSearch, Direction, Size};
+      return {
+        args,
+        faSearch,
+        Direction,
+        Size,
+      };
     },
     template: `
       <AntFormGroup>
@@ -220,6 +298,6 @@ export const Summary: Story = {
       </AntFormGroup>`,
   }),
   args: {
-    placeholder: 'Placeholder'
+    placeholder: 'Placeholder',
   },
 };

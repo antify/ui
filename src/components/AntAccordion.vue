@@ -1,8 +1,12 @@
 <script lang="ts" setup>
 import AntAccordionItem from './AntAccordionItem.vue';
-import {onMounted, ref} from 'vue';
-import {CollapseStrategy} from './__types/AntAccordion.types';
-import AntSkeleton from "./AntSkeleton.vue";
+import {
+  onMounted, ref,
+} from 'vue';
+import {
+  CollapseStrategy,
+} from './__types/AntAccordion.types';
+import AntSkeleton from './AntSkeleton.vue';
 
 const props = withDefaults(defineProps<{
   items: {
@@ -20,7 +24,7 @@ const props = withDefaults(defineProps<{
   skeleton?: boolean;
 }>(), {
   collapseStrategy: CollapseStrategy.single,
-  skeleton: false
+  skeleton: false,
 });
 
 const openItems = ref<number[]>([]);
@@ -33,9 +37,14 @@ onMounted(() => {
 
 function onOpen(index: number) {
   if (props.collapseStrategy === CollapseStrategy.single) {
-    openItems.value = [index];
+    openItems.value = [
+      index,
+    ];
   } else {
-    openItems.value = [...openItems.value, index];
+    openItems.value = [
+      ...openItems.value,
+      index,
+    ];
   }
 }
 
@@ -58,10 +67,10 @@ function onClose(index: number) {
         :is-open="openItems.includes(index)"
         :icon-left="item.iconLeft"
         :content-padding="item.contentPadding"
-        :activeLabelClasses="item.activeLabelClasses"
-        :activeIconClasses="item.activeIconClasses"
-        :inactiveLabelClasses="item.inactiveLabelClasses"
-        :inactiveIconClasses="item.inactiveIconClasses"
+        :active-label-classes="item.activeLabelClasses"
+        :active-icon-classes="item.activeIconClasses"
+        :inactive-label-classes="item.inactiveLabelClasses"
+        :inactive-icon-classes="item.inactiveIconClasses"
         :skeleton="skeleton"
         @open="() => onOpen(index)"
         @close="() => onClose(index)"
@@ -78,9 +87,13 @@ function onClose(index: number) {
             name="item-content"
             v-bind="{item, index}"
           >
-            <div v-html="item.content"/>
+            <div v-html="item.content" />
 
-            <AntSkeleton v-if="skeleton" absolute rounded/>
+            <AntSkeleton
+              v-if="skeleton"
+              absolute
+              rounded
+            />
           </slot>
         </div>
       </AntAccordionItem>

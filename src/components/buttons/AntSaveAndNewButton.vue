@@ -1,9 +1,16 @@
 <script lang="ts" setup>
 import AntActionButton from './AntActionButton.vue';
-import {Position, Size, Grouped, State} from '../../enums';
-import {faFloppyDisk, faPlus} from '@fortawesome/free-solid-svg-icons';
+import {
+  Position, Size, Grouped, State,
+} from '../../enums';
+import {
+  faFloppyDisk, faPlus,
+} from '@fortawesome/free-solid-svg-icons';
 
-defineEmits(['click', 'blur']);
+defineEmits([
+  'click',
+  'blur',
+]);
 withDefaults(defineProps<{
   iconVariant?: boolean;
   size?: Size;
@@ -15,7 +22,7 @@ withDefaults(defineProps<{
   tooltipPosition?: Position;
 }>(), {
   iconVariant: false,
-  canSave: true
+  canSave: true,
 });
 </script>
 

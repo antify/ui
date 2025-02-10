@@ -1,19 +1,34 @@
 <script setup lang="ts">
 import AntField from '../forms/AntField.vue';
-import {useVModel} from '@vueuse/core';
-import {computed, onMounted, watch} from 'vue';
-import {InputState, Size} from '../../enums';
-import {handleEnumValidation} from '../../handler';
+import {
+  useVModel,
+} from '@vueuse/core';
+import {
+  computed, onMounted, watch,
+} from 'vue';
+import {
+  InputState, Size,
+} from '../../enums';
+import {
+  handleEnumValidation,
+} from '../../handler';
 
-defineOptions({inheritAttrs: false});
+defineOptions({
+  inheritAttrs: false,
+});
 
-const emit = defineEmits(['update:modelValue', 'update:skeleton', 'validate', 'blur']);
+const emit = defineEmits([
+  'update:modelValue',
+  'update:skeleton',
+  'validate',
+  'blur',
+]);
 const props = withDefaults(defineProps<{
   modelValue: number | number[] | null;
   label?: string;
   description?: string;
   state?: InputState;
-  size?: Size,
+  size?: Size;
   disabled?: boolean;
   skeleton?: boolean;
   min?: number;
@@ -25,7 +40,7 @@ const props = withDefaults(defineProps<{
   disabled: false,
   skeleton: false,
   limiter: false,
-  messages: () => []
+  messages: () => [],
 });
 const _modelValue = useVModel(props, 'modelValue', emit);
 const inputClasses = computed(() => {
@@ -38,10 +53,10 @@ const inputClasses = computed(() => {
   };
 
   return {
-    'ant-range-slider transition-colors relative border-none w-full h-2 bg-base-300 rounded-md outline-none': true,
+    'ant-range-slider transition-colors relative border-none w-full h-2 bg-base-300 rounded-md outline-hidden': true,
     'disabled:opacity-50 disabled:cursor-not-allowed': props.disabled,
-    'invisible': props.skeleton,
-    [variants[props.state]]: true
+    invisible: props.skeleton,
+    [variants[props.state]]: true,
   };
 });
 
@@ -54,7 +69,11 @@ watch(() => props.skeleton, (val) => {
   }
 });
 watch(_modelValue, (val) => {
-  if ([InputState.danger, InputState.warning, InputState.info].includes(props.state)) {
+  if ([
+    InputState.danger,
+    InputState.warning,
+    InputState.info,
+  ].includes(props.state)) {
     emit('validate', val);
   }
 });

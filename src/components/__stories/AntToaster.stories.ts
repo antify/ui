@@ -1,15 +1,29 @@
 import AntButton from '../buttons/AntButton.vue';
 import AntFormGroup from '../forms/AntFormGroup.vue';
-import {CornerPosition, InputState} from '../../enums';
-import {enumToPlainText} from '../../utils';
+import {
+  CornerPosition, InputState,
+} from '../../enums';
+import {
+  enumToPlainText,
+} from '../../utils';
 import AntToaster from '../AntToaster.vue';
-import type {StoryObj} from "@storybook/vue3";
-import {useToaster} from '../../composables/useToaster';
-import type {Toast} from '../__types/AntToaster.types';
+import type {
+  StoryObj,
+} from '@storybook/vue3';
+import {
+  useToaster,
+} from '../../composables/useToaster';
+import type {
+  Toast,
+} from '../__types/AntToaster.types';
 
 export default {
   title: 'Components/Toaster',
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     toasts: {
       description: 'The toasts to display',
@@ -18,13 +32,15 @@ export default {
           summary: 'Toast[]',
           // TODO:: Describe Toast more detailed
           detail: 'Toast[]',
-        }
-      }
+        },
+      },
     },
     position: {
       description: 'Defines where the toasts will appear',
       options: Object.values(CornerPosition),
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       table: {
         defaultValue: {
           summary: 'CornerPosition.bottomRight',
@@ -42,15 +58,20 @@ type Story = StoryObj<typeof AntToaster>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntButton, AntToaster},
+    components: {
+      AntButton,
+      AntToaster,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
       <div class="dashed h-60 relative">
         <AntToaster v-bind="args"/>
       </div>
-    `
+    `,
   }),
   args: {
     toasts: [
@@ -58,14 +79,18 @@ export const Docs: Story = {
         title: 'Title',
         content: 'Content here',
         type: InputState.success,
-      }
-    ]
-  }
+      },
+    ],
+  },
 };
 
 export const UseToaster: Story = {
   render: (args) => ({
-    components: {AntButton, AntToaster, AntFormGroup},
+    components: {
+      AntButton,
+      AntToaster,
+      AntFormGroup,
+    },
     setup() {
       const toaster = useToaster();
       const toasts: Toast[] = [
@@ -93,10 +118,14 @@ export const UseToaster: Story = {
           title: 'Title',
           content: 'Content here',
           type: InputState.info,
-        }
+        },
       ];
 
-      return {args, toasts, toaster};
+      return {
+        args,
+        toasts,
+        toaster,
+      };
     },
     template: `
       <AntFormGroup
@@ -113,6 +142,6 @@ export const UseToaster: Story = {
       </AntFormGroup>
 
       <AntToaster v-bind="args" :toasts="toaster.getToasts()"/>
-    `
-  })
+    `,
+  }),
 };

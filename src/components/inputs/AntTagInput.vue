@@ -1,59 +1,81 @@
 <script setup lang="ts">
-import {AntField} from './Elements';
-import type {SelectOption} from './__types';
-import {Grouped, InputState, Size} from '../../enums';
-import {useVModel} from '@vueuse/core';
-import {faChevronRight, type IconDefinition} from '@fortawesome/free-solid-svg-icons';
-import {computed, onMounted, type Ref, ref, watch} from 'vue';
+import {
+  AntField,
+} from './Elements';
+import type {
+  SelectOption,
+} from './__types';
+import {
+  Grouped, InputState, Size,
+} from '../../enums';
+import {
+  useVModel,
+} from '@vueuse/core';
+import {
+  faChevronRight, type IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  computed, onMounted, type Ref, ref, watch,
+} from 'vue';
 import AntTag from '../AntTag.vue';
 import AntIcon from '../AntIcon.vue';
-import {AntTagSize, IconSize} from '../__types';
+import {
+  AntTagSize, IconSize,
+} from '../__types';
 import AntSelectMenu from './Elements/AntSelectMenu.vue';
 import AntSkeleton from '../AntSkeleton.vue';
-import {vOnClickOutside} from '@vueuse/components';
-import {AntTagInputSize} from './__types/AntTagInput.types';
-import type {TagState} from '../__types/AntTag.types';
+import {
+  vOnClickOutside,
+} from '@vueuse/components';
+import {
+  AntTagInputSize,
+} from './__types/AntTagInput.types';
+import type {
+  TagState,
+} from '../__types/AntTag.types';
 
-const emit = defineEmits(['update:modelValue', 'blur', 'validate']);
-const props = withDefaults(
-  defineProps<{
-    modelValue: (string | number)[] | null;
-    options: SelectOption[];
-    label?: string;
-    description?: string;
-    placeholder?: string;
-    size?: AntTagInputSize;
-    state?: InputState;
-    disabled?: boolean;
-    readonly?: boolean;
-    skeleton?: boolean;
-    name?: string;
-    expanded?: boolean;
-    icon?: IconDefinition;
-    grouped?: Grouped;
-    nullable?: boolean;
-    messages?: string[];
-    allowCreate?: boolean;
-    allowDuplicates?: boolean;
-    openOnFocus?: boolean;
-    autoCloseAfterSelection?: boolean;
-    createCallback?: (item: string) => Promise<SelectOption>;
-  }>(), {
-    size: AntTagInputSize.md,
-    state: InputState.base,
-    icon: () => faChevronRight,
-    messages: () => [],
-    grouped: Grouped.none,
-    allowCreate: false,
-    allowDuplicates: false,
-    openOnFocus: true,
-    readonly: false,
-    disabled: false,
-    skeleton: false,
-    autoCloseAfterSelection: false,
-    placeholder: 'Add new tag'
-  }
-);
+const emit = defineEmits([
+  'update:modelValue',
+  'blur',
+  'validate',
+]);
+const props = withDefaults(defineProps<{
+  modelValue: (string | number)[] | null;
+  options: SelectOption[];
+  label?: string;
+  description?: string;
+  placeholder?: string;
+  size?: AntTagInputSize;
+  state?: InputState;
+  disabled?: boolean;
+  readonly?: boolean;
+  skeleton?: boolean;
+  name?: string;
+  expanded?: boolean;
+  icon?: IconDefinition;
+  grouped?: Grouped;
+  nullable?: boolean;
+  messages?: string[];
+  allowCreate?: boolean;
+  allowDuplicates?: boolean;
+  openOnFocus?: boolean;
+  autoCloseAfterSelection?: boolean;
+  createCallback?: (item: string) => Promise<SelectOption>;
+}>(), {
+  size: AntTagInputSize.md,
+  state: InputState.base,
+  icon: () => faChevronRight,
+  messages: () => [],
+  grouped: Grouped.none,
+  allowCreate: false,
+  allowDuplicates: false,
+  openOnFocus: true,
+  readonly: false,
+  disabled: false,
+  skeleton: false,
+  autoCloseAfterSelection: false,
+  placeholder: 'Add new tag',
+});
 
 const _modelValue: Ref<(string | number)[] | null> = useVModel(props, 'modelValue', emit);
 const _skeleton = useVModel(props, 'skeleton', emit);
@@ -88,7 +110,7 @@ const inputContainerClasses = computed(() => {
     'rounded-none': props.grouped === Grouped.center,
     'rounded-tl-none rounded-bl-none rounded-tr-md rounded-br-md': props.grouped === Grouped.right,
     'rounded-md': props.grouped === Grouped.none,
-    'invisible': props.skeleton,
+    invisible: props.skeleton,
   };
 });
 const inputClasses = computed(() => {
@@ -101,7 +123,7 @@ const inputClasses = computed(() => {
   };
 
   return {
-    'outline-0 border:none ring:none bg-transparent w-full': true,
+    'outline-0 bg-transparent w-full': true,
     'opacity-50 cursor-not-allowed': props.disabled,
     [variants[props.state]]: true,
   };
@@ -124,15 +146,15 @@ const filteredOptions = computed(() => {
       return !_modelValue.value?.includes(option.value);
     }
 
-    return option.label.toLowerCase().includes(tagInput.value.toLowerCase())
+    return option.label.toLowerCase().includes(tagInput.value.toLowerCase());
   });
-})
+});
 
 function onClickOutside() {
   if (!dropDownOpen.value) {
     return;
   }
-  console.log("click outside");
+  console.log('click outside');
   // dropDownOpen.value = false;
 }
 
@@ -161,7 +183,7 @@ function addTagFromOptions(item: string | number) {
     addTag(item);
 
     if (props.autoCloseAfterSelection) {
-      console.log("HIER");
+      console.log('HIER');
       dropDownOpen.value = false;
     }
   }
@@ -175,7 +197,9 @@ function addTag(tagValue: string | number): void {
   if (Array.isArray(_modelValue.value)) {
     _modelValue.value.push(tagValue);
   } else {
-    _modelValue.value = [tagValue];
+    _modelValue.value = [
+      tagValue,
+    ];
   }
 
   tagInput.value = '';
@@ -211,10 +235,16 @@ watch(() => props.skeleton, (val) => {
   }
 });
 watch(_modelValue, (val) => {
-  if ([InputState.danger, InputState.warning, InputState.info].includes(props.state)) {
+  if ([
+    InputState.danger,
+    InputState.warning,
+    InputState.info,
+  ].includes(props.state)) {
     emit('validate', val);
   }
-}, {deep: true});
+}, {
+  deep: true,
+});
 
 onMounted(() => {
   /**
@@ -248,9 +278,9 @@ onMounted(() => {
         />
 
         <div
+          v-on-click-outside="onClickOutside"
           :class="inputContainerClasses"
           class="w-full flex items-center"
-          v-on-click-outside="onClickOutside"
         >
           <div
             class="flex gap-2.5 items-center"
@@ -286,7 +316,7 @@ onMounted(() => {
               @keydown.delete="removeLastTag"
               @keydown.enter.prevent="checkCreateTag(tagInput)"
               @blur="onBlur"
-            />
+            >
           </div>
         </div>
 

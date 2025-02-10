@@ -1,20 +1,27 @@
 <script lang="ts" setup>
-import {ref, useSlots, watch} from 'vue';
-import {faXmark} from '@fortawesome/free-solid-svg-icons';
+import {
+  ref, useSlots, watch,
+} from 'vue';
+import {
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import AntButton from './buttons/AntButton.vue';
-import AntSkeleton from "./AntSkeleton.vue";
+import AntSkeleton from './AntSkeleton.vue';
 
-const emit = defineEmits(['update:open', 'close']);
+const emit = defineEmits([
+  'update:open',
+  'close',
+]);
 const props = withDefaults(defineProps<{
-  title: string,
-  open: boolean,
-  fullscreen?: boolean,
-  padding?: boolean
-  skeleton?: boolean
+  title: string;
+  open: boolean;
+  fullscreen?: boolean;
+  padding?: boolean;
+  skeleton?: boolean;
 }>(), {
   fullscreen: false,
   padding: false,
-  skeleton: false
+  skeleton: false,
 });
 const openModal = ref(props.open);
 const openBackground = ref(props.open);
@@ -22,7 +29,7 @@ const openBackground = ref(props.open);
 watch(() => props.open, (val) => {
   function onKeydown(e: KeyboardEvent) {
     if (e.key === 'Escape') {
-      closeModal()
+      closeModal();
     }
   }
 
@@ -48,7 +55,7 @@ function closeModal() {
     <div
       v-if="openBackground"
       class="absolute inset-0 flex items-center justify-center z-[80] cursor-pointer overflow-hidden"
-      :class="{'bg-black/50 backdrop-blur-sm': !fullscreen}"
+      :class="{'bg-black/50 backdrop-blur-xs': !fullscreen}"
       @click.self="closeModal"
     >
       <Transition :name="!fullscreen ? 'bounce' : 'bounce-slow'">
@@ -63,7 +70,11 @@ function closeModal() {
             <slot name="title">
               <div class="relative text-for-white-bg-font text-lg font-medium">
                 {{ title }}
-                <AntSkeleton v-if="skeleton" absolute rounded/>
+                <AntSkeleton
+                  v-if="skeleton"
+                  absolute
+                  rounded
+                />
               </div>
             </slot>
 
@@ -78,14 +89,14 @@ function closeModal() {
             class="bg-white text-for-white-bg-font grow overflow-y-auto"
             :class="{'p-2': padding}"
           >
-            <slot/>
+            <slot />
           </div>
 
           <div
             v-if="useSlots()['footer'] || false"
             class="bg-white p-2 text-for-white-bg-font"
           >
-            <slot name="footer"/>
+            <slot name="footer" />
           </div>
         </div>
       </Transition>
