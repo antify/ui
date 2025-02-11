@@ -3,14 +3,9 @@ name: Release Workflow test
 on:
   push:
     branches: ['main']
-  workflow_run:
-    workflows: ["UI Tests"]
-    types:
-      - completed
 
 jobs:
   release:
-    if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') }}
     runs-on: ubuntu-latest
 
     steps:
