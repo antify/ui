@@ -1,18 +1,38 @@
 <script lang="ts" setup>
-import {computed, onMounted, ref} from 'vue';
+import {
+  computed, onMounted, ref,
+} from 'vue';
 import AntField from '../forms/AntField.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
 import AntIcon from '../AntIcon.vue';
-import {Size} from '../../enums/Size.enum';
-import {useVModel} from '@vueuse/core';
-import {InputState} from '../../enums';
-import {BaseInputType} from './Elements/__types';
-import {handleEnumValidation} from '../../handler';
-import {AntDateInputTypes} from './__types/AntDateInput.types';
-import {faCalendar, faClock} from '@fortawesome/free-solid-svg-icons';
-import {IconSize} from '../__types/AntIcon.types';
+import {
+  Size,
+} from '../../enums/Size.enum';
+import {
+  useVModel,
+} from '@vueuse/core';
+import {
+  InputState,
+} from '../../enums';
+import {
+  BaseInputType,
+} from './Elements/__types';
+import {
+  handleEnumValidation,
+} from '../../handler';
+import {
+  AntDateInputTypes,
+} from './__types/AntDateInput.types';
+import {
+  faCalendar, faClock,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  IconSize,
+} from '../__types/AntIcon.types';
 
-defineOptions({inheritAttrs: false});
+defineOptions({
+  inheritAttrs: false,
+});
 
 const props = withDefaults(defineProps<{
   modelValue: string | null;
@@ -32,9 +52,12 @@ const props = withDefaults(defineProps<{
   readonly: false,
   skeleton: false,
   size: Size.md,
-  messages: () => []
+  messages: () => [],
 });
-const emit = defineEmits(['update:modelValue', 'validate']);
+const emit = defineEmits([
+  'update:modelValue',
+  'validate',
+]);
 const _modelValue = useVModel(props, 'modelValue', emit);
 const inputRef = ref<null | HTMLInputElement>(null);
 const iconColor = computed(() => {

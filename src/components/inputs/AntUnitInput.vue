@@ -1,17 +1,33 @@
 <script lang="ts" setup>
-import {computed, onMounted} from 'vue';
+import {
+  computed, onMounted,
+} from 'vue';
 import AntButton from '../buttons/AntButton.vue';
 import AntField from '../forms/AntField.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
-import {Size} from '../../enums/Size.enum';
-import {type IconDefinition} from '@fortawesome/free-solid-svg-icons';
-import {InputState, State} from '../../enums';
-import {Grouped} from '../../enums/Grouped.enum';
-import {BaseInputType} from './Elements/__types';
-import {handleEnumValidation} from '../../handler';
-import Big from "big.js";
+import {
+  Size,
+} from '../../enums/Size.enum';
+import {
+  type IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  InputState, State,
+} from '../../enums';
+import {
+  Grouped,
+} from '../../enums/Grouped.enum';
+import {
+  BaseInputType,
+} from './Elements/__types';
+import {
+  handleEnumValidation,
+} from '../../handler';
+import Big from 'big.js';
 
-defineOptions({inheritAttrs: false});
+defineOptions({
+  inheritAttrs: false,
+});
 
 const props = withDefaults(defineProps<{
   modelValue: number | null;
@@ -40,7 +56,10 @@ const props = withDefaults(defineProps<{
   messages: () => [],
   decimalPlaces: 2,
 });
-const emit = defineEmits(['update:modelValue', 'validate']);
+const emit = defineEmits([
+  'update:modelValue',
+  'validate',
+]);
 
 const _modelValue = computed({
   get: () => {

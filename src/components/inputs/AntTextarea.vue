@@ -1,25 +1,47 @@
 <script lang="ts" setup>
-import {computed, onMounted, ref, watch} from 'vue';
-import {Size} from '../../enums/Size.enum';
+import {
+  computed, onMounted, ref, watch,
+} from 'vue';
+import {
+  Size,
+} from '../../enums/Size.enum';
 import AntSkeleton from '../AntSkeleton.vue';
 import AntIcon from '../AntIcon.vue';
-import {Grouped} from '../../enums/Grouped.enum';
+import {
+  Grouped,
+} from '../../enums/Grouped.enum';
 import {
   faExclamationTriangle,
   faExclamationCircle,
   faCircleCheck,
-  faCircleInfo
+  faCircleInfo,
 } from '@fortawesome/free-solid-svg-icons';
-import {handleEnumValidation} from '../../handler';
-import {classesToObjectSyntax} from '../../utils';
+import {
+  handleEnumValidation,
+} from '../../handler';
+import {
+  classesToObjectSyntax,
+} from '../../utils';
 import AntField from '../forms/AntField.vue';
-import {useVModel} from '@vueuse/core';
-import {InputState} from '../../enums';
-import {IconSize} from '../__types';
+import {
+  useVModel,
+} from '@vueuse/core';
+import {
+  InputState,
+} from '../../enums';
+import {
+  IconSize,
+} from '../__types';
 
-defineOptions({inheritAttrs: false});
+defineOptions({
+  inheritAttrs: false,
+});
 
-const emit = defineEmits(['update:modelValue', 'validate', 'blur']);
+const emit = defineEmits([
+  'update:modelValue',
+  'validate',
+  'blur',
+]);
 const props = withDefaults(defineProps<{
   modelValue: string | null;
   size?: Size;
@@ -47,7 +69,7 @@ const props = withDefaults(defineProps<{
   showIcon: true,
   limiter: false,
   resize: true,
-  messages: () => []
+  messages: () => [],
 });
 
 const _modelValue = useVModel(props, 'modelValue', emit);
@@ -93,19 +115,19 @@ const inputClasses = computed(() => {
     'rounded-none': props.grouped === Grouped.center,
     'rounded-tl-none rounded-bl-none rounded-tr-md rounded-br-md': props.grouped === Grouped.right,
     'rounded-md': props.grouped === Grouped.none,
-    'invisible': props.skeleton,
-    'resize-none': !props.resize
+    invisible: props.skeleton,
+    'resize-none': !props.resize,
   };
 });
 const iconColor = computed(() => {
   const variants = {
-    'base': undefined,
-    'danger': 'text-danger-500',
-    'info': 'text-info-500',
-    'primary': 'text-primary-500',
-    'secondary': 'text-secondary-500',
-    'success': 'text-success-500',
-    'warning': 'text-warning-500',
+    base: undefined,
+    danger: 'text-danger-500',
+    info: 'text-info-500',
+    primary: 'text-primary-500',
+    secondary: 'text-secondary-500',
+    success: 'text-success-500',
+    warning: 'text-warning-500',
   };
 
   return variants[props.state];
@@ -132,10 +154,16 @@ onMounted(() => {
 });
 
 watch(_modelValue, (val) => {
-  if ([InputState.danger, InputState.warning, InputState.info].includes(props.state)) {
+  if ([
+    InputState.danger,
+    InputState.warning,
+    InputState.info,
+  ].includes(props.state)) {
     emit('validate', val);
   }
-}, {deep: true});
+}, {
+  deep: true,
+});
 watch(() => props.skeleton, (val) => {
   if (!val && props.modelValue !== null) {
     emit('validate', props.modelValue);
@@ -148,7 +176,7 @@ function onBlur(e: FocusEvent) {
 }
 
 defineExpose({
-  getTextAreaRef: () => textAreaRef.value
+  getTextAreaRef: () => textAreaRef.value,
 });
 
 </script>
@@ -170,12 +198,12 @@ defineExpose({
       :class="{...{'-mr-px': grouped !== Grouped.none}, ..._wrapperClass}"
     >
       <textarea
+        ref="textAreaRef"
         v-model="_modelValue"
         :class="inputClasses"
         :placeholder="placeholder !== undefined ? placeholder : label"
         :disabled="disabled || skeleton"
         :readonly="readonly"
-        ref="textAreaRef"
         v-bind="$attrs"
         @blur="onBlur"
       />

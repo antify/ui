@@ -1,19 +1,40 @@
 <script lang="ts" setup>
-import {type IconDefinition} from '@fortawesome/free-solid-svg-icons';
-import {computed, onMounted} from 'vue';
-import {type RouteLocationRaw} from 'vue-router';
+import {
+  type IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  computed, onMounted,
+} from 'vue';
+import {
+  type RouteLocationRaw,
+} from 'vue-router';
 import AntSkeleton from '../AntSkeleton.vue';
 import AntSpinner from '../AntSpinner.vue';
-import {Grouped} from '../../enums/Grouped.enum';
-import {Size} from '../../enums/Size.enum';
-import {handleEnumValidation} from '../../handler';
-import {State, InputState, Position} from '../../enums';
-import {ButtonType} from './__types';
+import {
+  Grouped,
+} from '../../enums/Grouped.enum';
+import {
+  Size,
+} from '../../enums/Size.enum';
+import {
+  handleEnumValidation,
+} from '../../handler';
+import {
+  State, InputState, Position,
+} from '../../enums';
+import {
+  ButtonType,
+} from './__types';
 import AntIcon from '../AntIcon.vue';
 import AntTooltip from '../AntTooltip.vue';
-import {IconSize} from '../__types/AntIcon.types';
+import {
+  IconSize,
+} from '../__types/AntIcon.types';
 
-defineEmits(['click', 'blur']);
+defineEmits([
+  'click',
+  'blur',
+]);
 
 const props = withDefaults(defineProps<{
   filled?: boolean;
@@ -49,7 +70,7 @@ const props = withDefaults(defineProps<{
   noFocus: false,
   tooltipPosition: Position.bottom,
   tooltipState: InputState.base,
-  tooltipDelay: 800
+  tooltipDelay: 800,
 });
 
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
@@ -119,7 +140,7 @@ const classes = computed(() => {
     'focus:ring-2': !props.readonly && props.size === Size.sm || props.size === Size.xs || props.size === Size.xs2,
     'focus:ring-4': !props.readonly && props.size === Size.md || props.size === Size.lg,
     'w-full': props.expanded,
-    'invisible': props.skeleton,
+    invisible: props.skeleton,
     'outline outline-1 outline-offset-[-1px]': props.outlined,
     ...groupedClassList.value,
     [variants[props.state]]: true,
@@ -246,7 +267,7 @@ onMounted(() => {
       </component>
 
       <template #content>
-        <slot name="tooltip-content"/>
+        <slot name="tooltip-content" />
       </template>
     </AntTooltip>
   </div>

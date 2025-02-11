@@ -6,4 +6,4 @@ export const Main = () => {
   return {
     template: '<div>main</div>',
   };
-}
+};

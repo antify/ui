@@ -1,31 +1,51 @@
 import AntActionButton from '../AntActionButton.vue';
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {Grouped as _Grouped} from '../../../enums/Grouped.enum';
-import {State, InputState, Position, Size} from '../../../enums';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  Grouped as _Grouped,
+} from '../../../enums/Grouped.enum';
+import {
+  State, InputState, Position, Size,
+} from '../../../enums';
 
 const meta: Meta<typeof AntActionButton> = {
   title: 'Components/Buttons/Action Button',
   component: AntActionButton,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     state: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(State),
     },
     size: {
-      control: {type: 'select'},
-      options: Object.values(Size)
+      control: {
+        type: 'select',
+      },
+      options: Object.values(Size),
     },
     grouped: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(_Grouped),
     },
     tooltipPosition: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(Position),
     },
     tooltipState: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(InputState),
     },
     submit: {
@@ -40,9 +60,13 @@ type Story = StoryObj<typeof AntActionButton>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntActionButton},
+    components: {
+      AntActionButton,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
       <AntActionButton v-bind="args">
@@ -52,7 +76,7 @@ export const Docs: Story = {
       </AntActionButton>`,
   }),
   args: {
-    tooltipPosition: Position.right
+    tooltipPosition: Position.right,
   },
 };
 
@@ -60,7 +84,7 @@ export const Disabled: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    disabled: true
+    disabled: true,
   },
 };
 
@@ -68,7 +92,7 @@ export const Grouped: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    grouped: _Grouped.left
+    grouped: _Grouped.left,
   },
 };
 
@@ -76,7 +100,7 @@ export const Skeleton: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    skeleton: true
+    skeleton: true,
   },
 };
 
@@ -84,7 +108,7 @@ export const Expanded: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    expanded: true
+    expanded: true,
   },
 };
 

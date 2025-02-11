@@ -6,14 +6,31 @@
  * Fix overflow bug (See Ellipsis Text story)
  * TODO:: if the dropdown is open and the user types something, the element with a matching value should be focused.
  */
-import {computed, nextTick, onMounted, onUnmounted, ref, watch} from 'vue';
-import {InputState, Size} from '../../../enums';
-import type {SelectOption} from '../__types';
-import {useElementSize, useVModel, onClickOutside} from '@vueuse/core';
-import type {Validator} from '@antify/validate';
-import {autoUpdate, flip, offset, useFloating} from "@floating-ui/vue";
+import {
+  computed, nextTick, onMounted, onUnmounted, ref, watch,
+} from 'vue';
+import {
+  InputState, Size,
+} from '../../../enums';
+import type {
+  SelectOption,
+} from '../__types';
+import {
+  useElementSize, useVModel, onClickOutside,
+} from '@vueuse/core';
+import type {
+  Validator,
+} from '@antify/validate';
+import {
+  autoUpdate, flip, offset, useFloating,
+} from '@floating-ui/vue';
 
-const emit = defineEmits(['update:open', 'update:modelValue', 'update:focused', 'selectElement']);
+const emit = defineEmits([
+  'update:open',
+  'update:modelValue',
+  'update:focused',
+  'selectElement',
+]);
 const props = withDefaults(defineProps<{
   modelValue: string | string[] | number | number[] | null;
   focused: string | number | null;
@@ -33,18 +50,22 @@ const props = withDefaults(defineProps<{
   autoSelectFirstOnOpen: true,
   closeOnSelectItem: true,
 });
-const reference = ref<HTMLElement | null | undefined>(props.inputRef)
+const reference = ref<HTMLElement | null | undefined>(props.inputRef);
 const elementSize = useElementSize(reference);
-const floating = ref<HTMLElement | null>(null)
-const {floatingStyles, middlewareData, placement} = useFloating(reference, floating, {
+const floating = ref<HTMLElement | null>(null);
+const {
+  floatingStyles, middlewareData, placement,
+} = useFloating(reference, floating, {
   placement: 'bottom',
   whileElementsMounted: autoUpdate,
   middleware: [
     offset(8),
     flip({
-      fallbackPlacements: ['top'],
+      fallbackPlacements: [
+        'top',
+      ],
     }),
-  ]
+  ],
 });
 
 onClickOutside(floating, () => {
@@ -124,7 +145,7 @@ function onKeyDownDropDown(e: KeyboardEvent) {
     }
 
     if (!isOpen.value) {
-      isOpen.value = true
+      isOpen.value = true;
     }
 
     emit('selectElement', focusedDropDownItem.value);
@@ -135,7 +156,7 @@ function onKeyDownDropDown(e: KeyboardEvent) {
   }
 
   if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-    e.preventDefault()
+    e.preventDefault();
     isOpen.value = true;
 
     const index = props.options.findIndex(option => option.value === focusedDropDownItem.value);
@@ -149,7 +170,7 @@ function onKeyDownDropDown(e: KeyboardEvent) {
   }
 
   if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-    e.preventDefault()
+    e.preventDefault();
     isOpen.value = true;
 
     const index = props.options.findIndex(option => option.value === focusedDropDownItem.value);
@@ -174,7 +195,10 @@ function getActiveDropDownItemClasses(option: SelectOption) {
     [InputState.danger]: 'bg-danger-200',
   };
 
-  return option.value === focusedDropDownItem.value ? {'bg-white': false, [variants[props.state]]: true} : {};
+  return option.value === focusedDropDownItem.value ? {
+    'bg-white': false,
+    [variants[props.state]]: true,
+  } : {};
 }
 
 function onClickDropDownItem(e: MouseEvent, value: string | number | null) {
@@ -199,34 +223,34 @@ watch(_modelValue, (val) => {
     ref="reference"
     class="relative"
   >
-    <slot/>
+    <slot />
 
     <teleport to="body">
+      <div
+        v-if="isOpen"
+        ref="floating"
+        :class="dropdownClasses"
+        :style="{width: `${elementSize.width.value}px!important`, ...floatingStyles}"
+      >
         <div
-          v-if="isOpen"
-          :class="dropdownClasses"
-          ref="floating"
-          :style="{width: `${elementSize.width.value}px!important`, ...floatingStyles}"
+          v-for="(option, index) in options"
+          :key="`option-${index}`"
+          :class="{...dropDownItemClasses, ...getActiveDropDownItemClasses(option)}"
+          @mousedown="(e) => onClickDropDownItem(e, option.value)"
+          @mouseover="() => focusedDropDownItem = option.value"
         >
-          <div
-            v-for="(option, index) in options"
-            :key="`option-${index}`"
-            :class="{...dropDownItemClasses, ...getActiveDropDownItemClasses(option)}"
-            @mousedown="(e) => onClickDropDownItem(e, option.value)"
-            @mouseover="() => focusedDropDownItem = option.value"
-          >
-            {{ option.label }}
-          </div>
-
-          <div
-            v-if="options.length === 0"
-            :class="{...dropDownItemClasses}"
-          >
-            <slot name="empty">
-              No options available
-            </slot>
-          </div>
+          {{ option.label }}
         </div>
+
+        <div
+          v-if="options.length === 0"
+          :class="{...dropDownItemClasses}"
+        >
+          <slot name="empty">
+            No options available
+          </slot>
+        </div>
+      </div>
     </teleport>
   </div>
 </template>

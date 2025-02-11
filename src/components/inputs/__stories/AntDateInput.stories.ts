@@ -1,30 +1,54 @@
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {Size} from '../../../enums/Size.enum';
-import {Direction} from '../../../enums/Direction.enum';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  Size,
+} from '../../../enums/Size.enum';
+import {
+  Direction,
+} from '../../../enums/Direction.enum';
 import AntDateInput from '../AntDateInput.vue';
-import {InputState} from '../../../enums';
-import {AntDateInputTypes} from '../__types/AntDateInput.types';
+import {
+  InputState,
+} from '../../../enums';
+import {
+  AntDateInputTypes,
+} from '../__types/AntDateInput.types';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
 
 const meta: Meta<typeof AntDateInput> = {
   title: 'Inputs/Date Input',
   component: AntDateInput,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     modelValue: {
-      table: {type: {summary: 'string|null'}},
+      table: {
+        type: {
+          summary: 'string|null',
+        },
+      },
     },
     type: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(AntDateInputTypes),
     },
     state: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(InputState),
     },
     size: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(Size),
     },
   },
@@ -36,9 +60,13 @@ type Story = StoryObj<typeof AntDateInput>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntDateInput},
+    components: {
+      AntDateInput,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: `
       <AntDateInput
@@ -50,18 +78,30 @@ export const Docs: Story = {
   args: {
     modelValue: null,
     label: 'Label',
-    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod'
+    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
   },
 };
 
 export const Summary: Story = {
   parameters: {
-    chromatic: {disableSnapshot: false},
+    chromatic: {
+      disableSnapshot: false,
+    },
   },
   render: (args) => ({
-    components: {AntDateInput, AntFormGroup, AntFormGroupLabel},
+    components: {
+      AntDateInput,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
     setup() {
-      return {args, InputState, Size, AntDateInputType: AntDateInputTypes, Direction};
+      return {
+        args,
+        InputState,
+        Size,
+        AntDateInputType: AntDateInputTypes,
+        Direction,
+      };
     },
     template: `
       <AntFormGroup>
@@ -167,6 +207,6 @@ export const Summary: Story = {
   args: {
     modelValue: null,
     label: 'Label',
-    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod'
+    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
   },
 };

@@ -1,17 +1,37 @@
 <script lang="ts" setup>
-import {onMounted} from 'vue';
+import {
+  onMounted,
+} from 'vue';
 import AntField from '../forms/AntField.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
-import {Size} from '../../enums/Size.enum';
-import {TextInputType} from './__types/AntTextInput.types';
-import {handleEnumValidation} from '../../handler';
-import {useVModel} from '@vueuse/core';
-import {InputState} from '../../enums';
-import {BaseInputType} from './Elements/__types';
+import {
+  Size,
+} from '../../enums/Size.enum';
+import {
+  TextInputType,
+} from './__types/AntTextInput.types';
+import {
+  handleEnumValidation,
+} from '../../handler';
+import {
+  useVModel,
+} from '@vueuse/core';
+import {
+  InputState,
+} from '../../enums';
+import {
+  BaseInputType,
+} from './Elements/__types';
 
-defineOptions({inheritAttrs: false});
+defineOptions({
+  inheritAttrs: false,
+});
 
-const emit = defineEmits(['update:modelValue', 'update:skeleton', 'validate']);
+const emit = defineEmits([
+  'update:modelValue',
+  'update:skeleton',
+  'validate',
+]);
 const props = withDefaults(defineProps<{
   modelValue: string | null;
   label?: string;
@@ -34,7 +54,7 @@ const props = withDefaults(defineProps<{
   size: Size.md,
   type: TextInputType.text,
   limiter: false,
-  messages: () => []
+  messages: () => [],
 });
 
 const _value = useVModel(props, 'modelValue', emit);

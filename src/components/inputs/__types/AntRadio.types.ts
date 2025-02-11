@@ -1,4 +1,6 @@
-import {InputState} from '../../../enums';
+import {
+  InputState,
+} from '../../../enums';
 
 export type AntRadioTypes = {
   value: string;
@@ -8,4 +10,4 @@ export type AntRadioTypes = {
   state?: InputState;
 
   [key: string]: unknown;
-}
+};

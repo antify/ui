@@ -4,18 +4,26 @@ import {
   faCircleInfo,
   faExclamationCircle,
   faExclamationTriangle,
-  type IconDefinition
+  type IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
-import {computed} from 'vue';
-import {type RouteLocationRaw, useRoute} from 'vue-router';
-import {TabItemState} from './__types/AntTabItem.types';
-import {AntSkeleton} from "../../../dist";
+import {
+  computed,
+} from 'vue';
+import {
+  type RouteLocationRaw, useRoute,
+} from 'vue-router';
+import {
+  TabItemState,
+} from './__types/AntTabItem.types';
+import {
+  AntSkeleton,
+} from '../../../dist';
 
 const props = withDefaults(defineProps<{
   label: string;
   active: boolean;
   disabled?: boolean;
-  state?: TabItemState
+  state?: TabItemState;
   showIcon?: boolean;
   icon?: IconDefinition;
   to?: RouteLocationRaw;
@@ -69,7 +77,7 @@ const containerClasses = computed(() => {
 
   return {
     'p-2 text-center flex items-center justify-center gap-2 bg-white transition-[background-color] relative text-sm text-nowrap': true,
-    'grow': props.expanded,
+    grow: props.expanded,
     [variants[props.state]]: !props.disabled,
     [activeVariants[props.state]]: _active.value,
     [notActiveVariants[props.state]]: !_active.value,
@@ -118,7 +126,11 @@ const iconColor = computed(() => {
 
     <div class="relative">
       <slot>{{ label }}</slot>
-      <AntSkeleton v-if="skeleton" rounded absolute/>
+      <AntSkeleton
+        v-if="skeleton"
+        rounded
+        absolute
+      />
     </div>
 
     <AntIcon

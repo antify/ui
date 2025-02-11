@@ -1,35 +1,53 @@
 <script lang="ts" setup>
-import {useVModel} from '@vueuse/core';
-import {AntField} from './Elements';
-import {InputState, Size} from '../../enums';
+import {
+  useVModel,
+} from '@vueuse/core';
+import {
+  AntField,
+} from './Elements';
+import {
+  InputState, Size,
+} from '../../enums';
 import AntSkeleton from '../AntSkeleton.vue';
-import {computed, onMounted, ref, watch} from 'vue';
-import {handleEnumValidation} from '../../handler';
-import {faCheck} from '@fortawesome/free-solid-svg-icons';
+import {
+  computed, onMounted, ref, watch,
+} from 'vue';
+import {
+  handleEnumValidation,
+} from '../../handler';
+import {
+  faCheck,
+} from '@fortawesome/free-solid-svg-icons';
 import AntIcon from '../AntIcon.vue';
-import {IconSize} from '../__types';
+import {
+  IconSize,
+} from '../__types';
 
-const emit = defineEmits(['update:modelValue', 'update:skeleton', 'validate', 'blur']);
+const emit = defineEmits([
+  'update:modelValue',
+  'update:skeleton',
+  'validate',
+  'blur',
+]);
 const props =
-  withDefaults(
-    defineProps<{
-      modelValue: boolean | null;
-      label?: string;
-      description?: string;
-      state?: InputState;
-      size?: Size,
-      skeleton?: boolean;
-      disabled?: boolean;
-      readonly?: boolean;
-      messages?: string[];
-    }>(), {
-      state: InputState.base,
-      size: Size.md,
-      skeleton: false,
-      disabled: false,
-      readonly: false,
-      messages: () => []
-    });
+  withDefaults(defineProps<{
+    modelValue: boolean | null;
+    label?: string;
+    description?: string;
+    state?: InputState;
+    size?: Size;
+    skeleton?: boolean;
+    disabled?: boolean;
+    readonly?: boolean;
+    messages?: string[];
+  }>(), {
+    state: InputState.base,
+    size: Size.md,
+    skeleton: false,
+    disabled: false,
+    readonly: false,
+    messages: () => [],
+  });
 const _modelValue = useVModel(props, 'modelValue', emit);
 const delayedValue = ref(_modelValue.value);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
@@ -60,7 +78,7 @@ const inputClasses = computed(() => {
     'relative inline-flex flex-shrink-0 bg-base-100 border-0': true,
     'outline outline-1 outline-offset-[-1px] rounded': true,
     'focus:ring-offset-0': true,
-    'invisible': props.skeleton,
+    invisible: props.skeleton,
     'cursor-pointer': !hasInputState.value,
     'focus:ring-2': !hasInputState.value && (props.size === Size.sm || props.size === Size.xs || props.size === Size.xs2),
     'focus:ring-4': !hasInputState.value && (props.size === Size.lg || props.size === Size.md),
@@ -93,13 +111,13 @@ const iconColor = computed(() => {
     case InputState.info:
       return 'text-info-500-font';
     case InputState.success:
-      return 'text-success-500-font'
+      return 'text-success-500-font';
     case InputState.warning:
       return 'text-warning-500-font';
     default:
       return 'text-danger-500-font';
   }
-})
+});
 
 /**
  * Delay value to change the checkboxes background color after
@@ -113,10 +131,16 @@ watch(_modelValue, (val) => {
   }
 });
 watch(_modelValue, (val) => {
-  if ([InputState.danger, InputState.warning, InputState.info].includes(props.state)) {
+  if ([
+    InputState.danger,
+    InputState.warning,
+    InputState.info,
+  ].includes(props.state)) {
     emit('validate', val);
   }
-}, {deep: true});
+}, {
+  deep: true,
+});
 watch(() => props.skeleton, (val) => {
   if (!val && props.modelValue !== null) {
     emit('validate', props.modelValue);
@@ -158,7 +182,7 @@ onMounted(() => {
           :aria-checked="_modelValue"
           :disabled="disabled || readonly"
           @blur="onBlur"
-        />
+        >
 
         <div
           class="absolute flex items-center justify-center !text-white pointer-events-none"
@@ -184,7 +208,7 @@ onMounted(() => {
         :class="props.size === Size.md ? 'h-5' : 'h-4'"
       >
         <span :class="contentClasses">
-          <slot/>
+          <slot />
         </span>
 
         <AntSkeleton

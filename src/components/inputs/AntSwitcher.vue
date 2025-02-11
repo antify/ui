@@ -1,13 +1,25 @@
 <script setup lang="ts">
 import AntField from '../forms/AntField.vue';
 import AntButton from '../buttons/AntButton.vue';
-import {faChevronLeft, faChevronRight} from '@fortawesome/free-solid-svg-icons';
+import {
+  faChevronLeft, faChevronRight,
+} from '@fortawesome/free-solid-svg-icons';
 import AntSkeleton from '../AntSkeleton.vue';
-import {type SwitcherOption} from './__types/AntSwitcher.types';
-import {State, Grouped, InputState, Size} from '../../enums';
-import {computed, onMounted, watch} from 'vue';
+import {
+  type SwitcherOption,
+} from './__types/AntSwitcher.types';
+import {
+  State, Grouped, InputState, Size,
+} from '../../enums';
+import {
+  computed, onMounted, watch,
+} from 'vue';
 
-const emit = defineEmits(['update:modelValue', 'validate', 'blur']);
+const emit = defineEmits([
+  'update:modelValue',
+  'validate',
+  'blur',
+]);
 const props = withDefaults(defineProps<{
   modelValue: string | null;
   options: string[] | SwitcherOption[];
@@ -17,17 +29,16 @@ const props = withDefaults(defineProps<{
   readonly?: boolean;
   disabled?: boolean;
   state?: InputState;
-  size?: Size,
+  size?: Size;
   messages?: string[];
 }>(), {
   state: InputState.base,
   size: Size.md,
-  messages: () => []
+  messages: () => [],
 });
 const _value = computed({
   get() {
-    const found = props.options.find((option: string | SwitcherOption) =>
-      typeof option === 'string' ? option === props.modelValue : option.value === props.modelValue);
+    const found = props.options.find((option: string | SwitcherOption) => typeof option === 'string' ? option === props.modelValue : option.value === props.modelValue);
 
     if (!found) {
       return props.options[0];
@@ -37,11 +48,13 @@ const _value = computed({
   },
   set(val: string | SwitcherOption) {
     emit('update:modelValue', typeof val === 'string' ? val : val.value);
-  }
+  },
 });
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const containerClasses = computed(() => {
-  const classes: { [key: string]: boolean } = {
+  const classes: {
+    [key: string]: boolean;
+  } = {
     'flex relative ring-primary/25 rounded-md outline-none': true,
     'focus-within:ring-2': (props.size === Size.xs2 || props.size === Size.xs || props.size === Size.sm) && !hasInputState.value,
     'focus-within:ring-4': (props.size === Size.md || props.size === Size.lg) && !hasInputState.value,
@@ -59,14 +72,16 @@ const containerClasses = computed(() => {
   return classes;
 });
 const itemClasses = computed(() => {
-  const classes: { [key: string]: boolean } = {
+  const classes: {
+    [key: string]: boolean;
+  } = {
     'grow text-center text-black relative outline outline-1 -outline-offset-1': true,
     'p-1 text-xs ': props.size === Size.xs2,
     'p-1.5 text-xs ': props.size === Size.xs,
     'p-1.5 text-sm ': props.size === Size.sm,
     'p-2 text-sm ': props.size === Size.md,
     'p-2.5 text-sm ': props.size === Size.lg,
-    'invisible': props.skeleton,
+    invisible: props.skeleton,
     'opacity-50 cursor-not-allowed': props.disabled,
   };
 

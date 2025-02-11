@@ -1,4 +1,4 @@
 export enum Direction {
   column = 'column',
-  row = 'row'
+  row = 'row',
 }

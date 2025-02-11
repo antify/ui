@@ -1,24 +1,40 @@
 import AntListGroupItem from '../AntListGroupItem.vue';
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {faUser, faChevronRight} from '@fortawesome/free-solid-svg-icons';
-import {ListGroupItemState} from '../__types/AntListGroupItem.types';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  faUser, faChevronRight,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  ListGroupItemState,
+} from '../__types/AntListGroupItem.types';
 
 const meta: Meta<typeof AntListGroupItem> = {
   title: 'Components/List Group Item',
   component: AntListGroupItem,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {
     state: {
-      control: {type: 'select'},
+      control: {
+        type: 'select',
+      },
       options: Object.values(ListGroupItemState),
     },
     iconLeft: {
-      control: {type: 'none'},
+      control: {
+        type: 'none',
+      },
       description:
         'Will be displayed right to the default slot.<br>Use Font-awesome Icons.',
     },
     iconRight: {
-      control: {type: 'none'},
+      control: {
+        type: 'none',
+      },
       description:
         'Will be displayed right to the default slot.<br>Use Font-awesome Icons.',
     },
@@ -31,9 +47,13 @@ type Story = StoryObj<typeof AntListGroupItem>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntListGroupItem},
+    components: {
+      AntListGroupItem,
+    },
     setup() {
-      return {args};
+      return {
+        args,
+      };
     },
     template: '<div class="p-4 bg-base-100"><AntListGroupItem v-bind="args">Item</AntListGroupItem></div>',
   }),

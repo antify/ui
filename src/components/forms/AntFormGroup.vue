@@ -1,6 +1,10 @@
 <script lang="ts" setup>
-import {Direction} from '../../enums/Direction.enum';
-import {computed, useAttrs} from 'vue';
+import {
+  Direction,
+} from '../../enums/Direction.enum';
+import {
+  computed, useAttrs,
+} from 'vue';
 
 const attrs = useAttrs();
 const props = withDefaults(defineProps<{
@@ -11,7 +15,7 @@ const props = withDefaults(defineProps<{
 
 const classes = computed(() => {
   // Let override gap-x-* and gap-y-* classes from outside
-  const attrClasses = typeof attrs.class === 'string' ? attrs.class : ''
+  const attrClasses = typeof attrs.class === 'string' ? attrs.class : '';
   const hasGapX = /gap-x-\d/.test(attrClasses);
   const hasGapY = /gap-y-\d/.test(attrClasses);
 
@@ -20,7 +24,7 @@ const classes = computed(() => {
     'gap-y-2.5': !hasGapY && props.direction === Direction.column,
     'flex-row': props.direction === Direction.row,
     'gap-x-2.5': !hasGapX && props.direction === Direction.row,
-  }
+  };
 
   return classes;
 });
@@ -31,6 +35,6 @@ const classes = computed(() => {
     class="flex"
     :class="classes"
   >
-    <slot/>
+    <slot />
   </section>
 </template>

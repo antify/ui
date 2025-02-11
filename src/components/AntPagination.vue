@@ -4,31 +4,42 @@
  * TODO:: test me in storybook through vue router
  * TODO:: Fix ts errors
  */
-import {useRouter, useRoute} from 'vue-router';
-import {computed} from 'vue';
+import {
+  useRouter, useRoute,
+} from 'vue-router';
+import {
+  computed,
+} from 'vue';
 import AntButton from './buttons/AntButton.vue';
-import {faChevronRight, faChevronLeft} from '@fortawesome/free-solid-svg-icons';
+import {
+  faChevronRight, faChevronLeft,
+} from '@fortawesome/free-solid-svg-icons';
 import AntSkeleton from './AntSkeleton.vue';
-import {State, Grouped} from '../enums';
+import {
+  State, Grouped,
+} from '../enums';
 
-const emit = defineEmits(['update:skeleton', 'input']);
+const emit = defineEmits([
+  'update:skeleton',
+  'input',
+]);
 const props = withDefaults(
   defineProps<{
-    pages: number,
-    pageQuery?: string,
-    skeleton?: boolean,
+    pages: number;
+    pageQuery?: string;
+    skeleton?: boolean;
 
     /**
      * Light version does not show the very previous and next page button.
      * This makes the pagination smaller in space.
      */
-    lightVersion?: boolean
+    lightVersion?: boolean;
   }>(),
   {
     pageQuery: 'p',
     skeleton: false,
-    lightVersion: false
-  }
+    lightVersion: false,
+  },
 );
 const router = useRouter();
 const route = useRoute();
@@ -43,18 +54,20 @@ const page = computed({
     return _page;
   },
   set(val) {
-    const query = {...route.query};
+    const query = {
+      ...route.query,
+    };
     query[props.pageQuery] = val;
 
     (async () => {
       await router.push({
         ...route,
-        query
+        query,
       });
 
       emit('input', val);
     })();
-  }
+  },
 });
 
 /**

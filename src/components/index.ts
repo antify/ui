@@ -153,5 +153,5 @@ export {
   AntTag,
   AntToast,
   AntToaster,
-  AntTooltip
+  AntTooltip,
 };

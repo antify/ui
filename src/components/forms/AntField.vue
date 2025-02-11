@@ -1,13 +1,24 @@
 <script lang="ts" setup>
-import {onMounted, computed} from 'vue';
-import {Size} from '../../enums/Size.enum';
+import {
+  onMounted, computed,
+} from 'vue';
+import {
+  Size,
+} from '../../enums/Size.enum';
 import AntInputLabel from '../inputs/Elements/AntInputLabel.vue';
 import AntInputDescription from '../inputs/Elements/AntInputDescription.vue';
-import {handleEnumValidation} from '../../handler';
+import {
+  handleEnumValidation,
+} from '../../handler';
 import AntInputLimiter from '../inputs/Elements/AntInputLimiter.vue';
-import {InputState} from '../../enums';
+import {
+  InputState,
+} from '../../enums';
 
-defineEmits(['clickLabel', 'validate']);
+defineEmits([
+  'clickLabel',
+  'validate',
+]);
 
 const props = withDefaults(defineProps<{
   label?: string;
@@ -74,7 +85,7 @@ const descriptionClasses = computed(() => ({
       @click-content="$emit('clickLabel')"
     >
       <div class="w-full h-full">
-        <slot/>
+        <slot />
       </div>
     </AntInputLabel>
 

@@ -1,26 +1,38 @@
-import {computed, ref, watch} from 'vue';
-import {type Meta, type StoryObj} from '@storybook/vue3';
+import {
+  computed, ref, watch,
+} from 'vue';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
 import AntTabs from '../../tabs/AntTabs.vue';
 import AntCrud from '../AntCrud.vue';
 import AntCrudTableNav from '../AntCrudTableNav.vue';
 import AntTable from '../../table/AntTable.vue';
 import AntCrudTableFilter from '../AntCrudTableFilter.vue';
 import AntCrudDetail from '../AntCrudDetail.vue';
-import {AntTableRowTypes} from '../../table/__types/TableHeader.types';
-import {vueRouter} from "storybook-vue3-router";
+import {
+  AntTableRowTypes,
+} from '../../table/__types/TableHeader.types';
+import {
+  vueRouter,
+} from 'storybook-vue3-router';
 
 const meta: Meta<typeof AntCrud> = {
   title: 'Crud/Crud',
   component: AntCrud,
   parameters: {
-    controls: {sort: 'requiredFirst'},
-    fullscreen: true
+    controls: {
+      sort: 'requiredFirst',
+    },
+    fullscreen: true,
   },
   decorators: [
-    () => ({template: '<div class="dashed h-80"><story/></div>'}),
-    vueRouter()
+    () => ({
+      template: '<div class="dashed h-80"><story/></div>',
+    }),
+    vueRouter(),
   ],
-  argTypes: {}
+  argTypes: {},
 };
 
 export default meta;
@@ -52,7 +64,7 @@ export const Docs: Story = {
       AntCrudTableNav,
       AntCrud,
       AntCrudTableFilter,
-      AntCrudDetail
+      AntCrudDetail,
     },
     setup() {
       const selectedDataItem = ref(null);
@@ -73,13 +85,13 @@ export const Docs: Story = {
             title: 'Name',
             identifier: 'name',
             type: AntTableRowTypes.text,
-            lightVersion: true
+            lightVersion: true,
           },
           {
             title: 'Title',
             identifier: 'title',
             type: AntTableRowTypes.text,
-            lightVersion: true
+            lightVersion: true,
           },
           {
             title: 'E-Mail',
@@ -100,7 +112,7 @@ export const Docs: Story = {
             title: 'Country',
             identifier: 'country',
             type: AntTableRowTypes.text,
-          }
+          },
         ],
       };
     },
@@ -137,5 +149,5 @@ export const Docs: Story = {
       </AntCrud>
     `,
   }),
-  args: {}
+  args: {},
 };

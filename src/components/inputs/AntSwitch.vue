@@ -1,11 +1,22 @@
 <script setup lang="ts">
 import AntField from '../forms/AntField.vue';
-import {computed, watch} from 'vue';
+import {
+  computed, watch,
+} from 'vue';
 import AntSkeleton from '../AntSkeleton.vue';
-import {InputState, Size} from '../../enums';
-import {hasSlotContent} from '../../utils';
+import {
+  InputState, Size,
+} from '../../enums';
+import {
+  hasSlotContent,
+} from '../../utils';
 
-const emit = defineEmits(['update:modelValue', 'input', 'blur', 'validate']);
+const emit = defineEmits([
+  'update:modelValue',
+  'input',
+  'blur',
+  'validate',
+]);
 const props = withDefaults(defineProps<{
   modelValue: boolean | null;
   label?: string;
@@ -14,23 +25,25 @@ const props = withDefaults(defineProps<{
   readonly?: boolean;
   disabled?: boolean;
   size?: Size;
-  state?: InputState
-  messages?: string[]
+  state?: InputState;
+  messages?: string[];
 }>(), {
   size: Size.md,
   state: InputState.base,
-  messages: () => []
+  messages: () => [],
 });
 const _value = computed({
   get: () => props.modelValue,
   set: (val: boolean | null) => {
     emit('update:modelValue', val);
     emit('input', val);
-  }
+  },
 });
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const buttonClasses = computed(() => {
-  const classes: { [key: string]: boolean } = {
+  const classes: {
+    [key: string]: boolean;
+  } = {
     'relative inline-flex flex-shrink-0': true,
     'focus:outline-none': true,
     'rounded-full ease-in-out duration-200': true,
@@ -39,10 +52,10 @@ const buttonClasses = computed(() => {
     'h-5 w-9': props.size === Size.lg || props.size === Size.md || props.size === Size.sm,
     'h-4 w-[30px]': props.size === Size.xs || props.size === Size.xs2,
     'bg-base-300': !_value.value,
-    'invisible': props.skeleton,
+    invisible: props.skeleton,
     // Disabled
     'opacity-50 cursor-not-allowed': props.disabled,
-    'cursor-default': props.readonly
+    'cursor-default': props.readonly,
   };
   const colorVariant = {
     [InputState.base]: 'focus-within:ring-primary-200',
@@ -72,7 +85,7 @@ const ballClasses = computed(() => ({
   'h-3.5 w-3.5  translate-y-[1px]': props.size === Size.xs || props.size === Size.xs2,
   'translate-x-[.925rem]': _value.value && (props.size === Size.xs || props.size === Size.xs2),
   'translate-x-[1px]': !_value.value && (props.size === Size.xs || props.size === Size.xs2),
-  'invisible': props.skeleton
+  invisible: props.skeleton,
 }));
 const valueClasses = computed(() => ({
   'text-for-white-bg-font': true,
@@ -111,7 +124,11 @@ watch(() => props.skeleton, (val) => {
   }
 });
 watch(_value, () => {
-  if ([InputState.danger, InputState.info, InputState.warning].includes(props.state)) {
+  if ([
+    InputState.danger,
+    InputState.info,
+    InputState.warning,
+  ].includes(props.state)) {
     emit('validate', props.modelValue);
   }
 });
@@ -156,7 +173,7 @@ function onBlur(e: FocusEvent) {
             aria-hidden="true"
             :class="ballClasses"
           >
-            <slot name="icon"/>
+            <slot name="icon" />
           </span>
         </button>
 
@@ -173,7 +190,7 @@ function onBlur(e: FocusEvent) {
         :class="props.size === Size.lg || props.size === Size.md ||props.size === Size.sm ? 'h-5' : 'h-4'"
       >
         <span :class="valueClasses">
-          <slot/>
+          <slot />
         </span>
 
         <AntSkeleton

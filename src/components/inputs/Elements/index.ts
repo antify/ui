@@ -11,5 +11,5 @@ export {
   AntInputDescription,
   AntInputLabel,
   AntInputLimiter,
-  AntSelectMenu
+  AntSelectMenu,
 };

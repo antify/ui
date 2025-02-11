@@ -1,10 +1,12 @@
 import defaultColors from 'tailwindcss/colors.js';
-import {type Config} from 'tailwindcss';
+import {
+  type Config,
+} from 'tailwindcss';
 
 const colors = {
-  'transparent': defaultColors.transparent,
-  'white': defaultColors.white,
-  'black': defaultColors.black,
+  transparent: defaultColors.transparent,
+  white: defaultColors.white,
+  black: defaultColors.black,
 
   'base-50': defaultColors.slate['50'],
   'base-100': defaultColors.slate['100'],
@@ -190,17 +192,24 @@ export default {
     },
     extend: {
       fontSize: {
-        '2xs': ['0.625rem', '0.75rem'],
+        '2xs': [
+          '0.625rem',
+          '0.75rem',
+        ],
       },
       animation: {
         skeleton: 'skeleton 2s ease-out infinite',
       },
       keyframes: {
-        'skeleton': {
-          '0%, 100%': {'background-color': colors['base-300']},
-          '50%': {'background-color': colors['base-100']},
-        }
-      }
-    }
-  }
+        skeleton: {
+          '0%, 100%': {
+            'background-color': colors['base-300'],
+          },
+          '50%': {
+            'background-color': colors['base-100'],
+          },
+        },
+      },
+    },
+  },
 } as Config;

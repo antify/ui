@@ -1,10 +1,16 @@
 <script lang="ts" setup>
-import {faAngleDown, faAngleUp, faQuestionCircle} from '@fortawesome/free-solid-svg-icons';
+import {
+  faAngleDown, faAngleUp, faQuestionCircle,
+} from '@fortawesome/free-solid-svg-icons';
 import AntIcon from './AntIcon.vue';
 import AntTransitionCollapseHeight from './transitions/AntTransitionCollapseHeight.vue';
-import {IconSize} from './__types/AntIcon.types';
-import {computed} from 'vue';
-import AntSkeleton from "../components/AntSkeleton.vue";
+import {
+  IconSize,
+} from './__types/AntIcon.types';
+import {
+  computed,
+} from 'vue';
+import AntSkeleton from '../components/AntSkeleton.vue';
 
 const props = withDefaults(defineProps<{
   isOpen: boolean;
@@ -25,14 +31,17 @@ const props = withDefaults(defineProps<{
   activeLabelClasses: 'bg-primary-500 text-primary-500-font',
   activeIconClasses: 'text-primary-500-font',
   inactiveLabelClasses: 'bg-white text-for-white-bg-font',
-  inactiveIconClasses: 'text-for-white-bg-font'
+  inactiveIconClasses: 'text-for-white-bg-font',
 });
-const emit = defineEmits(['close', 'open']);
+const emit = defineEmits([
+  'close',
+  'open',
+]);
 
 // TODO:: Stehengeblieben: delays machen
 function onClick() {
   if (props.skeleton) {
-    return
+    return;
   }
 
   if (props.isOpen) {
@@ -45,8 +54,8 @@ function onClick() {
 const labelClasses = computed(() => ({
   [props.activeLabelClasses]: props.isOpen,
   [props.inactiveLabelClasses]: !props.isOpen,
-  'cursor-pointer': !props.skeleton
-}))
+  'cursor-pointer': !props.skeleton,
+}));
 </script>
 
 <template>
@@ -63,7 +72,10 @@ const labelClasses = computed(() => ({
         class="flex justify-between items-center"
       >
         <div class="flex items-center gap-2">
-          <slot name="icon-left" v-bind="{isOpen}">
+          <slot
+            name="icon-left"
+            v-bind="{isOpen}"
+          >
             <AntIcon
               v-if="iconLeft"
               :size="IconSize.sm"
@@ -73,12 +85,15 @@ const labelClasses = computed(() => ({
             />
           </slot>
 
-
           <div class="relative">
             <div class="text-sm font-semibold">
               {{ label }}
             </div>
-            <AntSkeleton v-if="skeleton" absolute rounded/>
+            <AntSkeleton
+              v-if="skeleton"
+              absolute
+              rounded
+            />
           </div>
         </div>
 
@@ -102,7 +117,7 @@ const labelClasses = computed(() => ({
           class="text-sm bg-white text-for-white-bg-font"
           :class="{'p-2': contentPadding}"
         >
-          <slot/>
+          <slot />
         </div>
       </Transition>
     </div>

@@ -1,13 +1,21 @@
 import AntModal from '../AntModal.vue';
 import AntButton from '../buttons/AntButton.vue';
-import {type Meta, type StoryObj} from '@storybook/vue3';
-import {computed} from 'vue';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
+import {
+  computed,
+} from 'vue';
 import AntKeycap from '../AntKeycap.vue';
 
 const meta: Meta<typeof AntModal> = {
   title: 'Components/Modal',
   component: AntModal,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   argTypes: {},
 };
 
@@ -17,16 +25,23 @@ type Story = StoryObj<typeof AntModal>;
 
 export const Docs: Story = {
   render: (args) => ({
-    components: {AntModal, AntButton, AntKeycap},
+    components: {
+      AntModal,
+      AntButton,
+      AntKeycap,
+    },
     setup() {
       const open = computed({
         // @ts-ignore
         get: () => args.open,
         // @ts-ignore
-        set: (val) => args.open = val
+        set: (val) => args.open = val,
       });
 
-      return {args, open};
+      return {
+        args,
+        open,
+      };
     },
     template: `
       <div
@@ -73,7 +88,7 @@ export const Docs: Story = {
   }),
   args: {
     title: 'Lorem ipsum dolor',
-    open: false
+    open: false,
   },
 };
 
@@ -82,6 +97,6 @@ export const Fullscreen: Story = {
   args: {
     ...Docs.args,
     open: true,
-    fullscreen: true
+    fullscreen: true,
   },
 };

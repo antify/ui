@@ -1,16 +1,32 @@
 <script lang="ts" setup>
-import {computed, onMounted,} from 'vue';
+import {
+  computed, onMounted,
+} from 'vue';
 import AntButton from '../buttons/AntButton.vue';
 import AntField from '../forms/AntField.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
-import {Size,} from '../../enums/Size.enum';
-import {faMinus, faPlus,} from '@fortawesome/free-solid-svg-icons';
-import {InputState, State,} from '../../enums/State.enum';
-import {handleEnumValidation,} from '../../handler';
-import {Grouped,} from '../../enums/Grouped.enum';
-import {BaseInputType,} from './Elements/__types';
+import {
+  Size,
+} from '../../enums/Size.enum';
+import {
+  faMinus, faPlus,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+  InputState, State,
+} from '../../enums/State.enum';
+import {
+  handleEnumValidation,
+} from '../../handler';
+import {
+  Grouped,
+} from '../../enums/Grouped.enum';
+import {
+  BaseInputType,
+} from './Elements/__types';
 import Big from 'big.js';
-import {getDecimalPlaces} from "../../utils";
+import {
+  getDecimalPlaces,
+} from '../../utils';
 
 Big.RM = Big.roundHalfEven;
 

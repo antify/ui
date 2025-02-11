@@ -1,18 +1,24 @@
 <script setup lang="ts">
 import AntButton from '../buttons/AntButton.vue';
-import {faAngleLeft} from '@fortawesome/free-solid-svg-icons';
+import {
+  faAngleLeft,
+} from '@fortawesome/free-solid-svg-icons';
 import AntSaveAndNewButton from '../buttons/AntSaveAndNewButton.vue';
 import AntSaveButton from '../buttons/AntSaveButton.vue';
 
-defineEmits(['back', 'save', 'save-and-new']);
+defineEmits([
+  'back',
+  'save',
+  'save-and-new',
+]);
 withDefaults(defineProps<{
-  disabled?: boolean
-  skeleton?: boolean
-  canSave?: boolean
+  disabled?: boolean;
+  skeleton?: boolean;
+  canSave?: boolean;
 }>(), {
   disabled: false,
   skeleton: false,
-  canSave: true
+  canSave: true,
 });
 </script>
 
@@ -37,7 +43,7 @@ withDefaults(defineProps<{
     </div>
 
     <div class="flex gap-2.5">
-      <slot name="before-buttons-right"/>
+      <slot name="before-buttons-right" />
       <slot name="buttons-right">
         <AntSaveAndNewButton
           :skeleton="skeleton"
@@ -53,7 +59,7 @@ withDefaults(defineProps<{
           @click="$emit('save')"
         />
       </slot>
-      <slot name="after-buttons-right"/>
+      <slot name="after-buttons-right" />
     </div>
   </div>
 </template>

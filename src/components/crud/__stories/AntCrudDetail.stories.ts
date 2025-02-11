@@ -1,16 +1,26 @@
-import {type Meta, type StoryObj} from '@storybook/vue3';
+import {
+  type Meta, type StoryObj,
+} from '@storybook/vue3';
 import AntCrudDetail from '../AntCrudDetail.vue';
 import AntCrudDetailNav from '../AntCrudDetailNav.vue';
 import AntCrudDetailActions from '../AntCrudDetailActions.vue';
-import {vueRouter} from 'storybook-vue3-router';
+import {
+  vueRouter,
+} from 'storybook-vue3-router';
 
 const meta: Meta<typeof AntCrudDetail> = {
   title: 'Crud/Crud Detail',
   component: AntCrudDetail,
-  parameters: {controls: {sort: 'requiredFirst'}},
+  parameters: {
+    controls: {
+      sort: 'requiredFirst',
+    },
+  },
   decorators: [
-    () => ({template: '<div class="dashed h-80"><story/></div>'}),
-    vueRouter()
+    () => ({
+      template: '<div class="dashed h-80"><story/></div>',
+    }),
+    vueRouter(),
   ],
   argTypes: {},
 };
@@ -24,7 +34,7 @@ export const Docs: Story = {
     components: {
       AntCrudDetail,
       AntCrudDetailNav,
-      AntCrudDetailActions
+      AntCrudDetailActions,
     },
     setup() {
       return {
@@ -43,7 +53,7 @@ export const Docs: Story = {
             id: '3',
             label: 'Tab',
           },
-        ]
+        ],
       };
     },
     template: `
@@ -68,8 +78,8 @@ export const Docs: Story = {
       </AntCrudDetail>
     `,
   }),
-  args: {}
-}
+  args: {},
+};
 
 export const overflownContent: Story = {
   render: (args, ctx) => ({
@@ -79,13 +89,13 @@ export const overflownContent: Story = {
       return {
         // @ts-ignore
         ...Docs.render(args, ctx).setup(),
-        overflowContent: true
+        overflowContent: true,
       };
     },
     // @ts-ignore
-    template: Docs.render(args, ctx).template
+    template: Docs.render(args, ctx).template,
   }),
   args: {
     ...Docs.args,
-  }
+  },
 };

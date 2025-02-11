@@ -1,19 +1,24 @@
 <script setup lang="ts">
-import {AntTableAlign, AntTableRowTypes, AntTableSize, type TableHeader} from './__types/TableHeader.types';
-import {computed} from 'vue';
-import {type RouteLocationRaw, RouterLink} from 'vue-router';
+import {
+  AntTableAlign, AntTableRowTypes, AntTableSize, type TableHeader,
+} from './__types/TableHeader.types';
+import {
+  computed,
+} from 'vue';
+import {
+  type RouteLocationRaw, RouterLink,
+} from 'vue-router';
 
 const props =
-  withDefaults(
-    defineProps<{
-      element: Record<string, unknown>;
-      header: TableHeader;
-      align?: AntTableAlign
-      size?: AntTableSize
-    }>(), {
-      align: AntTableAlign.left,
-      size: AntTableSize.md
-    });
+  withDefaults(defineProps<{
+    element: Record<string, unknown>;
+    header: TableHeader;
+    align?: AntTableAlign;
+    size?: AntTableSize;
+  }>(), {
+    align: AntTableAlign.left,
+    size: AntTableSize.md,
+  });
 
 const cellClasses = computed(() => ({
   'whitespace-nowrap text-sm font-medium relative': true,
@@ -21,7 +26,7 @@ const cellClasses = computed(() => ({
   'text-center': props.align === AntTableAlign.center,
   'px-2.5 py-0 h-10': props.size === AntTableSize.lg,
   'px-2 py-0 h-9': props.size === AntTableSize.md,
-  'px-1.5 py-0 h-8': props.size === AntTableSize.sm
+  'px-1.5 py-0 h-8': props.size === AntTableSize.sm,
 }));
 </script>
 
@@ -47,8 +52,7 @@ const cellClasses = computed(() => ({
       <RouterLink
         :to="element[header.toProp] as RouteLocationRaw"
         class="absolute inset-0"
-      >
-      </RouterLink>
+      />
       {{ element[header.identifier] }}
     </div>
 
@@ -65,7 +69,7 @@ const cellClasses = computed(() => ({
       <slot
         name="cellContent"
         v-bind="{ element, header }"
-      ></slot>
+      />
     </div>
 
     <slot

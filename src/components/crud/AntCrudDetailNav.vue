@@ -1,26 +1,34 @@
 <script setup lang="ts">
 // TODO:: fix why tabs are not full height in story
-import type {TabItem} from '../tabs/__types/AntTabItem.types';
+import type {
+  TabItem,
+} from '../tabs/__types/AntTabItem.types';
 import AntTabs from '../tabs/AntTabs.vue';
 import AntDeleteButton from '../buttons/AntDeleteButton.vue';
 import AntDeleteDialog from '../dialogs/AntDeleteDialog.vue';
-import {ref} from 'vue';
-import {Position} from '../../enums';
+import {
+  ref,
+} from 'vue';
+import {
+  Position,
+} from '../../enums';
 
-defineEmits(['delete']);
+defineEmits([
+  'delete',
+]);
 withDefaults(defineProps<{
-  tabItems?: TabItem[]
-  deleteButtonDisabled?: boolean
-  getEntityName: () => string
-  canDelete?: boolean
-  showDeleteButton?: boolean
-  skeleton?: boolean
+  tabItems?: TabItem[];
+  deleteButtonDisabled?: boolean;
+  getEntityName: () => string;
+  canDelete?: boolean;
+  showDeleteButton?: boolean;
+  skeleton?: boolean;
 }>(), {
   tabItems: () => [],
   deleteButtonDisabled: false,
   canDelete: true,
   showDeleteButton: true,
-  skeleton: false
+  skeleton: false,
 });
 
 const dialogOpen = ref(false);
@@ -40,7 +48,7 @@ const dialogOpen = ref(false);
 
     <div class="flex gap-2 pr-2 py-2">
       <slot name="buttons">
-        <slot name="before-delete-button"/>
+        <slot name="before-delete-button" />
 
         <AntDeleteButton
           v-if="showDeleteButton"
@@ -52,7 +60,7 @@ const dialogOpen = ref(false);
           @click="() => dialogOpen = true"
         />
 
-        <slot name="after-delete-button"/>
+        <slot name="after-delete-button" />
       </slot>
     </div>
 
