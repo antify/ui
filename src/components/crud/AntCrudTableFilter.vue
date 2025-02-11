@@ -78,8 +78,8 @@ watch(() => props.fullWidth, (val) => {
     data-e2e="crud-table-filter"
   >
     <div
-      class="flex gap-2.5 flex-grow"
-      :class="{'flex-grow': !_fullWidth}"
+      class="flex gap-2.5 grow"
+      :class="{'grow': !_fullWidth}"
     >
       <div :class="{'w-80': _fullWidth, 'w-full': !_fullWidth}">
         <AntSearch

@@ -55,7 +55,7 @@ const containerClasses = computed(() => {
   const classes: {
     [key: string]: boolean;
   } = {
-    'flex relative ring-primary/25 rounded-md outline-none': true,
+    'flex relative ring-primary/25 rounded-md outline-hidden': true,
     'focus-within:ring-2': (props.size === Size.xs2 || props.size === Size.xs || props.size === Size.sm) && !hasInputState.value,
     'focus-within:ring-4': (props.size === Size.md || props.size === Size.lg) && !hasInputState.value,
   };

@@ -57,7 +57,7 @@ const inputClasses = computed(() => {
   const classes: {
     [key: string]: boolean;
   } = {
-    'relative inline-flex flex-shrink-0': true,
+    'relative inline-flex shrink-0': true,
     'focus:ring-offset-0 outline outline-offset-[-1px] outline-1 focus:outline-offset-[-1px] focus:outline-1 rounded-full': true,
     'flex items-center justify-center rounded-full appearance-none': true,
     'cursor-pointer': !hasInputState.value,

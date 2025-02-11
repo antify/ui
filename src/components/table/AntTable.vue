@@ -325,7 +325,7 @@ onMounted(() => {
 
     <div
       v-if="data.length > 0 && _loading"
-      class="absolute bg-opacity-50 w-full top-0 bottom-0 bg-base-300 flex items-center justify-center z-10"
+      class="absolute w-full top-0 bottom-0 bg-base-300/50 flex items-center justify-center z-10"
     >
       <AntSpinner
         class="!w-24 !h-24"

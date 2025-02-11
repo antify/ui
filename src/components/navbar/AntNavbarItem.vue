@@ -48,7 +48,7 @@ function itemClick(): void {
       :color="navbarItem.active ? 'text-primary-500' : 'text-for-white-bg-font'"
     />
 
-    <div class="flex-grow select-none">
+    <div class="grow select-none">
       {{ navbarItem.label }}
     </div>
 

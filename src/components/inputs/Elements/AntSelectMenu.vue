@@ -89,7 +89,7 @@ const dropdownClasses = computed(() => {
   };
 
   return {
-    'w-full border flex flex-col gap-px outline-none -mt-px overflow-y-auto shadow-md z-[90] max-h-[250px]': true,
+    'w-full border flex flex-col gap-px outline-hidden -mt-px overflow-y-auto shadow-md z-[90] max-h-[250px]': true,
     'rounded-md': true,
     [variants[props.state]]: true,
   };
