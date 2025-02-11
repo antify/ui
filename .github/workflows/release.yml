@@ -21,7 +21,13 @@ jobs:
       run: npm install -g pnpm
 
     - name: Install dependencies
-      run: pnpm install
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git push origin main --follow-tags
+        pnpm install
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Release new version
       run: pnpm release
