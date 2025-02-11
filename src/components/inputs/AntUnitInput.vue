@@ -63,7 +63,11 @@ const emit = defineEmits([
 
 const _modelValue = computed({
   get: () => {
-    return String(new Big(props.modelValue || 0).toFixed(Math.max(0, props.decimalPlaces)));
+    if(!props.modelValue) {
+      return props.modelValue;
+    }
+
+    return String(new Big(props.modelValue).toFixed(Math.max(0, props.decimalPlaces)));
   },
   set: (val: string) => {
     emit('update:modelValue', Number(val));

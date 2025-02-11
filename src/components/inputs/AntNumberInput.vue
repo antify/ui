@@ -72,11 +72,15 @@ const emit = defineEmits([
 
 const _modelValue = computed({
   get: () => {
+    if(!props.modelValue) {
+      return props.modelValue;
+    }
+
     const modelDecimalPlaces = getDecimalPlaces(props.modelValue || 0);
     const stepDecimalPlaces = getDecimalPlaces(props.steps);
     const decimalPlaces = Math.max(modelDecimalPlaces, stepDecimalPlaces);
 
-    return String(new Big(props.modelValue || 0).toFixed(decimalPlaces));
+    return String(new Big(props.modelValue).toFixed(decimalPlaces));
   },
   set: (val: string) => {
     emit('update:modelValue', Number(val));
