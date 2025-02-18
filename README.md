@@ -13,8 +13,8 @@ Certain components, such as modals and toasts, need to be displayed on top of ot
 
 | Component   | z-index |
 |-------------|---------|
-| AntDropdown | 50      |
-| AntModal    | 80      |
+| AntModal    | 50      |
+| AntDropdown | 80      |
 | AntPopover  | 90      |
 | AntToaster  | 100     |
 
