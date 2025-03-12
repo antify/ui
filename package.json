@@ -47,7 +47,7 @@
     "dist"
   ],
   "peerDependencies": {
-    "tailwindcss": "^4.0.3",
+    "tailwindcss": "4.0.13",
     "vue": "^3.4.29"
   },
   "dependencies": {
@@ -55,7 +55,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/vue-fontawesome": "^3.0.5",
-    "@tailwindcss/vite": "^4.0.3",
+    "@tailwindcss/vite": "4.0.13",
     "@tiptap/extension-heading": "^2.1.16",
     "@tiptap/extension-underline": "^2.1.16",
     "@tiptap/pm": "^2.1.16",
