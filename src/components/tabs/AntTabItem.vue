@@ -15,9 +15,7 @@ import {
 import {
   TabItemState,
 } from './__types/AntTabItem.types';
-import {
-  AntSkeleton,
-} from '../../../dist';
+import AntSkeleton from '../AntSkeleton.vue';
 
 const props = withDefaults(defineProps<{
   label: string;
