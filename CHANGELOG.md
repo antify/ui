@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.2.12 (2025-03-14)
+
+
+### Bug Fixes
+
+* **AntCrudDetailNav:** Fix wrong ux using filled delete button ([ebc90a0](https://github.com/antify/ui/commit/ebc90a07837f240505677e7f40009c47e07527d4))
+
 ### 2.2.11 (2025-03-12)
 
 ### 2.2.10 (2025-02-18)
