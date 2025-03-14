@@ -18,9 +18,13 @@ const props = withDefaults(defineProps<{
   tabItems?: TabItem[];
   expanded?: boolean;
   skeleton?: boolean;
+  leftBorder?: boolean;
+  rightBorder?: boolean;
 }>(), {
   expanded: false,
   skeleton: false,
+  leftBorder: false,
+  rightBorder: false,
 });
 
 const currentActive = useVModel(props, 'modelValue', emits);
@@ -30,6 +34,8 @@ const containerClasses = computed(() => ({
 
 const scrollContainerClasses = computed(() => ({
   'w-full': props.expanded,
+  'border-l': props.leftBorder,
+  'border-r': props.rightBorder,
 }));
 
 function clickTab(tabItem: TabItem) {
@@ -48,7 +54,7 @@ function clickTab(tabItem: TabItem) {
 <template>
   <div :class="containerClasses">
     <div
-      class="flex gap-px bg-base-300 border-l border-r border-base-300 overflow-x-auto"
+      class="flex gap-px bg-base-300 border-base-300 overflow-x-auto"
       :class="scrollContainerClasses"
     >
       <slot>
