@@ -5,7 +5,7 @@
   >
     <slot name="header" />
 
-    <div class="grow bg-white h-full overflow-y-auto">
+    <div class="grow h-px overflow-y-auto bg-base-100">
       <slot />
     </div>
 
