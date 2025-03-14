@@ -54,7 +54,6 @@ const dialogOpen = ref(false);
           v-if="showDeleteButton"
           :disabled="deleteButtonDisabled || !canDelete"
           :skeleton="skeleton"
-          filled
           :can-delete="canDelete"
           :invalid-permission-tooltip-position="Position.left"
           @click="() => dialogOpen = true"
