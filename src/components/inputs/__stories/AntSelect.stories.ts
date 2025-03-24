@@ -5,7 +5,11 @@ import {
   Size,
 } from '../../../enums/Size.enum';
 import AntSelect from '../AntSelect.vue';
+import AntIcon from '../../AntIcon.vue';
 import AntDropdown from '../Elements/AntSelectMenu.vue';
+import {
+  faCake,
+} from '@fortawesome/free-solid-svg-icons';
 import {
   computed, onMounted, ref, type Ref,
 } from 'vue';
@@ -129,6 +133,110 @@ export const Docs: Story = {
       <div ref="scrollContainer" class="overflow-y-auto h-[100vh] p-2.5 dashed">
         <div class="flex items-center h-[200vh]">
           <AntSelect v-bind="args" v-model="modelValue"/>
+        </div>
+      </div>
+    `,
+  }),
+  args: {
+    modelValue: null,
+    label: 'Label',
+    options,
+    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
+  },
+};
+
+export const WithSlots: Story = {
+  render: (args) => ({
+    components: {
+      AntSelect,
+      AntDropdown,
+      AntIcon,
+    },
+    setup() {
+      const modelValue = computed({
+        // @ts-ignore
+        get: () => args.modelValue,
+        // @ts-ignore
+        set: (val) => args.modelValue = val,
+      });
+      const scrollContainer: Ref<HTMLElement | undefined> = ref(undefined);
+
+      onMounted(() => {
+        if (scrollContainer.value) {
+          scrollContainer.value.scrollTop = (scrollContainer.value.scrollHeight - scrollContainer.value.clientHeight ) / 2;
+        }
+      });
+
+      return {
+        args,
+        modelValue,
+        scrollContainer,
+        faCake,
+      };
+    },
+    template: `
+      <div ref="scrollContainer" class="overflow-y-auto h-[100vh] p-2.5 dashed">
+        <div class="flex items-center h-[200vh]">
+          <AntSelect v-bind="args" v-model="modelValue">
+            <template #contentLeft="option">
+              <div v-if="option.value === '1'">
+                <AntIcon
+                  :icon="faCake"
+                  color="text-primary-500"
+                />
+              </div>
+
+              <div v-if="option.value === '2'">
+                <AntIcon
+                  :icon="faCake"
+                  color="text-secondary-500"
+                />
+              </div>
+
+              <div v-if="option.value === '3'">
+                <AntIcon
+                  :icon="faCake"
+                  color="text-success-500"
+                />
+              </div>
+
+              <div v-if="option.value === '4'">
+                <AntIcon
+                  :icon="faCake"
+                  color="text-warning-500"
+                />
+              </div>
+            </template>
+            <template #contentRight="option">
+              <div v-if="option.value === '1'">
+                <AntIcon
+                  :icon="faCake"
+                  color="text-primary-500"
+                />
+              </div>
+
+              <div v-if="option.value === '2'">
+                <AntIcon
+                  :icon="faCake"
+                  color="text-secondary-500"
+                />
+              </div>
+
+              <div v-if="option.value === '3'">
+                <AntIcon
+                  :icon="faCake"
+                  color="text-success-500"
+                />
+              </div>
+
+              <div v-if="option.value === '4'">
+                <AntIcon
+                  :icon="faCake"
+                  color="text-warning-500"
+                />
+              </div>
+            </template>
+          </AntSelect>
         </div>
       </div>
     `,

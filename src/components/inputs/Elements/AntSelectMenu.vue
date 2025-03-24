@@ -104,14 +104,14 @@ const dropDownItemClasses = computed(() => {
   };
 
   return {
-    'select-none text-ellipsis overflow-hidden whitespace-nowrap min-h-fit': true,
+    'flex items-center select-none text-ellipsis overflow-hidden whitespace-nowrap min-h-fit': true,
     [variants[props.state]]: true,
     // Size
-    'p-1 text-xs': props.size === Size.xs2,
-    'p-1.5 text-xs': props.size === Size.xs,
-    'p-1.5 text-sm': props.size === Size.sm,
-    'p-2 text-sm': props.size === Size.md,
-    'p-2.5 text-sm': props.size === Size.lg,
+    'p-1 text-xs gap-1': props.size === Size.xs2,
+    'p-1.5 text-xs gap1.5': props.size === Size.xs,
+    'p-1.5 text-sm gap-1.5': props.size === Size.sm,
+    'p-2 text-sm gap-2': props.size === Size.md,
+    'p-2.5 text-sm gap-2.5': props.size === Size.lg,
   };
 });
 
@@ -240,7 +240,15 @@ watch(_modelValue, (val) => {
           @mousedown="(e) => onClickDropDownItem(e, option.value)"
           @mouseover="() => focusedDropDownItem = option.value"
         >
+          <slot
+            name="contentLeft"
+            v-bind="option"
+          />
           {{ option.label }}
+          <slot
+            name="contentRight"
+            v-bind="option"
+          />
         </div>
 
         <div
