@@ -6,7 +6,7 @@ import {
   InputState,
 } from '../enums';
 import {
-  arrow, autoUpdate, flip, offset, useFloating,
+  arrow, autoUpdate, flip, offset, useFloating, shift,
 } from '@floating-ui/vue';
 import {
   hasSlotContent,
@@ -52,6 +52,7 @@ const {
       ],
       fallbackAxisSideDirection: 'none',
     }),
+    shift(),
     arrow({
       element: floatingArrow,
     }),
@@ -197,7 +198,7 @@ function onClick() {
         @mouseleave="() => onMouseLeaveTooltip()"
       >
         <div
-          class="p-2 rounded-md border"
+          class="p-2 rounded-md border w-fit max-w-screen"
           :class="contentClasses"
         >
           <slot name="content" />
