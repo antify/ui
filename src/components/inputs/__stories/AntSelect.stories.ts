@@ -336,84 +336,80 @@ export const summary: Story = {
       disableSnapshot: false,
     },
   },
-  render: (args) => ({
-    components: {
-      AntSelect,
-    },
-    setup() {
-      return {
-        args,
-        manySelectOptions,
-      };
-    },
+  render: (args, ctx) => ({
+    // @ts-ignore
+    components: Docs.render(args, ctx).components,
+    // @ts-ignore
+    setup: Docs.render(args, ctx).setup,
     template: `
       <div class="p-4 flex flex-col gap-2.5">
         <div class="flex w-2/5 gap-2.5">
-          <AntSelect v-bind="args" :value="null"
+          <AntSelect v-bind="args"
+                     v-model="modelValue"
                      placeholder="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"/>
-          <AntSelect v-bind="args" value="5"/>
+          <AntSelect v-bind="args" v-model="modelValue"/>
         </div>
         <div class="flex gap-2.5">
-          <AntSelect v-bind="args" :value="null" size="md" state="base"/>
-          <AntSelect v-bind="args" :value="null" size="md" state="info"/>
-          <AntSelect v-bind="args" :value="null" size="md" state="success"/>
-          <AntSelect v-bind="args" :value="null" size="md" state="warning"/>
-          <AntSelect v-bind="args" :value="null" size="md" state="danger"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="base"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="info"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="success"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="warning"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="danger"/>
         </div>
         <div class="flex gap-2.5">
-          <AntSelect v-bind="args" :value="null" size="sm" state="base"/>
-          <AntSelect v-bind="args" :value="null" size="sm" state="info"/>
-          <AntSelect v-bind="args" :value="null" size="sm" state="success"/>
-          <AntSelect v-bind="args" :value="null" size="sm" state="warning"/>
-          <AntSelect v-bind="args" :value="null" size="sm" state="danger"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="base"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="info"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="success"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="warning"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="danger"/>
         </div>
         <div class="flex gap-2.5">
-          <AntSelect v-bind="args" value="1" size="md" state="base"/>
-          <AntSelect v-bind="args" value="1" size="md" state="info"/>
-          <AntSelect v-bind="args" value="1" size="md" state="success"/>
-          <AntSelect v-bind="args" value="1" size="md" state="warning"/>
-          <AntSelect v-bind="args" value="1" size="md" state="danger"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="base"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="info"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="success"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="warning"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="danger"/>
         </div>
         <div class="flex gap-2.5">
-          <AntSelect v-bind="args" value="1" size="sm" state="base"/>
-          <AntSelect v-bind="args" value="1" size="sm" state="info"/>
-          <AntSelect v-bind="args" value="1" size="sm" state="success"/>
-          <AntSelect v-bind="args" value="1" size="sm" state="warning"/>
-          <AntSelect v-bind="args" value="1" size="sm" state="danger"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="base"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="info"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="success"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="warning"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="danger"/>
         </div>
         <div class="flex gap-2.5">
-          <AntSelect v-bind="args" value="1" size="sm" state="base" disabled/>
-          <AntSelect v-bind="args" value="1" size="sm" state="info" disabled/>
-          <AntSelect v-bind="args" value="1" size="sm" state="success" disabled/>
-          <AntSelect v-bind="args" value="1" size="sm" state="warning" disabled/>
-          <AntSelect v-bind="args" value="1" size="sm" state="danger" disabled/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="base" disabled/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="info" disabled/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="success" disabled/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="warning" disabled/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="danger" disabled/>
         </div>
         <div class="flex gap-2.5">
-          <AntSelect v-bind="args" :value="1" v-model="modelValue" size="sm" state="base" disabled nullable/>
-          <AntSelect v-bind="args" :value="1" v-model="modelValue" size="sm" state="info" disabled nullable/>
-          <AntSelect v-bind="args" :value="1" v-model="modelValue" size="sm" state="success" disabled nullable/>
-          <AntSelect v-bind="args" :value="1" v-model="modelValue" size="sm" state="warning" disabled nullable/>
-          <AntSelect v-bind="args" :value="1" v-model="modelValue" size="sm" state="danger" disabled nullable/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="base" disabled nullable/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="info" disabled nullable/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="success" disabled nullable/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="warning" disabled nullable/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="danger" disabled nullable/>
         </div>
         <div class="flex gap-2.5">
-          <AntSelect v-bind="args" :value="null" grouped="none"/>
-          <AntSelect v-bind="args" :value="null" grouped="right"/>
-          <AntSelect v-bind="args" :value="null" grouped="center"/>
-          <AntSelect v-bind="args" :value="null" grouped="left"/>
+          <AntSelect v-bind="args" v-model="modelValue" grouped="none"/>
+          <AntSelect v-bind="args" v-model="modelValue" grouped="right"/>
+          <AntSelect v-bind="args" v-model="modelValue" grouped="center"/>
+          <AntSelect v-bind="args" v-model="modelValue" grouped="left"/>
         </div>
         <div class="flex gap-2.5">
-          <AntSelect v-bind="args" value="1" size="md" nullable state="base"/>
-          <AntSelect v-bind="args" value="1" size="md" nullable state="info"/>
-          <AntSelect v-bind="args" value="1" size="md" nullable state="success"/>
-          <AntSelect v-bind="args" value="1" size="md" nullable state="warning"/>
-          <AntSelect v-bind="args" value="1" size="md" nullable state="danger"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" nullable state="base"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" nullable state="info"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" nullable state="success"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" nullable state="warning"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" nullable state="danger"/>
         </div>
         <div class="flex gap-2.5">
-          <AntSelect v-bind="args" value="1" size="sm" nullable state="base"/>
-          <AntSelect v-bind="args" value="1" size="sm" nullable state="info"/>
-          <AntSelect v-bind="args" value="1" size="sm" nullable state="success"/>
-          <AntSelect v-bind="args" value="1" size="sm" nullable state="warning"/>
-          <AntSelect v-bind="args" value="1" size="sm" nullable state="danger"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" nullable state="base"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" nullable state="info"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" nullable state="success"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" nullable state="warning"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" nullable state="danger"/>
         </div>
       </div>
     `,
