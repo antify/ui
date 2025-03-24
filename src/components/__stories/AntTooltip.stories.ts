@@ -45,7 +45,7 @@ export const Docs: Story = {
     },
     setup() {
       const scrollContainer: Ref<HTMLElement | undefined> = ref(undefined);
-      const tooltipContent = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr,\n sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
+      const tooltipContent = 'Tooltip content';
 
       onMounted(() => {
         if (scrollContainer.value) {
@@ -122,6 +122,50 @@ export const Docs: Story = {
     });
   },
   args: {},
+};
+
+export const largeContent: Story = {
+  render: (args) => ({
+    components: {
+      AntTooltip,
+      AntButton,
+    },
+    setup() {
+      const scrollContainer: Ref<HTMLElement | undefined> = ref(undefined);
+      const tooltipContent = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr,\n sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
+
+      onMounted(() => {
+        if (scrollContainer.value) {
+          scrollContainer.value.scrollLeft = (scrollContainer.value.scrollWidth - scrollContainer.value.clientWidth ) / 2;
+          scrollContainer.value.scrollTop = (scrollContainer.value.scrollHeight - scrollContainer.value.clientHeight ) / 2;
+        }
+      });
+
+      return {
+        args,
+        scrollContainer,
+        tooltipContent,
+      };
+    },
+    template: `
+      <div ref="scrollContainer" class="dashed  h-[50vh] w-[50vw] overflow-scroll">
+        <div class="flex grow justify-center items-center h-screen w-[2000px]">
+          <AntTooltip v-bind="args">
+            <AntButton>Hover me</AntButton>
+
+            <template #content>
+              <div>
+                {{tooltipContent}}
+              </div>
+            </template>
+          </AntTooltip>
+        </div>
+      </div>
+    `,
+  }),
+  args: {
+    ...Docs.args,
+  },
 };
 
 export const disabled: Story = {
