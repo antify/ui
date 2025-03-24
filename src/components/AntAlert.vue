@@ -17,7 +17,7 @@ import AntIcon from './AntIcon.vue';
 import AntTooltip from './AntTooltip.vue';
 import AntSkeleton from './AntSkeleton.vue';
 import {
-  InputState, Position,
+  InputState,
 } from '../enums';
 import {
   IconSize,
@@ -125,13 +125,11 @@ onMounted(() => {
         <div v-if="hasQuestionMark">
           <slot name="questionMarkText">
             <AntTooltip>
-              <template #reference>
-                <AntIcon
-                  :icon="faCircleQuestion"
-                  :color="iconColor"
-                  :size="IconSize.sm"
-                />
-              </template>
+              <AntIcon
+                :icon="faCircleQuestion"
+                :color="iconColor"
+                :size="IconSize.sm"
+              />
 
               <template #content>
                 {{ questionMarkText }}
