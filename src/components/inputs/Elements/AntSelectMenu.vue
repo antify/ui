@@ -54,7 +54,7 @@ const reference = ref<HTMLElement | null | undefined>(props.inputRef);
 const elementSize = useElementSize(reference);
 const floating = ref<HTMLElement | null>(null);
 const {
-  floatingStyles, middlewareData, placement,
+  floatingStyles,
 } = useFloating(reference, floating, {
   placement: 'bottom',
   whileElementsMounted: autoUpdate,
@@ -89,7 +89,7 @@ const dropdownClasses = computed(() => {
   };
 
   return {
-    'w-full border flex flex-col gap-px outline-hidden -mt-px overflow-y-auto shadow-md z-[90] max-h-[250px]': true,
+    'w-full border flex flex-col gap-px outline-none -mt-px overflow-y-auto shadow-md z-[90] max-h-[250px]': true,
     'rounded-md': true,
     [variants[props.state]]: true,
   };
@@ -230,6 +230,7 @@ watch(_modelValue, (val) => {
         v-if="isOpen"
         ref="floating"
         :class="dropdownClasses"
+        data-e2e="select-menu"
         :style="{width: `${elementSize.width.value}px!important`, ...floatingStyles}"
       >
         <div
