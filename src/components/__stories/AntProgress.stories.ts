@@ -7,6 +7,9 @@ import {
   Size,
 } from '../../enums/Size.enum';
 import {
+  State,
+} from '../../enums/State.enum';
+import {
   ref,
 } from 'vue';
 import {
@@ -22,7 +25,14 @@ const meta: Meta<typeof AntProgress> = {
       sort: 'requiredFirst',
     },
   },
-  argTypes: {},
+  argTypes: {
+    state: {
+      control: {
+        type: 'select',
+      },
+      options: Object.values(State),
+    },
+  },
 };
 
 export default meta;
@@ -80,7 +90,7 @@ export const Docs: Story = {
       };
     },
     template: `
-      <div class="dashed p-2 flex w-[50vw] flex-col gap-2.5">
+      <div class="dashed p-2 flex h-[50vh] flex-col gap-2.5">
         <AntProgress v-bind="args" :progress="progress"/>
 
         <div class="flex gap-2.5 items-center">
@@ -112,5 +122,7 @@ export const Docs: Story = {
       </div>
     `,
   }),
-  args: {},
+  args: {
+    height: '8px',
+  },
 };
