@@ -24,6 +24,7 @@ const props = withDefaults(defineProps<{
   hasFilter?: boolean;
   canCreate?: boolean;
   skeleton?: boolean;
+  searchPlaceholderText?: string;
 }>(), {
   fullWidth: true,
   showFilter: true,
@@ -31,6 +32,7 @@ const props = withDefaults(defineProps<{
   hasFilter: false,
   canCreate: true,
   skeleton: false,
+  searchPlaceholderText: 'Search',
 });
 const emit = defineEmits([
   'search',
@@ -85,6 +87,7 @@ watch(() => props.fullWidth, (val) => {
         <AntSearch
           v-model="search"
           :skeleton="skeleton"
+          :placeholder="searchPlaceholderText"
         />
       </div>
 
