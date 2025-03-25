@@ -5,7 +5,11 @@ import {
   Size,
 } from '../../../enums/Size.enum';
 import AntSelect from '../AntSelect.vue';
+import AntIcon from '../../AntIcon.vue';
 import AntDropdown from '../Elements/AntSelectMenu.vue';
+import {
+  faCake,
+} from '@fortawesome/free-solid-svg-icons';
 import {
   computed, onMounted, ref, type Ref,
 } from 'vue';
@@ -141,6 +145,110 @@ export const Docs: Story = {
   },
 };
 
+export const WithSlots: Story = {
+  render: (args) => ({
+    components: {
+      AntSelect,
+      AntDropdown,
+      AntIcon,
+    },
+    setup() {
+      const modelValue = computed({
+        // @ts-ignore
+        get: () => args.modelValue,
+        // @ts-ignore
+        set: (val) => args.modelValue = val,
+      });
+      const scrollContainer: Ref<HTMLElement | undefined> = ref(undefined);
+
+      onMounted(() => {
+        if (scrollContainer.value) {
+          scrollContainer.value.scrollTop = (scrollContainer.value.scrollHeight - scrollContainer.value.clientHeight ) / 2;
+        }
+      });
+
+      return {
+        args,
+        modelValue,
+        scrollContainer,
+        faCake,
+      };
+    },
+    template: `
+      <div ref="scrollContainer" class="overflow-y-auto h-[100vh] p-2.5 dashed">
+        <div class="flex items-center h-[200vh]">
+          <AntSelect v-bind="args" v-model="modelValue">
+            <template #contentLeft="option">
+              <div v-if="option.value === '1'">
+                <AntIcon
+                  :icon="faCake"
+                  color="text-primary-500"
+                />
+              </div>
+
+              <div v-if="option.value === '2'">
+                <AntIcon
+                  :icon="faCake"
+                  color="text-secondary-500"
+                />
+              </div>
+
+              <div v-if="option.value === '3'">
+                <AntIcon
+                  :icon="faCake"
+                  color="text-success-500"
+                />
+              </div>
+
+              <div v-if="option.value === '4'">
+                <AntIcon
+                  :icon="faCake"
+                  color="text-warning-500"
+                />
+              </div>
+            </template>
+            <template #contentRight="option">
+              <div v-if="option.value === '1'">
+                <AntIcon
+                  :icon="faCake"
+                  color="text-primary-500"
+                />
+              </div>
+
+              <div v-if="option.value === '2'">
+                <AntIcon
+                  :icon="faCake"
+                  color="text-secondary-500"
+                />
+              </div>
+
+              <div v-if="option.value === '3'">
+                <AntIcon
+                  :icon="faCake"
+                  color="text-success-500"
+                />
+              </div>
+
+              <div v-if="option.value === '4'">
+                <AntIcon
+                  :icon="faCake"
+                  color="text-warning-500"
+                />
+              </div>
+            </template>
+          </AntSelect>
+        </div>
+      </div>
+    `,
+  }),
+  args: {
+    modelValue: null,
+    label: 'Label',
+    options,
+    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
+  },
+};
+
 export const manyOptions: Story = {
   render: Docs.render,
   args: {
@@ -228,84 +336,80 @@ export const summary: Story = {
       disableSnapshot: false,
     },
   },
-  render: (args) => ({
-    components: {
-      AntSelect,
-    },
-    setup() {
-      return {
-        args,
-        manySelectOptions,
-      };
-    },
+  render: (args, ctx) => ({
+    // @ts-ignore
+    components: Docs.render(args, ctx).components,
+    // @ts-ignore
+    setup: Docs.render(args, ctx).setup,
     template: `
       <div class="p-4 flex flex-col gap-2.5">
         <div class="flex w-2/5 gap-2.5">
-          <AntSelect v-bind="args" :value="null"
+          <AntSelect v-bind="args"
+                     v-model="modelValue"
                      placeholder="Lorem ipsum dolor sit amet, consetetur sadipscing elitr"/>
-          <AntSelect v-bind="args" value="5"/>
+          <AntSelect v-bind="args" v-model="modelValue"/>
         </div>
         <div class="flex gap-2.5">
-          <AntSelect v-bind="args" :value="null" size="md" state="base"/>
-          <AntSelect v-bind="args" :value="null" size="md" state="info"/>
-          <AntSelect v-bind="args" :value="null" size="md" state="success"/>
-          <AntSelect v-bind="args" :value="null" size="md" state="warning"/>
-          <AntSelect v-bind="args" :value="null" size="md" state="danger"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="base"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="info"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="success"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="warning"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="danger"/>
         </div>
         <div class="flex gap-2.5">
-          <AntSelect v-bind="args" :value="null" size="sm" state="base"/>
-          <AntSelect v-bind="args" :value="null" size="sm" state="info"/>
-          <AntSelect v-bind="args" :value="null" size="sm" state="success"/>
-          <AntSelect v-bind="args" :value="null" size="sm" state="warning"/>
-          <AntSelect v-bind="args" :value="null" size="sm" state="danger"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="base"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="info"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="success"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="warning"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="danger"/>
         </div>
         <div class="flex gap-2.5">
-          <AntSelect v-bind="args" value="1" size="md" state="base"/>
-          <AntSelect v-bind="args" value="1" size="md" state="info"/>
-          <AntSelect v-bind="args" value="1" size="md" state="success"/>
-          <AntSelect v-bind="args" value="1" size="md" state="warning"/>
-          <AntSelect v-bind="args" value="1" size="md" state="danger"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="base"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="info"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="success"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="warning"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" state="danger"/>
         </div>
         <div class="flex gap-2.5">
-          <AntSelect v-bind="args" value="1" size="sm" state="base"/>
-          <AntSelect v-bind="args" value="1" size="sm" state="info"/>
-          <AntSelect v-bind="args" value="1" size="sm" state="success"/>
-          <AntSelect v-bind="args" value="1" size="sm" state="warning"/>
-          <AntSelect v-bind="args" value="1" size="sm" state="danger"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="base"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="info"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="success"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="warning"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="danger"/>
         </div>
         <div class="flex gap-2.5">
-          <AntSelect v-bind="args" value="1" size="sm" state="base" disabled/>
-          <AntSelect v-bind="args" value="1" size="sm" state="info" disabled/>
-          <AntSelect v-bind="args" value="1" size="sm" state="success" disabled/>
-          <AntSelect v-bind="args" value="1" size="sm" state="warning" disabled/>
-          <AntSelect v-bind="args" value="1" size="sm" state="danger" disabled/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="base" disabled/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="info" disabled/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="success" disabled/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="warning" disabled/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="danger" disabled/>
         </div>
         <div class="flex gap-2.5">
-          <AntSelect v-bind="args" :value="1" v-model="modelValue" size="sm" state="base" disabled nullable/>
-          <AntSelect v-bind="args" :value="1" v-model="modelValue" size="sm" state="info" disabled nullable/>
-          <AntSelect v-bind="args" :value="1" v-model="modelValue" size="sm" state="success" disabled nullable/>
-          <AntSelect v-bind="args" :value="1" v-model="modelValue" size="sm" state="warning" disabled nullable/>
-          <AntSelect v-bind="args" :value="1" v-model="modelValue" size="sm" state="danger" disabled nullable/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="base" disabled nullable/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="info" disabled nullable/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="success" disabled nullable/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="warning" disabled nullable/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" state="danger" disabled nullable/>
         </div>
         <div class="flex gap-2.5">
-          <AntSelect v-bind="args" :value="null" grouped="none"/>
-          <AntSelect v-bind="args" :value="null" grouped="right"/>
-          <AntSelect v-bind="args" :value="null" grouped="center"/>
-          <AntSelect v-bind="args" :value="null" grouped="left"/>
+          <AntSelect v-bind="args" v-model="modelValue" grouped="none"/>
+          <AntSelect v-bind="args" v-model="modelValue" grouped="right"/>
+          <AntSelect v-bind="args" v-model="modelValue" grouped="center"/>
+          <AntSelect v-bind="args" v-model="modelValue" grouped="left"/>
         </div>
         <div class="flex gap-2.5">
-          <AntSelect v-bind="args" value="1" size="md" nullable state="base"/>
-          <AntSelect v-bind="args" value="1" size="md" nullable state="info"/>
-          <AntSelect v-bind="args" value="1" size="md" nullable state="success"/>
-          <AntSelect v-bind="args" value="1" size="md" nullable state="warning"/>
-          <AntSelect v-bind="args" value="1" size="md" nullable state="danger"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" nullable state="base"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" nullable state="info"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" nullable state="success"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" nullable state="warning"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="md" nullable state="danger"/>
         </div>
         <div class="flex gap-2.5">
-          <AntSelect v-bind="args" value="1" size="sm" nullable state="base"/>
-          <AntSelect v-bind="args" value="1" size="sm" nullable state="info"/>
-          <AntSelect v-bind="args" value="1" size="sm" nullable state="success"/>
-          <AntSelect v-bind="args" value="1" size="sm" nullable state="warning"/>
-          <AntSelect v-bind="args" value="1" size="sm" nullable state="danger"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" nullable state="base"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" nullable state="info"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" nullable state="success"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" nullable state="warning"/>
+          <AntSelect v-bind="args" v-model="modelValue" size="sm" nullable state="danger"/>
         </div>
       </div>
     `,

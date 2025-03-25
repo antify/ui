@@ -91,6 +91,7 @@ const _modelValue = computed({
 });
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const valueLabel = computed(() => props.options.find(option => option.value === _modelValue.value)?.label || null);
+const selectedOption = computed(() => props.options.find(option => option.value === _modelValue.value) || null);
 const inputClasses = computed(() => {
   const variants: Record<InputState, string> = {
     [InputState.base]: 'outline-base-300 bg-white focus:ring-primary-200',
@@ -284,6 +285,18 @@ function onClickRemoveButton() {
           :close-on-enter="true"
           @select-element="(e) => _modelValue = e"
         >
+          <template #contentLeft="props">
+            <slot
+              name="contentLeft"
+              v-bind="{...props}"
+            />
+          </template>
+          <template #contentRight="props">
+            <slot
+              name="contentRight"
+              v-bind="{...props}"
+            />
+          </template>
           <!-- Input -->
           <div
             ref="inputRef"
@@ -310,9 +323,24 @@ function onClickRemoveButton() {
 
             <div
               v-else
-              class="select-none text-ellipsis overflow-hidden whitespace-nowrap w-full text-black"
+              class="flex items-center select-none text-ellipsis overflow-hidden whitespace-nowrap w-full text-black"
+              :class="{
+                'gap-1': size === Size.xs2,
+                'gap1.5': size === Size.xs,
+                'gap-1.5': size === Size.sm,
+                'gap-2': size === Size.md,
+                'gap-2.5': size === Size.lg,
+              }"
             >
+              <slot
+                name="contentLeft"
+                v-bind="selectedOption"
+              />
               {{ valueLabel }}
+              <slot
+                name="contentRight"
+                v-bind="selectedOption"
+              />
             </div>
 
             <AntIcon
