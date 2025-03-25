@@ -13,12 +13,15 @@ const props = withDefaults(defineProps<{
    */
   progress: number | null;
   /**
-   * Takes string with height and the value e.g. '16px' or '1rem'
+   * Takes string with height and the unit e.g. '16px' or '1rem'
    */
   height: string;
-  state?: State;
+  /**
+   * Takes tailwind class for background color e.g. 'bg-primary-500'
+   */
+  color?: string;
 }>(),{
-  state: State.primary,
+  color: 'bg-primary-500',
 });
 
 const progressWidth = computed(() => {
@@ -30,22 +33,6 @@ const progressWidth = computed(() => {
     return '100%';
   }
 });
-
-const progressState = computed(() => {
-  const variants: Record<State, string> = {
-    [State.base]: 'bg-base-300',
-    [State.primary]: 'bg-primary-500',
-    [State.secondary]: 'bg-secondary-500',
-    [State.info]: 'bg-info-500',
-    [State.success]: 'bg-success-500',
-    [State.warning]: 'bg-warning-500',
-    [State.danger]: 'bg-danger-500',
-  };
-
-  return {
-    [variants[props.state]]: true,
-  };
-});
 </script>
 
 <template>
@@ -55,7 +42,7 @@ const progressState = computed(() => {
   >
     <div
       class="absolute rounded-md"
-      :class="progressState"
+      :class="color"
       :style="{ width: progressWidth, height: height }"
     />
   </div>
