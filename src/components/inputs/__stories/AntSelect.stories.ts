@@ -179,62 +179,10 @@ export const WithSlots: Story = {
         <div class="flex items-center h-[200vh]">
           <AntSelect v-bind="args" v-model="modelValue">
             <template #contentLeft="option">
-              <div v-if="option.value === '1'">
-                <AntIcon
-                  :icon="faCake"
-                  color="text-primary-500"
-                />
-              </div>
-
-              <div v-if="option.value === '2'">
-                <AntIcon
-                  :icon="faCake"
-                  color="text-secondary-500"
-                />
-              </div>
-
-              <div v-if="option.value === '3'">
-                <AntIcon
-                  :icon="faCake"
-                  color="text-success-500"
-                />
-              </div>
-
-              <div v-if="option.value === '4'">
-                <AntIcon
-                  :icon="faCake"
-                  color="text-warning-500"
-                />
-              </div>
+              <img v-if="option.imgUrl" class="w-6 h-6 rounded-full"  :src="option.imgUrl" :alt="option.label"/>
             </template>
             <template #contentRight="option">
-              <div v-if="option.value === '1'">
-                <AntIcon
-                  :icon="faCake"
-                  color="text-primary-500"
-                />
-              </div>
-
-              <div v-if="option.value === '2'">
-                <AntIcon
-                  :icon="faCake"
-                  color="text-secondary-500"
-                />
-              </div>
-
-              <div v-if="option.value === '3'">
-                <AntIcon
-                  :icon="faCake"
-                  color="text-success-500"
-                />
-              </div>
-
-              <div v-if="option.value === '4'">
-                <AntIcon
-                  :icon="faCake"
-                  color="text-warning-500"
-                />
-              </div>
+              <img v-if="option.imgUrl" class="w-6 h-6 rounded-full"  :src="option.imgUrl" :alt="option.label"/>
             </template>
           </AntSelect>
         </div>
@@ -244,7 +192,26 @@ export const WithSlots: Story = {
   args: {
     modelValue: null,
     label: 'Label',
-    options,
+    options: [
+      {
+        label: "Option 1",
+        value: 1,
+        imgUrl: 'https://fastly.picsum.photos/id/972/200/200.jpg?hmac=TeAvfwW2T9YMpPW-sWWTeAiseERb12wSeR3mYzuG6TE'
+      },
+      {
+        label: "Option 2",
+        value: 2,
+        imgUrl: 'https://fastly.picsum.photos/id/314/200/200.jpg?hmac=bCAc2iO5ovLPrvwDQV31aBPS13QTyv33ut2H2wY4QXU'
+      },{
+        label: "Option 3",
+        value: 3,
+        imgUrl: 'https://fastly.picsum.photos/id/972/200/200.jpg?hmac=TeAvfwW2T9YMpPW-sWWTeAiseERb12wSeR3mYzuG6TE'
+      },{
+        label: "Option 4",
+        value: 4,
+        imgUrl: 'https://fastly.picsum.photos/id/165/200/200.jpg?hmac=tQGrY9pm5ze9soSsZ5CNBt87zqnHfFwdPv_khau12Sw'
+      },
+    ],
     description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
   },
 };
