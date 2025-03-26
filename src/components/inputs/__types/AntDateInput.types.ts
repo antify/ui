@@ -4,5 +4,4 @@ export enum AntDateInputTypes {
   month = 'month',
   time = 'time',
   week = 'week',
-
 }
