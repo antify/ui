@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.3.0 (2025-03-27)
+
+
+### Features
+
+* **ImageInput:** Implement AntImageInput ([6df6850](https://github.com/antify/ui/commit/6df6850aa8e2257a16aa14d20aa9e93b9c8a095e))
+
 ### 2.2.16 (2025-03-27)
 
 ### 2.2.15 (2025-03-25)
