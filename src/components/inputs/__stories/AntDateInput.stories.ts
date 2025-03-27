@@ -82,6 +82,49 @@ export const Docs: Story = {
   },
 };
 
+export const WithDateLimits: Story = {
+  render: (args) => ({
+    components: {
+      AntDateInput,
+    },
+    setup() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+
+      const min = '2024-01-01';
+      const max = `${year}-${month}-${day}`;
+
+      return {
+        args,
+        min,
+        max
+      };
+    },
+    template: `
+      <div class="flex flex-col gap-4">
+        <ul class="text-sm text-base-500">
+          <li>Min-Date: <span class="font-bold">{{ min }}</span></li>
+          <li>Max-Date: <span class="font-bold">{{ max }}</span></li>
+        </ul>
+
+        <AntDateInput
+          v-bind="args"
+          v-model="args.modelValue"
+          :min="min"
+          :max="max"
+        />
+      </div>
+    `,
+  }),
+  args: {
+    modelValue: null,
+    label: 'Label',
+    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
+  },
+};
+
 export const Summary: Story = {
   parameters: {
     chromatic: {

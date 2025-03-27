@@ -59,6 +59,8 @@ const props = withDefaults(defineProps<{
   iconLeft?: IconDefinition;
   nullable?: boolean;
   inputRef?: null | HTMLInputElement;
+  min?: string;
+  max?: string;
 }>(), {
   state: InputState.base,
   disabled: false,
@@ -257,6 +259,8 @@ function onClickClearIcon() {
       :disabled="disabled || skeleton"
       :readonly="readonly"
       :tabindex="hasInputState ? -1 : 0"
+      :min="min"
+      :max="max"
       title=""
       v-bind="$attrs"
       @blur="onBlur"

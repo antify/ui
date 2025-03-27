@@ -45,6 +45,8 @@ const props = withDefaults(defineProps<{
   readonly?: boolean;
   skeleton?: boolean;
   messages?: string[];
+  min?: string;
+  max?: string;
 }>(), {
   state: InputState.base,
   type: AntDateInputTypes.date,
@@ -110,6 +112,8 @@ function onClickCalendar() {
       :disabled="disabled"
       :readonly="readonly"
       :show-icon="false"
+      :min="min"
+      :max="max"
       v-bind="$attrs"
       @validate="val => $emit('validate', val)"
     >
