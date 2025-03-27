@@ -50,6 +50,7 @@ import AntTagInput from './inputs/AntTagInput.vue';
 import AntTextarea from './inputs/AntTextarea.vue';
 import AntTextInput from './inputs/AntTextInput.vue';
 import AntUnitInput from './inputs/AntUnitInput.vue';
+import AntImageInput from './inputs/AntImageInput.vue';
 
 // Layouts
 import AntNavLeftLayout from './layouts/AntNavLeftLayout.vue';
@@ -129,6 +130,7 @@ export {
   AntTextarea,
   AntTextInput,
   AntUnitInput,
+  AntImageInput,
   AntNavLeftLayout,
   AntNavbar,
   AntNavbarItem,
