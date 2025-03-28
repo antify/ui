@@ -137,83 +137,39 @@ export const Summary: Story = {
       const progress1 = ref<number>(50);
       const progress2 = ref<number>(50);
       const progress3 = ref<number>(50);
+      const progress = [
+        progress1,
+        progress2,
+        progress3,
+      ];
 
       const increase = (number: number) => {
-        if(number === 1) {
-          if (progress1.value === 100) {
-            return;
-          }
+        const progressItem = progress[number - 1];
 
-          progress1.value += 10;
-        } else if(number === 2) {
-          if (progress2.value === 100) {
-            return;
-          }
-
-          progress2.value += 10;
-        } else {
-          if (progress3.value === 100) {
-            return;
-          }
-
-          progress3.value += 10;
+        if (progressItem.value < 100) {
+          progressItem.value += 10;
         }
       };
 
       const decrease = (number: number) => {
-        if(number === 1) {
-          if (progress1.value === null || progress1.value === 0) {
-            return;
-          }
+        const progressItem = progress[number - 1];
 
-          progress1.value -= 10;
-        } else if(number === 2) {
-          if (progress2.value === null || progress2.value === 0) {
-            return;
-          }
-
-          progress2.value -= 10;
-        } else {
-          if (progress3.value === null || progress3.value === 0) {
-            return;
-          }
-
-          progress3.value -= 10;
+        if (progressItem.value < 100) {
+          progressItem.value -= 10;
         }
       };
 
       const onClickStart = (number: number) => {
-        if(number === 1) {
-          progress1.value = 0;
+        const progressItem = progress[number - 1];
+        progressItem.value = 0;
 
-          const interval = setInterval(() => {
-            if (progress1.value < 100) {
-              progress1.value += 5;
-            } else {
-              clearInterval(interval);
-            }
-          }, 100);
-        } else if(number === 2) {
-          progress2.value = 0;
-
-          const interval = setInterval(() => {
-            if (progress2.value < 100) {
-              progress2.value += 5;
-            } else {
-              clearInterval(interval);
-            }
-          }, 100);
-        } else {
-          progress3.value = 0;
-
-          const interval = setInterval(() => {
-            if (progress3.value < 100) {
-              progress3.value += 5;
-            } else {
-              clearInterval(interval);
-            }
-          }, 100);
-        }
+        const interval = setInterval(() => {
+          if (progressItem.value < 100) {
+            progressItem.value += 5;
+          } else {
+            clearInterval(interval);
+          }
+        }, 100);
       };
 
       return {
