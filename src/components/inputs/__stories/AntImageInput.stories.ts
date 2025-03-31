@@ -14,6 +14,9 @@ import AntFormGroup from '../../forms/AntFormGroup.vue';
 import {
   ref,
 } from 'vue';
+import {
+  action,
+} from '@storybook/addon-actions';
 
 const meta: Meta<typeof AntImageInput> = {
   title: 'Inputs/Image Input',
@@ -24,7 +27,7 @@ const meta: Meta<typeof AntImageInput> = {
     },
   },
   argTypes: {
-    modelValue: {
+    src: {
       table: {
         type: {
           summary: 'string|null',
@@ -63,18 +66,37 @@ export const Docs: Story = {
       AntImageInput,
     },
     setup() {
+      function upload(value: File) {
+        console.info('Action upload:', value);
+        action('upload')(value);
+
+        // @ts-expect-error is readonly
+        args.loading = true;
+
+        // @ts-expect-error is readonly
+        setTimeout(() => args.loading = false, 2000);
+      }
+
+      function remove() {
+        action('remove')();
+      }
+
       return {
         args,
+        upload,
+        remove,
       };
     },
     template: `
       <AntImageInput
         v-bind="args"
-        v-model="args.modelValue"
+        :src="args.src"
+        @upload="upload"
+        @remove="remove"
       />`,
   }),
   args: {
-    modelValue: '/avatar.jpg',
+    src: '/avatar.jpg',
     label: 'Label',
     description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
   },
@@ -84,7 +106,7 @@ export const Empty: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    modelValue: null,
+    src: null,
   },
 };
 
@@ -130,19 +152,19 @@ export const Summary: Story = {
      <AntFormGroup>
        <AntFormGroupLabel>Default</AntFormGroupLabel>
        <AntImageInput
-         v-model="valuedModelValue"
+         :src="valuedModelValue"
          label="Label"
          description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
        />
        <AntFormGroupLabel>Empty</AntFormGroupLabel>
        <AntImageInput
-         v-model="emptyModelValue"
+         :src="emptyModelValue"
          label="Label"
          description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
        />
        <AntFormGroupLabel>Disabled</AntFormGroupLabel>
        <AntImageInput
-         v-model="valuedModelValue"
+         :src="valuedModelValue"
          label="Label"
          description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
        />

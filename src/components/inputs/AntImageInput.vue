@@ -34,7 +34,7 @@ defineOptions({
 });
 
 const props = withDefaults(defineProps<{
-  modelValue: string | null;
+  src: string | null;
   loading?: boolean;
   label?: string;
   placeholder?: string;
@@ -56,10 +56,10 @@ const props = withDefaults(defineProps<{
   loading: false,
 });
 const emit = defineEmits([
-  'update:modelValue',
   'validate',
+  'upload',
+  'remove',
 ]);
-const _modelValue = useVModel(props, 'modelValue', emit);
 const descriptionFontSize = computed(() => {
   if (props.size === Size.xs2 || props.size === Size.xs) {
     return Size.xs;
@@ -76,12 +76,9 @@ const openFileDialog = () => {
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
   const file = target.files?.[0];
+
   if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      emit('update:modelValue', reader.result as string);
-    };
-    reader.readAsDataURL(file);
+    emit('upload', file as File);
   }
 };
 
@@ -107,8 +104,8 @@ onMounted(() => {
       <div>
         <div class="h-[70px] w-[70px] bg-gray-100 rounded-full overflow-hidden flex items-center justify-center relative">
           <img
-            v-if="_modelValue && !skeleton"
-            :src="_modelValue"
+            v-if="src && !skeleton"
+            :src="src"
             alt="Image"
             class="h-full w-full object-cover"
           >
@@ -159,12 +156,14 @@ onMounted(() => {
           </span>
 
           <AntButton
-            v-if="_modelValue"
+            v-if="src"
             :size="Size.lg"
             :icon-left="faMultiply"
             :skeleton="skeleton"
             :disabled="disabled"
-            @click.prevent="() => _modelValue = null"
+            @click.prevent="() => {
+              emit('remove');
+            }"
           >
             <template #tooltip-content>
               Remove image
