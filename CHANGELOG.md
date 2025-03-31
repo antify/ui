@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.4.0 (2025-03-31)
+
+
+### Features
+
+* **ImageInput:** Improve state change emitting ([2705356](https://github.com/antify/ui/commit/27053562f3ba9d81191b77a7b3f5f6ab64d8c918))
+
 ### 2.3.1 (2025-03-28)
 
 ## 2.3.0 (2025-03-27)
