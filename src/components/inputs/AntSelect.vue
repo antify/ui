@@ -291,6 +291,7 @@ function onClickRemoveButton() {
               v-bind="{...props}"
             />
           </template>
+
           <template #contentRight="props">
             <slot
               name="contentRight"
@@ -333,11 +334,13 @@ function onClickRemoveButton() {
               }"
             >
               <slot
+                v-if="selectedOption !== null"
                 name="contentLeft"
                 v-bind="selectedOption"
               />
               {{ valueLabel }}
               <slot
+                v-if="selectedOption !== null"
                 name="contentRight"
                 v-bind="selectedOption"
               />
