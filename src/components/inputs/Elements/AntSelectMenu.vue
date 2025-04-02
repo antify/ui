@@ -121,7 +121,7 @@ watch(isOpen, () => {
       focusedDropDownItem.value =
         typeof _modelValue.value === 'string' || typeof _modelValue.value === 'number' ? _modelValue.value :
           Array.isArray(_modelValue.value) ? _modelValue.value[0] :
-            props.options[0].value;
+            (props.options[0].value || null);
     } else {
       focusedDropDownItem.value = null;
     }
@@ -137,6 +137,56 @@ onMounted(() => {
 onUnmounted(() => {
   reference.value?.removeEventListener('keydown', onKeyDownDropDown);
 });
+
+/**
+ * Get the next focusable select option.
+ * It skips group labels and goes to beginning of the list if it reaches the end.
+ *
+ * @param currentOptionIndex
+ */
+function getNextFocusableSelectOption(currentOptionIndex: number): number | null {
+  for (let i = currentOptionIndex + 1; i < props.options.length; i++) {
+    if (!props.options[i].isGroupLabel) {
+      return i;
+    }
+  }
+
+  // If no next option is found, return the first option, but make sure
+  // to skip group labels again.
+  for (let i = 0; i < props.options.length; i++) {
+    if (!props.options[i].isGroupLabel) {
+      return i;
+    }
+  }
+
+  // Seems that the option list is empty or all options are group labels.
+  return null;
+}
+
+/**
+ * Get the prev focusable select option.
+ * It skips group labels and goes to end of the list if it reaches the end.
+ *
+ * @param currentOptionIndex
+ */
+function getPrevFocusableSelectOption(currentOptionIndex: number): number | null {
+  for (let i = currentOptionIndex - 1; i >= 0; i--) {
+    if (!props.options[i].isGroupLabel) {
+      return i;
+    }
+  }
+
+  // If no previous option is found, return the last option, but make sure
+  // to skip group labels again.
+  for (let i = props.options.length - 1; i >= 0; i--) {
+    if (!props.options[i].isGroupLabel) {
+      return i;
+    }
+  }
+
+  // Seems that the option list is empty or all options are group labels.
+  return null;
+}
 
 function onKeyDownDropDown(e: KeyboardEvent) {
   if (e.key === 'Enter') {
@@ -160,12 +210,10 @@ function onKeyDownDropDown(e: KeyboardEvent) {
     isOpen.value = true;
 
     const index = props.options.findIndex(option => option.value === focusedDropDownItem.value);
-    const option = props.options[index + 1];
+    const nextOptionIndex = getNextFocusableSelectOption(index);
 
-    if (index === -1) {
-      focusedDropDownItem.value = props.options[0].value;
-    } else if (option !== undefined) {
-      focusedDropDownItem.value = option.value;
+    if (nextOptionIndex !== null) {
+      focusedDropDownItem.value = props.options[nextOptionIndex].value || null;
     }
   }
 
@@ -174,10 +222,10 @@ function onKeyDownDropDown(e: KeyboardEvent) {
     isOpen.value = true;
 
     const index = props.options.findIndex(option => option.value === focusedDropDownItem.value);
-    const option = props.options[index - 1];
+    const prevOptionIndex = getPrevFocusableSelectOption(index);
 
-    if (option !== undefined) {
-      focusedDropDownItem.value = option.value;
+    if (prevOptionIndex !== null) {
+      focusedDropDownItem.value = props.options[prevOptionIndex].value || null;
     }
   }
 
@@ -187,6 +235,10 @@ function onKeyDownDropDown(e: KeyboardEvent) {
 }
 
 function getActiveDropDownItemClasses(option: SelectOption) {
+  if (option.isGroupLabel) {
+    return {};
+  }
+
   const variants: Record<InputState, string> = {
     [InputState.base]: '!bg-base-100',
     [InputState.success]: 'bg-success-200',
@@ -201,16 +253,21 @@ function getActiveDropDownItemClasses(option: SelectOption) {
   } : {};
 }
 
-function onClickDropDownItem(e: MouseEvent, value: string | number | null) {
+function onClickDropDownItem(e: MouseEvent, option: SelectOption) {
   e.preventDefault();
+
+  if (option.isGroupLabel) {
+    return;
+  }
+
   reference.value?.focus();
 
   if (props.closeOnSelectItem) {
     isOpen.value = false;
   }
 
-  emit('selectElement', value);
-  _modelValue.value = value;
+  emit('selectElement', option.value);
+  _modelValue.value = option.value || null;
 }
 
 watch(_modelValue, (val) => {
@@ -236,9 +293,13 @@ watch(_modelValue, (val) => {
         <div
           v-for="(option, index) in options"
           :key="`option-${index}`"
-          :class="{...dropDownItemClasses, ...getActiveDropDownItemClasses(option)}"
-          @mousedown="(e) => onClickDropDownItem(e, option.value)"
-          @mouseover="() => focusedDropDownItem = option.value"
+          :class="{
+            ...dropDownItemClasses,
+            ...getActiveDropDownItemClasses(option),
+            'font-bold': option.isGroupLabel,
+          }"
+          @mousedown="(e) => onClickDropDownItem(e, option)"
+          @mouseover="() => focusedDropDownItem = !option.isGroupLabel && option.value !== undefined ? option.value : null"
         >
           <slot
             name="contentLeft"

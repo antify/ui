@@ -194,22 +194,24 @@ export const WithSlots: Story = {
     label: 'Label',
     options: [
       {
-        label: "Option 1",
+        label: 'Option 1',
         value: 1,
-        imgUrl: 'https://fastly.picsum.photos/id/972/200/200.jpg?hmac=TeAvfwW2T9YMpPW-sWWTeAiseERb12wSeR3mYzuG6TE'
+        imgUrl: 'https://fastly.picsum.photos/id/972/200/200.jpg?hmac=TeAvfwW2T9YMpPW-sWWTeAiseERb12wSeR3mYzuG6TE',
       },
       {
-        label: "Option 2",
+        label: 'Option 2',
         value: 2,
-        imgUrl: 'https://fastly.picsum.photos/id/314/200/200.jpg?hmac=bCAc2iO5ovLPrvwDQV31aBPS13QTyv33ut2H2wY4QXU'
-      },{
-        label: "Option 3",
+        imgUrl: 'https://fastly.picsum.photos/id/314/200/200.jpg?hmac=bCAc2iO5ovLPrvwDQV31aBPS13QTyv33ut2H2wY4QXU',
+      },
+      {
+        label: 'Option 3',
         value: 3,
-        imgUrl: 'https://fastly.picsum.photos/id/972/200/200.jpg?hmac=TeAvfwW2T9YMpPW-sWWTeAiseERb12wSeR3mYzuG6TE'
-      },{
-        label: "Option 4",
+        imgUrl: 'https://fastly.picsum.photos/id/972/200/200.jpg?hmac=TeAvfwW2T9YMpPW-sWWTeAiseERb12wSeR3mYzuG6TE',
+      },
+      {
+        label: 'Option 4',
         value: 4,
-        imgUrl: 'https://fastly.picsum.photos/id/165/200/200.jpg?hmac=tQGrY9pm5ze9soSsZ5CNBt87zqnHfFwdPv_khau12Sw'
+        imgUrl: 'https://fastly.picsum.photos/id/165/200/200.jpg?hmac=tQGrY9pm5ze9soSsZ5CNBt87zqnHfFwdPv_khau12Sw',
       },
     ],
     description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
@@ -232,6 +234,7 @@ export const nullable: Story = {
     nullable: true,
   },
 };
+
 export const skeleton: Story = {
   render: Docs.render,
   args: {
@@ -240,6 +243,7 @@ export const skeleton: Story = {
     skeleton: true,
   },
 };
+
 export const disabled: Story = {
   render: (args, ctx) => ({
     // @ts-ignore
@@ -259,6 +263,53 @@ export const disabled: Story = {
     ...Docs.args,
     modelValue: '1',
     disabled: true,
+  },
+};
+
+export const grouped: Story = {
+  render: (args, ctx) => ({
+    // @ts-ignore
+    components: Docs.render(args, ctx).components,
+    // @ts-ignore
+    setup: Docs.render(args, ctx).setup,
+    template: `
+      <AntSelect v-bind="args" v-model="modelValue"/>
+    `,
+  }),
+  args: {
+    label: 'Label',
+    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
+    options: [
+      {
+        label: 'Group 1',
+        isGroupLabel: true,
+      },
+      {
+        label: 'Option 1.1',
+        value: 1,
+        imgUrl: 'https://fastly.picsum.photos/id/972/200/200.jpg?hmac=TeAvfwW2T9YMpPW-sWWTeAiseERb12wSeR3mYzuG6TE',
+      },
+      {
+        label: 'Option 2.1',
+        value: 2,
+        imgUrl: 'https://fastly.picsum.photos/id/314/200/200.jpg?hmac=bCAc2iO5ovLPrvwDQV31aBPS13QTyv33ut2H2wY4QXU',
+      },
+      {
+        label: 'Group 2',
+        isGroupLabel: true,
+      },
+      {
+        label: 'Option 2.1',
+        value: 3,
+        imgUrl: 'https://fastly.picsum.photos/id/972/200/200.jpg?hmac=TeAvfwW2T9YMpPW-sWWTeAiseERb12wSeR3mYzuG6TE',
+      },
+      {
+        label: 'Option 2.2',
+        value: 4,
+        imgUrl: 'https://fastly.picsum.photos/id/165/200/200.jpg?hmac=tQGrY9pm5ze9soSsZ5CNBt87zqnHfFwdPv_khau12Sw',
+      },
+    ],
+    modelValue: 1,
   },
 };
 
