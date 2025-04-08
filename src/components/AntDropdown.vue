@@ -62,7 +62,7 @@ onKeyStroke('Escape', (e: KeyboardEvent) => {
 });
 
 const onClickOutside = [
-  (ev) => {
+  () => {
     emit('update:showDropdown', false);
   },
   {
@@ -81,7 +81,6 @@ const onClickOutside = [
     <div
       ref="reference"
       v-on-click-outside="onClickOutside"
-      class="h-full w-full"
     >
       <slot />
     </div>

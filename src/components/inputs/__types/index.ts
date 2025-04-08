@@ -5,3 +5,4 @@ export * from './AntSelect.types';
 export * from './AntSwitcher.types';
 export * from './AntTagInput.types';
 export * from './AntTextInput.types';
+export * from '../AntColorInput/AntColorInput.types';
