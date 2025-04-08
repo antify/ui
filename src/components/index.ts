@@ -51,6 +51,7 @@ import AntTextarea from './inputs/AntTextarea.vue';
 import AntTextInput from './inputs/AntTextInput.vue';
 import AntUnitInput from './inputs/AntUnitInput.vue';
 import AntImageInput from './inputs/AntImageInput.vue';
+import AntColorInput from './inputs/AntColorInput/AntColorInput.vue';
 
 // Layouts
 import AntNavLeftLayout from './layouts/AntNavLeftLayout.vue';
@@ -156,4 +157,5 @@ export {
   AntToast,
   AntToaster,
   AntTooltip,
+  AntColorInput,
 };
