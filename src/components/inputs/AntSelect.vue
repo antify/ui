@@ -283,7 +283,6 @@ function onClickRemoveButton() {
           :size="size"
           :state="state"
           :close-on-enter="true"
-          @select-element="(e) => _modelValue = e"
         >
           <template #contentLeft="props">
             <slot
