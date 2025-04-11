@@ -49,6 +49,16 @@ const buttonClasses = computed(() => ({
   'h-8 w-8': ColorInputSize.xl === props.size,
   'h-10 w-10': ColorInputSize.xl2 === props.size,
 }));
+
+const iconClasses = computed(() => {
+  const colorIntensity = Number(props.value?.split('-')[1]);
+
+  if(!colorIntensity) {
+    return 'text-white!';
+  }
+
+  return colorIntensity < 500 ? 'text-black!' : 'text-white!';
+});
 </script>
 
 <template>
@@ -65,7 +75,7 @@ const buttonClasses = computed(() => ({
     <AntIcon
       v-if="selected"
       :icon="faCheck"
-      class="text-white"
+      :class="iconClasses"
     />
   </button>
 </template>
