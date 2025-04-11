@@ -324,7 +324,7 @@ function onClickRemoveButton() {
 
             <div
               v-else
-              class="flex items-center select-none text-ellipsis overflow-hidden whitespace-nowrap w-full text-black"
+              class="flex items-center select-none overflow-hidden w-full"
               :class="{
                 'gap-1': size === Size.xs2,
                 'gap1.5': size === Size.xs,
@@ -338,7 +338,9 @@ function onClickRemoveButton() {
                 name="contentLeft"
                 v-bind="selectedOption"
               />
-              {{ valueLabel }}
+              <div class="text-ellipsis overflow-hidden whitespace-nowrap w-full text-black">
+                {{ valueLabel }}
+              </div>
               <slot
                 v-if="selectedOption !== null"
                 name="contentRight"

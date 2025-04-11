@@ -16,13 +16,13 @@ import type {
   SelectOption,
 } from '../__types';
 import {
-  useElementSize, useVModel, onClickOutside,
+  onClickOutside, useElementSize, useVModel,
 } from '@vueuse/core';
 import type {
   Validator,
 } from '@antify/validate';
 import {
-  autoUpdate, flip, offset, useFloating,
+  autoPlacement, autoUpdate, flip, offset, useFloating,
 } from '@floating-ui/vue';
 
 const emit = defineEmits([
@@ -56,13 +56,21 @@ const floating = ref<HTMLElement | null>(null);
 const {
   floatingStyles,
 } = useFloating(reference, floating, {
-  placement: 'bottom',
+  placement: 'bottom-start',
   whileElementsMounted: autoUpdate,
   middleware: [
     offset(8),
+    autoPlacement({
+      allowedPlacements: [
+        'top-start',
+        'top-end',
+        'bottom-start',
+        'bottom-end',
+      ],
+    }),
     flip({
       fallbackPlacements: [
-        'top',
+        'top-start',
       ],
     }),
   ],
@@ -89,7 +97,7 @@ const dropdownClasses = computed(() => {
   };
 
   return {
-    'w-full border flex flex-col gap-px outline-none -mt-px overflow-y-auto shadow-md z-[90] max-h-[250px]': true,
+    'w-fit border flex flex-col gap-px outline-none -mt-px overflow-y-auto shadow-md z-[90] max-h-[250px]': true,
     'rounded-md': true,
     [variants[props.state]]: true,
   };
@@ -288,7 +296,7 @@ watch(_modelValue, (val) => {
         ref="floating"
         :class="dropdownClasses"
         data-e2e="select-menu"
-        :style="{width: `${elementSize.width.value}px!important`, ...floatingStyles}"
+        :style="{minWidth: `${elementSize.width.value}px!important`, ...floatingStyles}"
       >
         <div
           v-for="(option, index) in options"

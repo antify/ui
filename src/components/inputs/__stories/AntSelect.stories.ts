@@ -19,6 +19,9 @@ import {
 import {
   InputState,
 } from '../../../enums';
+import AntFormGroup from '../../forms/AntFormGroup.vue';
+import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
+import AntSwitch from '../AntSwitch.vue';
 
 const meta: Meta<typeof AntSelect> = {
   title: 'Inputs/Select',
@@ -99,6 +102,13 @@ const manySelectOptions: SelectOption[] = [
   ...Array(24).keys(),
 ].map((key) => ({
   label: `Option ${Number(key) + 1}`,
+  value: Number(key) + 1,
+}));
+
+const longSelectOptions: SelectOption[] = [
+  ...Array(4).keys(),
+].map((key) => ({
+  label: `Very Long Select Option Possibly Larger Than Container ${Number(key) + 1}`,
   value: Number(key) + 1,
 }));
 
@@ -223,6 +233,26 @@ export const manyOptions: Story = {
   args: {
     ...Docs.args,
     options: manySelectOptions,
+  },
+};
+
+export const longOptions: Story = {
+  render: (args, ctx) => ({
+    // @ts-ignore
+    components: Docs.render(args, ctx).components,
+    // @ts-ignore
+    setup: Docs.render(args, ctx).setup,
+    template: `
+      <div class="flex justify-center overflow-y-auto h-[100vh] p-2.5 dashed">
+        <div class="flex flex-col gap-4 justify-center h-[250vh] max-w-[150px]">
+          <AntSelect v-bind="args" v-model="modelValue"/>
+        </div>
+      </div>
+    `,
+  }),
+  args: {
+    ...Docs.args,
+    options: longSelectOptions,
   },
 };
 
@@ -356,9 +386,19 @@ export const summary: Story = {
   },
   render: (args, ctx) => ({
     // @ts-ignore
-    components: Docs.render(args, ctx).components,
+    components: {
+      AntSelect,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
     // @ts-ignore
-    setup: Docs.render(args, ctx).setup,
+    setup() {
+
+      return {
+        ...Docs.render(args, ctx).setup(),
+        longSelectOptions,
+      };
+    },
     template: `
       <div class="p-4 flex flex-col gap-2.5">
         <div class="flex w-2/5 gap-2.5">
@@ -429,6 +469,16 @@ export const summary: Story = {
           <AntSelect v-bind="args" v-model="modelValue" size="sm" nullable state="warning"/>
           <AntSelect v-bind="args" v-model="modelValue" size="sm" nullable state="danger"/>
         </div>
+        <AntFormGroup>
+          <AntFormGroupLabel>Long Select Options</AntFormGroupLabel>
+        <div class="grid grid-cols-5 gap-2.5">
+          <AntSelect v-bind="args" v-model="modelValue" :options="longSelectOptions"/>
+           <AntSelect v-bind="args" v-model="modelValue" :options="longSelectOptions"/>
+           <AntSelect v-bind="args" v-model="modelValue" :options="longSelectOptions"/>
+           <AntSelect v-bind="args" v-model="modelValue" :options="longSelectOptions"/>
+           <AntSelect v-bind="args" v-model="modelValue" :options="longSelectOptions"/>
+        </div>
+        </AntFormGroup>
       </div>
     `,
   }),
