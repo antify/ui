@@ -154,7 +154,6 @@ function onClickOutside() {
   if (!dropDownOpen.value) {
     return;
   }
-  console.log('click outside');
   // dropDownOpen.value = false;
 }
 
@@ -183,7 +182,6 @@ function addTagFromOptions(item: string | number) {
     addTag(item);
 
     if (props.autoCloseAfterSelection) {
-      console.log('HIER');
       dropDownOpen.value = false;
     }
   }
@@ -219,6 +217,10 @@ function removeTag(tag: string | number) {
 
 function changeFocus() {
   dropDownOpen.value = true;
+}
+
+function closeDropdown() {
+  dropDownOpen.value = false;
 }
 
 function onBlur(e: FocusEvent) {
@@ -312,9 +314,11 @@ onMounted(() => {
               :class="inputClasses"
               :disabled="disabled"
               :readonly="readonly"
+              @click="changeFocus"
               @focus="changeFocus"
               @keydown.delete="removeLastTag"
               @keydown.enter.prevent="checkCreateTag(tagInput)"
+              @keydown.esc.prevent="closeDropdown"
               @blur="onBlur"
             >
           </div>

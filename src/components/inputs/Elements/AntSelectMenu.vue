@@ -129,7 +129,7 @@ watch(isOpen, () => {
       focusedDropDownItem.value =
         typeof _modelValue.value === 'string' || typeof _modelValue.value === 'number' ? _modelValue.value :
           Array.isArray(_modelValue.value) ? _modelValue.value[0] :
-            (props.options[0].value || null);
+            (props.options[0]?.value || null);
     } else {
       focusedDropDownItem.value = null;
     }
