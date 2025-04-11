@@ -9,17 +9,14 @@ import {
   Size,
 } from '../../enums/Size.enum';
 import {
-  faPlus, faMinus,
+  faMinus, faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import {
-  State, InputState,
+  InputState, State,
 } from '../../enums/State.enum';
 import {
   handleEnumValidation,
 } from '../../handler';
-import {
-  useVModel,
-} from '@vueuse/core';
 import {
   Grouped,
 } from '../../enums/Grouped.enum';
@@ -27,6 +24,10 @@ import {
   BaseInputType,
 } from './Elements/__types';
 import Big from 'big.js';
+import {
+  getDecimalPlaces,
+} from '../../utils';
+
 Big.RM = Big.roundHalfEven;
 
 defineOptions({
@@ -38,7 +39,7 @@ defineOptions({
  * Additionally, the initial value (if none is given) gets set to "0" with the same amount of decimals as used in the steps.
  */
 const props = withDefaults(defineProps<{
-  modelValue: string | null;
+  modelValue: number | null;
   label?: string;
   placeholder?: string;
   description?: string;
@@ -68,7 +69,23 @@ const emit = defineEmits([
   'update:modelValue',
   'validate',
 ]);
-const _modelValue = useVModel(props, 'modelValue', emit);
+
+const _modelValue = computed({
+  get: () => {
+    if(!props.modelValue) {
+      return props.modelValue;
+    }
+
+    const modelDecimalPlaces = getDecimalPlaces(props.modelValue || 0);
+    const stepDecimalPlaces = getDecimalPlaces(props.steps);
+    const decimalPlaces = Math.max(modelDecimalPlaces, stepDecimalPlaces);
+
+    return String(new Big(props.modelValue).toFixed(decimalPlaces));
+  },
+  set: (val: string) => {
+    emit('update:modelValue', Number(val));
+  },
+});
 
 const isPrevButtonDisabled = computed(() => {
   if (props.disabled) {
@@ -97,19 +114,6 @@ onMounted(() => {
   handleEnumValidation(props.size, Size, 'size');
   handleEnumValidation(props.state, InputState, 'state');
 });
-
-/**
- * Returns the amount of decimal places of the given value.
- * @param value Number to get decimal places from.
- */
-function getDecimalPlaces(value: number | string) {
-  const strValue = String(value);
-  const decimalIndex = strValue.indexOf('.');
-
-  if (decimalIndex === -1) return 0;
-
-  return strValue.length - decimalIndex - 1;
-}
 
 function subtract() {
   const modelDecimalPlaces = getDecimalPlaces(_modelValue.value || 0);
