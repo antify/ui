@@ -6,6 +6,9 @@ import Color from './Color.vue';
 import {
   ColorInputSize,
 } from './AntColorInput.types';
+import {
+  nextTick, onMounted, ref,
+} from 'vue';
 
 defineEmits([
   'select',
@@ -18,6 +21,15 @@ withDefaults(defineProps<{
   size?: Size;
 }>(), {
   size: Size.md,
+});
+
+const colorButtonRefs = ref<HTMLButtonElement[]>([]);
+
+onMounted(() => {
+  // Set focus to the first item in the colors list
+  setTimeout(() => {
+    colorButtonRefs.value[0].buttonRef?.focus();
+  }, 50);
 });
 </script>
 
@@ -32,8 +44,9 @@ withDefaults(defineProps<{
     }"
   >
     <Color
-      v-for="color in colors"
+      v-for="(color, index) in colors"
       :key="color"
+      :ref="(val) => colorButtonRefs[index] = val"
       :value="color"
       :selected="color === value"
       :size="ColorInputSize.xl2"
