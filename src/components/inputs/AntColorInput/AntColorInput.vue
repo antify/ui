@@ -6,16 +6,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import AntSkeleton from '../../AntSkeleton.vue';
 import {
-  Size,
-  State,
-  Grouped,
-  InputState,
+  Grouped, InputState, Size, State,
 } from '../../../enums';
 import {
-  ref,
-  watch,
-  computed,
-  onMounted, nextTick,
+  computed, nextTick, onMounted, ref, watch,
 } from 'vue';
 import Color from './Color.vue';
 import AntDropdown from '../../AntDropdown.vue';
@@ -67,15 +61,13 @@ const containerClasses = computed(() => {
     [key: string]: boolean;
   } = {
     'flex relative w-fit ring-primary/25 rounded-md outline-hidden': true,
-    'focus-within:ring-2': (props.size === Size.xs2 || props.size === Size.xs || props.size === Size.sm) && !hasInputState.value,
-    'focus-within:ring-4': (props.size === Size.md || props.size === Size.lg) && !hasInputState.value,
   };
   const colorVariant = {
-    [InputState.base]: 'focus-within:ring-primary-200',
-    [InputState.danger]: 'focus-within:ring-danger-200',
-    [InputState.info]: 'focus-within:ring-info-200',
-    [InputState.success]: 'focus-within:ring-success-200',
-    [InputState.warning]: 'focus-within:ring-warning-200',
+    [InputState.base]: 'focus:ring-primary-200',
+    [InputState.danger]: 'focus:ring-danger-200',
+    [InputState.info]: 'focus:ring-info-200',
+    [InputState.success]: 'focus:ring-success-200',
+    [InputState.warning]: 'focus:ring-warning-200',
   };
 
   classes[colorVariant[props.state]] = true;
@@ -94,6 +86,8 @@ const itemClasses = computed(() => {
     [key: string]: boolean;
   } = {
     'relative outline outline-1 -outline-offset-1 rounded-l-md cursor-pointer': true,
+    'focus:ring-2': (props.size === Size.xs2 || props.size === Size.xs || props.size === Size.sm) && !hasInputState.value,
+    'focus:ring-4': (props.size === Size.md || props.size === Size.lg) && !hasInputState.value,
     'rounded-r-md': !hasRemoveButton.value,
     'p-1': props.size === Size.xs2,
     'p-1.5': props.size === Size.xs || props.size === Size.sm,
@@ -104,11 +98,11 @@ const itemClasses = computed(() => {
   };
 
   const colorVariant = {
-    [InputState.danger]: 'outline-danger-500 bg-danger-100',
-    [InputState.base]: 'outline-base-300 bg-white',
-    [InputState.info]: 'outline-info-500 bg-info-100',
-    [InputState.success]: 'outline-success-500 bg-success-100',
-    [InputState.warning]: 'outline-warning-500 bg-warning-100',
+    [InputState.base]: 'outline-base-300 bg-white focus:ring-primary-200',
+    [InputState.success]: 'outline-success-500 bg-success-100 focus:ring-success-200',
+    [InputState.info]: 'outline-info-500 bg-info-100 focus:ring-info-200',
+    [InputState.warning]: 'outline-warning-500 bg-warning-100 focus:ring-warning-200',
+    [InputState.danger]: 'outline-danger-500  bg-danger-100 focus:ring-danger-200',
   };
 
   classes[colorVariant[props.state]] = true;
@@ -116,6 +110,7 @@ const itemClasses = computed(() => {
   return classes;
 });
 const showDropdown = ref<boolean>(false);
+const itemRef = ref<HTMLDivElement | null>(null);
 
 /**
  * Validate default value if given after delayed data fetching.
@@ -134,6 +129,30 @@ watch(_value, () => {
 function onBlur(e: FocusEvent) {
   emit('validate', props.modelValue);
   emit('blur', e);
+}
+
+function onColorSelect(val: string | null) {
+  emit('update:modelValue', val);
+  nextTick(() => showDropdown.value = false);
+  itemRef.value?.focus();
+}
+
+function onClick() {
+  if (props.readonly || props.disabled) {
+    return;
+  }
+
+  showDropdown.value = true;
+}
+
+function onKeyDown(e: KeyboardEvent) {
+  if (props.readonly || props.disabled) {
+    return;
+  }
+
+  if (e.key === 'Enter') {
+    showDropdown.value = true;
+  }
 }
 
 onMounted(() => {
@@ -159,15 +178,22 @@ onMounted(() => {
     >
       <div
         :class="containerClasses"
-        tabindex="0"
-        @blur="onBlur"
       >
-        <div class="relative">
-          <div :class="itemClasses">
+        <div
+          class="relative"
+        >
+          <div
+            ref="itemRef"
+            :class="itemClasses"
+            :tabindex="disabled || readonly ? -1 : 0"
+            @click="onClick"
+            @keydown="onKeyDown"
+            @blur="onBlur"
+          >
             <Color
               :value="modelValue"
               :size="size as unknown as ColorInputSize"
-              @click="showDropdown = true"
+              readonly
             />
           </div>
 
@@ -183,7 +209,6 @@ onMounted(() => {
           v-if="hasRemoveButton"
           :icon-left="faMultiply"
           :grouped="Grouped.right"
-          :no-focus="true"
           :state="state as unknown as State"
           :size="size"
           :skeleton="skeleton"
@@ -198,10 +223,7 @@ onMounted(() => {
         <ColorSelection
           :value="modelValue"
           :colors="props.options"
-          @select="(val) => {
-            $emit('update:modelValue', val);
-            nextTick(() => showDropdown = false);
-          }"
+          @select="onColorSelect"
         />
       </template>
     </AntDropdown>

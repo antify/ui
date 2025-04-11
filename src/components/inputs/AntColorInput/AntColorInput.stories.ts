@@ -51,6 +51,17 @@ const defaultOptions = [
   'orange-500',
 ];
 
+const lightColorOptions = [
+  'primary-300',
+  'red-300',
+  'green-300',
+  'blue-300',
+  'yellow-300',
+  'purple-300',
+  'pink-300',
+  'orange-300',
+];
+
 type Story = StoryObj<typeof AntColorInput>;
 
 export const Docs: Story = {
@@ -101,10 +112,13 @@ export const Summary: Story = {
         set: (val) => args.modelValue = val,
       });
       const skeleton = ref(true);
+      const lightModelValue = ref('primary-300');
 
       return {
         args,
         modelValue,
+        lightModelValue,
+        lightColorOptions,
         InputState,
         skeleton,
         Size,
@@ -115,71 +129,73 @@ export const Summary: Story = {
         <AntFormGroupLabel>States</AntFormGroupLabel>
         <AntFormGroup direction="row">
           <AntColorInput v-bind="args" v-model="modelValue" label="Label"
-                       description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
-                       :state="InputState.base"/>
+                         description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
+                         :state="InputState.base"/>
           <AntColorInput v-bind="args" v-model="modelValue" label="Label"
-                       description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
-                       :state="InputState.info"/>
+                         description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
+                         :state="InputState.info"/>
           <AntColorInput v-bind="args" v-model="modelValue" label="Label"
-                       description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
-                       :state="InputState.success"/>
+                         description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
+                         :state="InputState.success"/>
           <AntColorInput v-bind="args" v-model="modelValue" label="Label"
-                       description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
-                       :state="InputState.warning"/>
+                         description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
+                         :state="InputState.warning"/>
           <AntColorInput v-bind="args" v-model="modelValue" label="Label"
-                       description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
-                       :state="InputState.danger"/>
+                         description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
+                         :state="InputState.danger"/>
         </AntFormGroup>
         <AntFormGroupLabel>Sizes</AntFormGroupLabel>
         <AntFormGroup direction="row">
           <AntColorInput v-bind="args" v-model="modelValue" label="Label" :size="Size.lg"
-                       description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
+                         description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
           />
           <AntColorInput v-bind="args" v-model="modelValue" label="Label" :size="Size.md"
-                       description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
+                         description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
           />
           <AntColorInput v-bind="args" v-model="modelValue" label="Label" :size="Size.sm"
-                       description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
+                         description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
           />
           <AntColorInput v-bind="args" v-model="modelValue" label="Label" :size="Size.xs"
-                       description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
+                         description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
           />
           <AntColorInput v-bind="args" v-model="modelValue" label="Label" :size="Size.xs2"
-                       description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
+                         description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
           />
         </AntFormGroup>
         <AntFormGroup direction="row">
           <AntFormGroup>
             <AntFormGroupLabel>Disabled</AntFormGroupLabel>
             <AntColorInput v-bind="args" v-model="modelValue" :disabled="true" label="Label"
-                         description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
+                           description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
             />
           </AntFormGroup>
           <AntFormGroup>
             <AntFormGroupLabel>Readonly</AntFormGroupLabel>
             <AntColorInput v-bind="args" v-model="modelValue" :readonly="true" label="Label"
-                         description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
+                           description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
             />
           </AntFormGroup>
           <AntFormGroup>
             <AntFormGroupLabel>Skeleton</AntFormGroupLabel>
             <AntColorInput v-bind="args" v-model="modelValue" :skeleton="true" label="Label"
-                         description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
+                           description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
             />
           </AntFormGroup>
         </AntFormGroup>
         <AntFormGroupLabel>Plain</AntFormGroupLabel>
         <AntColorInput v-bind="args" v-model="modelValue"/>
+        <AntFormGroupLabel>Light Color Options</AntFormGroupLabel>
+        <AntColorInput v-model="lightModelValue" :options="lightColorOptions" />
         <AntFormGroupLabel>Nullable</AntFormGroupLabel>
         <AntColorInput v-bind="args" v-model="modelValue" nullable/>
         <AntFormGroupLabel>With label</AntFormGroupLabel>
         <AntColorInput v-bind="args" v-model="modelValue" label="Label"/>
         <AntFormGroupLabel>With description</AntFormGroupLabel>
         <AntColorInput v-bind="args" v-model="modelValue"
-                     description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"/>
+                       description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"/>
         <AntFormGroupLabel>With label + description</AntFormGroupLabel>
         <AntColorInput v-bind="args" v-model="modelValue" label="Label"
-                     description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"/>
+                       description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"/>
       </AntFormGroup>
     `,
   }),
