@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 import {
-  computed,
-  onMounted,
-  ref,
+  computed, onBeforeUnmount, onMounted, ref,
 } from 'vue';
 import AntField from '../forms/AntField.vue';
 import {
@@ -11,9 +9,6 @@ import {
 import {
   InputState, State,
 } from '../../enums';
-import {
-  useVModel,
-} from '@vueuse/core';
 import {
   handleEnumValidation,
 } from '../../handler';
@@ -73,6 +68,44 @@ const openFileDialog = () => {
   fileInput.value?.click();
 };
 
+const isDragging = ref<boolean>(false);
+const isDraggingOverDropZone = ref<boolean>(false);
+
+const dropZoneClasses = computed(() => {
+  return {
+    'h-full w-full border-2 border-transparent rounded overflow-y-auto p-2 -top-2 -left-2': true,
+    'border-primary-500!': isDraggingOverDropZone.value,
+    'border-dashed border-base-300!': isDragging.value,
+  };
+});
+
+const handleDragOver = () => {
+  isDraggingOverDropZone.value = true;
+};
+
+const handleDragEnter = () => {
+  isDraggingOverDropZone.value = true;
+};
+
+const handleDragLeave = () => {
+  isDraggingOverDropZone.value = false;
+};
+
+const handleDrop = (event: DragEvent) => {
+  isDraggingOverDropZone.value = false;
+  isDragging.value = false;
+
+  if(!event.dataTransfer) {
+    return;
+  }
+
+  const file = event.dataTransfer.files?.[0];
+
+  if(file) {
+    emit('upload', file as File);
+  }
+};
+
 const handleFileChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
   const file = target.files?.[0];
@@ -82,9 +115,34 @@ const handleFileChange = (event: Event) => {
   }
 };
 
+const handleDragOverBody = (e: DragEvent) => {
+  e.preventDefault();
+  isDragging.value = true;
+};
+
+const handleDragLeaveBody = (e: DragEvent) => {
+  e.preventDefault();
+  isDragging.value = false;
+};
+
+const handleDropBody = (e: DragEvent) => {
+  e.preventDefault();
+  isDragging.value = false;
+};
+
 onMounted(() => {
   handleEnumValidation(props.state, InputState, 'state');
   handleEnumValidation(props.size, Size, 'size');
+
+  document.body.addEventListener('dragover', handleDragOverBody);
+  document.body.addEventListener('dragleave', handleDragLeaveBody);
+  document.body.addEventListener('drop', handleDropBody);
+});
+
+onBeforeUnmount(() => {
+  document.body.removeEventListener('dragover', handleDragOverBody);
+  document.body.removeEventListener('dragleave', handleDragLeaveBody);
+  document.body.removeEventListener('drop', handleDropBody);
 });
 </script>
 
@@ -135,25 +193,36 @@ onMounted(() => {
       </div>
 
       <div class="flex flex-col gap-2.5 w-full">
-        <div class="flex items-center relative w-full justify-between">
-          <input
-            v-if="!disabled && !skeleton"
-            ref="fileInput"
-            type="file"
-            accept="image/*"
-            class="hidden"
-            @change="handleFileChange"
-          >
+        <div class="flex items-center relative w-full justify-between gap-2">
+          <div class="relative w-full h-full flex items-center">
+            <input
+              v-if="!disabled && !skeleton"
+              ref="fileInput"
+              type="file"
+              accept="image/*"
+              class="hidden"
+              @change="handleFileChange"
+            >
 
-          <span class="text-sm text-for-white-bg-font relative">
-            Upload Image
+            <span class="text-sm text-for-white-bg-font relative">
+              Upload Image
 
-            <AntSkeleton
-              v-if="skeleton"
-              absolute
-              rounded
+              <AntSkeleton
+                v-if="skeleton"
+                absolute
+                rounded
+              />
+            </span>
+
+            <div
+              class="absolute top-0 left-0 w-full h-full border bg-transparent"
+              :class="dropZoneClasses"
+              @drop.prevent="handleDrop"
+              @dragenter.prevent="handleDragEnter"
+              @dragover.prevent="handleDragOver"
+              @dragleave.prevent="handleDragLeave"
             />
-          </span>
+          </div>
 
           <AntButton
             v-if="src"
