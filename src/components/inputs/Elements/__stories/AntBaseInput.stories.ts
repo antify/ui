@@ -24,6 +24,9 @@ import AntFormGroupLabel from '../../../forms/AntFormGroupLabel.vue';
 import {
   Direction,
 } from '../../../../enums/Direction.enum';
+import {
+  ref,
+} from 'vue';
 
 const meta: Meta<typeof AntBaseInput> = {
   computed: {
@@ -188,6 +191,41 @@ export const IconRight: Story = {
           <AntIcon :icon="faEye"/>
         </template>
       </AntBaseInput>`,
+  }),
+  args: {
+    ...Docs.args,
+  },
+};
+
+export const Autofocus: Story = {
+  render: (args) => ({
+    components: {
+      AntBaseInput,
+      AntFormGroup,
+      AntButton,
+    },
+    setup: () => {
+      const inputRef = ref<HTMLElement | null>(null);
+
+      return {
+        inputRef,
+        clickAutofocus: () => {
+          inputRef.value?.focus();
+        },
+        args,
+      };
+    },
+    template: `
+      <AntFormGroup>
+        <AntButton @click="clickAutofocus">Focus element</AntButton>
+
+        <AntBaseInput
+          v-model="args.modelValue"
+          v-bind="args"
+          v-model:input-ref="inputRef"
+        />
+      </AntFormGroup>
+    `,
   }),
   args: {
     ...Docs.args,

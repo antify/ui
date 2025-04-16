@@ -30,6 +30,7 @@ defineOptions({
 const emit = defineEmits([
   'update:modelValue',
   'update:skeleton',
+  'update:inputRef',
   'validate',
 ]);
 const props = withDefaults(defineProps<{
@@ -43,11 +44,13 @@ const props = withDefaults(defineProps<{
   readonly?: boolean;
   skeleton?: boolean;
   type?: TextInputType;
+  inputRef?: null | HTMLInputElement;
   limiter?: boolean;
   max?: number;
   messages?: string[];
 }>(), {
   state: InputState.base,
+  inputRef: null,
   disabled: false,
   readonly: false,
   skeleton: false,
@@ -58,6 +61,7 @@ const props = withDefaults(defineProps<{
 });
 
 const _value = useVModel(props, 'modelValue', emit);
+const _inputRef = useVModel(props, 'inputRef', emit);
 
 onMounted(() => {
   handleEnumValidation(props.size, Size, 'size');
@@ -79,6 +83,7 @@ onMounted(() => {
   >
     <AntBaseInput
       v-model="_value"
+      v-model:input-ref="_inputRef"
       :type="type as unknown as BaseInputType"
       wrapper-class="grow"
       :state="state"

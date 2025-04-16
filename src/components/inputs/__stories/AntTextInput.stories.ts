@@ -1,5 +1,6 @@
-import {
-  type Meta, type StoryObj,
+import type {
+  Meta,
+  StoryObj,
 } from '@storybook/vue3';
 import {
   Size,
@@ -11,6 +12,12 @@ import {
 import {
   InputState,
 } from '../../../enums';
+import AntPasswordInput from '../AntPasswordInput.vue';
+import AntFormGroup from '../../forms/AntFormGroup.vue';
+import AntButton from '../../buttons/AntButton.vue';
+import {
+  ref,
+} from 'vue';
 
 const meta: Meta<typeof AntTextInput> = {
   title: 'Inputs/Text Input',
@@ -91,6 +98,41 @@ export const Docs: Story = {
     modelValue: null,
     label: 'Label',
     description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
+  },
+};
+
+export const Autofocus: Story = {
+  render: (args) => ({
+    components: {
+      AntTextInput,
+      AntFormGroup,
+      AntButton,
+    },
+    setup: () => {
+      const inputRef = ref<HTMLElement | null>(null);
+
+      return {
+        inputRef,
+        clickAutofocus: () => {
+          inputRef.value?.focus();
+        },
+        args,
+      };
+    },
+    template: `
+      <AntFormGroup>
+        <AntButton @click="clickAutofocus">Focus element</AntButton>
+
+        <AntTextInput
+          v-model="args.modelValue"
+          v-bind="args"
+          v-model:input-ref="inputRef"
+        />
+      </AntFormGroup>
+    `,
+  }),
+  args: {
+    ...Docs.args,
   },
 };
 

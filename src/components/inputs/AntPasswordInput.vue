@@ -36,6 +36,7 @@ const props = withDefaults(defineProps<{
   label?: string;
   placeholder?: string;
   description?: string;
+  inputRef?: null | HTMLInputElement;
   size?: Size;
   state?: InputState;
   disabled?: boolean;
@@ -43,6 +44,7 @@ const props = withDefaults(defineProps<{
   messages?: string[];
 }>(), {
   state: InputState.base,
+  inputRef: null,
   disabled: false,
   skeleton: false,
   size: Size.md,
@@ -50,9 +52,11 @@ const props = withDefaults(defineProps<{
 });
 const emit = defineEmits([
   'update:modelValue',
+  'update:inputRef',
   'validate',
 ]);
 const _modelValue = useVModel(props, 'modelValue', emit);
+const _inputRef = useVModel(props, 'inputRef', emit);
 const isVisible = ref(false);
 const iconSize = computed(() => {
   if (props.size === Size.xs2 || props.size === Size.xs) {
@@ -94,6 +98,7 @@ onMounted(() => {
     <div class="flex relative">
       <AntBaseInput
         v-model="_modelValue"
+        v-model:input-ref="_inputRef"
         :type="isVisible ? BaseInputType.text : BaseInputType.password"
         :state="state"
         :size="size"
