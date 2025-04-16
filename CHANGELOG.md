@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 2.4.10 (2025-04-15)
+
+
+### Bug Fixes
+
+* **AntButton:** Fix missing cursor pointer ([8fc144b](https://github.com/antify/ui/commit/8fc144baee3a8d621c7d7958cd6b2e8b38382d8b))
+
 ### 2.4.9 (2025-04-11)
 
 ### 2.4.8 (2025-04-11)
