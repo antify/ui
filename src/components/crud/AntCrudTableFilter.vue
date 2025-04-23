@@ -125,7 +125,6 @@ watch(() => props.fullWidth, (val) => {
     <div v-if="_fullWidth">
       <slot name="buttons">
         <AntCreateButton
-          filled
           :skeleton="skeleton"
           :can-create="canCreate"
           :invalid-permission-tooltip-position="Position.left"
