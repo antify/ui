@@ -3,7 +3,7 @@ import {
   Grouped,
 } from '../enums/Grouped.enum';
 import {
-  computed,
+  computed, ref, watch,
 } from 'vue';
 
 defineOptions({
@@ -23,7 +23,7 @@ const props = withDefaults(defineProps<{
   rounded: false,
   roundedFull: false,
   absolute: false,
-  minShowTime: 5000,
+  minShowTime: 300,
 });
 
 const groupedClassList = computed(() => ({
@@ -38,11 +38,35 @@ const classList = computed(() => ({
   'rounded-full': props.roundedFull && props.grouped === Grouped.none,
   ...groupedClassList.value,
 }));
+
+/**
+ * To prevent flickering, make sure the skeleton is a minimum time visible
+ * before hide it.
+ */
+const _visible = ref(props.visible);
+
+watch(
+  () => props.visible,
+  (newValue) => {
+    if (newValue) {
+      _visible.value = true;
+    } else if (props.minShowTime && props.minShowTime > 0) {
+      setTimeout(() => {
+        _visible.value = false;
+      }, props.minShowTime);
+    } else {
+      _visible.value = false;
+    }
+  },
+  {
+    immediate: true,
+  },
+);
 </script>
 
 <template>
   <div
-    v-if="visible"
+    v-if="_visible"
     :class="classList"
     v-bind="$attrs"
     data-e2e="skeleton"
