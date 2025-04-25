@@ -20,6 +20,7 @@ import {
 const props = withDefaults(defineProps<{
   fullWidth?: boolean;
   showFilter?: boolean;
+  showSearch?: boolean;
   searchQuery?: string;
   hasFilter?: boolean;
   canCreate?: boolean;
@@ -28,6 +29,7 @@ const props = withDefaults(defineProps<{
 }>(), {
   fullWidth: true,
   showFilter: true,
+  showSearch: true,
   searchQuery: 'search',
   hasFilter: false,
   canCreate: true,
@@ -84,11 +86,14 @@ watch(() => props.fullWidth, (val) => {
       :class="{'grow': !_fullWidth}"
     >
       <div :class="{'w-80': _fullWidth, 'w-full': !_fullWidth}">
-        <AntSearch
-          v-model="search"
-          :skeleton="skeleton"
-          :placeholder="searchPlaceholderText"
-        />
+        <slot name="filter">
+          <AntSearch
+            v-if="showSearch"
+            v-model="search"
+            :skeleton="skeleton"
+            :placeholder="searchPlaceholderText"
+          />
+        </slot>
       </div>
 
       <AntDropdown
@@ -122,7 +127,7 @@ watch(() => props.fullWidth, (val) => {
       </AntDropdown>
     </div>
 
-    <div v-if="_fullWidth">
+    <div>
       <slot name="buttons">
         <AntCreateButton
           :skeleton="skeleton"

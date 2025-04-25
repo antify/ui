@@ -35,7 +35,7 @@ export const Docs: Story = {
       };
     },
     template: `
-      <div class="border border-base-300 border-dashed">
+      <div class="dashed">
         <AntCrudTableFilter
           v-model:search="args.search"
           v-bind="args"
