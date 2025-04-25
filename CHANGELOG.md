@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 2.5.0 (2025-04-25)
+
+
+### Features
+
+* **AntSkeleton:** Add flicker protection ([4fadd59](https://github.com/antify/ui/commit/4fadd59b6f6293aae462979a7edf77af8fbf9ebe))
+
 ### 2.4.12 (2025-04-23)
 
 ### 2.4.11 (2025-04-16)
