@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import {
-  computed, onMounted,
+  computed,
+  onMounted,
 } from 'vue';
 import {
   Size,
@@ -48,21 +49,20 @@ onMounted(() => {
     <span
       v-if="label"
       :class="fontClasses"
+      @click="() => {
+        if(!skeleton) {
+          $emit('clickContent')
+        }
+      }"
     >
-      <span
-        :class="{'invisible': skeleton}"
-        @click="$emit('clickContent')"
+      <AntSkeleton
+        :visible="skeleton"
+        rounded
       >
         <slot name="label">
           {{ label }}
         </slot>
-      </span>
-
-      <AntSkeleton
-        v-if="skeleton"
-        absolute
-        rounded
-      />
+      </AntSkeleton>
     </span>
 
     <slot />

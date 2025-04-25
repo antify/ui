@@ -53,14 +53,11 @@ onMounted(() => {
 
 <template>
   <div :class="classes">
-    <span :class="{'invisible': skeleton}">
-      {{ value }}/{{ maxValue }}
-    </span>
-
     <AntSkeleton
-      v-if="skeleton"
-      absolute
+      :visible="skeleton"
       rounded
-    />
+    >
+      {{ value }}/{{ maxValue }}
+    </AntSkeleton>
   </div>
 </template>

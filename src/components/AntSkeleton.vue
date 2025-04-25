@@ -6,13 +6,19 @@ import {
   computed,
 } from 'vue';
 
+defineOptions({
+  inheritAttrs: false,
+});
+
 const props = withDefaults(defineProps<{
+  visible?: boolean;
   grouped?: Grouped;
   rounded?: boolean;
   roundedFull?: boolean;
   absolute?: boolean;
   minShowTime?: number;
 }>(), {
+  visible: true,
   grouped: Grouped.none,
   rounded: false,
   roundedFull: false,
@@ -36,7 +42,15 @@ const classList = computed(() => ({
 
 <template>
   <div
+    v-if="visible"
     :class="classList"
+    v-bind="$attrs"
     data-e2e="skeleton"
-  />
+  >
+    <div class="invisible">
+      <slot />
+    </div>
+  </div>
+
+  <slot v-else />
 </template>

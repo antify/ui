@@ -33,7 +33,7 @@ const classes = computed(() => {
   };
 
   return {
-    'relative font-regular inline-block transition-color': true,
+    'font-regular inline-block transition-color': true,
     'text-2xs': props.size === Size.xs2,
     'text-xs': props.size === Size.xs,
     'text-sm': props.size === Size.sm,
@@ -53,14 +53,11 @@ onMounted(() => {
   <div
     :class="classes"
   >
-    <span :class="{'invisible': skeleton}">
-      <slot />
-    </span>
-
     <AntSkeleton
-      v-if="skeleton"
-      absolute
+      :visible="skeleton"
       rounded
-    />
+    >
+      <slot />
+    </AntSkeleton>
   </div>
 </template>

@@ -1,7 +1,11 @@
 import AntInputLabel from '../AntInputLabel.vue';
-import {
-  type Meta, type StoryObj,
+import type {
+  Meta,
+  StoryObj,
 } from '@storybook/vue3';
+import {
+  fn,
+} from '@storybook/test';
 import {
   Size,
 } from '../../../../enums/Size.enum';
@@ -58,6 +62,7 @@ export const Docs: Story = {
   }),
   args: {
     label: 'Label',
+    onClickContent: fn(),
   },
 };
 

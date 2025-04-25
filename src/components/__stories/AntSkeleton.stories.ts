@@ -63,3 +63,23 @@ export const Grouped: Story = {
     grouped: _Grouped.left,
   },
 };
+
+export const Slot: Story = {
+  render: (args) => ({
+    components: {
+      AntSkeleton,
+    },
+    setup() {
+      return {
+        args,
+      };
+    },
+    template: `
+      <AntSkeleton
+        v-bind="args"
+      >
+        Test here
+      </AntSkeleton>`,
+  }),
+  args: {},
+};
