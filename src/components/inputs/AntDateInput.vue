@@ -4,6 +4,7 @@ import {
 } from 'vue';
 import AntField from '../forms/AntField.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
+import AntButton from '../buttons/AntButton.vue';
 import AntIcon from '../AntIcon.vue';
 import {
   Size,
@@ -12,7 +13,7 @@ import {
   useVModel,
 } from '@vueuse/core';
 import {
-  InputState,
+  Grouped, InputState, State,
 } from '../../enums';
 import {
   BaseInputType,
@@ -24,7 +25,7 @@ import {
   AntDateInputTypes,
 } from './__types/AntDateInput.types';
 import {
-  faCalendar, faClock,
+  faCalendar, faClock, faMultiply,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   IconSize,
@@ -47,6 +48,7 @@ const props = withDefaults(defineProps<{
   messages?: string[];
   min?: string;
   max?: string;
+  nullable?: boolean;
 }>(), {
   state: InputState.base,
   type: AntDateInputTypes.date,
@@ -55,6 +57,7 @@ const props = withDefaults(defineProps<{
   skeleton: false,
   size: Size.md,
   messages: () => [],
+  nullable: false,
 });
 const emit = defineEmits([
   'update:modelValue',
@@ -78,6 +81,7 @@ const iconColor = computed(() => {
 });
 const iconSize = computed(() => props.size === Size.xs || props.size === Size.xs2 ? IconSize.xs : IconSize.sm);
 const _icon = computed(() => props.type === AntDateInputTypes.time ? faClock : faCalendar);
+const _nullable = computed(() => props.nullable && props.modelValue);
 
 onMounted(() => {
   handleEnumValidation(props.state, InputState, 'state');
@@ -102,30 +106,42 @@ function onClickCalendar() {
     :state="state"
     :messages="messages"
   >
-    <AntBaseInput
-      v-model="_modelValue"
-      v-model:input-ref="inputRef"
-      :type="type as unknown as BaseInputType"
-      :state="state"
-      :size="size"
-      :skeleton="skeleton"
-      :disabled="disabled"
-      :readonly="readonly"
-      :show-icon="false"
-      :min="min"
-      :max="max"
-      v-bind="$attrs"
-      @validate="val => $emit('validate', val)"
-    >
-      <template #icon-right>
-        <AntIcon
-          :icon="_icon"
-          :color="iconColor"
-          :size="iconSize"
-          :class="{'cursor-pointer': !disabled && !readonly, 'opacity-50': disabled}"
-          @click="onClickCalendar"
-        />
-      </template>
-    </AntBaseInput>
+    <div class="flex">
+      <AntBaseInput
+        v-model="_modelValue"
+        v-model:input-ref="inputRef"
+        :type="type as unknown as BaseInputType"
+        :state="state"
+        :size="size"
+        :skeleton="skeleton"
+        :disabled="disabled"
+        :readonly="readonly"
+        :show-icon="false"
+        :min="min"
+        :max="max"
+        :grouped="_nullable ? Grouped.left : Grouped.none"
+        v-bind="$attrs"
+        @validate="val => $emit('validate', val)"
+      >
+        <template #icon-right>
+          <AntIcon
+            :icon="_icon"
+            :color="iconColor"
+            :size="iconSize"
+            :class="{'cursor-pointer': !disabled && !readonly, 'opacity-50': disabled}"
+            @click="onClickCalendar"
+          />
+        </template>
+      </AntBaseInput>
+
+      <AntButton
+        v-if="_nullable"
+        :icon-left="faMultiply"
+        :grouped="Grouped.right"
+        :state="state as unknown as State"
+        :size="size"
+        @click="_modelValue = null"
+      />
+    </div>
   </AntField>
 </template>
