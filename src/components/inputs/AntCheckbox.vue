@@ -234,12 +234,14 @@ input[type="checkbox"]::before {
   width: 100%;
   height: 100%;
   transform: scale(0);
-  transition: 120ms transform;
+  transition: 120ms all;
   background: currentColor;
   border-radius: inherit;
+  opacity: 0;
 }
 
 input[type="checkbox"]:checked::before {
   transform: scale(1);
+  opacity: 1;
 }
 </style>
