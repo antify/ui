@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-  onMounted,
+  computed, onMounted,
 } from 'vue';
 import AntButton from '../buttons/AntButton.vue';
 import AntField from '../forms/AntField.vue';
@@ -12,10 +12,7 @@ import {
   type IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 import {
-  useVModel,
-} from '@vueuse/core';
-import {
-  State, InputState,
+  InputState, State,
 } from '../../enums';
 import {
   Grouped,
@@ -26,6 +23,7 @@ import {
 import {
   handleEnumValidation,
 } from '../../handler';
+import Big from 'big.js';
 
 defineOptions({
   inheritAttrs: false,
@@ -47,6 +45,7 @@ const props = withDefaults(defineProps<{
   skeleton?: boolean;
   wrapperClass?: string | Record<string, boolean>;
   messages?: string[];
+  decimalPlaces?: number;
 }>(), {
   state: InputState.base,
   disabled: false,
@@ -55,12 +54,25 @@ const props = withDefaults(defineProps<{
   size: Size.md,
   limiter: false,
   messages: () => [],
+  decimalPlaces: 2,
 });
 const emit = defineEmits([
   'update:modelValue',
   'validate',
 ]);
-const _modelValue = useVModel(props, 'modelValue', emit);
+
+const _modelValue = computed({
+  get: () => {
+    if(!props.modelValue) {
+      return props.modelValue;
+    }
+
+    return String(new Big(props.modelValue).toFixed(Math.max(0, props.decimalPlaces)));
+  },
+  set: (val: string) => {
+    emit('update:modelValue', Number(val));
+  },
+});
 
 onMounted(() => {
   handleEnumValidation(props.state, InputState, 'state');
@@ -76,7 +88,7 @@ onMounted(() => {
     :description="description"
     :state="state"
     :limiter-max-value="limiter && max !== undefined ? max : undefined"
-    :limiter-value="limiter && _modelValue !== undefined && _modelValue !== null ? _modelValue : undefined"
+    :limiter-value="limiter && _modelValue !== undefined && _modelValue !== null ? Number(_modelValue) : undefined"
     :messages="messages"
   >
     <div
@@ -86,7 +98,7 @@ onMounted(() => {
         v-model="_modelValue"
         :type="BaseInputType.number"
         :grouped="Grouped.left"
-        wrapper-class="grow"
+        wrapper-class="flex-grow"
         :state="state"
         :size="size"
         :min="min"
