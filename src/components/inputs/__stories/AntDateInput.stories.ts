@@ -1,5 +1,6 @@
-import {
-  type Meta, type StoryObj,
+import type {
+  Meta,
+  StoryObj,
 } from '@storybook/vue3';
 import {
   Size,
@@ -99,7 +100,7 @@ export const WithDateLimits: Story = {
       return {
         args,
         min,
-        max
+        max,
       };
     },
     template: `
@@ -175,6 +176,41 @@ export const Summary: Story = {
             v-bind="args"
             v-model="args.modelValue"
             :state="InputState.danger"
+          />
+        </AntFormGroup>
+
+        <AntFormGroupLabel>
+          Nullable
+        </AntFormGroupLabel>
+        <AntFormGroup :direction="Direction.row">
+          <AntDateInput
+            v-bind="args"
+            model-value="2025-01-01"
+            nullable
+          />
+          <AntDateInput
+            v-bind="args"
+            model-value="2025-01-01"
+            :state="InputState.info"
+            nullable
+          />
+          <AntDateInput
+            v-bind="args"
+            model-value="2025-01-01"
+            :state="InputState.success"
+            nullable
+          />
+          <AntDateInput
+            v-bind="args"
+            model-value="2025-01-01"
+            :state="InputState.warning"
+            nullable
+          />
+          <AntDateInput
+            v-bind="args"
+            model-value="2025-01-01"
+            :state="InputState.danger"
+            nullable
           />
         </AntFormGroup>
 
