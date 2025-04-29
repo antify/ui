@@ -82,7 +82,9 @@ export function getDecimalPlaces(value: number | string) {
   const strValue = String(value);
   const decimalIndex = strValue.indexOf('.');
 
-  if (decimalIndex === -1) return 0;
+  if (decimalIndex === -1) {
+    return 0;
+  }
 
   return strValue.length - decimalIndex - 1;
 }
