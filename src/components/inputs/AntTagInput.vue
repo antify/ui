@@ -193,7 +193,10 @@ function addTag(tagValue: string | number): void {
   }
 
   if (Array.isArray(_modelValue.value)) {
-    _modelValue.value.push(tagValue);
+    _modelValue.value = [
+      ..._modelValue.value,
+      tagValue,
+    ];
   } else {
     _modelValue.value = [
       tagValue,
@@ -205,13 +208,13 @@ function addTag(tagValue: string | number): void {
 
 function removeLastTag() {
   if (tagInput.value === '' && Array.isArray(_modelValue.value) && _modelValue.value.length > 0) {
-    _modelValue.value.splice(-1, 1);
+    _modelValue.value = _modelValue.value.filter((element) => element !== _modelValue.value?.pop());
   }
 }
 
 function removeTag(tag: string | number) {
   if (_modelValue.value && !props.disabled && !props.skeleton && !props.readonly) {
-    _modelValue.value.splice(_modelValue.value.findIndex((_value) => _value === tag), 1);
+    _modelValue.value = _modelValue.value.filter((element) => element !== tag);
   }
 }
 
