@@ -35,11 +35,13 @@ const props = withDefaults(defineProps<{
   size?: Size;
   messages?: string[];
   nullable?: boolean;
+  colorsPerRow?: number;
 }>(), {
   state: InputState.base,
   size: Size.md,
   messages: () => [],
   nullable: false,
+  colorsPerRow: 4,
 });
 const _value = computed({
   get() {
@@ -223,6 +225,7 @@ onMounted(() => {
         <ColorSelection
           :value="modelValue"
           :colors="props.options"
+          :colors-per-row="colorsPerRow"
           @select="onColorSelect"
         />
       </template>
