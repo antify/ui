@@ -65,7 +65,7 @@ function closeModal() {
           :class="{'w-full h-full': fullscreen, 'border border-base-300 rounded-md shadow-md': !fullscreen}"
         >
           <div
-            class="bg-white p-2 flex items-center justify-between"
+            class="flex gap-2 bg-white p-2 flex items-center justify-between"
           >
             <slot name="title">
               <div class="relative text-for-white-bg-font text-lg font-medium">
