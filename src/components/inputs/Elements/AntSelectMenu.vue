@@ -97,7 +97,7 @@ const dropdownClasses = computed(() => {
   };
 
   return {
-    'w-fit border flex flex-col gap-px outline-none -mt-px overflow-y-auto shadow-md z-[90] max-h-[250px]': true,
+    'w-fit border outline-none -mt-px overflow-y-auto shadow-md z-[90] max-h-[250px]': true,
     'rounded-md': true,
     [variants[props.state]]: true,
   };
@@ -298,26 +298,28 @@ watch(_modelValue, (val) => {
         data-e2e="select-menu"
         :style="{minWidth: `${elementSize.width.value}px!important`, ...floatingStyles}"
       >
-        <div
-          v-for="(option, index) in options"
-          :key="`option-${index}`"
-          :class="{
-            ...dropDownItemClasses,
-            ...getActiveDropDownItemClasses(option),
-            'font-bold': option.isGroupLabel,
-          }"
-          @mousedown="(e) => onClickDropDownItem(e, option)"
-          @mouseover="() => focusedDropDownItem = !option.isGroupLabel && option.value !== undefined ? option.value : null"
-        >
-          <slot
-            name="contentLeft"
-            v-bind="option"
-          />
-          {{ option.label }}
-          <slot
-            name="contentRight"
-            v-bind="option"
-          />
+        <div class="flex flex-col gap-px">
+          <div
+            v-for="(option, index) in options"
+            :key="`option-${index}`"
+            :class="{
+              ...dropDownItemClasses,
+              ...getActiveDropDownItemClasses(option),
+              'font-bold': option.isGroupLabel,
+            }"
+            @mousedown="(e) => onClickDropDownItem(e, option)"
+            @mouseover="() => focusedDropDownItem = !option.isGroupLabel && option.value !== undefined ? option.value : null"
+          >
+            <slot
+              name="contentLeft"
+              v-bind="option"
+            />
+            {{ option.label }}
+            <slot
+              name="contentRight"
+              v-bind="option"
+            />
+          </div>
         </div>
 
         <div
