@@ -35,6 +35,11 @@ const meta: Meta<typeof AntColorInput> = {
       },
       options: Object.values(Size),
     },
+    colorsPerRow: {
+      control: {
+        type: 'number',
+      },
+    },
   },
 };
 

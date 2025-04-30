@@ -19,6 +19,7 @@ withDefaults(defineProps<{
   value: string | null;
   colors: string[];
   size?: Size;
+  colorsPerRow: number;
 }>(), {
   size: Size.md,
 });
@@ -45,6 +46,9 @@ onMounted(() => {
       'p-1.5': size === Size.xs || size === Size.sm,
       'p-2': size === Size.md,
       'p-2.5': size === Size.lg,
+    }"
+    :style="{
+      gridTemplateColumns: `repeat(${colorsPerRow}, minmax(0, 1fr))`
     }"
   >
     <Color
