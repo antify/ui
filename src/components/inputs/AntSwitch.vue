@@ -47,6 +47,7 @@ const buttonClasses = computed(() => {
     'relative inline-flex shrink-0': true,
     'focus:outline-hidden': true,
     'rounded-full ease-in-out duration-200': true,
+    'cursor-pointer': !hasInputState.value,
     'focus-within:ring-4': !hasInputState.value && (props.size === Size.lg || props.size === Size.md),
     'focus-within:ring-2': !hasInputState.value && (props.size === Size.sm || props.size === Size.xs || props.size === Size.xs2),
     'h-5 w-9': props.size === Size.lg || props.size === Size.md || props.size === Size.sm,

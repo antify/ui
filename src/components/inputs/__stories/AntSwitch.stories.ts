@@ -43,12 +43,17 @@ export const Docs: Story = {
       AntSwitch,
     },
     setup() {
+      const value = ref(false);
+
       return {
         args,
+        value,
       };
     },
     template: `
-      <AntSwitch v-bind="args"/>
+      <AntSwitch v-bind="args" v-model="value">
+        Value
+      </AntSwitch>
     `,
   }),
   args: {
