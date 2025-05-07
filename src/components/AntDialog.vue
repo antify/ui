@@ -4,8 +4,8 @@
 import {
   computed, ref, watch,
 } from 'vue';
-import AntButton from '../buttons/AntButton.vue';
-import AntIcon from '../AntIcon.vue';
+import AntButton from './AntButton.vue';
+import AntIcon from './AntIcon.vue';
 import {
   faCheckCircle,
   faExclamationCircle,
@@ -15,10 +15,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {
   State, InputState,
-} from '../../enums';
+} from '../enums';
 import {
   IconSize,
-} from '../__types';
+} from './__types';
 
 const emit = defineEmits([
   'update:open',

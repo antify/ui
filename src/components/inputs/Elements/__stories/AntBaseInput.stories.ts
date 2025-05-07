@@ -8,7 +8,7 @@ import {
   BaseInputType,
 } from '../__types/AntBaseInput.types';
 import AntBaseInput from '../AntBaseInput.vue';
-import AntButton from '../../../buttons/AntButton.vue';
+import AntButton from '../../../AntButton.vue';
 import AntIcon from '../../../AntIcon.vue';
 import {
   Grouped as _Grouped,

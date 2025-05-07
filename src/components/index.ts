@@ -1,24 +1,8 @@
-// Buttons
-import AntActionButton from './buttons/AntActionButton.vue';
-import AntButton from './buttons/AntButton.vue';
-import AntCreateButton from './buttons/AntCreateButton.vue';
-import AntDeleteButton from './buttons/AntDeleteButton.vue';
-import AntDuplicateButton from './buttons/AntDuplicateButton.vue';
-import AntEditButton from './buttons/AntEditButton.vue';
-import AntSaveAndNewButton from './buttons/AntSaveAndNewButton.vue';
-import AntSaveButton from './buttons/AntSaveButton.vue';
+// Button
+import AntButton from './AntButton.vue';
 
-// Crud
-import AntCrud from './crud/AntCrud.vue';
-import AntCrudDetail from './crud/AntCrudDetail.vue';
-import AntCrudDetailActions from './crud/AntCrudDetailActions.vue';
-import AntCrudDetailNav from './crud/AntCrudDetailNav.vue';
-import AntCrudTableFilter from './crud/AntCrudTableFilter.vue';
-import AntCrudTableNav from './crud/AntCrudTableNav.vue';
-
-// Dialogs
-import AntDeleteDialog from './dialogs/AntDeleteDialog.vue';
-import AntDialog from './dialogs/AntDialog.vue';
+// Dialog
+import AntDialog from './AntDialog.vue';
 
 // Forms
 import AntField from './forms/AntField.vue';
@@ -90,21 +74,7 @@ import AntToaster from './AntToaster.vue';
 import AntTooltip from './AntTooltip.vue';
 
 export {
-  AntActionButton,
   AntButton,
-  AntCreateButton,
-  AntDeleteButton,
-  AntDuplicateButton,
-  AntEditButton,
-  AntSaveAndNewButton,
-  AntSaveButton,
-  AntCrud,
-  AntCrudDetail,
-  AntCrudDetailActions,
-  AntCrudDetailNav,
-  AntCrudTableFilter,
-  AntCrudTableNav,
-  AntDeleteDialog,
   AntDialog,
   AntField,
   AntFormGroup,

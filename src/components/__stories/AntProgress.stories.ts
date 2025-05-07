@@ -2,7 +2,7 @@ import AntProgress from '../AntProgress.vue';
 import {
   type Meta, type StoryObj,
 } from '@storybook/vue3';
-import AntButton from '../buttons/AntButton.vue';
+import AntButton from '../AntButton.vue';
 import {
   Size,
 } from '../../enums/Size.enum';

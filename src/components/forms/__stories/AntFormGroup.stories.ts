@@ -4,7 +4,7 @@ import {
 import AntFormGroup from '../AntFormGroup.vue';
 import AntFormGroupLabel from '../AntFormGroupLabel.vue';
 import AntTextInput from '../../inputs/AntTextInput.vue';
-import AntButton from '../../buttons/AntButton.vue';
+import AntButton from '../../AntButton.vue';
 import {
   Direction,
 } from '../../../enums/Direction.enum';

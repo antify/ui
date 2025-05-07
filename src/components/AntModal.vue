@@ -5,7 +5,7 @@ import {
 import {
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
-import AntButton from './buttons/AntButton.vue';
+import AntButton from './AntButton.vue';
 import AntSkeleton from './AntSkeleton.vue';
 
 const emit = defineEmits([
