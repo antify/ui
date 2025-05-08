@@ -10,7 +10,7 @@ import {
 import {
   computed,
 } from 'vue';
-import AntButton from './buttons/AntButton.vue';
+import AntButton from './AntButton.vue';
 import {
   faChevronRight, faChevronLeft,
 } from '@fortawesome/free-solid-svg-icons';

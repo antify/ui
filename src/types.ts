@@ -1,6 +1,5 @@
 export * from './enums';
 export * from './components/__types';
-export * from './components/buttons/__types';
 export * from './components/inputs/__types';
 export * from './components/inputs/Elements/__types';
 export * from './components/navbar/__types';

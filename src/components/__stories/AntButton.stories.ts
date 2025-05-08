@@ -1,6 +1,6 @@
 import AntButton from '../AntButton.vue';
-import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
-import AntFormGroup from '../../forms/AntFormGroup.vue';
+import AntFormGroupLabel from '../forms/AntFormGroupLabel.vue';
+import AntFormGroup from '../forms/AntFormGroup.vue';
 import {
   faCaretRight, faCaretLeft,
 } from '@fortawesome/free-solid-svg-icons';
@@ -9,20 +9,20 @@ import {
 } from '@storybook/vue3';
 import {
   Size,
-} from '../../../enums/Size.enum';
+} from '../../enums/Size.enum';
 import {
   Grouped as _Grouped,
-} from '../../../enums/Grouped.enum';
+} from '../../enums/Grouped.enum';
 import {
   State, InputState, Position,
-} from '../../../enums';
+} from '../../enums';
 import {
   within,
 } from '@storybook/test';
 
 const meta: Meta<typeof AntButton> = {
   component: AntButton,
-  title: 'Components/Buttons/Button',
+  title: 'Components/Button',
   parameters: {
     controls: {
       sort: 'requiredFirst',

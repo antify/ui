@@ -1,5 +1,5 @@
 import AntDropdown from '../AntDropdown.vue';
-import AntButton from '../buttons/AntButton.vue';
+import AntButton from '../AntButton.vue';
 import AntTextInput from '../inputs/AntTextInput.vue';
 import {
   type Meta, type StoryObj,

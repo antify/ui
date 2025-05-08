@@ -1,5 +1,5 @@
 import AntTable from '../AntTable.vue';
-import AntButton from '../../buttons/AntButton.vue';
+import AntButton from '../../AntButton.vue';
 import AntSelect from '../../inputs/AntSelect.vue';
 import AntCheckboxGroup from '../../inputs/AntCheckboxGroup.vue';
 import {

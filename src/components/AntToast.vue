@@ -13,7 +13,7 @@ import {
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import AntIcon from './AntIcon.vue';
-import AntButton from './buttons/AntButton.vue';
+import AntButton from './AntButton.vue';
 import {
   State, InputState, Size,
 } from '../enums';

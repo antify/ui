@@ -36,7 +36,7 @@ import AntSkeleton from '../AntSkeleton.vue';
 import {
   vOnClickOutside,
 } from '@vueuse/components';
-import AntButton from '../buttons/AntButton.vue';
+import AntButton from '../AntButton.vue';
 import {
   State, InputState,
 } from '../../enums';

@@ -8,28 +8,28 @@ import {
 import {
   type RouteLocationRaw,
 } from 'vue-router';
-import AntSkeleton from '../AntSkeleton.vue';
-import AntSpinner from '../AntSpinner.vue';
+import AntSkeleton from './AntSkeleton.vue';
+import AntSpinner from './AntSpinner.vue';
 import {
   Grouped,
-} from '../../enums/Grouped.enum';
+} from '../enums/Grouped.enum';
 import {
   Size,
-} from '../../enums/Size.enum';
+} from '../enums/Size.enum';
 import {
   handleEnumValidation,
-} from '../../handler';
+} from '../handler';
 import {
   State, InputState, Position,
-} from '../../enums';
+} from '../enums';
 import {
   ButtonType,
 } from './__types';
-import AntIcon from '../AntIcon.vue';
-import AntTooltip from '../AntTooltip.vue';
+import AntIcon from './AntIcon.vue';
+import AntTooltip from './AntTooltip.vue';
 import {
   IconSize,
-} from '../__types/AntIcon.types';
+} from './__types/AntIcon.types';
 
 defineEmits([
   'click',
