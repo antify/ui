@@ -43,15 +43,15 @@ const icons = {
 const _icon = computed(() => icons[props.state]);
 const classes = computed(() => {
   const variants: Record<InputState, string> = {
-    [InputState.base]: 'bg-base-100 border-base-500 text-base-500',
-    [InputState.danger]: 'bg-danger-100 border-danger-500 text-danger-500',
-    [InputState.info]: 'bg-info-100 border-info-500 text-info-500',
-    [InputState.success]: 'bg-success-100 border-success-500 text-success-500',
-    [InputState.warning]: 'bg-warning-100 border-warning-500 text-warning-500',
+    [InputState.base]: 'border-base-500 text-base-500',
+    [InputState.danger]: 'border-danger-500 text-danger-500',
+    [InputState.info]: 'border-info-500 text-info-500',
+    [InputState.success]: 'border-success-500 text-success-500',
+    [InputState.warning]: 'border-warning-500 text-warning-500',
   };
 
   return {
-    'inline-flex flex-col gap-2 rounded-md p-2 border transition-colors shadow-md': true,
+    'bg-white inline-flex flex-col gap-2 rounded-md p-2 border transition-colors shadow-md': true,
     [variants[props.state]]: true,
   };
 });
