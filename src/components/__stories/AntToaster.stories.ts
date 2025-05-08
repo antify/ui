@@ -1,4 +1,4 @@
-import AntButton from '../buttons/AntButton.vue';
+import AntButton from '../AntButton.vue';
 import AntFormGroup from '../forms/AntFormGroup.vue';
 import {
   CornerPosition, InputState,

@@ -24,7 +24,7 @@ import {
 import {
   faAngleDown, faAngleUp,
 } from '@fortawesome/free-solid-svg-icons';
-import AntButton from '../buttons/AntButton.vue';
+import AntButton from '../AntButton.vue';
 import AntIcon from '../AntIcon.vue';
 import AntTableSkeleton from './AntTableSkeleton.vue';
 

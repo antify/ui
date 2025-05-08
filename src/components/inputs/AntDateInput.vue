@@ -4,7 +4,7 @@ import {
 } from 'vue';
 import AntField from '../forms/AntField.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
-import AntButton from '../buttons/AntButton.vue';
+import AntButton from '../AntButton.vue';
 import AntIcon from '../AntIcon.vue';
 import {
   Size,

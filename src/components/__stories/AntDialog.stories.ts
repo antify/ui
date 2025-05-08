@@ -2,13 +2,13 @@ import AntDialog from '../AntDialog.vue';
 import {
   type Meta, type StoryObj,
 } from '@storybook/vue3';
-import AntButton from '../../buttons/AntButton.vue';
+import AntButton from '../AntButton.vue';
 import {
   InputState,
-} from '../../../enums';
+} from '../../enums';
 
 const meta: Meta<typeof AntDialog> = {
-  title: 'Components/Dialogs/Dialog',
+  title: 'Components/Dialog',
   component: AntDialog,
   parameters: {
     controls: {

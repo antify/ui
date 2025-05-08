@@ -5,7 +5,7 @@ import {
 import {
   InputState,
 } from '../../enums';
-import AntButton from '../buttons/AntButton.vue';
+import AntButton from '../AntButton.vue';
 import {
   onMounted, ref, type Ref,
 } from 'vue';

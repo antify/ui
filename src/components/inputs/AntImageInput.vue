@@ -19,7 +19,7 @@ import AntIcon from '../AntIcon.vue';
 import {
   IconSize,
 } from '../__types';
-import AntButton from '../buttons/AntButton.vue';
+import AntButton from '../AntButton.vue';
 import AntSpinner from '../AntSpinner.vue';
 import AntInputDescription from './Elements/AntInputDescription.vue';
 import AntSkeleton from '../AntSkeleton.vue';

@@ -11,7 +11,7 @@ import {
 import AntPasswordInput from '../AntPasswordInput.vue';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
-import AntButton from '../../buttons/AntButton.vue';
+import AntButton from '../../AntButton.vue';
 import {
   ref,
 } from 'vue';

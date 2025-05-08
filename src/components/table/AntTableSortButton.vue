@@ -6,7 +6,7 @@ import {
 import {
   AntTableSize, AntTableSortDirection,
 } from './__types/TableHeader.types';
-import AntButton from '../buttons/AntButton.vue';
+import AntButton from '../AntButton.vue';
 import {
   computed,
 } from 'vue';
