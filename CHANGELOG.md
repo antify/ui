@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/antify/ui/compare/v2.5.7...v3.0.0) (2025-05-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* Do not use AntSkeleton with v-if. Use :visible prop instead.
+
+### Features
+
+* Add flicker protection ([80232f7](https://github.com/antify/ui/commit/80232f7d4b8e73f1fd5c40222dcf66bc7b2a17d5))
+
 ### 2.5.7 (2025-05-08)
 
 ### 2.5.6 (2025-04-30)
