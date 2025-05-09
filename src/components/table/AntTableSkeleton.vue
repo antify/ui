@@ -7,6 +7,7 @@ import AntTh from './AntTh.vue';
 import AntSkeleton from '../AntSkeleton.vue';
 
 withDefaults(defineProps<{
+  visible: boolean;
   headers: TableHeader[];
   getRowClasses: (element: Record<string, unknown>, rowIndex: number) => {};
   size?: AntTableSize;
@@ -20,7 +21,10 @@ withDefaults(defineProps<{
 </script>
 
 <template>
-  <div class="overflow-hidden h-full overflow-x-auto overflow-y-auto">
+  <div
+    v-if="visible"
+    class="overflow-hidden h-full overflow-x-auto overflow-y-auto"
+  >
     <table
       class="min-w-full max-h-full relative"
     >

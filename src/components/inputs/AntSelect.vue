@@ -260,13 +260,6 @@ function onClickRemoveButton() {
         class="relative w-full"
         :class="{'cursor-pointer': !skeleton && !readonly}"
       >
-        <AntSkeleton
-          v-if="skeleton"
-          absolute
-          rounded
-          :grouped="skeletonGrouped"
-        />
-
         <input
           v-model="_modelValue"
           type="hidden"
@@ -297,70 +290,78 @@ function onClickRemoveButton() {
               v-bind="{...props}"
             />
           </template>
-          <!-- Input -->
-          <div
-            ref="inputRef"
-            :class="inputClasses"
-            :tabindex="disabled || readonly ? -1 : 0"
-            v-bind="$attrs"
-            @mousedown="onClickSelectInput"
-            @click="() => inputRef?.focus()"
-            @blur="onBlur"
+
+          <AntSkeleton
+            :visible="skeleton"
+            rounded
+            :grouped="skeletonGrouped"
+            class="w-full"
           >
+            <!-- Input -->
             <div
-              v-if="_modelValue === null && placeholder !== undefined"
-              :class="placeholderClasses"
+              ref="inputRef"
+              :class="inputClasses"
+              :tabindex="disabled || readonly ? -1 : 0"
+              v-bind="$attrs"
+              @mousedown="onClickSelectInput"
+              @click="() => inputRef?.focus()"
+              @blur="onBlur"
             >
-              {{ placeholder }}
-            </div>
-
-            <div
-              v-else-if="_modelValue === null && label !== undefined"
-              :class="placeholderClasses"
-            >
-              {{ label }}
-            </div>
-
-            <div
-              v-else
-              class="flex items-center select-none overflow-hidden w-full"
-              :class="{
-                'gap-1': size === Size.xs2,
-                'gap1.5': size === Size.xs,
-                'gap-1.5': size === Size.sm,
-                'gap-2': size === Size.md,
-                'gap-2.5': size === Size.lg,
-              }"
-            >
-              <slot
-                v-if="selectedOption !== null"
-                name="contentLeft"
-                v-bind="selectedOption"
-              />
-              <div class="text-ellipsis overflow-hidden whitespace-nowrap w-full text-black">
-                {{ valueLabel }}
+              <div
+                v-if="_modelValue === null && placeholder !== undefined"
+                :class="placeholderClasses"
+              >
+                {{ placeholder }}
               </div>
-              <slot
-                v-if="selectedOption !== null"
-                name="contentRight"
-                v-bind="selectedOption"
+
+              <div
+                v-else-if="_modelValue === null && label !== undefined"
+                :class="placeholderClasses"
+              >
+                {{ label }}
+              </div>
+
+              <div
+                v-else
+                class="flex items-center select-none overflow-hidden w-full"
+                :class="{
+                  'gap-1': size === Size.xs2,
+                  'gap1.5': size === Size.xs,
+                  'gap-1.5': size === Size.sm,
+                  'gap-2': size === Size.md,
+                  'gap-2.5': size === Size.lg,
+                }"
+              >
+                <slot
+                  v-if="selectedOption !== null"
+                  name="contentLeft"
+                  v-bind="selectedOption"
+                />
+                <div class="text-ellipsis overflow-hidden whitespace-nowrap w-full text-black">
+                  {{ valueLabel }}
+                </div>
+                <slot
+                  v-if="selectedOption !== null"
+                  name="contentRight"
+                  v-bind="selectedOption"
+                />
+              </div>
+
+              <AntIcon
+                v-if="isOpen"
+                :icon="faChevronUp"
+                :size="iconSize"
+                :class="arrowClasses"
+              />
+
+              <AntIcon
+                v-else
+                :icon="faChevronDown"
+                :size="iconSize"
+                :class="arrowClasses"
               />
             </div>
-
-            <AntIcon
-              v-if="isOpen"
-              :icon="faChevronUp"
-              :size="iconSize"
-              :class="arrowClasses"
-            />
-
-            <AntIcon
-              v-else
-              :icon="faChevronDown"
-              :size="iconSize"
-              :class="arrowClasses"
-            />
-          </div>
+          </AntSkeleton>
         </AntSelectMenu>
       </div>
 

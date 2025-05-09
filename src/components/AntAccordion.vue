@@ -82,18 +82,17 @@ function onClose(index: number) {
           />
         </template>
 
-        <div class="relative">
+        <div>
           <slot
             name="item-content"
             v-bind="{item, index}"
           >
-            <div v-html="item.content" />
-
             <AntSkeleton
-              v-if="skeleton"
-              absolute
+              :visible="skeleton"
               rounded
-            />
+            >
+              <div v-html="item.content" />
+            </AntSkeleton>
           </slot>
         </div>
       </AntAccordionItem>

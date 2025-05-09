@@ -231,72 +231,72 @@ function onClickClearIcon() {
     class="block relative w-full h-fit"
     :class="_wrapperClass"
   >
-    <div
-      v-if="iconLeft"
-      class="absolute h-full flex items-center justify-center z-20"
-      :class="{
-        'w-6': size === Size.xs2,
-        'w-7': size === Size.sm,
-        'w-8': size === Size.xs,
-        'w-9': size === Size.md,
-        'w-10': size === Size.lg,
-        'opacity-50': disabled,
-      }"
-    >
-      <AntIcon
-        :icon="iconLeft"
-        :size="inputIconSize"
-        color="text-for-white-bg-font"
-      />
-    </div>
-
-    <input
-      ref="_inputRef"
-      v-model="_modelValue"
-      :class="inputClasses"
-      :type="type"
-      :placeholder="placeholder"
-      :disabled="disabled || skeleton"
-      :readonly="readonly"
-      :tabindex="hasInputState ? -1 : 0"
-      :min="min"
-      :max="max"
-      title=""
-      v-bind="$attrs"
-      @blur="onBlur"
-    >
-
-    <div
-      v-if="(nullable && _modelValue !== null && _modelValue !== '') || (showIcon && icon) || hasSlotContent(slot['icon-right'])"
-      class="absolute h-full flex items-center justify-center right-0 top-0 transition-all z-20"
-      :class="{'w-6': size === Size.xs2, 'w-7': size === Size.xs, 'w-8': size === Size.sm, 'w-9': size === Size.md, 'w-10': size === Size.lg}"
-    >
-      <slot name="icon-right">
-        <AntIcon
-          v-if="nullable && _modelValue !== null && _modelValue !== ''"
-          :icon="faXmark"
-          :class="{'cursor-pointer': !disabled, ...iconClasses}"
-          :color="iconColorClass"
-          :size="inputIconSize"
-          @click="() => onClickClearIcon()"
-        />
-
-        <AntIcon
-          v-else-if="showIcon && icon"
-          :icon="icon"
-          :color="iconColorClass"
-          :class="iconClasses"
-          :size="inputIconSize"
-        />
-      </slot>
-    </div>
-
     <AntSkeleton
-      v-if="skeleton"
-      absolute
+      :visible="skeleton"
       :grouped="grouped"
       rounded
-    />
+      class="w-full"
+    >
+      <div
+        v-if="iconLeft"
+        class="absolute h-full flex items-center justify-center z-20"
+        :class="{
+          'w-6': size === Size.xs2,
+          'w-7': size === Size.sm,
+          'w-8': size === Size.xs,
+          'w-9': size === Size.md,
+          'w-10': size === Size.lg,
+          'opacity-50': disabled,
+        }"
+      >
+        <AntIcon
+          :icon="iconLeft"
+          :size="inputIconSize"
+          color="text-for-white-bg-font"
+        />
+      </div>
+
+      <input
+        ref="_inputRef"
+        v-model="_modelValue"
+        :class="inputClasses"
+        :type="type"
+        :placeholder="placeholder"
+        :disabled="disabled || skeleton"
+        :readonly="readonly"
+        :tabindex="hasInputState ? -1 : 0"
+        :min="min"
+        :max="max"
+        title=""
+        v-bind="$attrs"
+        @blur="onBlur"
+      >
+
+      <div
+        v-if="(nullable && _modelValue !== null && _modelValue !== '') || (showIcon && icon) || hasSlotContent(slot['icon-right'])"
+        class="absolute h-full flex items-center justify-center right-0 top-0 transition-all z-20"
+        :class="{'w-6': size === Size.xs2, 'w-7': size === Size.xs, 'w-8': size === Size.sm, 'w-9': size === Size.md, 'w-10': size === Size.lg}"
+      >
+        <slot name="icon-right">
+          <AntIcon
+            v-if="nullable && _modelValue !== null && _modelValue !== ''"
+            :icon="faXmark"
+            :class="{'cursor-pointer': !disabled, ...iconClasses}"
+            :color="iconColorClass"
+            :size="inputIconSize"
+            @click="() => onClickClearIcon()"
+          />
+
+          <AntIcon
+            v-else-if="showIcon && icon"
+            :icon="icon"
+            :color="iconColorClass"
+            :class="iconClasses"
+            :size="inputIconSize"
+          />
+        </slot>
+      </div>
+    </AntSkeleton>
   </div>
 </template>
 

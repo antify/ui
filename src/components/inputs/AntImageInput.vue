@@ -160,36 +160,35 @@ onBeforeUnmount(() => {
       :class="{'cursor-pointer': !disabled && !skeleton}"
     >
       <div>
-        <div class="h-[70px] w-[70px] bg-gray-100 rounded-full overflow-hidden flex items-center justify-center relative">
-          <img
-            v-if="src && !skeleton"
-            :src="src"
-            alt="Image"
-            class="h-full w-full object-cover"
-          >
+        <AntSkeleton
+          :visible="skeleton"
+          rounded-full
+        >
+          <div class="h-[70px] w-[70px] bg-gray-100 rounded-full overflow-hidden flex items-center justify-center">
+            <img
+              v-if="src"
+              :src="src"
+              alt="Image"
+              class="h-full w-full object-cover"
+            >
 
-          <AntIcon
-            v-else
-            class="text-base-300"
-            :size="IconSize.xl3"
-            :icon="faImage"
-          />
-
-          <div
-            v-if="loading"
-            class="absolute flex items-center justify-center inset-0 bg-base-600/50 rounded-full"
-          >
-            <AntSpinner
-              :state="State.primary"
+            <AntIcon
+              v-else
+              class="text-base-300"
+              :size="IconSize.xl3"
+              :icon="faImage"
             />
-          </div>
 
-          <AntSkeleton
-            v-if="skeleton"
-            absolute
-            rounded-full
-          />
-        </div>
+            <div
+              v-if="loading"
+              class="absolute flex items-center justify-center inset-0 bg-base-600/50 rounded-full"
+            >
+              <AntSpinner
+                :state="State.primary"
+              />
+            </div>
+          </div>
+        </AntSkeleton>
       </div>
 
       <div class="flex flex-col gap-2.5 w-full">
@@ -204,15 +203,14 @@ onBeforeUnmount(() => {
               @change="handleFileChange"
             >
 
-            <span class="text-sm text-for-white-bg-font relative">
-              Upload Image
-
-              <AntSkeleton
-                v-if="skeleton"
-                absolute
-                rounded
-              />
-            </span>
+            <AntSkeleton
+              :visible="skeleton"
+              rounded
+            >
+              <span class="text-sm text-for-white-bg-font">
+                Upload Image
+              </span>
+            </AntSkeleton>
 
             <div
               class="absolute top-0 left-0 w-full h-full border bg-transparent"

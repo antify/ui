@@ -181,18 +181,19 @@ onMounted(() => {
         @click="prevOption"
         @blur="onBlur"
       />
-      <div class="grow relative">
-        <div :class="itemClasses">
-          {{ typeof _value === 'string' ? _value : _value.label }}
-        </div>
 
-        <AntSkeleton
-          v-if="skeleton"
-          absolute
-          :grouped="Grouped.center"
-          rounded
-        />
-      </div>
+      <AntSkeleton
+        :visible="skeleton"
+        :grouped="Grouped.center"
+        rounded
+        class="grow"
+      >
+        <div class="grow">
+          <div :class="itemClasses">
+            {{ typeof _value === 'string' ? _value : _value.label }}
+          </div>
+        </div>
+      </AntSkeleton>
 
       <AntButton
         :icon-left="faChevronRight"

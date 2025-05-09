@@ -197,25 +197,24 @@ onMounted(() => {
         </div>
 
         <AntSkeleton
-          v-if="skeleton"
+          :visible="skeleton"
           absolute
           rounded
         />
       </div>
 
       <div
-        class="relative flex items-center"
+        class="flex items-center"
         :class="props.size === Size.md ? 'h-5' : 'h-4'"
       >
-        <span :class="contentClasses">
-          <slot />
-        </span>
-
         <AntSkeleton
-          v-if="skeleton"
-          absolute
+          :visible="skeleton"
           rounded
-        />
+        >
+          <span :class="contentClasses">
+            <slot />
+          </span>
+        </AntSkeleton>
       </div>
     </div>
   </AntField>

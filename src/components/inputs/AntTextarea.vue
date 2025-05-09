@@ -193,7 +193,10 @@ defineExpose({
     :messages="messages"
     :expanded-height="!resize"
   >
-    <div
+    <AntSkeleton
+      :visible="skeleton"
+      :grouped="grouped"
+      rounded
       class="block relative w-full h-full"
       :class="{...{'-mr-px': grouped !== Grouped.none}, ..._wrapperClass}"
     >
@@ -219,13 +222,6 @@ defineExpose({
           :color="iconColor"
         />
       </div>
-
-      <AntSkeleton
-        v-if="skeleton"
-        absolute
-        :grouped="grouped"
-        rounded
-      />
-    </div>
+    </AntSkeleton>
   </AntField>
 </template>

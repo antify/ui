@@ -128,7 +128,7 @@ const classes = computed(() => {
   };
 
   return {
-    'transition-all inline-flex items-center justify-center relative font-medium cursor-pointer select-none': true,
+    'transition-all inline-flex items-center justify-center font-medium cursor-pointer select-none': true,
     'active:shadow-[inset_0_4px_4px_rgba(0,0,0,0.25)]': !hasInputState.value,
     'p-1 text-xs gap-1': props.size === Size.xs2,
     'p-1.5 text-xs gap-1.5': props.size === Size.xs,
@@ -140,7 +140,6 @@ const classes = computed(() => {
     'focus:ring-2': !props.readonly && props.size === Size.sm || props.size === Size.xs || props.size === Size.xs2,
     'focus:ring-4': !props.readonly && props.size === Size.md || props.size === Size.lg,
     'w-full': props.expanded,
-    invisible: props.skeleton,
     'outline outline-1 outline-offset-[-1px]': props.outlined,
     ...groupedClassList.value,
     [variants[props.state]]: true,
@@ -202,73 +201,72 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    class="relative inline-flex h-fit"
-    :class="{'w-full': props.expanded}"
-    data-e2e="button"
-    :data-e2e-state="props.state"
+  <AntSkeleton
+    :visible="skeleton"
+    :grouped="grouped"
+    rounded
   >
-    <AntSkeleton
-      v-if="skeleton"
-      :grouped="grouped"
-      rounded
-      absolute
-    />
-
-    <AntTooltip
-      class="w-full"
-      :state="tooltipState"
-      :delay="tooltipDelay"
+    <div
+      class="inline-flex h-fit"
+      :class="{'w-full': props.expanded}"
+      data-e2e="button"
+      :data-e2e-state="props.state"
     >
-      <component
-        :is="is"
-        :class="classes"
-        :type="type"
-        :to="to"
-        :disabled="disabled || undefined"
-        :tabindex="noFocus || hasInputState ? '-1' : '0'"
-        @click="(e: MouseEvent) => !props.readonly ? $emit('click', e) : null"
-        @blur="(e: FocusEvent) => !props.readonly ? $emit('blur', e) : null"
+      <AntTooltip
+        class="w-full"
+        :state="tooltipState"
+        :delay="tooltipDelay"
       >
-        <AntSpinner
-          v-if="spinner"
-          :size="size"
-          :state="state"
-          :inverted="!filled"
-        />
-
-        <slot
-          v-if="!spinner"
-          name="icon-left"
+        <component
+          :is="is"
+          :class="classes"
+          :type="type"
+          :to="to"
+          :disabled="disabled || undefined"
+          :tabindex="noFocus || hasInputState ? '-1' : '0'"
+          @click="(e: MouseEvent) => !props.readonly ? $emit('click', e) : null"
+          @blur="(e: FocusEvent) => !props.readonly ? $emit('blur', e) : null"
         >
-          <AntIcon
-            v-if="iconLeft"
-            :icon="iconLeft"
-            :size="getIconSize"
-            :color="iconColor"
+          <AntSpinner
+            v-if="spinner"
+            :size="size"
+            :state="state"
+            :inverted="!filled"
           />
-        </slot>
 
-        <slot
-          v-if="!spinner"
-        />
+          <slot
+            v-if="!spinner"
+            name="icon-left"
+          >
+            <AntIcon
+              v-if="iconLeft"
+              :icon="iconLeft"
+              :size="getIconSize"
+              :color="iconColor"
+            />
+          </slot>
 
-        <slot
-          v-if="!spinner"
-          name="icon-right"
-        >
-          <AntIcon
-            v-if="iconRight"
-            :icon="iconRight"
-            :size="getIconSize"
-            :color="iconColor"
+          <slot
+            v-if="!spinner"
           />
-        </slot>
-      </component>
 
-      <template #content>
-        <slot name="tooltip-content" />
-      </template>
-    </AntTooltip>
-  </div>
+          <slot
+            v-if="!spinner"
+            name="icon-right"
+          >
+            <AntIcon
+              v-if="iconRight"
+              :icon="iconRight"
+              :size="getIconSize"
+              :color="iconColor"
+            />
+          </slot>
+        </component>
+
+        <template #content>
+          <slot name="tooltip-content" />
+        </template>
+      </AntTooltip>
+    </div>
+  </AntSkeleton>
 </template>

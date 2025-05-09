@@ -45,21 +45,21 @@ const iconClasses = computed(() => {
 </script>
 
 <template>
-  <div
-    class="inline-flex relative justify-center items-center bg-base-300 rounded-md text-center text-base-300-font font-medium"
-    :class="classes"
+  <AntSkeleton
+    :visible="skeleton"
+    rounded
   >
-    <AntIcon
-      v-if="icon"
-      :icon="icon"
-      :size="iconClasses"
-    />
+    <div
+      class="inline-flex justify-center items-center bg-base-300 rounded-md text-center text-base-300-font font-medium"
+      :class="classes"
+    >
+      <AntIcon
+        v-if="icon"
+        :icon="icon"
+        :size="iconClasses"
+      />
 
-    <slot v-else />
-    <AntSkeleton
-      v-if="skeleton"
-      absolute
-      rounded
-    />
-  </div>
+      <slot v-else />
+    </div>
+  </AntSkeleton>
 </template>

@@ -181,8 +181,10 @@ onMounted(() => {
       <div
         :class="containerClasses"
       >
-        <div
-          class="relative"
+        <AntSkeleton
+          :visible="skeleton"
+          :grouped="hasRemoveButton ? Grouped.left : Grouped.none"
+          rounded
         >
           <div
             ref="itemRef"
@@ -198,14 +200,7 @@ onMounted(() => {
               readonly
             />
           </div>
-
-          <AntSkeleton
-            v-if="skeleton"
-            absolute
-            :grouped="hasRemoveButton ? Grouped.left : Grouped.none"
-            rounded
-          />
-        </div>
+        </AntSkeleton>
 
         <AntButton
           v-if="hasRemoveButton"

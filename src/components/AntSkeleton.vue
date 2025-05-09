@@ -3,8 +3,11 @@ import {
   Grouped,
 } from '../enums/Grouped.enum';
 import {
-  computed, ref, watch,
+  computed,
 } from 'vue';
+import {
+  useFlickerProtection,
+} from '../composables/useFlickerProtection';
 
 defineOptions({
   inheritAttrs: false,
@@ -38,30 +41,7 @@ const classList = computed(() => ({
   'rounded-full': props.roundedFull && props.grouped === Grouped.none,
   ...groupedClassList.value,
 }));
-
-/**
- * To prevent flickering, make sure the skeleton is a minimum time visible
- * before hide it.
- */
-const _visible = ref(props.visible);
-
-watch(
-  () => props.visible,
-  (newValue) => {
-    if (newValue) {
-      _visible.value = true;
-    } else if (props.minShowTime && props.minShowTime > 0) {
-      setTimeout(() => {
-        _visible.value = false;
-      }, props.minShowTime);
-    } else {
-      _visible.value = false;
-    }
-  },
-  {
-    immediate: true,
-  },
-);
+const _visible = useFlickerProtection(computed(() => props.visible));
 </script>
 
 <template>

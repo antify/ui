@@ -170,49 +170,47 @@ const pagination = computed(() => {
 </script>
 
 <template>
-  <div
-    class="inline-flex relative"
-    data-e2e="pagination"
+  <AntSkeleton
+    :visible="skeleton"
+    rounded
   >
-    <AntSkeleton
-      v-if="skeleton"
-      rounded
-      absolute
-    />
-
     <div
-      class="inline-flex gap-px"
-      :class="{'invisible': skeleton}"
+      class="inline-flex"
+      data-e2e="pagination"
     >
-      <AntButton
-        :disabled="page === 1"
-        :icon-left="faChevronLeft"
-        :grouped="Grouped.left"
-        :filled="false"
-        @click="() => page = page - 1"
-      />
-
-      <AntButton
-        v-for="(pageObj) in pagination"
-        :key="`pagination-button-${pageObj}`"
-        :state="pageObj === page ? State.primary : State.base"
-        :class="{'text-primary-500 z-10': pageObj === page}"
-        :disabled="pageObj === '...'"
-        :grouped="Grouped.center"
-        :filled="false"
-        :readonly="pageObj === page"
-        @click="() => page = pageObj"
+      <div
+        class="inline-flex gap-px"
       >
-        {{ pageObj }}
-      </AntButton>
+        <AntButton
+          :disabled="page === 1"
+          :icon-left="faChevronLeft"
+          :grouped="Grouped.left"
+          :filled="false"
+          @click="() => page = page - 1"
+        />
 
-      <AntButton
-        :icon-left="faChevronRight"
-        :grouped="Grouped.right"
-        :disabled="page === pages"
-        :filled="false"
-        @click="() => page = page + 1"
-      />
+        <AntButton
+          v-for="(pageObj) in pagination"
+          :key="`pagination-button-${pageObj}`"
+          :state="pageObj === page ? State.primary : State.base"
+          :class="{'text-primary-500 z-10': pageObj === page}"
+          :disabled="pageObj === '...'"
+          :grouped="Grouped.center"
+          :filled="false"
+          :readonly="pageObj === page"
+          @click="() => page = pageObj"
+        >
+          {{ pageObj }}
+        </AntButton>
+
+        <AntButton
+          :icon-left="faChevronRight"
+          :grouped="Grouped.right"
+          :disabled="page === pages"
+          :filled="false"
+          @click="() => page = page + 1"
+        />
+      </div>
     </div>
-  </div>
+  </AntSkeleton>
 </template>

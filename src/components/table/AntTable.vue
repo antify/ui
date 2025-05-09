@@ -27,6 +27,9 @@ import {
 import AntButton from '../AntButton.vue';
 import AntIcon from '../AntIcon.vue';
 import AntTableSkeleton from './AntTableSkeleton.vue';
+import {
+  useFlickerProtection,
+} from '../../composables/useFlickerProtection';
 
 defineOptions({
   inheritAttrs: false,
@@ -34,7 +37,6 @@ defineOptions({
 
 const emits = defineEmits([
   'update:modelValue',
-  'update:skeleton',
   'update:selectedRow',
   'rowClick',
   'updateSort',
@@ -53,6 +55,7 @@ const props = withDefaults(defineProps<{
   emptyStateText?: string;
   collapseStrategy?: CollapseStrategy;
   expandedRows?: boolean;
+  skeleton?: boolean;
 }>(), {
   rowKey: 'id',
   loading: false,
@@ -63,11 +66,11 @@ const props = withDefaults(defineProps<{
   emptyStateText: 'We couldn\'t find any entry',
   collapseStrategy: CollapseStrategy.single,
   expandedRows: false,
+  skeleton: false,
 });
 const slots = defineSlots();
 const openItems = ref<number[]>([]);
 const selected: Ref<Record<string, unknown> | undefined> = useVModel(props, 'selectedRow', emits);
-const _loading: Ref<boolean> = useVModel(props, 'loading', emits);
 const _showLightVersion = ref(props.showLightVersion);
 const _headers = computed(() => {
   // if (_showLightVersion.value) {
@@ -78,9 +81,10 @@ const _headers = computed(() => {
 
   return props.headers;
 });
+const _skeleton = useFlickerProtection(computed(() => props.skeleton));
+const _loading = useFlickerProtection(computed(() => props.loading));
 
 const maxColSpan = computed(() => _headers.value.length + (hasSlotContent(slots['rowFirstCell']) ? 1 : 0) + (hasSlotContent(slots['rowLastCell']) ? 1 : 0));
-const skeleton = computed(() => !props.data || props.data.length === 0 && _loading.value);
 
 function sortTable(header: TableHeader, newDirection: AntTableSortDirection) {
   // TODO:: Sorting is always done externally, here should only be a emit sort with header and direction.
@@ -180,7 +184,7 @@ onMounted(() => {
     data-e2e="table"
   >
     <div
-      v-if="!skeleton"
+      v-if="!_skeleton"
       class="overflow-hidden h-full overflow-x-auto overflow-y-auto"
     >
       <table
@@ -307,7 +311,7 @@ onMounted(() => {
             </template>
           </template>
 
-          <tr v-if="data.length === 0 && !_loading">
+          <tr v-if="data.length === 0">
             <td
               colspan="100"
               class="w-full h-full py-2 text-center text-for-white-bg-font text-lg"
@@ -324,7 +328,7 @@ onMounted(() => {
     </div>
 
     <div
-      v-if="data.length > 0 && _loading"
+      v-if="_loading"
       class="absolute w-full top-0 bottom-0 bg-base-300/50 flex items-center justify-center z-10"
     >
       <AntSpinner
@@ -334,7 +338,7 @@ onMounted(() => {
     </div>
 
     <AntTableSkeleton
-      v-if="skeleton"
+      :visible="_skeleton"
       :headers="_headers"
       :size="size"
       :get-row-classes="getRowClasses"

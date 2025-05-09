@@ -99,6 +99,7 @@ export const Summary: Story = {
         <AntFormGroup direction="row">
           <AntCheckbox
             v-model="offValue"
+            v-bind="args"
             class="w-28"
             :state="InputState.base"
             label="Label"
@@ -107,6 +108,7 @@ export const Summary: Story = {
           />
           <AntCheckbox
             v-model="offValue"
+            v-bind="args"
             class="w-28"
             :state="InputState.info"
             label="Label"
@@ -115,6 +117,7 @@ export const Summary: Story = {
           />
           <AntCheckbox
             v-model="offValue"
+            v-bind="args"
             class="w-28"
             :state="InputState.success"
             label="Label"
@@ -123,6 +126,7 @@ export const Summary: Story = {
           />
           <AntCheckbox
             v-model="offValue"
+            v-bind="args"
             class="w-28"
             :state="InputState.warning"
             label="Label"
@@ -131,6 +135,7 @@ export const Summary: Story = {
           />
           <AntCheckbox
             v-model="offValue"
+            v-bind="args"
             class="w-28"
             :state="InputState.danger"
             label="Label"
@@ -143,6 +148,7 @@ export const Summary: Story = {
         <AntFormGroup direction="row">
           <AntCheckbox
             v-model="onValue"
+            v-bind="args"
             class="w-28"
             :state="InputState.base"
             label="Label"
@@ -151,6 +157,7 @@ export const Summary: Story = {
           />
           <AntCheckbox
             v-model="onValue"
+            v-bind="args"
             class="w-28"
             :state="InputState.info"
             label="Label"
@@ -159,6 +166,7 @@ export const Summary: Story = {
           />
           <AntCheckbox
             v-model="onValue"
+            v-bind="args"
             class="w-28"
             :state="InputState.success"
             label="Label"
@@ -167,6 +175,7 @@ export const Summary: Story = {
           />
           <AntCheckbox
             v-model="onValue"
+            v-bind="args"
             class="w-28"
             :state="InputState.warning"
             label="Label"
@@ -175,6 +184,7 @@ export const Summary: Story = {
           />
           <AntCheckbox
             v-model="onValue"
+            v-bind="args"
             class="w-28"
             :state="InputState.danger"
             label="Label"
@@ -187,6 +197,7 @@ export const Summary: Story = {
         <AntFormGroup direction="row">
           <AntCheckbox
             v-model="offValue"
+            v-bind="args"
             class="w-28"
             :size="Size.lg"
             label="Label"
@@ -194,6 +205,7 @@ export const Summary: Story = {
           />
           <AntCheckbox
             v-model="onValue"
+            v-bind="args"
             class="w-28"
             :size="Size.lg"
             label="Label"
@@ -201,6 +213,7 @@ export const Summary: Story = {
           />
           <AntCheckbox
             v-model="offValue"
+            v-bind="args"
             class="w-28"
             :size="Size.md"
             label="Label"
@@ -208,6 +221,7 @@ export const Summary: Story = {
           />
           <AntCheckbox
             v-model="onValue"
+            v-bind="args"
             class="w-28"
             :size="Size.md"
             label="Label"
@@ -215,6 +229,7 @@ export const Summary: Story = {
           />
           <AntCheckbox
             v-model="offValue"
+            v-bind="args"
             class="w-28"
             :size="Size.sm"
             label="Label"
@@ -222,6 +237,7 @@ export const Summary: Story = {
           />
           <AntCheckbox
             v-model="onValue"
+            v-bind="args"
             class="w-28"
             :size="Size.sm"
             label="Label"
@@ -229,6 +245,7 @@ export const Summary: Story = {
           />
           <AntCheckbox
             v-model="offValue"
+            v-bind="args"
             class="w-28"
             :size="Size.xs"
             label="Label"
@@ -236,6 +253,7 @@ export const Summary: Story = {
           />
           <AntCheckbox
             v-model="onValue"
+            v-bind="args"
             class="w-28"
             :size="Size.xs"
             label="Label"
@@ -243,6 +261,7 @@ export const Summary: Story = {
           />
           <AntCheckbox
             v-model="offValue"
+            v-bind="args"
             class="w-28"
             :size="Size.xs2"
             label="Label"
@@ -250,6 +269,7 @@ export const Summary: Story = {
           />
           <AntCheckbox
             v-model="onValue"
+            v-bind="args"
             class="w-28"
             :size="Size.xs"
             label="Label"
@@ -262,6 +282,7 @@ export const Summary: Story = {
             <AntFormGroup direction="row">
               <AntCheckbox
                 v-model="offValue"
+                v-bind="args"
                 class="w-28"
                 label="Label"
                 description="Lorem ipsum dolor sit amet."
@@ -271,6 +292,7 @@ export const Summary: Story = {
               </AntCheckbox>
               <AntCheckbox
                 v-model="onValue"
+                v-bind="args"
                 class="w-28"
                 label="Label"
                 description="Lorem ipsum dolor sit amet."
@@ -285,6 +307,7 @@ export const Summary: Story = {
             <AntFormGroup direction="row">
               <AntCheckbox
                 v-model="offValue"
+                v-bind="args"
                 :readonly="true"
                 class="w-28"
                 label="Label"
@@ -294,6 +317,7 @@ export const Summary: Story = {
               </AntCheckbox>
               <AntCheckbox
                 v-model="onValue"
+                v-bind="args"
                 :readonly="true"
                 class="w-28"
                 label="Label"
@@ -307,6 +331,7 @@ export const Summary: Story = {
             <AntFormGroupLabel>Skeleton</AntFormGroupLabel>
             <AntCheckbox
               v-model="offValue"
+              v-bind="args"
               class="w-28"
               label="Label"
               description="Lorem ipsum dolor sit amet."
@@ -318,49 +343,50 @@ export const Summary: Story = {
         </AntFormGroup>
         <AntFormGroupLabel>Plain</AntFormGroupLabel>
         <AntFormGroup direction="row">
-          <AntCheckbox v-model="offValue"/>
-          <AntCheckbox v-model="onValue"/>
+          <AntCheckbox v-model="offValue" v-bind="args" />
+          <AntCheckbox v-model="onValue"  v-bind="args" />
         </AntFormGroup>
         <AntFormGroupLabel>Label & label + value</AntFormGroupLabel>
         <AntFormGroup direction="row">
-          <AntCheckbox v-model="offValue" label="Label"/>
-          <AntCheckbox v-model="onValue" label="Label"/>
-          <AntCheckbox v-model="offValue" label="Label">
+          <AntCheckbox v-model="offValue" v-bind="args" label="Label"/>
+          <AntCheckbox v-model="onValue" v-bind="args" label="Label"/>
+          <AntCheckbox v-model="offValue" v-bind="args" label="Label">
             Value
           </AntCheckbox>
-          <AntCheckbox v-model="onValue" label="Label">
+          <AntCheckbox v-model="onValue" v-bind="args" label="Label">
             Value
           </AntCheckbox>
         </AntFormGroup>
         <AntFormGroupLabel>Description & description + value</AntFormGroupLabel>
         <AntFormGroup direction="row">
-          <AntCheckbox v-model="offValue" class="w-28" description="Lorem ipsum dolor sit amet"/>
-          <AntCheckbox v-model="onValue" class="w-28" description="Lorem ipsum dolor sit amet"/>
-          <AntCheckbox v-model="offValue" class="w-28" description="Lorem ipsum dolor sit amet">
+          <AntCheckbox v-model="offValue" v-bind="args" class="w-28" description="Lorem ipsum dolor sit amet"/>
+          <AntCheckbox v-model="onValue" v-bind="args" class="w-28" description="Lorem ipsum dolor sit amet"/>
+          <AntCheckbox v-model="offValue" v-bind="args" class="w-28" description="Lorem ipsum dolor sit amet">
             Value
           </AntCheckbox>
-          <AntCheckbox v-model="onValue" class="w-28" description="Lorem ipsum dolor sit amet">
+          <AntCheckbox v-model="onValue" v-bind="args" class="w-28" description="Lorem ipsum dolor sit amet">
             Value
           </AntCheckbox>
         </AntFormGroup>
         <AntFormGroupLabel>Content</AntFormGroupLabel>
         <AntFormGroup direction="row">
-          <AntCheckbox v-model="offValue" class="w-28">
+          <AntCheckbox v-model="offValue" v-bind="args" class="w-28">
             Value
           </AntCheckbox>
-          <AntCheckbox v-model="onValue" class="w-28">
+          <AntCheckbox v-model="onValue" v-bind="args" class="w-28">
             Value
           </AntCheckbox>
         </AntFormGroup>
         <AntFormGroupLabel>Label & Description</AntFormGroupLabel>
         <AntFormGroup direction="row">
-          <AntCheckbox v-model="offValue" class="w-28" description="Lorem ipsum dolor sit amet" label="Label"/>
-          <AntCheckbox v-model="onValue" class="w-28" description="Lorem ipsum dolor sit amet" label="Label"/>
+          <AntCheckbox v-model="offValue" v-bind="args" class="w-28" description="Lorem ipsum dolor sit amet" label="Label"/>
+          <AntCheckbox v-model="onValue" v-bind="args" class="w-28" description="Lorem ipsum dolor sit amet" label="Label"/>
         </AntFormGroup>
         <AntFormGroupLabel>Label & Description & Content</AntFormGroupLabel>
         <AntFormGroup direction="row">
           <AntCheckbox
             v-model="offValue"
+            v-bind="args"
             class="w-28"
             description="Lorem ipsum dolor sit amet"
             label="Label"
@@ -369,6 +395,7 @@ export const Summary: Story = {
           </AntCheckbox>
           <AntCheckbox
             v-model="onValue"
+            v-bind="args"
             class="w-28"
             description="Lorem ipsum dolor sit amet"
             label="Label"

@@ -38,15 +38,12 @@ export const Docs: Story = {
       };
     },
     template: `
-          <div class="p-4 bg-base-100">
-            <AntListGroup v-bind="args">
-              <AntListGroupItem to="/example" :icon-left="faUser">Profile</AntListGroupItem>
-              <AntListGroupItem to="/example" :icon-left="faDownload">Downloads</AntListGroupItem>
-              <AntListGroupItem to="/example" :icon-left="faMessage">Messages</AntListGroupItem>
-              <AntListGroupItem to="/example" :icon-left="faCog">Settings</AntListGroupItem>
-            </AntListGroup>
-          </div>
-        `,
+      <AntListGroup v-bind="args">
+        <AntListGroupItem to="/example" :icon-left="faUser">Profile</AntListGroupItem>
+        <AntListGroupItem to="/example" :icon-left="faDownload">Downloads</AntListGroupItem>
+        <AntListGroupItem to="/example" :icon-left="faMessage">Messages</AntListGroupItem>
+        <AntListGroupItem to="/example" :icon-left="faCog">Settings</AntListGroupItem>
+      </AntListGroup>`,
   }),
   args: {},
 };

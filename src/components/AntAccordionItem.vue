@@ -85,16 +85,14 @@ const labelClasses = computed(() => ({
             />
           </slot>
 
-          <div class="relative">
+          <AntSkeleton
+            :visible="skeleton"
+            rounded
+          >
             <div class="text-sm font-semibold">
               {{ label }}
             </div>
-            <AntSkeleton
-              v-if="skeleton"
-              absolute
-              rounded
-            />
-          </div>
+          </AntSkeleton>
         </div>
 
         <AntIcon

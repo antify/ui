@@ -201,25 +201,24 @@ onMounted(() => {
         >
 
         <AntSkeleton
-          v-if="skeleton"
+          :visible="skeleton"
           absolute
           rounded-full
         />
       </div>
 
       <div
-        class="relative flex items-center"
+        class="flex items-center"
         :class="valueSize"
       >
-        <span :class="valueClass">
-          {{ value.label }}
-        </span>
-
         <AntSkeleton
-          v-if="skeleton"
-          absolute
+          :visible="skeleton"
           rounded
-        />
+        >
+          <span :class="valueClass">
+            {{ value.label }}
+          </span>
+        </AntSkeleton>
       </div>
     </div>
   </AntField>

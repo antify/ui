@@ -122,14 +122,12 @@ const iconColor = computed(() => {
       />
     </slot>
 
-    <div class="relative">
+    <AntSkeleton
+      :visible="skeleton"
+      rounded
+    >
       <slot>{{ label }}</slot>
-      <AntSkeleton
-        v-if="skeleton"
-        rounded
-        absolute
-      />
-    </div>
+    </AntSkeleton>
 
     <AntIcon
       v-if="iconRight && showIcon"

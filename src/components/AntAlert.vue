@@ -64,7 +64,7 @@ const classes = computed(() => {
   };
 
   return {
-    'inline-flex flex-col gap-2 rounded-md p-2 transition-colors text-sm relative': true,
+    'inline-flex flex-col gap-2 rounded-md p-2 transition-colors text-sm': true,
     'w-full': props.expanded,
     [variants[props.state]]: true,
   };
@@ -89,68 +89,67 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    :class="classes"
-    data-e2e="alert"
+  <AntSkeleton
+    :visible="skeleton"
+    rounded
   >
-    <AntSkeleton
-      v-if="skeleton"
-      absolute
-      rounded
-    />
-
     <div
-      v-if="icon || hasQuestionMark || dismissBtn || title"
-      class="inline-flex items-center justify-between w-content gap-2"
-      :class="{'invisible': skeleton}"
+      :class="classes"
+      data-e2e="alert"
     >
-      <div class="inline-flex items-center gap-2">
-        <AntIcon
-          v-if="icon"
-          :icon="_icon"
-          :color="iconColor"
-          :size="IconSize.sm"
-        />
+      <div
+        v-if="icon || hasQuestionMark || dismissBtn || title"
+        class="inline-flex items-center justify-between w-content gap-2"
+        :class="{'invisible': skeleton}"
+      >
+        <div class="inline-flex items-center gap-2">
+          <AntIcon
+            v-if="icon"
+            :icon="_icon"
+            :color="iconColor"
+            :size="IconSize.sm"
+          />
 
-        <div
-          :class="{'font-semibold': hasDefaultSlot}"
-        >
-          <slot name="title">
-            {{ title }}
-          </slot>
+          <div
+            :class="{'font-semibold': hasDefaultSlot}"
+          >
+            <slot name="title">
+              {{ title }}
+            </slot>
+          </div>
+        </div>
+
+        <div class="flex gap-2">
+          <div v-if="hasQuestionMark">
+            <slot name="questionMarkText">
+              <AntTooltip>
+                <AntIcon
+                  :icon="faCircleQuestion"
+                  :color="iconColor"
+                  :size="IconSize.sm"
+                />
+
+                <template #content>
+                  {{ questionMarkText }}
+                </template>
+              </AntTooltip>
+            </slot>
+          </div>
+
+          <AntIcon
+            v-if="dismissBtn"
+            :icon="faXmark"
+            class="cursor-pointer"
+            :color="iconColor"
+            :size="IconSize.sm"
+            @click="() => $emit('close')"
+          />
         </div>
       </div>
 
-      <div class="flex gap-2">
-        <div v-if="hasQuestionMark">
-          <slot name="questionMarkText">
-            <AntTooltip>
-              <AntIcon
-                :icon="faCircleQuestion"
-                :color="iconColor"
-                :size="IconSize.sm"
-              />
-
-              <template #content>
-                {{ questionMarkText }}
-              </template>
-            </AntTooltip>
-          </slot>
-        </div>
-
-        <AntIcon
-          v-if="dismissBtn"
-          :icon="faXmark"
-          class="cursor-pointer"
-          :color="iconColor"
-          :size="IconSize.sm"
-          @click="() => $emit('close')"
-        />
+      <div v-if="hasDefaultSlot">
+        <slot />
       </div>
     </div>
-
-    <div v-if="hasDefaultSlot">
-      <slot />
-    </div>
-  </div>
+  </AntSkeleton>
 </template>

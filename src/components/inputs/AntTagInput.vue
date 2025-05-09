@@ -272,16 +272,12 @@ onMounted(() => {
       :expanded="expanded"
       :messages="messages"
     >
-      <div
-        class="relative w-full"
+      <AntSkeleton
+        :visible="skeleton"
+        rounded
+        :grouped="skeletonGrouped"
+        class="w-full"
       >
-        <AntSkeleton
-          v-if="skeleton"
-          absolute
-          rounded
-          :grouped="skeletonGrouped"
-        />
-
         <div
           v-on-click-outside="onClickOutside"
           :class="inputContainerClasses"
@@ -347,7 +343,7 @@ onMounted(() => {
             </span>
           </template>
         </AntSelectMenu>
-      </div>
+      </AntSkeleton>
     </AntField>
   </div>
 </template>

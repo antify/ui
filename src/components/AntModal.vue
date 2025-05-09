@@ -68,13 +68,13 @@ function closeModal() {
             class="bg-white p-2 flex items-center justify-between gap-2"
           >
             <slot name="title">
-              <div class="relative text-for-white-bg-font text-lg font-medium">
-                {{ title }}
+              <div class="text-for-white-bg-font text-lg font-medium">
                 <AntSkeleton
-                  v-if="skeleton"
-                  absolute
+                  :visible="skeleton"
                   rounded
-                />
+                >
+                  {{ title }}
+                </AntSkeleton>
               </div>
             </slot>
 

@@ -157,33 +157,32 @@ function onBlur(e: FocusEvent) {
     :messages="messages"
     :expanded="false"
   >
-    <div class="relative w-fit flex items-center gap-1.5">
-      <div class="relative w-fit flex items-center">
-        <button
-          v-bind="$attrs"
-          type="button"
-          :class="buttonClasses"
-          role="switch"
-          :aria-checked="!!_value"
-          :disabled="disabled"
-          :tabindex="hasInputState ? -1 : 0"
-          @click="changeValue"
-          @blur="onBlur"
-        >
-          <span
-            aria-hidden="true"
-            :class="ballClasses"
+    <div class="w-fit flex items-center gap-1.5">
+      <AntSkeleton
+        :visible="skeleton"
+        rounded-full
+      >
+        <div class="relative w-fit flex items-center">
+          <button
+            v-bind="$attrs"
+            type="button"
+            :class="buttonClasses"
+            role="switch"
+            :aria-checked="!!_value"
+            :disabled="disabled"
+            :tabindex="hasInputState ? -1 : 0"
+            @click="changeValue"
+            @blur="onBlur"
           >
-            <slot name="icon" />
-          </span>
-        </button>
-
-        <AntSkeleton
-          v-if="skeleton"
-          absolute
-          rounded-full
-        />
-      </div>
+            <span
+              aria-hidden="true"
+              :class="ballClasses"
+            >
+              <slot name="icon" />
+            </span>
+          </button>
+        </div>
+      </AntSkeleton>
 
       <div
         v-if="hasSlotContent($slots['default'])"
@@ -195,7 +194,7 @@ function onBlur(e: FocusEvent) {
         </span>
 
         <AntSkeleton
-          v-if="skeleton"
+          :visible="skeleton"
           absolute
           rounded
           class="l-1.5"

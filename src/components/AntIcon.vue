@@ -56,15 +56,15 @@ onMounted(() => {
 
 <template>
   <span :class="containerClasses">
-    <FaIcon
-      v-if="icon"
-      :icon="icon"
-      :class="iconClasses"
-    />
     <AntSkeleton
-      v-if="skeleton"
-      absolute
+      :visible="skeleton"
       rounded
-    />
+    >
+      <FaIcon
+        v-if="icon"
+        :icon="icon"
+        :class="iconClasses"
+      />
+    </AntSkeleton>
   </span>
 </template>

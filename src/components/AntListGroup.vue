@@ -11,18 +11,18 @@ withDefaults(defineProps<{
 </script>
 
 <template>
-  <div class="relative">
+  <div>
     <AntSkeleton
-      v-if="skeleton"
-      absolute
+      :visible="skeleton"
       rounded
-    />
-
-    <div
-      class="flex flex-col rounded-md bg-base-300 gap-px relative border border-base-300 overflow-hidden"
-      :class="{'invisible': skeleton, 'shadow-md': shadow}"
+      class="w-full"
     >
-      <slot />
-    </div>
+      <div
+        class="flex flex-col rounded-md bg-base-300 gap-px relative border border-base-300 overflow-hidden"
+        :class="{'invisible': skeleton, 'shadow-md': shadow}"
+      >
+        <slot />
+      </div>
+    </AntSkeleton>
   </div>
 </template>
