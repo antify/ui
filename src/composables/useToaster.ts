@@ -65,20 +65,24 @@ export const useToaster = () => {
       });
     },
     toastDeleted() {
-      // TODO:: translate
-      this.toastSuccess('Deleted');
+      // TODO:: move to template
+      this.toastSuccess('Gelöscht');
     },
     toastCreated() {
-      // TODO:: translate
-      this.toastSuccess('Saved');
+      // TODO:: move to template
+      this.toastSuccess('Gespeichert');
     },
     toastUpdated() {
-      // TODO:: translate
-      this.toastSuccess('Saved');
+      // TODO:: move to template
+      this.toastSuccess('Gespeichert');
     },
     toastDuplicated() {
-      // TODO:: translate
-      this.toastSuccess('Duplicated');
+      // TODO:: move to template
+      this.toastSuccess('Dupliziert');
+    },
+    toastInvalidFormInfo() {
+      // TODO:: move to template
+      this.toastInfo('Das Formular enthält Fehler.\nBitte überprüfe alle Felder und behebe die Fehler.');
     },
   };
 };
