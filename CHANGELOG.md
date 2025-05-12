@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/antify/ui/compare/v3.0.1...v3.1.0) (2025-05-12)
+
+
+### Features
+
+* **AntToaster:** Update animation ([77a3c2c](https://github.com/antify/ui/commit/77a3c2c69783ad95114c2718a548b42d32612dc9))
+* **AntToast:** Update ui ([b8b0682](https://github.com/antify/ui/commit/b8b0682fe2afc6c56da805a3ebf8528d402bc4a5))
+
 ### [3.0.1](https://github.com/antify/ui/compare/v3.0.0...v3.0.1) (2025-05-12)
 
 
