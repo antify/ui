@@ -31,15 +31,17 @@ const cardClass = computed(() => ({
 </script>
 
 <template>
-  <AntSkeleton
-    :visible="skeleton"
-    rounded
+  <div
+    :class="cardClass"
+    class="bg-white outline outline-offset-[-1px] outline-base-300 rounded-md relative"
   >
-    <div
-      :class="cardClass"
-      class="bg-white outline outline-offset-[-1px] outline-base-300 rounded-md"
-    >
-      <slot />
-    </div>
-  </AntSkeleton>
+    <slot />
+
+    <AntSkeleton
+      :visible="skeleton"
+      rounded
+      :class="{'w-full': props.expanded}"
+      absolute
+    />
+  </div>
 </template>

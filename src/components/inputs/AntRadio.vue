@@ -211,14 +211,14 @@ onMounted(() => {
         class="flex items-center"
         :class="valueSize"
       >
-        <AntSkeleton
-          :visible="skeleton"
-          rounded
-        >
-          <span :class="valueClass">
+        <span :class="valueClass">
+          <AntSkeleton
+            :visible="skeleton"
+            rounded
+          >
             {{ value.label }}
-          </span>
-        </AntSkeleton>
+          </AntSkeleton>
+        </span>
       </div>
     </div>
   </AntField>

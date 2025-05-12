@@ -207,14 +207,14 @@ onMounted(() => {
         class="flex items-center"
         :class="props.size === Size.md ? 'h-5' : 'h-4'"
       >
-        <AntSkeleton
-          :visible="skeleton"
-          rounded
-        >
-          <span :class="contentClasses">
+        <span :class="contentClasses">
+          <AntSkeleton
+            :visible="skeleton"
+            rounded
+          >
             <slot />
-          </span>
-        </AntSkeleton>
+          </AntSkeleton>
+        </span>
       </div>
     </div>
   </AntField>
