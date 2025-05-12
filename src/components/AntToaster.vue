@@ -21,6 +21,24 @@ const props = withDefaults(defineProps<{
   position: CornerPosition.bottomLeft,
 });
 
+const _toasts = computed(() => {
+  if(props.position === CornerPosition.topLeft || props.position === CornerPosition.topRight) {
+    return props.toasts;
+  }
+
+  return [
+    ...props.toasts,
+  ].reverse();
+});
+
+const transitionName = computed(() => {
+  if(props.position === CornerPosition.topLeft || props.position === CornerPosition.topRight) {
+    return 'list-top';
+  }
+
+  return 'list-bottom';
+});
+
 const classes = computed(() => ({
   'left-0 top-0 items-start': props.position === CornerPosition.topLeft,
   'right-0 top-0 items-end': props.position === CornerPosition.topRight,
@@ -35,9 +53,9 @@ const classes = computed(() => ({
     :class="classes"
     data-e2e="toaster"
   >
-    <TransitionGroup name="list">
+    <TransitionGroup :name="transitionName">
       <AntToast
-        v-for="toast of toasts"
+        v-for="toast of _toasts"
         :key="`ant-toast-${toast.id}`"
         :title="toast.title"
         :state="toast.type"
@@ -56,24 +74,33 @@ const classes = computed(() => ({
 </template>
 
 <style>
-.list-move {
-  transition: all 0.5s ease;
+.list-top-move, .list-bottom-move {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.list-top-enter-active,
+.list-top-leave-active,
+.list-bottom-enter-active,
+.list-bottom-leave-active {
+  transition: opacity 0.3s, transform 0.3s;
 }
 
-.list-enter-active {
-  animation: fade-in .6s;
+.list-top-enter-from,
+.list-top-leave-to {
+  opacity: 0;
+  transform: scale(0.8) translateY(-20px);
 }
 
-.list-leave-active {
-  animation: fade-in .4s reverse;
+.list-bottom-enter-from,
+.list-bottom-leave-to {
+  opacity: 0;
+  transform: scale(0.8) translateY(20px);
 }
 
-@keyframes fade-in {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+.list-top-enter-to,
+.list-top-leave-from,
+.list-bottom-enter-to,
+.list-bottom-leave-from {
+  opacity: 1;
+  transform: scale(1) translateY(0);
 }
 </style>

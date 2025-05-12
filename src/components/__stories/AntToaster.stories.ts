@@ -69,7 +69,7 @@ export const Docs: Story = {
     },
     template: `
       <div class="dashed h-60 relative">
-        <AntToaster v-bind="args"/>
+        <AntToaster v-bind="args" />
       </div>
     `,
   }),
@@ -141,7 +141,7 @@ export const UseToaster: Story = {
         </AntButton>
       </AntFormGroup>
 
-      <AntToaster v-bind="args" :toasts="toaster.getToasts()"/>
+      <AntToaster v-bind="args" :toasts="toaster.getToasts()" />
     `,
   }),
 };
