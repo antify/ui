@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.1](https://github.com/antify/ui/compare/v3.0.0...v3.0.1) (2025-05-12)
+
+
+### Bug Fixes
+
+* Hot fix translations ([ba8345c](https://github.com/antify/ui/commit/ba8345c7108da87da987eb01d1d7397d5fdc7858))
+
 ## [3.0.0](https://github.com/antify/ui/compare/v2.5.7...v3.0.0) (2025-05-09)
 
 
