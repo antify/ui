@@ -64,21 +64,5 @@ export const useToaster = () => {
         type: InputState.info,
       });
     },
-    toastDeleted() {
-      // TODO:: translate
-      this.toastSuccess('Deleted');
-    },
-    toastCreated() {
-      // TODO:: translate
-      this.toastSuccess('Saved');
-    },
-    toastUpdated() {
-      // TODO:: translate
-      this.toastSuccess('Saved');
-    },
-    toastDuplicated() {
-      // TODO:: translate
-      this.toastSuccess('Duplicated');
-    },
   };
 };
