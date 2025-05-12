@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 3.1.2 (2025-05-12)
+
+
+### Bug Fixes
+
+* Fix skeleton bugs ([f80a5bf](https://github.com/antify/ui/commit/f80a5bf6c844f686558a25811e5215461e44cb05))
+
 ### 3.1.1 (2025-05-12)
 
 ## [3.1.0](https://github.com/antify/ui/compare/v3.0.1...v3.1.0) (2025-05-12)
