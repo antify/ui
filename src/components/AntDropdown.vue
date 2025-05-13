@@ -1,15 +1,12 @@
 <script lang="ts" setup>
 import {
-  computed, ref,
+  computed, onMounted, ref,
 } from 'vue';
 import {
   classesToObjectSyntax,
 } from '../utils';
 import {
-  vOnClickOutside,
-} from '@vueuse/components';
-import {
-  onKeyStroke,
+  onKeyStroke, onClickOutside,
 } from '@vueuse/core';
 import {
   autoUpdate, flip, offset, useFloating, shift,
@@ -61,16 +58,15 @@ onKeyStroke('Escape', (e: KeyboardEvent) => {
   }
 });
 
-const onClickOutside = [
-  () => {
+onMounted(() => {
+  onClickOutside(reference, () => {
     emit('update:showDropdown', false);
-  },
-  {
+  }, {
     ignore: [
       floating,
     ],
-  },
-];
+  });
+});
 </script>
 
 <template>
@@ -80,7 +76,6 @@ const onClickOutside = [
   >
     <div
       ref="reference"
-      v-on-click-outside="onClickOutside"
     >
       <slot />
     </div>
