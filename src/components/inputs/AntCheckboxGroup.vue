@@ -5,9 +5,6 @@ import {
 import {
   AntField,
 } from './Elements';
-import {
-  useVModel,
-} from '@vueuse/core';
 import AntCheckbox from './AntCheckbox.vue';
 import {
   computed, onMounted, ref, watch,
@@ -48,7 +45,6 @@ const props = withDefaults(
     messages: () => [],
   },
 );
-const _modelValue = useVModel(props, 'modelValue', emit);
 const containerClasses = computed(() => ({
   'flex gap-2.5': true,
   'flex-row': props.direction === Direction.row,
@@ -56,7 +52,7 @@ const containerClasses = computed(() => ({
 }));
 const containerRef = ref<null | HTMLElement>(null);
 
-watch(_modelValue, (val) => {
+watch(() => props.modelValue, (val) => {
   if ([
     InputState.danger,
     InputState.warning,
@@ -74,18 +70,21 @@ watch(() => props.skeleton, (val) => {
 });
 
 function updateValue(value: string) {
-  if (_modelValue.value === null) {
-    return _modelValue.value = [
+  if (props.modelValue === null) {
+    return emit('update:modelValue', [
       value,
-    ];
+    ]);
   }
 
-  const index = _modelValue.value.indexOf(value);
+  const index = props.modelValue.indexOf(value);
 
   if (index === -1) {
-    _modelValue.value.push(value);
+    emit('update:modelValue', [
+      ...(props.modelValue || []),
+      value,
+    ]);
   } else {
-    _modelValue.value.splice(index, 1);
+    emit('update:modelValue', (props.modelValue || []).filter((item, i) => i !== index));
   }
 }
 
@@ -96,7 +95,7 @@ function hasFocusedCheckbox() {
 function onBlurCheckbox() {
   setTimeout(() => {
     if (!hasFocusedCheckbox()) {
-      emit('validate', _modelValue.value);
+      emit('validate', props.modelValue);
     }
   }, 100);
 }
@@ -126,7 +125,7 @@ onMounted(() => {
       <AntCheckbox
         v-for="(checkbox, index) in checkboxes"
         :key="`checkbox-group-${index}`"
-        :model-value="_modelValue !== null ? _modelValue?.indexOf(checkbox.value) !== -1 : null"
+        :model-value="modelValue !== null ? modelValue?.indexOf(checkbox.value) !== -1 : null"
         :size="size"
         :state="state"
         :skeleton="skeleton"
