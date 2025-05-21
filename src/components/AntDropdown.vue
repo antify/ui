@@ -17,10 +17,12 @@ const props = withDefaults(defineProps<{
   dropdownClasses?: string | Record<string, boolean>;
   contentPadding?: boolean;
   isClickable?: boolean;
+  expanded?: boolean;
 }>(), {
   contentPadding: true,
   dropdownClasses: '',
   isClickable: true,
+  expanded: false,
 });
 const emit = defineEmits([
   'update:showDropdown',
@@ -73,9 +75,15 @@ onMounted(() => {
   <div
     class="relative flex"
     data-e2e="dropdown"
+    :class="{
+      'w-full': expanded,
+    }"
   >
     <div
       ref="reference"
+      :class="{
+        'w-full': expanded,
+      }"
     >
       <slot />
     </div>
