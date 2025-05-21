@@ -18,6 +18,7 @@ import AntInputLimiter from './inputs/Elements/AntInputLimiter.vue';
 
 // Inputs
 import AntCheckbox from './inputs/AntCheckbox.vue';
+import AntMultiSelect from './inputs/AntMultiSelect.vue';
 import AntCheckboxGroup from './inputs/AntCheckboxGroup.vue';
 import AntDateInput from './inputs/AntDateInput.vue';
 import AntNumberInput from './inputs/AntNumberInput.vue';
@@ -25,6 +26,7 @@ import AntPasswordInput from './inputs/AntPasswordInput.vue';
 import AntRadio from './inputs/AntRadio.vue';
 import AntRadioGroup from './inputs/AntRadioGroup.vue';
 import AntRangeSlider from './inputs/AntRangeSlider.vue';
+
 // import AntRichTextEditor from './inputs/AntRichTextEditor.vue';
 import AntSearch from './inputs/AntSearch.vue';
 import AntSelect from './inputs/AntSelect.vue';
@@ -128,4 +130,5 @@ export {
   AntToaster,
   AntTooltip,
   AntColorInput,
+  AntMultiSelect,
 };
