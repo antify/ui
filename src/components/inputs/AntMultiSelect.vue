@@ -17,12 +17,13 @@ import {
 } from '../../enums/Grouped.enum';
 import AntIcon from '../AntIcon.vue';
 import {
-  faChevronDown, faChevronUp,
+  faChevronDown, faChevronUp, faMultiply,
 } from '@fortawesome/free-solid-svg-icons';
 import AntSkeleton from '../AntSkeleton.vue';
 import AntDropdown from '../AntDropdown.vue';
+import AntButton from '../AntButton.vue';
 import {
-  State, InputState,
+  InputState,
 } from '../../enums';
 import {
   IconSize,
@@ -39,6 +40,7 @@ defineOptions({
 const props = withDefaults(defineProps<{
   modelValue: string[] | null;
   options: MultiSelectOption[];
+  nullable?: boolean;
   label?: string;
   description?: string;
   placeholder?: string;
@@ -48,6 +50,8 @@ const props = withDefaults(defineProps<{
   readonly?: boolean;
   skeleton?: boolean;
   grouped?: Grouped;
+  singularValueLabel?: string;
+  pluralValueLabel?: string;
   name?: string;
   wrapperClass?: string | Record<string, boolean>;
   expanded?: boolean;
@@ -56,10 +60,13 @@ const props = withDefaults(defineProps<{
   state: InputState.base,
   grouped: Grouped.none,
   size: Size.md,
+  nullable: false,
   disabled: false,
   readonly: false,
   skeleton: false,
   expanded: true,
+  singularValueLabel: 'item selected',
+  pluralValueLabel: 'items selected',
   messages: () => [],
 });
 const emit = defineEmits([
@@ -86,21 +93,22 @@ const inputClasses = computed(() => {
     'outline-offset-[-1px] outline-1 focus:outline-offset-[-1px] focus:outline-1': true,
     'w-full': props.expanded,
     [variants[props.state]]: true,
-    'cursor-pointer': !props.skeleton && !props.readonly,
+    'cursor-pointer': !props.skeleton && !props.readonly && !props.disabled,
     // Skeleton
     invisible: props.skeleton,
     // Disabled
-    'disabled:opacity-50 disabled:cursor-not-allowed': true,
+    'disabled:opacity-50 disabled:cursor-not-allowed': props.disabled,
     // Size
-    'p-1 text-xs': props.size === Size.xs2,
-    'p-1.5 text-xs': props.size === Size.xs,
-    'p-1.5 text-sm': props.size === Size.sm,
-    'p-2 text-sm': props.size === Size.md,
-    'p-2.5 text-sm': props.size === Size.lg,
+    'p-1 gap-1 text-xs': props.size === Size.xs2,
+    'p-1.5 gap-1.5 text-xs': props.size === Size.xs,
+    'p-1.5 gap-1.5 text-sm': props.size === Size.sm,
+    'p-2 gap-2 text-sm': props.size === Size.md,
+    'p-2.5 gap-2.5 text-sm': props.size === Size.lg,
     'focus:ring-2': !hasInputState.value && (props.size === Size.sm || props.size === Size.xs || props.size === Size.xs2),
     'focus:ring-4': !hasInputState.value && (props.size === Size.lg || props.size === Size.md),
     // Grouped
-    'rounded-tl-md rounded-bl-md rounded-tr-none rounded-br-none': props.grouped === Grouped.left,
+    'rounded-tl-md rounded-bl-md rounded-tr-none rounded-br-none': props.grouped === Grouped.left ||
+      props.nullable && props.modelValue && props.modelValue.length > 0,
     'rounded-tl-none rounded-bl-none rounded-tr-md rounded-br-md': props.grouped === Grouped.right,
     'rounded-none': props.grouped === Grouped.center,
     'rounded-md': props.grouped === Grouped.none,
@@ -145,21 +153,10 @@ const valueLabel = computed(() => {
   }
 
   if (_modelValue.value.length === 1) {
-    return `${_modelValue.value.length} item selected`;
+    return `${_modelValue.value.length} ${props.singularValueLabel}`;
   }
 
-  return `${_modelValue.value.length} items selected`;
-});
-const skeletonGrouped = computed(() => {
-  if (_modelValue.value === null) {
-    return props.grouped;
-  }
-
-  if (props.grouped === Grouped.right || props.grouped === Grouped.center) {
-    return Grouped.center;
-  } else {
-    return Grouped.left;
-  }
+  return `${_modelValue.value.length} ${props.pluralValueLabel}`;
 });
 const iconSize = computed(() => {
   if (props.size === Size.lg || props.size === Size.md || props.size === Size.sm) {
@@ -187,6 +184,10 @@ watch(isOpen, (val) => {
   if (!val) {
     emit('update:modelValue', selectedCheckboxes.value);
   }
+});
+
+watch(() => props.modelValue, (val) => selectedCheckboxes.value = val as string[], {
+  deep: true,
 });
 
 /**
@@ -245,65 +246,81 @@ function onClickSelectInput(e: MouseEvent) {
       <AntSkeleton
         :visible="skeleton"
         rounded
-        :grouped="skeletonGrouped"
+        :grouped="grouped"
         class="w-full"
       >
         <!-- Input -->
-        <div
-          ref="inputRef"
-          :class="inputClasses"
-          :tabindex="disabled || readonly ? -1 : 0"
-          v-bind="$attrs"
-          @mousedown="onClickSelectInput"
-          @click="() => inputRef?.focus()"
-          @blur="onBlur"
-        >
+        <div class="flex">
           <div
-            v-if="(_modelValue === null || _modelValue.length === 0) && placeholder !== undefined"
-            :class="placeholderClasses"
+            ref="inputRef"
+            :class="inputClasses"
+            :tabindex="disabled || readonly ? -1 : 0"
+            v-bind="$attrs"
+            @mousedown="onClickSelectInput"
+            @click="() => inputRef?.focus()"
+            @blur="onBlur"
           >
-            {{ placeholder }}
+            <slot name="icon" />
+
+            <div
+              v-if="(_modelValue === null || _modelValue.length === 0) && placeholder !== undefined"
+              :class="placeholderClasses"
+            >
+              {{ placeholder }}
+            </div>
+
+            <div
+              v-else-if="(_modelValue === null || _modelValue.length === 0) && label !== undefined"
+              :class="placeholderClasses"
+            >
+              {{ label }}
+            </div>
+
+            <div
+              v-else
+              class="flex items-center select-none overflow-hidden w-full"
+            >
+              <slot
+                v-bind="props"
+                name="value-label"
+              >
+                <div class="text-ellipsis overflow-hidden whitespace-nowrap w-full text-black">
+                  {{ valueLabel }}
+                </div>
+              </slot>
+            </div>
+
+            <AntIcon
+              v-if="isOpen"
+              :icon="faChevronUp"
+              :size="iconSize"
+              :class="arrowClasses"
+            />
+
+            <AntIcon
+              v-else
+              :icon="faChevronDown"
+              :size="iconSize"
+              :class="arrowClasses"
+            />
           </div>
 
-          <div
-            v-else-if="(_modelValue === null || _modelValue.length === 0) && label !== undefined"
-            :class="placeholderClasses"
-          >
-            {{ label }}
-          </div>
-
-          <div
-            v-else
-            class="flex items-center select-none overflow-hidden w-full"
-          >
-            <slot name="value-label">
-              <div class="text-ellipsis overflow-hidden whitespace-nowrap w-full text-black">
-                {{ valueLabel }}
-              </div>
-            </slot>
-          </div>
-
-          <AntIcon
-            v-if="isOpen"
-            :icon="faChevronUp"
-            :size="iconSize"
-            :class="arrowClasses"
-          />
-
-          <AntIcon
-            v-else
-            :icon="faChevronDown"
-            :size="iconSize"
-            :class="arrowClasses"
+          <AntButton
+            v-if="props.nullable && props.modelValue && props.modelValue.length > 0"
+            :icon-left="faMultiply"
+            :grouped="Grouped.right"
+            :size="size"
+            @click="emit('update:modelValue', [])"
           />
         </div>
       </AntSkeleton>
 
       <template #content>
-        <div class="max-h-[500px] overflow-auto">
+        <div class="max-h-[250px] overflow-auto">
           <AntCheckboxGroup
             v-model="selectedCheckboxes"
             class="p-2"
+            :size="size"
             :checkboxes="options as AntCheckboxType[]"
           />
         </div>

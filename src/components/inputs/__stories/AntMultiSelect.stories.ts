@@ -5,10 +5,14 @@ import {
   Size,
 } from '../../../enums/Size.enum';
 import AntMultiSelect from '../AntMultiSelect.vue';
+import AntFormGroup from '../../forms/AntFormGroup.vue';
+import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
 import {
   ref,
 } from 'vue';
 import {
+  Direction,
+  Grouped,
   InputState,
 } from '../../../enums';
 import {
@@ -16,6 +20,11 @@ import {
 } from '../__types/AntMultiSelect.types';
 
 const meta: Meta<typeof AntMultiSelect> = {
+  computed: {
+    Direction() {
+      return Direction;
+    },
+  },
   title: 'Inputs/Multi Select',
   component: AntMultiSelect,
   parameters: {
@@ -45,6 +54,17 @@ const meta: Meta<typeof AntMultiSelect> = {
         type: 'select',
       },
       options: Object.values(InputState),
+    },
+    grouped: {
+      control: {
+        type: 'select',
+      },
+      options: Object.values(Grouped),
+      table: {
+        defaultValue: {
+          summary: Grouped.none,
+        },
+      },
     },
     size: {
       control: {
@@ -185,7 +205,7 @@ export const Docs: Story = {
     },
     template: `
         <div class="flex flex-col justify-center">
-          <AntMultiSelect v-bind="args" v-model="value" expanded/>
+          <AntMultiSelect v-bind="args" v-model="value"/>
         </div>
     `,
   }),
@@ -193,5 +213,76 @@ export const Docs: Story = {
     label: 'Label',
     options,
     description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
+    nullable: true,
+  },
+};
+
+export const Summary: Story = {
+  render: (args) => ({
+    components: {
+      AntMultiSelect,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
+    setup() {
+      const value = ref([
+        '1',
+        '2',
+        '3',
+      ]);
+
+      return {
+        args,
+        value,
+        Direction,
+        InputState,
+        Size,
+        Grouped,
+      };
+    },
+    template: `
+        <AntFormGroup>
+          <AntFormGroupLabel>State</AntFormGroupLabel>
+
+          <AntFormGroup :direction="Direction.row">
+                <AntMultiSelect v-bind="args" v-model="value"/>
+                <AntMultiSelect v-bind="args" v-model="value" :state="InputState.info"/>
+                <AntMultiSelect v-bind="args" v-model="value" :state="InputState.success"/>
+                <AntMultiSelect v-bind="args" v-model="value" :state="InputState.warning"/>
+                <AntMultiSelect v-bind="args" v-model="value" :state="InputState.danger"/>
+          </AntFormGroup>
+
+          <AntFormGroupLabel>Size</AntFormGroupLabel>
+
+          <AntFormGroup :direction="Direction.row">
+            <AntMultiSelect v-bind="args" v-model="value" :size="Size.lg"/>
+            <AntMultiSelect v-bind="args" v-model="value" :size="Size.md"/>
+            <AntMultiSelect v-bind="args" v-model="value" :size="Size.sm"/>
+            <AntMultiSelect v-bind="args" v-model="value" :size="Size.xs"/>
+            <AntMultiSelect v-bind="args" v-model="value" :size="Size.xs2"/>
+          </AntFormGroup>
+
+          <AntFormGroupLabel>Disabled, Skeleton, Nullable</AntFormGroupLabel>
+
+          <AntFormGroup :direction="Direction.row">
+            <AntMultiSelect v-bind="args" v-model="value" disabled/>
+            <AntMultiSelect v-bind="args" v-model="value" skeleton/>
+            <AntMultiSelect v-bind="args" v-model="value" nullable/>
+          </AntFormGroup>
+
+          <AntFormGroupLabel>Label</AntFormGroupLabel>
+          <AntMultiSelect v-bind="args" v-model="value" label="Label"/>
+
+          <AntFormGroupLabel>Description</AntFormGroupLabel>
+          <AntMultiSelect v-bind="args" v-model="value" description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"/>
+
+          <AntFormGroupLabel>Labe + Description</AntFormGroupLabel>
+          <AntMultiSelect v-bind="args" v-model="value" label="Label" description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"/>
+        </AntFormGroup>
+    `,
+  }),
+  args: {
+    placeholder: 'Placeholder',
+    options,
   },
 };
