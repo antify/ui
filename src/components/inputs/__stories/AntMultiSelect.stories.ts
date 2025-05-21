@@ -218,6 +218,11 @@ export const Docs: Story = {
 };
 
 export const Summary: Story = {
+  parameters: {
+    chromatic: {
+      disableSnapshot: false,
+    },
+  },
   render: (args) => ({
     components: {
       AntMultiSelect,
