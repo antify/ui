@@ -41,8 +41,10 @@ const transitionName = computed(() => {
 
 const classes = computed(() => ({
   'left-0 top-0 items-start': props.position === CornerPosition.topLeft,
+  'left-0 top-0 items-center': props.position === CornerPosition.topCenter,
   'right-0 top-0 items-end': props.position === CornerPosition.topRight,
   'left-0 bottom-0 items-start': props.position === CornerPosition.bottomLeft,
+  'left-0 bottom-0 items-center': props.position === CornerPosition.bottomCenter,
   'right-0 bottom-0 items-end': props.position === CornerPosition.bottomRight,
 }));
 </script>
