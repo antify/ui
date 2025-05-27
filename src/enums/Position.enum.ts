@@ -7,7 +7,9 @@ export enum Position {
 
 export enum CornerPosition {
   topLeft = 'topLeft',
+  topCenter = 'topCenter',
   topRight = 'topRight',
   bottomRight = 'bottomRight',
+  bottomCenter = 'bottomCenter',
   bottomLeft = 'bottomLeft',
 }
