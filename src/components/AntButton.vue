@@ -31,6 +31,10 @@ import {
   IconSize,
 } from './__types/AntIcon.types';
 
+defineOptions({
+  inheritAttrs: false,
+});
+
 defineEmits([
   'click',
   'blur',
@@ -55,6 +59,7 @@ const props = withDefaults(defineProps<{
   tooltipPosition?: Position;
   tooltipState?: InputState;
   tooltipDelay?: number;
+  dataE2e?: string;
 }>(), {
   state: State.base,
   disabled: false,
@@ -71,6 +76,7 @@ const props = withDefaults(defineProps<{
   tooltipPosition: Position.bottom,
   tooltipState: InputState.base,
   tooltipDelay: 800,
+  dataE2e: 'button',
 });
 
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
@@ -209,8 +215,6 @@ onMounted(() => {
     <div
       class="inline-flex h-fit"
       :class="{'w-full': props.expanded}"
-      data-e2e="button"
-      :data-e2e-state="props.state"
     >
       <AntTooltip
         class="w-full"
@@ -224,6 +228,9 @@ onMounted(() => {
           :to="to"
           :disabled="disabled || undefined"
           :tabindex="noFocus || hasInputState ? '-1' : '0'"
+          v-bind="$attrs"
+          :data-e2e="dataE2e"
+          :data-e2e-state="props.state"
           @click="(e: MouseEvent) => !props.readonly ? $emit('click', e) : null"
           @blur="(e: FocusEvent) => !props.readonly ? $emit('blur', e) : null"
         >
