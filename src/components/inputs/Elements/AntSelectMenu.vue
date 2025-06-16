@@ -302,6 +302,7 @@ watch(_modelValue, (val) => {
           <div
             v-for="(option, index) in options"
             :key="`option-${index}`"
+            data-e2e="select-menu-item"
             :class="{
               ...dropDownItemClasses,
               ...getActiveDropDownItemClasses(option),
