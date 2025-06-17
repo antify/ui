@@ -307,6 +307,7 @@ function onClickSelectInput(e: MouseEvent) {
 
           <AntButton
             v-if="props.nullable && props.modelValue && props.modelValue.length > 0"
+            data-e2e="clear-button"
             :icon-left="faMultiply"
             :grouped="Grouped.right"
             :size="size"

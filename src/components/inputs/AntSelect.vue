@@ -367,6 +367,7 @@ function onClickRemoveButton() {
 
       <AntButton
         v-if="nullable && _modelValue !== null"
+        data-e2e="clear-button"
         :icon-left="faMultiply"
         :state="state as unknown as State"
         :grouped="[Grouped.left, Grouped.center].some(item => item === grouped) ? Grouped.center : Grouped.right"
