@@ -78,6 +78,8 @@ const isOpen = ref(false);
 const _modelValue = computed<string[]>(() => [
   ...props.modelValue || [],
 ]);
+let actuallyValueLength = ref<number>(0);
+
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const inputClasses = computed(() => {
   const variants: Record<InputState, string> = {
@@ -148,15 +150,15 @@ const valueLabel = computed(() => {
     return;
   }
 
-  if (_modelValue.value.length === 0) {
+  if (actuallyValueLength.value === 0) {
     return props.label || props.placeholder;
   }
 
-  if (_modelValue.value.length === 1) {
-    return `${_modelValue.value.length} ${props.singularValueLabel}`;
+  if (actuallyValueLength.value === 1) {
+    return `${actuallyValueLength.value} ${props.singularValueLabel}`;
   }
 
-  return `${_modelValue.value.length} ${props.pluralValueLabel}`;
+  return `${actuallyValueLength.value} ${props.pluralValueLabel}`;
 });
 const iconSize = computed(() => {
   if (props.size === Size.lg || props.size === Size.md || props.size === Size.sm) {
@@ -165,20 +167,10 @@ const iconSize = computed(() => {
 
   return IconSize.xs;
 });
-const selectedCheckboxes = ref<string[]>( [
+const selectedCheckboxes = ref<string[]>([
   ..._modelValue.value,
 ]);
 const inputRef = ref<HTMLElement | null>(null);
-
-onMounted(() => {
-  handleEnumValidation(props.size, Size, 'size');
-  handleEnumValidation(props.state, InputState, 'state');
-  handleEnumValidation(props.grouped, Grouped, 'grouped');
-
-  if (!props.skeleton && props.modelValue !== null) {
-    emit('validate', props.modelValue);
-  }
-});
 
 watch(isOpen, (val) => {
   if (!val) {
@@ -199,6 +191,8 @@ watch(() => props.skeleton, (val) => {
   }
 });
 watch(_modelValue, () => {
+  getActuallySelectedItems();
+
   if (props.messages.length > 0) {
     emit('validate', props.modelValue);
   }
@@ -222,6 +216,36 @@ function onClickSelectInput(e: MouseEvent) {
 
   isOpen.value = !isOpen.value;
 }
+
+function onClickClear() {
+  const optionValues = props.options.map(option => option.value);
+  const clearedValue = _modelValue.value.filter((value) => !optionValues.includes(value));
+
+  emit('update:modelValue', clearedValue);
+}
+
+function getActuallySelectedItems() {
+  actuallyValueLength.value = 0;
+
+  _modelValue.value.forEach((value) => {
+    props.options.forEach((option) => {
+      if (value === option.value) {
+        actuallyValueLength.value++;
+      }
+    });
+  });
+}
+
+onMounted(() => {
+  getActuallySelectedItems();
+  handleEnumValidation(props.size, Size, 'size');
+  handleEnumValidation(props.state, InputState, 'state');
+  handleEnumValidation(props.grouped, Grouped, 'grouped');
+
+  if (!props.skeleton && props.modelValue !== null) {
+    emit('validate', props.modelValue);
+  }
+});
 </script>
 
 <template>
@@ -263,14 +287,14 @@ function onClickSelectInput(e: MouseEvent) {
             <slot name="icon" />
 
             <div
-              v-if="(_modelValue === null || _modelValue.length === 0) && placeholder !== undefined"
+              v-if="(_modelValue === null || actuallyValueLength === 0) && placeholder !== undefined"
               :class="placeholderClasses"
             >
               {{ placeholder }}
             </div>
 
             <div
-              v-else-if="(_modelValue === null || _modelValue.length === 0) && label !== undefined"
+              v-else-if="(_modelValue === null || actuallyValueLength === 0) && label !== undefined"
               :class="placeholderClasses"
             >
               {{ label }}
@@ -311,7 +335,7 @@ function onClickSelectInput(e: MouseEvent) {
             :icon-left="faMultiply"
             :grouped="Grouped.right"
             :size="size"
-            @click="emit('update:modelValue', [])"
+            @click="onClickClear"
           />
         </div>
       </AntSkeleton>

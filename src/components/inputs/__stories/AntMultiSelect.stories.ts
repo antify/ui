@@ -196,7 +196,10 @@ export const Docs: Story = {
       AntMultiSelect,
     },
     setup() {
-      const value = ref(null);
+      const value = ref([
+        '26',
+        '2',
+      ]);
 
       return {
         args,
