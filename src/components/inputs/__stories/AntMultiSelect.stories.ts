@@ -198,6 +198,7 @@ export const Docs: Story = {
     setup() {
       const value = ref([
         '26',
+        '2',
       ]);
 
       return {

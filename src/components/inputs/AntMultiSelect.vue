@@ -78,7 +78,7 @@ const isOpen = ref(false);
 const _modelValue = computed<string[]>(() => [
   ...props.modelValue || [],
 ]);
-let actuallyValueLength: number = 0;
+let actuallyValueLength = ref<number>(0);
 
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const inputClasses = computed(() => {
@@ -150,15 +150,15 @@ const valueLabel = computed(() => {
     return;
   }
 
-  if (actuallyValueLength === 0) {
+  if (actuallyValueLength.value === 0) {
     return props.label || props.placeholder;
   }
 
-  if (actuallyValueLength === 1) {
-    return `${actuallyValueLength} ${props.singularValueLabel}`;
+  if (actuallyValueLength.value === 1) {
+    return `${actuallyValueLength.value} ${props.singularValueLabel}`;
   }
 
-  return `${actuallyValueLength} ${props.pluralValueLabel}`;
+  return `${actuallyValueLength.value} ${props.pluralValueLabel}`;
 });
 const iconSize = computed(() => {
   if (props.size === Size.lg || props.size === Size.md || props.size === Size.sm) {
@@ -178,18 +178,7 @@ watch(isOpen, (val) => {
   }
 });
 
-watch(() => props.modelValue, (val) => {
-  selectedCheckboxes.value = val as string[];
-  actuallyValueLength = 0;
-
-  _modelValue.value.forEach((value) => {
-    props.options.forEach((option) => {
-      if (value === option.value) {
-        actuallyValueLength++;
-      }
-    });
-  });
-}, {
+watch(() => props.modelValue, (val) => selectedCheckboxes.value = val as string[], {
   deep: true,
 });
 
@@ -202,6 +191,8 @@ watch(() => props.skeleton, (val) => {
   }
 });
 watch(_modelValue, () => {
+  getActuallySelectedItems();
+
   if (props.messages.length > 0) {
     emit('validate', props.modelValue);
   }
@@ -233,7 +224,20 @@ function onClickClear() {
   emit('update:modelValue', clearedValue);
 }
 
+function getActuallySelectedItems() {
+  actuallyValueLength.value = 0;
+
+  _modelValue.value.forEach((value) => {
+    props.options.forEach((option) => {
+      if (value === option.value) {
+        actuallyValueLength.value++;
+      }
+    });
+  });
+}
+
 onMounted(() => {
+  getActuallySelectedItems();
   handleEnumValidation(props.size, Size, 'size');
   handleEnumValidation(props.state, InputState, 'state');
   handleEnumValidation(props.grouped, Grouped, 'grouped');
