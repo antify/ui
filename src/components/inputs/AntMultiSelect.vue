@@ -197,6 +197,7 @@ watch(_modelValue, () => {
     emit('validate', props.modelValue);
   }
 });
+watch(() => props.options, () => getActuallySelectedItems());
 
 function onBlur(e: FocusEvent) {
   emit('validate', props.modelValue);
