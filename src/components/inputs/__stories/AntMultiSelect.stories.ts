@@ -7,6 +7,7 @@ import {
 import AntMultiSelect from '../AntMultiSelect.vue';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
+import AntButton from '../../AntButton.vue';
 import {
   ref,
 } from 'vue';
@@ -14,6 +15,7 @@ import {
   Direction,
   Grouped,
   InputState,
+  State,
 } from '../../../enums';
 import {
   type MultiSelectOption,
@@ -91,7 +93,7 @@ export default meta;
 
 type Story = StoryObj<typeof AntMultiSelect>;
 
-const options: MultiSelectOption[] = [
+const options1: MultiSelectOption[] = [
   {
     label: 'Option 1',
     value: '1',
@@ -104,6 +106,9 @@ const options: MultiSelectOption[] = [
     label: 'Option 3',
     value: '3',
   },
+];
+
+const options2: MultiSelectOption[] = [
   {
     label: 'Option 4',
     value: '4',
@@ -116,105 +121,55 @@ const options: MultiSelectOption[] = [
     label: 'Option 6',
     value: '6',
   },
-  {
-    label: 'Option 7',
-    value: '7',
-  },
-  {
-    label: 'Option 8',
-    value: '8',
-  },
-  {
-    label: 'Option 9',
-    value: '9',
-  },
-  {
-    label: 'Option 10',
-    value: '10',
-  },
-  {
-    label: 'Option 11',
-    value: '11',
-  },
-  {
-    label: 'Option 12',
-    value: '12',
-  },
-  {
-    label: 'Option 13',
-    value: '13',
-  },
-  {
-    label: 'Option 14',
-    value: '14',
-  },
-  {
-    label: 'Option 15',
-    value: '15',
-  },
-  {
-    label: 'Option 16',
-    value: '16',
-  },
-  {
-    label: 'Option 17',
-    value: '17',
-  },
-  {
-    label: 'Option 18',
-    value: '18',
-  },
-  {
-    label: 'Option 19',
-    value: '19',
-  },
-  {
-    label: 'Option 20',
-    value: '20',
-  },
-  {
-    label: 'Option 21',
-    value: '21',
-  },
-  {
-    label: 'Option 22',
-    value: '22',
-  },
-  {
-    label: 'Option 23',
-    value: '23',
-  },
-  {
-    label: 'Option 24',
-    value: '24',
-  },
 ];
 
 export const Docs: Story = {
   render: (args) => ({
     components: {
       AntMultiSelect,
+      AntButton,
     },
     setup() {
       const value = ref([
         '26',
-        '2',
+        '3',
       ]);
+
+      const currentOptions = ref(options1);
+      const selectOptions = (number?: number) => currentOptions.value = number === 1 ? options1 : options2;
 
       return {
         args,
         value,
+        State,
+        currentOptions,
+        selectOptions,
       };
     },
     template: `
-        <div class="flex flex-col justify-center">
-          <AntMultiSelect v-bind="args" v-model="value"/>
+        <div class="flex flex-col justify-center gap-2.5">
+          <div class="flex gap-2.5">
+            <AntButton
+              :state="currentOptions[0].value === '1' ? State.primary : State.base"
+              :filled="currentOptions[0].value === '1'"
+              @click="selectOptions(1)"
+            >
+              Options 1
+            </AntButton>
+            <AntButton
+              :state="currentOptions[0].value === '4' ? State.primary : State.base"
+              :filled="currentOptions[0].value === '4'"
+              @click="selectOptions()"
+            >
+              Options 2
+            </AntButton>
+          </div>
+          <AntMultiSelect v-bind="args" v-model="value" :options="currentOptions"/>
         </div>
     `,
   }),
   args: {
     label: 'Label',
-    options,
     description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
     nullable: true,
   },
@@ -291,6 +246,6 @@ export const Summary: Story = {
   }),
   args: {
     placeholder: 'Placeholder',
-    options,
+    options1,
   },
 };
