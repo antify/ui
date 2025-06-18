@@ -246,6 +246,6 @@ export const Summary: Story = {
   }),
   args: {
     placeholder: 'Placeholder',
-    options1,
+    options: options1,
   },
 };
