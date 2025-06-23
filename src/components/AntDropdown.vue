@@ -93,6 +93,7 @@ onMounted(() => {
         <div
           v-if="showDropdown"
           ref="floating"
+          data-e2e="dropdown-menu"
           :class="_dropdownClasses"
           :style="floatingStyles"
         >
