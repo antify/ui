@@ -64,6 +64,7 @@ const iconClasses = computed(() => {
 <template>
   <button
     ref="buttonRef"
+    :data-e2e-color="value"
     :class="buttonClasses"
     :style="{
       backgroundColor: `var(--color-${value})`,

@@ -188,6 +188,8 @@ onMounted(() => {
         >
           <div
             ref="itemRef"
+            data-e2e="color-input"
+            :data-e2e-state="state"
             :class="itemClasses"
             :tabindex="disabled || readonly ? -1 : 0"
             @click="onClick"
