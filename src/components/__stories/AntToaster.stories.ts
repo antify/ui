@@ -141,7 +141,11 @@ export const UseToaster: Story = {
         </AntButton>
       </AntFormGroup>
 
-      <AntToaster v-bind="args" :toasts="toaster.getToasts()" />
+      <AntToaster
+        v-bind="args"
+        :toasts="toaster.getToasts()"
+        @close="(toast) => toaster.removeToast(toast)"
+      />
     `,
   }),
 };
