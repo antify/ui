@@ -22,7 +22,7 @@ const props = withDefaults(defineProps<{
 });
 
 const _toasts = computed(() => {
-  if(props.position === CornerPosition.topLeft || props.position === CornerPosition.topRight) {
+  if(props.position === CornerPosition.topLeft || props.position === CornerPosition.topRight || props.position === CornerPosition.topCenter) {
     return props.toasts;
   }
 
@@ -62,7 +62,7 @@ const classes = computed(() => ({
         :title="toast.title"
         :state="toast.type"
         :icon="toast.hasIcon"
-        @close="() => $emit('close', toast)"
+        @close="$emit('close', toast)"
       >
         <template
           v-if="toast.content"
