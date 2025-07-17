@@ -196,6 +196,10 @@
   @apply bg-transparent;
 }
 
+::-webkit-scrollbar-corner {
+  @apply bg-transparent;
+}
+
 ::-webkit-scrollbar-thumb {
   @apply bg-base-200 rounded-full border-3 border-transparent cursor-pointer bg-clip-content;
 }
