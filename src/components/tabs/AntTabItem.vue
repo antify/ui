@@ -48,7 +48,7 @@ const _active = computed<boolean>(() => {
   }
 
   if (typeof props.to === 'object' && props.to?.name !== undefined) {
-    return route.name === props.to.name;
+    return (route.name as string).startsWith(props.to.name);
   }
 
   return props.active;
