@@ -36,6 +36,7 @@ const props = withDefaults(defineProps<{
   messages?: string[];
   nullable?: boolean;
   colorsPerRow?: number;
+  dropdownWrapperClass?: string | Record<string, boolean>;
 }>(), {
   state: InputState.base,
   size: Size.md,
@@ -219,12 +220,14 @@ onMounted(() => {
       </div>
 
       <template #content>
-        <ColorSelection
-          :value="modelValue"
-          :colors="props.options"
-          :colors-per-row="colorsPerRow"
-          @select="onColorSelect"
-        />
+        <div :class="dropdownWrapperClass">
+          <ColorSelection
+            :value="modelValue"
+            :colors="props.options"
+            :colors-per-row="colorsPerRow"
+            @select="onColorSelect"
+          />
+        </div>
       </template>
     </AntDropdown>
   </AntField>
