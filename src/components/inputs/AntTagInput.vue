@@ -284,7 +284,7 @@ onMounted(() => {
           class="w-full flex items-center"
         >
           <div
-            class="flex gap-2.5 items-center"
+            class="flex flex-wrap gap-2.5 items-center"
           >
             <AntTag
               v-for="(tag, index) in _modelValue"
