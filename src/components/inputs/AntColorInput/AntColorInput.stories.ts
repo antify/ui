@@ -12,6 +12,9 @@ import {
 import {
   InputState,
 } from '../../../enums';
+import {
+  ColorButtonSize,
+} from './AntColorInput.types';
 import AntColorInput from './AntColorInput.vue';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
@@ -34,6 +37,12 @@ const meta: Meta<typeof AntColorInput> = {
         type: 'select',
       },
       options: Object.values(Size),
+    },
+    colorSize: {
+      control: {
+        type: 'select',
+      },
+      options: Object.values(ColorButtonSize),
     },
     colorsPerRow: {
       control: {
@@ -234,9 +243,7 @@ export const Docs: Story = {
       };
     },
     template: `
-      <div class="h-[200px] p-[50px]">
-        <AntColorInput v-bind="args" v-model="modelValue" />
-      </div>
+      <AntColorInput v-bind="args" v-model="modelValue" />
     `,
   }),
   args: {
@@ -245,7 +252,6 @@ export const Docs: Story = {
     options: bulkColorOptions,
     modelValue: 'entry-1',
     colorsPerRow: 8,
-    dropdownWrapperClass: 'h-[100px] overflow-y-auto',
   },
 };
 

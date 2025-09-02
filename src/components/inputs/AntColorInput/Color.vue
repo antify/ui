@@ -4,7 +4,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import AntIcon from '../../AntIcon.vue';
 import {
-  ColorInputSize,
+  ColorButtonSize,
 } from './AntColorInput.types';
 import {
   computed, ref,
@@ -21,11 +21,11 @@ const props = withDefaults(defineProps<{
    */
   value: string | null;
   selected?: boolean;
-  size?: ColorInputSize;
+  size?: ColorButtonSize;
   readonly?: boolean;
 }>(), {
   selected: false,
-  size: ColorInputSize.xl,
+  size: ColorButtonSize.xl,
   readonly: false,
 });
 
@@ -37,17 +37,14 @@ defineExpose({
 
 const buttonClasses = computed(() => ({
   'rounded-sm cursor-pointer flex items-center justify-center': true,
-  'h-4 w-4': [
-    ColorInputSize.xs,
-    ColorInputSize.xs2,
-  ].includes(props.size),
-  'h-5 w-5': [
-    ColorInputSize.lg,
-    ColorInputSize.md,
-    ColorInputSize.sm,
-  ].includes(props.size),
-  'h-8 w-8': ColorInputSize.xl === props.size,
-  'h-10 w-10': ColorInputSize.xl2 === props.size,
+  'h-5 w-5': props.size === ColorButtonSize.xs3,
+  'h-6 w-6': props.size === ColorButtonSize.xs2,
+  'h-7 w-7': props.size === ColorButtonSize.xs,
+  'h-8 w-8': props.size === ColorButtonSize.sm,
+  'h-9 w-9': props.size === ColorButtonSize.md,
+  'h-10 w-10': props.size === ColorButtonSize.lg,
+  'h-11 w-11': props.size === ColorButtonSize.xl,
+  'h-12 w-12': props.size === ColorButtonSize.xl2,
 }));
 
 const iconClasses = computed(() => {

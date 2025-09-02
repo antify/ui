@@ -14,8 +14,8 @@ import {
 import Color from './Color.vue';
 import AntDropdown from '../../AntDropdown.vue';
 import ColorSelection from './ColorSelection.vue';
-import type {
-  ColorInputSize,
+import {
+  ColorButtonSize,
 } from './AntColorInput.types';
 
 const emit = defineEmits([
@@ -33,6 +33,7 @@ const props = withDefaults(defineProps<{
   disabled?: boolean;
   state?: InputState;
   size?: Size;
+  colorSize?: ColorButtonSize;
   messages?: string[];
   nullable?: boolean;
   colorsPerRow?: number;
@@ -40,13 +41,14 @@ const props = withDefaults(defineProps<{
 }>(), {
   state: InputState.base,
   size: Size.md,
+  colorSize: ColorButtonSize.md,
   messages: () => [],
   nullable: false,
   colorsPerRow: 4,
 });
 const _value = computed({
   get() {
-    const found = props.options.find((option: string | ColorOption) => typeof option === 'string' ? option === props.modelValue : option.value === props.modelValue);
+    const found = props.options.find((option: string) => option === props.modelValue);
 
     if (!found) {
       return props.options[0];
@@ -54,8 +56,8 @@ const _value = computed({
 
     return found;
   },
-  set(val: string | ColorOption) {
-    emit('update:modelValue', typeof val === 'string' ? val : val.value);
+  set(val: string) {
+    emit('update:modelValue', val);
   },
 });
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
@@ -92,10 +94,7 @@ const itemClasses = computed(() => {
     'focus:ring-2': (props.size === Size.xs2 || props.size === Size.xs || props.size === Size.sm) && !hasInputState.value,
     'focus:ring-4': (props.size === Size.md || props.size === Size.lg) && !hasInputState.value,
     'rounded-r-md': !hasRemoveButton.value,
-    'p-1': props.size === Size.xs2,
-    'p-1.5': props.size === Size.xs || props.size === Size.sm,
-    'p-2': props.size === Size.md,
-    'p-2.5': props.size === Size.lg,
+    'p-0.5': true,
     invisible: props.skeleton,
     'opacity-50 cursor-not-allowed': props.disabled,
   };
@@ -111,6 +110,20 @@ const itemClasses = computed(() => {
   classes[colorVariant[props.state]] = true;
 
   return classes;
+});
+const inputButtonSize = computed(() => {
+  switch(props.size) {
+    case Size.xs2:
+      return ColorButtonSize.xs3;
+    case Size.xs:
+      return ColorButtonSize.xs2;
+    case Size.sm:
+      return ColorButtonSize.xs;
+    case Size.md:
+      return ColorButtonSize.sm;
+    default:
+      return ColorButtonSize.md;
+  }
 });
 const showDropdown = ref<boolean>(false);
 const itemRef = ref<HTMLDivElement | null>(null);
@@ -199,7 +212,7 @@ onMounted(() => {
           >
             <Color
               :value="modelValue"
-              :size="size as unknown as ColorInputSize"
+              :size="inputButtonSize"
               readonly
             />
           </div>
@@ -225,6 +238,7 @@ onMounted(() => {
             :value="modelValue"
             :colors="props.options"
             :colors-per-row="colorsPerRow"
+            :color-size="colorSize"
             @select="onColorSelect"
           />
         </div>

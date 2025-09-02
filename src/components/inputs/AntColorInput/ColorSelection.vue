@@ -4,7 +4,7 @@ import {
 } from '../../../enums';
 import Color from './Color.vue';
 import {
-  ColorInputSize,
+  ColorButtonSize,
 } from './AntColorInput.types';
 import {
   onMounted, ref,
@@ -18,10 +18,12 @@ withDefaults(defineProps<{
   // The selected color value
   value: string | null;
   colors: string[];
+  colorSize?: ColorButtonSize;
   size?: Size;
   colorsPerRow: number;
 }>(), {
   size: Size.md,
+  colorSize: ColorButtonSize.md,
 });
 
 type ColorComponentInstance = Element & {
@@ -57,7 +59,7 @@ onMounted(() => {
       :ref="(val) => colorButtonRefs[index] = val as ColorComponentInstance"
       :value="color"
       :selected="color === value"
-      :size="ColorInputSize.xl2"
+      :size="colorSize"
       @select="(val) => $emit('select', val)"
     />
   </div>
