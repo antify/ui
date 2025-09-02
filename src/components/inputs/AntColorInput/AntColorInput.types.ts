@@ -7,4 +7,5 @@ export enum ColorButtonSize {
   xs = 'xs',
   xs2 = '2xs',
   xs3 = '3xs',
+  xs4 = '4xs',
 }

@@ -37,6 +37,7 @@ defineExpose({
 
 const buttonClasses = computed(() => ({
   'rounded-sm cursor-pointer flex items-center justify-center': true,
+  'h-4 w-4': props.size === ColorButtonSize.xs4,
   'h-5 w-5': props.size === ColorButtonSize.xs3,
   'h-6 w-6': props.size === ColorButtonSize.xs2,
   'h-7 w-7': props.size === ColorButtonSize.xs,

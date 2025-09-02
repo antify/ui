@@ -94,7 +94,7 @@ const itemClasses = computed(() => {
     'focus:ring-2': (props.size === Size.xs2 || props.size === Size.xs || props.size === Size.sm) && !hasInputState.value,
     'focus:ring-4': (props.size === Size.md || props.size === Size.lg) && !hasInputState.value,
     'rounded-r-md': !hasRemoveButton.value,
-    'p-0.5': true,
+    'p-1': true,
     invisible: props.skeleton,
     'opacity-50 cursor-not-allowed': props.disabled,
   };
@@ -114,15 +114,15 @@ const itemClasses = computed(() => {
 const inputButtonSize = computed(() => {
   switch(props.size) {
     case Size.xs2:
-      return ColorButtonSize.xs3;
+      return ColorButtonSize.xs4;
     case Size.xs:
-      return ColorButtonSize.xs2;
+      return ColorButtonSize.xs3;
     case Size.sm:
-      return ColorButtonSize.xs;
+      return ColorButtonSize.xs2;
     case Size.md:
-      return ColorButtonSize.sm;
+      return ColorButtonSize.xs;
     default:
-      return ColorButtonSize.md;
+      return ColorButtonSize.sm;
   }
 });
 const showDropdown = ref<boolean>(false);
