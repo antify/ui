@@ -136,6 +136,7 @@ function onClickCalendar() {
 
       <AntButton
         v-if="_nullable"
+        :disabled="disabled"
         :icon-left="faMultiply"
         :grouped="Grouped.right"
         :state="state as unknown as State"
