@@ -1,25 +1,15 @@
 <script lang="ts" setup>
 import AntAccordionItem from './AntAccordionItem.vue';
 import {
-  onMounted, ref,
+  onMounted,
 } from 'vue';
 import {
-  CollapseStrategy,
+  CollapseStrategy, type AccordionItem,
 } from './__types/AntAccordion.types';
 import AntSkeleton from './AntSkeleton.vue';
 
 const props = withDefaults(defineProps<{
-  items: {
-    label?: string;
-    content?: string;
-    isOpen?: boolean;
-    iconLeft?: boolean;
-    contentPadding?: boolean;
-    activeLabelClasses?: string;
-    activeIconClasses?: string;
-    inactiveLabelClasses?: string;
-    inactiveIconClasses?: string;
-  }[];
+  items: AccordionItem[];
   collapseStrategy?: CollapseStrategy;
   skeleton?: boolean;
 }>(), {
@@ -27,22 +17,24 @@ const props = withDefaults(defineProps<{
   skeleton: false,
 });
 
-const openItems = ref<number[]>([]);
+const _openItems = defineModel<number[]>('openItems', {
+  default: [],
+});
 
 onMounted(() => {
-  openItems.value = props.items
+  _openItems.value = props.items
     .map((item, index) => item.isOpen ? index : -1)
     .filter((index) => index !== -1);
 });
 
 function onOpen(index: number) {
   if (props.collapseStrategy === CollapseStrategy.single) {
-    openItems.value = [
+    _openItems.value = [
       index,
     ];
   } else {
-    openItems.value = [
-      ...openItems.value,
+    _openItems.value = [
+      ..._openItems.value,
       index,
     ];
   }
@@ -50,9 +42,9 @@ function onOpen(index: number) {
 
 function onClose(index: number) {
   if (props.collapseStrategy === CollapseStrategy.single) {
-    openItems.value = [];
+    _openItems.value = [];
   } else {
-    openItems.value = openItems.value.filter((item) => item !== index);
+    _openItems.value = _openItems.value.filter((item) => item !== index);
   }
 }
 </script>
@@ -64,7 +56,7 @@ function onClose(index: number) {
         v-for="(item, index) in items"
         :key="`accordion-item-${index}`"
         :label="item.label"
-        :is-open="openItems.includes(index)"
+        :is-open="_openItems.includes(index)"
         :icon-left="item.iconLeft"
         :content-padding="item.contentPadding"
         :active-label-classes="item.activeLabelClasses"
