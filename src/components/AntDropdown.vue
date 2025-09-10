@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-  computed, onMounted, ref,
+  computed, ref,
 } from 'vue';
 import {
   classesToObjectSyntax,
@@ -16,13 +16,13 @@ const props = withDefaults(defineProps<{
   showDropdown: boolean;
   dropdownClasses?: string | Record<string, boolean>;
   contentPadding?: boolean;
-  isClickable?: boolean;
   expanded?: boolean;
+  closeOnClickOutside?: boolean;
 }>(), {
   contentPadding: true,
   dropdownClasses: '',
-  isClickable: true,
   expanded: false,
+  closeOnClickOutside: true,
 });
 const emit = defineEmits([
   'update:showDropdown',
@@ -60,14 +60,14 @@ onKeyStroke('Escape', (e: KeyboardEvent) => {
   }
 });
 
-onMounted(() => {
-  onClickOutside(reference, () => {
+onClickOutside(reference, () => {
+  if (props.closeOnClickOutside) {
     emit('update:showDropdown', false);
-  }, {
-    ignore: [
-      floating,
-    ],
-  });
+  }
+}, {
+  ignore: [
+    floating,
+  ],
 });
 </script>
 
