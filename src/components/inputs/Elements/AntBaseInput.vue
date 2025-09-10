@@ -75,7 +75,7 @@ const props = withDefaults(defineProps<{
   inputRef: null,
 });
 const slot = useSlots();
-const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
+const hasInputState = computed(() => props.skeleton || props.disabled);
 const icons = {
   [InputState.info]: faCircleInfo,
   [InputState.warning]: faExclamationTriangle,
@@ -96,6 +96,7 @@ const inputClasses = computed(() => {
     'block transition-colors relative border-none outline w-full text-black font-regular': true,
     'outline-offset-[-1px] outline-1 focus:outline-offset-[-1px] focus:outline-1': true,
     'disabled:opacity-50 disabled:cursor-not-allowed': props.disabled,
+    'read-only:cursor-default': props.readonly,
     'text-right': props.type === BaseInputType.number,
     [variants[props.state]]: true,
     // Size
