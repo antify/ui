@@ -88,7 +88,6 @@ const inputClasses = computed(() => {
     [InputState.success]: 'outline-success-500',
     [InputState.warning]: 'outline-warning-500',
   };
-  const customColor = `text-${props.customColor}-500 focus:ring-${props.customColor}-200 outline-${props.customColor}-300`;
 
   return {
     'relative inline-flex shrink-0 bg-base-100 border-0': true,
@@ -101,10 +100,9 @@ const inputClasses = computed(() => {
     'h-5 w-5': props.size === Size.lg || props.size === Size.md || props.size === Size.sm,
     'h-4 w-4': props.size === Size.xs || props.size === Size.xs2,
     'cursor-not-allowed opacity-50': props.disabled,
-    [focusColorVariant[props.state]]: !props.customColor && !hasInputState.value,
-    [activeColorVariant[props.state]]: !props.customColor && delayedValue.value,
-    [inactiveColorVariant[props.state]]: !props.customColor && !_modelValue.value,
-    [customColor]: true,
+    [focusColorVariant[props.state]]: !hasInputState.value,
+    [activeColorVariant[props.state]]: delayedValue.value,
+    [inactiveColorVariant[props.state]]: !_modelValue.value,
   };
 });
 const contentClasses = computed(() => ({
