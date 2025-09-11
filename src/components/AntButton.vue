@@ -11,11 +11,11 @@ import {
 import AntSkeleton from './AntSkeleton.vue';
 import AntSpinner from './AntSpinner.vue';
 import {
+  AntSpinnerSize,
+} from './__types';
+import {
   Grouped,
 } from '../enums/Grouped.enum';
-import {
-  Size,
-} from '../enums/Size.enum';
 import {
   handleEnumValidation,
 } from '../handler';
@@ -24,6 +24,7 @@ import {
 } from '../enums';
 import {
   ButtonType,
+  ButtonSize,
 } from './__types';
 import AntIcon from './AntIcon.vue';
 import AntTooltip from './AntTooltip.vue';
@@ -42,7 +43,7 @@ defineEmits([
 
 const props = withDefaults(defineProps<{
   filled?: boolean;
-  size?: Size;
+  size?: ButtonSize;
   state?: State;
   iconLeft?: IconDefinition;
   iconRight?: IconDefinition;
@@ -66,7 +67,7 @@ const props = withDefaults(defineProps<{
   filled: false,
   skeleton: false,
   spinner: false,
-  size: Size.md,
+  size: ButtonSize.md,
   grouped: Grouped.none,
   readonly: false,
   expanded: false,
@@ -134,17 +135,18 @@ const classes = computed(() => {
   };
 
   return {
-    'transition-all inline-flex items-center justify-center font-medium cursor-pointer select-none': true,
+    'transition-all inline-flex items-center justify-center font-medium cursor-pointer select-none h-fit': true,
     'active:shadow-[inset_0_4px_4px_rgba(0,0,0,0.25)]': !hasInputState.value,
-    'p-1 text-xs gap-1': props.size === Size.xs2,
-    'p-1.5 text-xs gap-1.5': props.size === Size.xs,
-    'p-1.5 text-sm gap-1.5': props.size === Size.sm,
-    'p-2 text-sm gap-2': props.size === Size.md,
-    'p-2.5 text-sm gap-2.5': props.size === Size.lg,
+    'p-1 text-2xs gap-1': props.size === ButtonSize.xs3,
+    'p-1 text-xs gap-1': props.size === ButtonSize.xs2,
+    'p-1.5 text-xs gap-1.5': props.size === ButtonSize.xs,
+    'p-1.5 text-sm gap-1.5': props.size === ButtonSize.sm,
+    'p-2 text-sm gap-2': props.size === ButtonSize.md,
+    'p-2.5 text-sm gap-2.5': props.size === ButtonSize.lg,
     'disabled:opacity-50 disabled:cursor-not-allowed': true,
     'cursor-default': props.readonly,
-    'focus:ring-2': !props.readonly && props.size === Size.sm || props.size === Size.xs || props.size === Size.xs2,
-    'focus:ring-4': !props.readonly && props.size === Size.md || props.size === Size.lg,
+    'focus:ring-2': !props.readonly && props.size === ButtonSize.sm || props.size === ButtonSize.xs || props.size === ButtonSize.xs2 || props.size === ButtonSize.xs3,
+    'focus:ring-4': !props.readonly && props.size === ButtonSize.md || props.size === ButtonSize.lg,
     'w-full': props.expanded,
     'outline outline-1 outline-offset-[-1px]': props.outlined,
     ...groupedClassList.value,
@@ -192,15 +194,33 @@ const is = computed(() => {
   return props.to !== undefined ? 'router-link' : 'button';
 });
 const getIconSize = computed(() => {
-  if (props.size === Size.xs || props.size === Size.xs2) {
+  if (props.size === ButtonSize.xs || props.size === ButtonSize.xs2) {
     return IconSize.xs;
+  } else if (props.size === ButtonSize.xs3) {
+    return IconSize.xs2;
   } else {
     return IconSize.sm;
   }
 });
+const spinnerSize = computed(() => {
+  switch (props.size) {
+    case ButtonSize.lg:
+      return AntSpinnerSize.sm;
+    case ButtonSize.md:
+      return AntSpinnerSize.sm;
+    case ButtonSize.sm:
+      return AntSpinnerSize.sm;
+    case ButtonSize.xs:
+      return AntSpinnerSize.xs;
+    case ButtonSize.xs2:
+      return AntSpinnerSize.xs2;
+    default:
+      return AntSpinnerSize.xs2;
+  }
+});
 
 onMounted(() => {
-  handleEnumValidation(props.size, Size, 'size');
+  handleEnumValidation(props.size, ButtonSize, 'size');
   handleEnumValidation(props.state, State, 'state');
   handleEnumValidation(props.grouped, Grouped, 'grouped');
 });
@@ -236,7 +256,7 @@ onMounted(() => {
         >
           <AntSpinner
             v-if="spinner"
-            :size="size"
+            :size="spinnerSize"
             :state="state"
             :inverted="!filled"
           />
