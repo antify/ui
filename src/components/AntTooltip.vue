@@ -170,11 +170,12 @@ function onClick() {
 
 <template>
   <div
-    class="relative"
+    class="relative h-fit"
     data-e2e="tooltip"
   >
     <div
       ref="reference"
+      class="flex"
       @mouseenter="() => onMouseOver()"
       @mouseleave="() => onMouseLeave()"
       @click="() => onClick()"

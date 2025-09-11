@@ -8,9 +8,6 @@ import {
   type Meta, type StoryObj,
 } from '@storybook/vue3';
 import {
-  Size,
-} from '../../enums/Size.enum';
-import {
   Grouped as _Grouped,
 } from '../../enums/Grouped.enum';
 import {
@@ -19,6 +16,9 @@ import {
 import {
   within,
 } from '@storybook/test';
+import {
+  ButtonSize,
+} from '../__types/AntButton.types';
 
 const meta: Meta<typeof AntButton> = {
   component: AntButton,
@@ -46,7 +46,7 @@ const meta: Meta<typeof AntButton> = {
       control: {
         type: 'select',
       },
-      options: Object.values(Size),
+      options: Object.values(ButtonSize),
       description: 'Defines the size of the button',
     },
     iconLeft: {
