@@ -34,6 +34,18 @@ const props = withDefaults(
     readonly?: boolean;
     disabled?: boolean;
     messages?: string[];
+    /**
+     * Tailwind ring class with focus prefix e.g. focus:ring-primary-200
+     */
+    focusColorClass?: string;
+    /**
+     * Tailwind outline class e.g. outline-primary-300
+     */
+    inactiveColorClass?: string;
+    /**
+     * Tailwind text class e.g. text-primary-500
+     */
+    activeColorClass?: string;
   }>(),
   {
     direction: Direction.column,
@@ -43,6 +55,9 @@ const props = withDefaults(
     readonly: false,
     disabled: false,
     messages: () => [],
+    focusColorClass: 'focus:ring-primary-200',
+    inactiveColorClass: 'outline-base-300',
+    activeColorClass: 'text-primary-500',
   },
 );
 const containerClasses = computed(() => ({
@@ -131,6 +146,9 @@ onMounted(() => {
         :skeleton="skeleton"
         :disabled="disabled || checkbox.disabled"
         :readonly="readonly || checkbox.readonly"
+        :active-color-class="activeColorClass"
+        :inactive-color-class="inactiveColorClass"
+        :focus-color-class="focusColorClass"
         @update:model-value="updateValue(checkbox.value)"
         @blur="() => onBlurCheckbox()"
       >
