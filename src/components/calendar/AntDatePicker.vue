@@ -6,11 +6,14 @@ import {
   subDays,
 } from 'date-fns';
 import {
+  ref,
+  watch,
   computed,
-  defineEmits, ref, watch,
+  defineEmits,
 } from 'vue';
 import AntDateSwitcher from './AntDateSwitcher.vue';
 import AntButton from '../AntButton.vue';
+import AntSkeleton from '../AntSkeleton.vue';
 
 const props = withDefaults(defineProps<{
   /**
@@ -20,11 +23,13 @@ const props = withDefaults(defineProps<{
   modelValue: number;
   showWeekend?: boolean;
   showTodayButton?: boolean;
+  skeleton?: boolean;
 }>(), {
   showWeekend: false,
   showTodayButton: true,
+  skeleton: false,
 });
-const emit = defineEmits([
+defineEmits([
   'select',
   'update:modelValue',
 ]);
@@ -109,6 +114,7 @@ watch(() => props.modelValue, (val) => {
     <AntDateSwitcher
       v-model:month="currentMonthIndex"
       v-model:year="currentYear"
+      :skeleton="skeleton"
     />
 
     <div
@@ -123,28 +129,41 @@ watch(() => props.modelValue, (val) => {
         :key="day"
         class="text-for-white-bg-font text-center p-2"
       >
-        {{ day }}
+        <AntSkeleton
+          :visible="skeleton"
+          rounded
+        >
+          {{ day }}
+        </AntSkeleton>
       </div>
 
       <template
         v-for="week in matrix"
         :key="week"
       >
-        <div
+        <template
           v-for="day in week"
           :key="day.date"
-          class="rounded-md flex items-center justify-center p-2 font-semibold cursor-pointer transition-colors"
-          :class="{
-            'text-base-400': !day.isCurrentMonth,
-            'text-for-white-bg-font': day.isCurrentMonth,
-            'outline outline-primary-500': day.isToday,
-            'hover:bg-base-200 hover:text-base-200-font': day.date !== format(modelValue, 'yyyy-MM-dd'),
-            'bg-primary-500 text-primary-500-font hover:bg-primary-300 hover:text-primary-300-font': day.date === format(modelValue, 'yyyy-MM-dd'),
-          }"
-          @click="() => $emit('update:modelValue', new Date(day.date).getTime())"
         >
-          {{ day.label }}
-        </div>
+          <AntSkeleton
+            :visible="skeleton"
+            rounded
+          >
+            <div
+              class="rounded-md flex items-center justify-center p-2 font-semibold cursor-pointer transition-colors"
+              :class="{
+                'text-base-400': !day.isCurrentMonth,
+                'text-for-white-bg-font': day.isCurrentMonth,
+                'outline outline-primary-500': day.isToday,
+                'hover:bg-base-200 hover:text-base-200-font': day.date !== format(modelValue, 'yyyy-MM-dd'),
+                'bg-primary-500 text-primary-500-font hover:bg-primary-300 hover:text-primary-300-font': day.date === format(modelValue, 'yyyy-MM-dd'),
+              }"
+              @click="() => $emit('update:modelValue', new Date(day.date).getTime())"
+            >
+              {{ day.label }}
+            </div>
+          </AntSkeleton>
+        </template>
       </template>
     </div>
 
@@ -153,6 +172,7 @@ watch(() => props.modelValue, (val) => {
       class="flex items-center justify-center p-2"
     >
       <AntButton
+        :skeleton="skeleton"
         @click="() => $emit('update:modelValue', Date.now())"
       >
         Heute

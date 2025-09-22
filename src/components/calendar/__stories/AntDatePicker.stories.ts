@@ -8,7 +8,7 @@ import {
 } from 'vue';
 
 const meta: Meta<typeof AntCalendar> = {
-  title: 'Components/DatePicker',
+  title: 'Components/Date Picker',
   component: AntCalendar,
   parameters: {
     controls: {

@@ -21,6 +21,7 @@ const props = defineProps<{
    */
   month: number;
   year: number;
+  skeleton: boolean;
 }>();
 const emit = defineEmits([
   'update:month',
@@ -87,6 +88,7 @@ function onClickNext() {
     <AntButton
       :icon-left="faChevronLeft"
       :grouped="Grouped.left"
+      :skeleton="skeleton"
       @click="onClickPrevious"
     />
     <AntDropdown
@@ -96,6 +98,7 @@ function onClickNext() {
     >
       <AntButton
         :grouped="Grouped.center"
+        :skeleton="skeleton"
         expanded
         @click="showMonthDropdown = !showMonthDropdown"
       >
@@ -119,6 +122,7 @@ function onClickNext() {
     >
       <AntButton
         :grouped="Grouped.center"
+        :skeleton="skeleton"
         expanded
         @click="showYearDropdown = !showYearDropdown"
       >
@@ -141,6 +145,7 @@ function onClickNext() {
       <AntButton
         :icon-left="faChevronRight"
         :grouped="Grouped.right"
+        :skeleton="skeleton"
         @click="onClickNext"
       />
     </div>
