@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 3.2.3 (2025-09-22)
+
+
+### Bug Fixes
+
+* **AntDatePicker:** Export AntDatePicker ([f01a002](https://github.com/antify/ui/commit/f01a002e39df0164c6eba978f75a38366b47f9e8))
+
 ### 3.2.2 (2025-09-22)
 
 ### 3.1.27 (2025-09-11)
