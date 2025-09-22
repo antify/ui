@@ -16,9 +16,13 @@ import {
   BaseInputType,
 } from './Elements/__types';
 import AntField from '../forms/AntField.vue';
+import {
+  useVModel,
+} from '@vueuse/core';
 
-const emits = defineEmits([
+const emit = defineEmits([
   'update:modelValue',
+  'update:inputRef',
 ]);
 const props = withDefaults(defineProps<{
   modelValue: string | null;
@@ -31,8 +35,10 @@ const props = withDefaults(defineProps<{
   skeleton?: boolean;
   inputTimeout?: number;
   query?: string;
+  inputRef?: null | HTMLInputElement;
 }>(), {
   disabled: false,
+  inputRef: null,
   skeleton: false,
   readonly: false,
   size: Size.md,
@@ -47,7 +53,7 @@ const _value = computed<string | null>({
   get: () => props.modelValue,
   set: (val: string | null) => {
     if (val === null) {
-      return emits('update:modelValue', val);
+      return emit('update:modelValue', val);
     }
 
     if (timeout.value) {
@@ -55,10 +61,11 @@ const _value = computed<string | null>({
     }
 
     timeout.value = setTimeout(() => {
-      emits('update:modelValue', val);
+      emit('update:modelValue', val);
     }, props.inputTimeout);
   },
 });
+const _inputRef = useVModel(props, 'inputRef', emit);
 
 onMounted(() => handleEnumValidation(props.size, Size, 'size'));
 </script>
@@ -73,6 +80,7 @@ onMounted(() => handleEnumValidation(props.size, Size, 'size'));
   >
     <AntBaseInput
       v-model="_value"
+      v-model:input-ref="_inputRef"
       :type="BaseInputType.search"
       :size="size"
       :skeleton="skeleton"

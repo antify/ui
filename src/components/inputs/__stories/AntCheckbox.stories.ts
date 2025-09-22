@@ -69,6 +69,41 @@ export const Docs: Story = {
   }),
 };
 
+export const customColors: Story = {
+  render: (args: any) => ({
+    components: {
+      AntCheckbox,
+    },
+    setup() {
+      const value = computed<boolean>({
+        get() {
+          return args.modelValue;
+        },
+        set(val) {
+          // @ts-ignore
+          args.modelValue = val;
+        },
+      });
+
+      return {
+        args,
+        value,
+      };
+    },
+    template: `
+      <div class="m-2">
+        <AntCheckbox v-bind="args" v-model="value"/>
+        <span class="text-sm text-gray-500">Reactive value: {{ value }}</span>
+      </div>
+    `,
+  }),
+  args: {
+    focusColorClass: 'focus:ring-teal-200',
+    inactiveColorClass: 'outline-teal-300',
+    activeColorClass: 'text-teal-300',
+  },
+};
+
 export const Summary: Story = {
   parameters: {
     chromatic: {

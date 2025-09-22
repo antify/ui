@@ -107,7 +107,7 @@ const labelClasses = computed(() => ({
   <AntTransitionCollapseHeight>
     <div
       v-show="isOpen"
-      class="bg-white overflow-hidden -mt-px"
+      class="bg-white overflow-hidden -mt-px shrink-0"
     >
       <Transition name="bounce">
         <div

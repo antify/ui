@@ -40,6 +40,18 @@ const props =
     disabled?: boolean;
     readonly?: boolean;
     messages?: string[];
+    /**
+     * Tailwind ring class with focus prefix e.g. focus:ring-primary-200
+     */
+    focusColorClass?: string;
+    /**
+     * Tailwind outline class e.g. outline-primary-300
+     */
+    inactiveColorClass?: string;
+    /**
+     * Tailwind text class e.g. text-primary-500
+     */
+    activeColorClass?: string;
   }>(), {
     state: InputState.base,
     size: Size.md,
@@ -47,27 +59,30 @@ const props =
     disabled: false,
     readonly: false,
     messages: () => [],
+    focusColorClass: 'focus:ring-primary-200',
+    inactiveColorClass: 'outline-base-300',
+    activeColorClass: 'text-primary-500',
   });
 const _modelValue = useVModel(props, 'modelValue', emit);
 const delayedValue = ref(_modelValue.value);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const inputClasses = computed(() => {
   const focusColorVariant: Record<InputState, string> = {
-    [InputState.base]: 'focus:ring-primary-200',
+    [InputState.base]: props.focusColorClass,
     [InputState.danger]: 'focus:ring-danger-200',
     [InputState.info]: 'focus:ring-info-200',
     [InputState.success]: 'focus:ring-success-200',
     [InputState.warning]: 'focus:ring-warning-200',
   };
   const activeColorVariant: Record<InputState, string> = {
-    [InputState.base]: 'text-primary-500',
+    [InputState.base]: props.activeColorClass,
     [InputState.danger]: 'text-danger-500',
     [InputState.info]: 'text-info-500',
     [InputState.success]: 'text-success-500',
     [InputState.warning]: 'text-warning-500',
   };
   const inactiveColorVariant: Record<InputState, string> = {
-    [InputState.base]: 'outline-base-300',
+    [InputState.base]: props.inactiveColorClass,
     [InputState.danger]: 'outline-danger-500',
     [InputState.info]: 'outline-info-500',
     [InputState.success]: 'outline-success-500',
