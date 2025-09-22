@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.0](https://github.com/antify/ui/compare/v3.1.13...v3.2.0) (2025-09-22)
+
+
+### Features
+
+* **AntColorInput:** Add data-e2e attributes([#191](https://github.com/antify/ui/issues/191)) ([0b71d67](https://github.com/antify/ui/commit/0b71d67cbceffa81d7aa814056e887bd44e82276))
+* **AntDatePicker:** Implement AntDatePicker ([f882352](https://github.com/antify/ui/commit/f882352c67afdae099a1b0209931c6afb7c25703))
+
+
+### Bug Fixes
+
+* **AntColorInput:** Rename to data-e2e-color([#191](https://github.com/antify/ui/issues/191)) ([3905a73](https://github.com/antify/ui/commit/3905a7345f05d6336c41e712b7e93300affd7678))
+
 ### 3.1.13 (2025-06-23)
 
 ### 3.1.12 (2025-06-18)
