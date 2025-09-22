@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 3.3.0 (2025-09-22)
+
+
+### Features
+
+* **AntDatePicker:** Add skeleton state ([3ba2e03](https://github.com/antify/ui/commit/3ba2e032910f5ed091435c29b7e776b877165898))
+
 ### 3.2.3 (2025-09-22)
 
 
