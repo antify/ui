@@ -230,6 +230,7 @@ onMounted(() => {
   <AntSkeleton
     :visible="skeleton"
     :grouped="grouped"
+    :class="{'w-full': props.expanded}"
     rounded
   >
     <div
