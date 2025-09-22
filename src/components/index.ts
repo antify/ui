@@ -60,6 +60,7 @@ import AntAccordionItem from './AntAccordionItem.vue';
 import AntAlert from './AntAlert.vue';
 import AntCard from './AntCard.vue';
 import AntContent from './AntContent.vue';
+import AntDatePicker from './calendar/AntDatePicker.vue';
 import AntDropdown from './AntDropdown.vue';
 import AntIcon from './AntIcon.vue';
 import AntKeycap from './AntKeycap.vue';
@@ -77,6 +78,7 @@ import AntTooltip from './AntTooltip.vue';
 
 export {
   AntButton,
+  AntDatePicker,
   AntDialog,
   AntField,
   AntFormGroup,
