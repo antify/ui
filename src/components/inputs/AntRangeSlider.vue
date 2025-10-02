@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import AntField from '../forms/AntField.vue';
+import AntTooltip from '../AntTooltip.vue';
 import {
   useVModel,
 } from '@vueuse/core';
 import {
-  computed, onMounted, watch,
+  computed, onMounted, ref, watch,
 } from 'vue';
 import {
-  InputState, Size,
+  State, Size,
 } from '../../enums';
 import {
   handleEnumValidation,
@@ -24,71 +25,148 @@ const emit = defineEmits([
   'blur',
 ]);
 const props = withDefaults(defineProps<{
-  modelValue: number | number[] | null;
+  modelValue: number | null;
   label?: string;
   description?: string;
-  state?: InputState;
+  state?: State;
   size?: Size;
   disabled?: boolean;
   skeleton?: boolean;
   min?: number;
   max?: number;
+  steps?: number;
   messages?: string[];
 }>(), {
-  state: InputState.base,
+  state: State.base,
   size: Size.md,
   disabled: false,
   skeleton: false,
-  limiter: false,
   messages: () => [],
+  min: 0,
+  max: 100,
+  steps: undefined,
 });
+
 const _modelValue = useVModel(props, 'modelValue', emit);
-const inputClasses = computed(() => {
-  const variants: Record<InputState, string> = {
-    [InputState.base]: 'text-base-base',
-    [InputState.danger]: 'text-danger-base',
-    [InputState.info]: 'text-info-base',
-    [InputState.success]: 'text-success-base',
-    [InputState.warning]: 'text-warning-base',
+
+const thumbClasses = computed(() => {
+  const borders: Record<State, string> = {
+    [State.base]: 'hover:border-base-500',
+    [State.primary]: 'hover:border-primary-500',
+    [State.secondary]: 'hover:border-secondary-500',
+    [State.danger]: 'hover:border-danger-500',
+    [State.info]: 'hover:border-info-500',
+    [State.success]: 'hover:border-success-500',
+    [State.warning]: 'hover:border-warning-500',
   };
 
   return {
-    'ant-range-slider transition-colors relative border-none w-full h-2 bg-base-300 rounded-md outline-hidden': true,
-    'disabled:opacity-50 disabled:cursor-not-allowed': props.disabled,
-    invisible: props.skeleton,
+    'absolute -translate-y-[50%] top-1/2 h-[16px] w-[16px] bg-base-50 border-2 border-base-300 rounded-full cursor-pointer': true,
+    [borders[props.state]]: true,
+  };
+});
+
+const progressClasses = computed(() => {
+  const variants: Record<State, string> = {
+    [State.base]: 'bg-base-500',
+    [State.primary]: 'bg-primary-500',
+    [State.secondary]: 'bg-secondary-500',
+    [State.danger]: 'bg-danger-500',
+    [State.info]: 'bg-info-500',
+    [State.success]: 'bg-success-500',
+    [State.warning]: 'bg-warning-500',
+  };
+
+  return {
     [variants[props.state]]: true,
   };
 });
 
-/**
- * Validate default value if given after delayed data fetching.
- */
-watch(() => props.skeleton, (val) => {
-  if (!val && props.modelValue !== null) {
-    emit('validate', props.modelValue);
-  }
+const sliderRef = ref<HTMLElement | null>(null);
+const sliderWidth = ref(0);
+const isDragging = ref(false);
+
+// Pixelposition (Thumb auf der Leiste)
+const xPosition = ref(0);
+// Startwerte beim Klick
+const initialMouseX = ref(0);
+const startXPosition = ref(0);
+
+// -------------------------------
+// Mapping: Pixel ↔ Wert
+// -------------------------------
+const clamp = (val: number, min: number, max: number) => Math.min(Math.max(val, min), max);
+const value = computed({
+  get: () => {
+    if (sliderWidth.value === 0) {
+      return props.min;
+    }
+
+    const ratio = xPosition.value / sliderWidth.value;
+    const raw = props.min + ratio * (props.max - props.min);
+
+    return Math.round(clamp(raw, props.min, props.max));
+  },
+  set: (val: number | null) => {
+    if (val === null || sliderWidth.value === 0) {
+      return;
+    }
+
+    const clampedVal = clamp(val, props.min, props.max);
+    const ratio = (clampedVal - props.min) / (props.max - props.min);
+    xPosition.value = ratio * sliderWidth.value;
+  },
+});
+
+// binde computed-Wert an modelValue
+watch(value, (val) => {
+  _modelValue.value = val;
 });
 watch(_modelValue, (val) => {
-  if ([
-    InputState.danger,
-    InputState.warning,
-    InputState.info,
-  ].includes(props.state)) {
-    emit('validate', val);
-  }
+  if (val != null) value.value = val;
 });
 
-function onBlur(e: FocusEvent) {
-  emit('validate', props.modelValue);
-  emit('blur', e);
-}
+// -------------------------------
+// Maus-Events
+// -------------------------------
+const onMouseDownThumb = (e: MouseEvent) => {
+  if (props.disabled) return;
+  isDragging.value = true;
+  initialMouseX.value = e.clientX;
+  startXPosition.value = xPosition.value;
 
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+};
+
+const onMouseMove = (e: MouseEvent) => {
+  if (!isDragging.value) return;
+  let newX = startXPosition.value + (e.clientX - initialMouseX.value);
+  // clamp zwischen 0 und sliderWidth
+  newX = Math.max(0, Math.min(newX, sliderWidth.value));
+  xPosition.value = newX;
+};
+
+const onMouseUp = () => {
+  isDragging.value = false;
+  document.removeEventListener('mousemove', onMouseMove);
+  document.removeEventListener('mouseup', onMouseUp);
+};
+
+// -------------------------------
+// Setup
+// -------------------------------
 onMounted(() => {
-  handleEnumValidation(props.state, InputState, 'state');
+  handleEnumValidation(props.state, State, 'state');
   handleEnumValidation(props.size, Size, 'size');
 
-  if (!props.skeleton && props.modelValue !== null) {
-    emit('validate', props.modelValue);
+  if (sliderRef.value) {
+    sliderWidth.value = sliderRef.value.offsetWidth - 16;
+  }
+
+  // init position aus modelValue
+  if (_modelValue.value != null) {
+    value.value = _modelValue.value;
   }
 });
 </script>
@@ -102,39 +180,48 @@ onMounted(() => {
     :state="state"
     :messages="messages"
   >
-    <input
-      v-model.number="_modelValue"
-      :class="inputClasses"
-      type="range"
-      :disabled="disabled || skeleton"
-      :min="min"
-      :max="max"
-      v-bind="$attrs"
-      @blur="onBlur"
-    >
+    <div class="flex flex-col gap-2">
+      <div
+        ref="sliderRef"
+        class="relative w-full"
+      >
+        <!-- Track -->
+        <div class="w-full h-[8px] bg-base-300 rounded-md" />
+        <!-- Progress -->
+        <div
+          class="absolute h-[8px] rounded-md top-0 left-0"
+          :class="progressClasses"
+          :style="{ width: `${xPosition + 8}px` }"
+        />
+        <!-- Thumb -->
+        <div
+          :class="thumbClasses"
+          :style="{ left: `${xPosition}px` }"
+          @mousedown="onMouseDownThumb"
+        />
+      </div>
+
+      <div
+        v-if="steps > 0"
+        class="flex px-1.5"
+        :class="{
+          'justify-center': steps === 1,
+          'justify-between': steps > 1,
+        }"
+      >
+        <div
+          v-for="(step, index) in Array.from({
+            length: steps,
+          })"
+          :key="index"
+          class="bg-base-200 border border-base-300 h-[10px] w-[3px] rounded-md"
+        />
+      </div>
+    </div>
+
+    <!-- Debug -->
+    <pre>Value: {{ value }}</pre>
+    <pre>xPosition: {{ xPosition }}</pre>
+    <pre>modelValue: {{ _modelValue }}</pre>
   </AntField>
 </template>
-
-<style scoped>
-.ant-range-slider {
-  -webkit-appearance: none;
-}
-
-.ant-range-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  border-radius: 100%;
-  appearance: none;
-  width: 14px;
-  height: 14px;
-  background: #fff;
-  border: 1px solid #CBD5E1;
-  cursor: pointer;
-}
-
-.ant-range-slider::-moz-range-thumb {
-  width: 25px;
-  height: 25px;
-  background: #04AA6D;
-  cursor: pointer;
-}
-</style>

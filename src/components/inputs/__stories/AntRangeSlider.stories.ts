@@ -6,7 +6,7 @@ import {
   ref,
 } from 'vue';
 import {
-  InputState,
+  State,
 } from '../../../enums';
 
 const meta: Meta<typeof AntRangeSlider> = {
@@ -31,7 +31,7 @@ const meta: Meta<typeof AntRangeSlider> = {
       control: {
         type: 'select',
       },
-      options: Object.values(InputState),
+      options: Object.values(State),
     },
   },
 };
@@ -57,4 +57,11 @@ export const Docs: Story = {
       <AntRangeSlider v-bind="args" v-model="value"/>
     `,
   }),
+  args: {
+    label: 'Range slider',
+    min: 10,
+    max: 90,
+    steps: 5,
+    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
+  },
 };
