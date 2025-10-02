@@ -189,15 +189,15 @@
 }
 
 ::-webkit-scrollbar {
-  @apply w-3 h-3 bg-transparent;
+  @apply w-3 h-3 bg-base-100;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-transparent;
+  @apply bg-base-100;
 }
 
 ::-webkit-scrollbar-corner {
-  @apply bg-transparent;
+  @apply bg-base-100;
 }
 
 ::-webkit-scrollbar-thumb {
