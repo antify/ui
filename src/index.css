@@ -201,9 +201,9 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-base-200 rounded-full border-3 border-transparent cursor-pointer bg-clip-content;
+  @apply bg-base-300 rounded-full border-3 border-transparent cursor-pointer bg-clip-content;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-base-300 border-l-1 border-t-1;
+  @apply bg-base-400;
 }
