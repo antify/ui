@@ -6,6 +6,9 @@ import {
 import {
   ref,
 } from 'vue';
+import {
+  addDays, format,
+} from 'date-fns';
 
 const meta: Meta<typeof AntCalendar> = {
   title: 'Components/Date Picker',
@@ -57,5 +60,13 @@ export const Docs: Story = {
         </div>
       </div>`,
   }),
-  args: {},
+  args: {
+    specialDays: [
+      {
+        name: 'Special Day',
+        date: format(addDays(new Date(), 1), 'yyyy-MM-dd'),
+        color: 'success-300',
+      },
+    ],
+  },
 };
