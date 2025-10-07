@@ -24,10 +24,20 @@ const props = withDefaults(defineProps<{
   showWeekend?: boolean;
   showTodayButton?: boolean;
   skeleton?: boolean;
+  /**
+   * To highlight specific days with a custom color e.g. legal holidays
+   * date have the following format: yyyy-mm-dd
+   */
+  specialDays?: {
+    name: string | null;
+    date: string;
+    color: string;
+  }[];
 }>(), {
   showWeekend: false,
   showTodayButton: true,
   skeleton: false,
+  specialDays: () => [],
 });
 defineEmits([
   'select',
@@ -68,6 +78,8 @@ const matrix = computed(() => {
         isCurrentMonth,
         isWeekend: weekdayIndex === 5 || weekdayIndex === 6,
         isToday: date === format(Date.now(), 'yyyy-MM-dd') && isCurrentMonth,
+        isSpecialDay: !!props.specialDays.find(specialDay => specialDay.date === date),
+        specialDayColor: props.specialDays.find(specialDay => specialDay.date === date)?.color,
       };
 
       currentDate = addDays(currentDate, 1);
@@ -101,6 +113,12 @@ const weekDays = computed(() => {
       'F',
     ];
 });
+
+const getColorNumber = (color: string) => {
+  const match = color.match(/(\d+)/);
+
+  return match ? parseInt(match[0], 10) : null;
+};
 
 watch(() => props.modelValue, (val) => {
   const date = new Date(val);
@@ -156,7 +174,15 @@ watch(() => props.modelValue, (val) => {
                 'text-for-white-bg-font': day.isCurrentMonth,
                 'outline outline-primary-500': day.isToday,
                 'hover:bg-base-200 hover:text-base-200-font': day.date !== format(modelValue, 'yyyy-MM-dd'),
-                'bg-primary-500 text-primary-500-font hover:bg-primary-300 hover:text-primary-300-font': day.date === format(modelValue, 'yyyy-MM-dd'),
+                '!bg-primary-500 !text-primary-500-font hover:bg-primary-300 hover:text-primary-300-font': day.date === format(modelValue, 'yyyy-MM-dd'),
+              }"
+              :style="{
+                backgroundColor: day.isSpecialDay ? `var(--color-${day.specialDayColor})` : 'none',
+                color: day.isSpecialDay
+                  ? getColorNumber(day.specialDayColor) < 500
+                    ? 'var(--color-for-white-bg-font)'
+                    : '#fff'
+                  : 'none'
               }"
               @click="() => $emit('update:modelValue', new Date(day.date).getTime())"
             >
