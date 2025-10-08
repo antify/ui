@@ -42,7 +42,7 @@ function closeModal() {
     () => {
       emit('close');
     },
-    // Wait finishing the close animation
+    //  Wait finishing the close animation
     400,
   );
 }
