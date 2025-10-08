@@ -47,6 +47,10 @@ function closeModal() {
   );
 }
 
+defineExpose({
+  close: closeModal,
+});
+
 onMounted(() => {
   openBackground.value = true;
   setTimeout(() => openModal.value = true, props.fullscreen ? 0 : 100);
