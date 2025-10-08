@@ -57,6 +57,7 @@ function closeModal() {
       class="absolute inset-0 flex items-center justify-center z-[80] cursor-pointer overflow-hidden"
       :class="{'bg-black/50 backdrop-blur-xs': !fullscreen}"
       @click.self="closeModal"
+      data-e2e="modal"
     >
       <Transition :name="!fullscreen ? 'bounce' : 'bounce-slow'">
         <div

@@ -10,6 +10,7 @@ withDefaults(defineProps<{
   <div
     :class="{ 'p-2.5': padding }"
     class="bg-white overflow-auto"
+    data-e2e="content"
   >
     <slot />
   </div>

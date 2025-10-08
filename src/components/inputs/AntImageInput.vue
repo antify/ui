@@ -154,6 +154,7 @@ onBeforeUnmount(() => {
     :state="state"
     :messages="messages"
     :expanded="expanded"
+    data-e2e="image-input"
   >
     <div
       class="flex gap-2.5 w-full"
@@ -224,6 +225,7 @@ onBeforeUnmount(() => {
 
           <AntButton
             v-if="src"
+            data-e2e="remove-button"
             :size="Size.lg"
             :icon-left="faMultiply"
             :skeleton="skeleton"
@@ -239,6 +241,7 @@ onBeforeUnmount(() => {
 
           <AntButton
             v-else
+            data-e2e="upload-button"
             :size="Size.lg"
             :icon-left="faUpload"
             :skeleton="skeleton"

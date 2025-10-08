@@ -63,6 +63,7 @@ const labelClasses = computed(() => ({
     class="p-2 select-none transition-colors"
     :class="labelClasses"
     @click="onClick"
+    data-e2e="accordion-item"
   >
     <slot
       name="label"

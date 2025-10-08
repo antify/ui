@@ -260,7 +260,7 @@ onMounted(() => {
     :expanded="expanded"
     :messages="messages"
     label-for="noop"
-    data-e2e="select"
+    data-e2e="multi-select"
     @click-label="() => inputRef?.focus()"
   >
     <AntDropdown

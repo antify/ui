@@ -41,6 +41,7 @@ function itemClick(): void {
     v-bind="$attrs"
     :class="itemClasses"
     @click="itemClick"
+    data-e2e="navbar-item"
   >
     <AntIcon
       v-if="navbarItem.icon"

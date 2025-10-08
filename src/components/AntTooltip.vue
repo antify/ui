@@ -172,6 +172,7 @@ function onClick() {
   <div
     class="relative h-fit"
     data-e2e="tooltip"
+    :data-e2e-state="state"
   >
     <div
       ref="reference"

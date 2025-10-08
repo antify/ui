@@ -113,6 +113,8 @@ const iconColor = computed(() => {
     :is="to !== undefined && !disabled ? 'router-link' : 'div'"
     :to="to"
     :class="containerClasses"
+    data-e2e="tab-item"
+    :data-e2e-state="state"
   >
     <slot name="iconLeft">
       <AntIcon

@@ -187,6 +187,7 @@ const pagination = computed(() => {
           :grouped="Grouped.left"
           :filled="false"
           @click="() => page = page - 1"
+          data-e2e="left-arrow-button"
         />
 
         <AntButton
@@ -209,6 +210,7 @@ const pagination = computed(() => {
           :disabled="page === pages"
           :filled="false"
           @click="() => page = page + 1"
+          data-e2e="right-arrow-button"
         />
       </div>
     </div>

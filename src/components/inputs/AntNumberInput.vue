@@ -158,6 +158,7 @@ function onButtonBlur() {
     :limiter-max-value="limiter && max !== undefined ? max : undefined"
     :limiter-value="limiter && _modelValue !== undefined && _modelValue !== null ? Number(_modelValue) : undefined"
     :messages="messages"
+    data-e2e="number-input"
   >
     <div
       class="flex relative"
@@ -173,6 +174,7 @@ function onButtonBlur() {
         :readonly="readonly"
         @click="subtract"
         @blur="onButtonBlur"
+        data-e2e="decrement-button"
       />
 
       <AntBaseInput
@@ -204,6 +206,7 @@ function onButtonBlur() {
         :readonly="readonly"
         @click="add"
         @blur="onButtonBlur"
+        data-e2e="increment-button"
       />
     </div>
   </AntField>

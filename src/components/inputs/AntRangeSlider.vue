@@ -101,6 +101,7 @@ onMounted(() => {
     :description="description"
     :state="state"
     :messages="messages"
+    data-e2e="range-slider"
   >
     <input
       v-model.number="_modelValue"

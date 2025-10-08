@@ -36,7 +36,9 @@ defineExpose({
 </script>
 
 <template>
-  <div class="flex flex-col">
+  <div class="flex flex-col"
+    data-e2e="year-picker"
+  >
     <div
       ref="yearListRef"
       class="h-64 overflow-y-auto flex flex-col gap-2 p-2 border-b border-base-300"

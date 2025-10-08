@@ -34,6 +34,7 @@ const cardClass = computed(() => ({
   <div
     :class="cardClass"
     class="bg-white outline outline-offset-[-1px] outline-base-300 rounded-md relative"
+    data-e2e="card"
   >
     <slot />
 

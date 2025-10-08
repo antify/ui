@@ -52,6 +52,8 @@ onMounted(() => {
 <template>
   <div
     :class="classes"
+    data-e2e="input-description"
+    :data-e2e-state="state"
   >
     <AntSkeleton
       :visible="skeleton"
