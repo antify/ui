@@ -94,6 +94,7 @@ onMounted(() => {
   <span
     :class="classes"
     data-e2e="tag"
+    :data-e2e-state="state"
   >
     <span
       v-if="iconLeft"

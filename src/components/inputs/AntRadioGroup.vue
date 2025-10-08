@@ -130,6 +130,7 @@ onMounted(() => {
     :messages="messages"
     :size="fieldSize"
     label-for="noop"
+    data-e2e="radio-group"
   >
     <div
       ref="containerRef"

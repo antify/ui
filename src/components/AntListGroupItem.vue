@@ -69,6 +69,8 @@ onMounted(() => {
     :is="to !== undefined ? 'router-link' : 'div'"
     :to="to"
     :class="classes"
+    data-e2e="list-group-item"
+    :data-e2e-state="state"
   >
     <div :class="contentWrapperClasses">
       <div class="flex items-center gap-2.5">

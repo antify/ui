@@ -236,6 +236,8 @@ onMounted(() => {
     <div
       class="inline-flex h-fit"
       :class="{'w-full': props.expanded}"
+      data-e2e="button"
+      :data-e2e-state="state"
     >
       <AntTooltip
         class="w-full"
@@ -251,7 +253,7 @@ onMounted(() => {
           :tabindex="noFocus || hasInputState ? '-1' : '0'"
           v-bind="$attrs"
           :data-e2e="dataE2e"
-          :data-e2e-state="props.state"
+          :data-e2e-state="state"
           @click="(e: MouseEvent) => !props.readonly ? $emit('click', e) : null"
           @blur="(e: FocusEvent) => !props.readonly ? $emit('blur', e) : null"
         >

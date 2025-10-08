@@ -287,6 +287,8 @@ watch(_modelValue, (val) => {
   <div
     ref="reference"
     class="relative"
+    data-e2e="select-menu-container"
+    :data-e2e-state="state"
   >
     <slot />
 
@@ -295,14 +297,14 @@ watch(_modelValue, (val) => {
         v-if="isOpen"
         ref="floating"
         :class="dropdownClasses"
-        data-e2e="select-menu"
+        data-e2e="select-menu-list"
         :style="{minWidth: `${elementSize.width.value}px!important`, ...floatingStyles}"
       >
         <div class="flex flex-col gap-px">
           <div
             v-for="(option, index) in options"
             :key="`option-${index}`"
-            data-e2e="select-menu-item"
+            data-e2e="select-list-item"
             :class="{
               ...dropDownItemClasses,
               ...getActiveDropDownItemClasses(option),

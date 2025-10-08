@@ -96,6 +96,7 @@ const spinningElementClass = computed(() => {
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     data-e2e="spinner"
+    :data-e2e-state="state"
   >
     <path
       :class="circleClass"

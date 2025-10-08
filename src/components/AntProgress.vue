@@ -39,6 +39,7 @@ const progressWidth = computed(() => {
   <div
     class="relative bg-base-100 w-full rounded-md"
     :style="{ height: height }"
+    data-e2e="progress"
   >
     <div
       class="absolute rounded-md"

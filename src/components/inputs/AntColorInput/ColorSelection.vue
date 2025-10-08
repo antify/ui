@@ -42,6 +42,7 @@ onMounted(() => {
 
 <template>
   <div
+    data-e2e="color-selection"
     class="grid grid-cols-4 gap-1.5"
     :class="{
       'p-1': size === Size.xs2,

@@ -26,6 +26,7 @@ const hasLogoImageSlot = computed(() => useSlots()['logo-image'] || false);
         v-if="hasLogoImageSlot"
         :to="logoRoute"
         class="bg-white min-h-[60px] flex justify-center items-center p-2.5"
+        data-e2e="nav-left-layout-logo"
       >
         <slot name="logo-image" />
       </component>

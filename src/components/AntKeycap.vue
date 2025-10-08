@@ -52,6 +52,7 @@ const iconClasses = computed(() => {
     <div
       class="inline-flex justify-center items-center bg-base-300 rounded-md text-center text-base-300-font font-medium"
       :class="classes"
+      data-e2e="keycap"
     >
       <AntIcon
         v-if="icon"

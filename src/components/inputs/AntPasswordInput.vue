@@ -94,6 +94,7 @@ onMounted(() => {
     :description="description"
     :state="state"
     :messages="messages"
+    data-e2e="password-input"
   >
     <div class="flex relative">
       <AntBaseInput

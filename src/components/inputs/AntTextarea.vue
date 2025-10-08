@@ -192,6 +192,7 @@ defineExpose({
     :limiter-value="limiter ? _modelValue?.length : undefined"
     :messages="messages"
     :expanded-height="!resize"
+    data-e2e="textarea"
   >
     <AntSkeleton
       :visible="skeleton"

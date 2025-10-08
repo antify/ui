@@ -105,6 +105,7 @@ function onClickCalendar() {
     :description="description"
     :state="state"
     :messages="messages"
+    data-e2e="date-input"
   >
     <div class="flex">
       <AntBaseInput
@@ -142,6 +143,7 @@ function onClickCalendar() {
         :state="state as unknown as State"
         :size="size"
         @click="_modelValue = null"
+        data-e2e="clear-button"
       />
     </div>
   </AntField>

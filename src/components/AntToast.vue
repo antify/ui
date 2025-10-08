@@ -77,7 +77,7 @@ onMounted(() => {
   <div
     :class="classes"
     data-e2e="toast"
-    :data-e2e-state="props.state"
+    :data-e2e-state="state"
   >
     <div class="inline-flex items-center justify-between w-content gap-2">
       <div class="inline-flex items-center gap-2">
@@ -115,7 +115,7 @@ onMounted(() => {
       class="flex justify-end"
     >
       <AntButton
-        :state="props.state as unknown as State"
+        :state="state as unknown as State"
         :size="Size.md"
         filled
         @click="() => $emit('undo')"

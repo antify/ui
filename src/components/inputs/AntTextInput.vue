@@ -80,6 +80,7 @@ onMounted(() => {
     :limiter-max-value="limiter && max !== undefined ? max : undefined"
     :limiter-value="limiter ? _value?.length : undefined"
     :messages="messages"
+    data-e2e="text-input"
   >
     <AntBaseInput
       v-model="_value"

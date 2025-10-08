@@ -90,6 +90,7 @@ onMounted(() => {
     :limiter-max-value="limiter && max !== undefined ? max : undefined"
     :limiter-value="limiter && _modelValue !== undefined && _modelValue !== null ? Number(_modelValue) : undefined"
     :messages="messages"
+    data-e2e="unit-input"
   >
     <div
       class="flex relative"
