@@ -83,6 +83,7 @@ function closeModal() {
               :skeleton="skeleton"
               :icon-left="faXmark"
               @click="closeModal"
+              data-e2e="modal-close-button"
             />
           </div>
 
