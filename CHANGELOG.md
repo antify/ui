@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.1.0 (2025-10-08)
+
+
+### Features
+
+* **AntModal:** Expose close modal function ([299ed3c](https://github.com/antify/ui/commit/299ed3c718796c05ba8678dddb82b90b9d234cce))
+
 ## 4.0.0 (2025-10-08)
 
 
