@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import {
-  ref, useSlots, watch,
+  ref,
+  useSlots,
+  onMounted,
 } from 'vue';
 import {
   faXmark,
@@ -9,12 +11,10 @@ import AntButton from './AntButton.vue';
 import AntSkeleton from './AntSkeleton.vue';
 
 const emit = defineEmits([
-  'update:open',
   'close',
 ]);
 const props = withDefaults(defineProps<{
   title: string;
-  open: boolean;
   fullscreen?: boolean;
   padding?: boolean;
   skeleton?: boolean;
@@ -23,31 +23,35 @@ const props = withDefaults(defineProps<{
   padding: false,
   skeleton: false,
 });
-const openModal = ref(props.open);
-const openBackground = ref(props.open);
+const openModal = ref(false);
+const openBackground = ref(false);
 
-watch(() => props.open, (val) => {
-  function onKeydown(e: KeyboardEvent) {
-    if (e.key === 'Escape') {
-      closeModal();
-    }
+function onKeydown(e: KeyboardEvent) {
+  if (e.key === 'Escape') {
+    closeModal();
   }
-
-  if (val) {
-    openBackground.value = true;
-    setTimeout(() => openModal.value = true, props.fullscreen ? 0 : 100);
-    document.addEventListener('keydown', onKeydown);
-  } else {
-    openModal.value = false;
-    setTimeout(() => openBackground.value = false, props.fullscreen ? 0 : 100);
-    document.removeEventListener('keydown', onKeydown);
-  }
-});
+}
 
 function closeModal() {
-  emit('update:open', false);
-  emit('close');
+  openModal.value = false;
+
+  setTimeout(() => openBackground.value = false, props.fullscreen ? 0 : 100);
+  document.removeEventListener('keydown', onKeydown);
+
+  setTimeout(
+    () => {
+      emit('close');
+    },
+    // Wait finishing the close animation
+    400,
+  );
 }
+
+onMounted(() => {
+  openBackground.value = true;
+  setTimeout(() => openModal.value = true, props.fullscreen ? 0 : 100);
+  document.addEventListener('keydown', onKeydown);
+});
 </script>
 
 <template>

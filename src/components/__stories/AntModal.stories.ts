@@ -4,7 +4,7 @@ import {
   type Meta, type StoryObj,
 } from '@storybook/vue3';
 import {
-  computed,
+  ref,
 } from 'vue';
 import AntKeycap from '../AntKeycap.vue';
 
@@ -31,12 +31,7 @@ export const Docs: Story = {
       AntKeycap,
     },
     setup() {
-      const open = computed({
-        // @ts-ignore
-        get: () => args.open,
-        // @ts-ignore
-        set: (val) => args.open = val,
-      });
+      const open = ref(false);
 
       return {
         args,
@@ -64,7 +59,11 @@ export const Docs: Story = {
         </div>
         <AntButton @click="() => open = true" state="primary">Open Modal</AntButton>
 
-        <AntModal v-bind="args" v-model:open="open">
+        <AntModal
+          v-if="open"
+          v-bind="args"
+          @close="open = false"
+        >
           Lorem ipsum dolor sit amet, consetetur sadipscing elitr, <br/>
           sed diam nonumy eirmod tempor invidunt <br/>
           ut labore et dolore magna aliquyam erat, <br/>
@@ -88,7 +87,6 @@ export const Docs: Story = {
   }),
   args: {
     title: 'Lorem ipsum dolor',
-    open: false,
   },
 };
 
@@ -96,7 +94,6 @@ export const Fullscreen: Story = {
   render: Docs.render,
   args: {
     ...Docs.args,
-    open: true,
     fullscreen: true,
   },
 };
