@@ -10,6 +10,7 @@ import {
   watch,
   computed,
   defineEmits,
+  onMounted,
 } from 'vue';
 import AntDateSwitcher from './AntDateSwitcher.vue';
 import AntButton from '../AntButton.vue';
@@ -39,9 +40,10 @@ const props = withDefaults(defineProps<{
   skeleton: false,
   specialDays: () => [],
 });
-defineEmits([
+const emit = defineEmits([
   'select',
   'update:modelValue',
+  'datePreview',
 ]);
 
 const COUNT_ROWS = 6;
@@ -124,6 +126,26 @@ watch(() => props.modelValue, (val) => {
   const date = new Date(val);
   currentMonthIndex.value = date.getMonth();
   currentYear.value = date.getFullYear();
+});
+
+watch(() => [
+  currentMonthIndex.value,
+  currentYear.value,
+], ([
+  currentMonthIndex,
+  currentYear,
+]) => {
+  emit('datePreview', {
+    month: currentMonthIndex,
+    year: currentYear,
+  });
+});
+
+onMounted(() => {
+  emit('datePreview', {
+    month: currentMonthIndex.value,
+    year: currentYear.value,
+  });
 });
 </script>
 
