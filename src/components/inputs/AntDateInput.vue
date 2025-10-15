@@ -141,6 +141,7 @@ function onClickCalendar() {
         :icon-left="faMultiply"
         :grouped="Grouped.right"
         :state="state as unknown as State"
+        :skeleton="skeleton"
         :size="size"
         @click="_modelValue = null"
         data-e2e="clear-button"
