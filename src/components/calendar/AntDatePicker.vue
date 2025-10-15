@@ -151,7 +151,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div
+    data-e2e="date-picker"
+  >
     <AntDateSwitcher
       v-model:month="currentMonthIndex"
       v-model:year="currentYear"
@@ -232,6 +234,7 @@ onMounted(() => {
       <AntButton
         :skeleton="skeleton"
         @click="() => $emit('update:modelValue', Date.now())"
+        data-e2e="today-button"
       >
         Heute
       </AntButton>

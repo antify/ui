@@ -119,6 +119,7 @@ const onClickOutside = [
     <div
       ref="reference"
       v-on-click-outside="onClickOutside"
+      data-e2e="popover"
     >
       <slot />
     </div>
@@ -130,6 +131,7 @@ const onClickOutside = [
             ref="floating"
             :class="_popoverClasses"
             :style="floatingStyles"
+            data-e2e="popover"
           >
             <div class="shadow-lg border-base-300 rounded-md text-sm relative inline-flex flex-col">
               <div

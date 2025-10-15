@@ -96,6 +96,7 @@ onMounted(() => {
     <div
       :class="classes"
       data-e2e="alert"
+      :data-e2e-state="state"
     >
       <div
         v-if="icon || hasQuestionMark || dismissBtn || title"

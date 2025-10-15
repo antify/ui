@@ -161,6 +161,7 @@ onMounted(() => {
     :state="state"
     :messages="messages"
     label-for="noop"
+    data-e2e="switcher"
   >
     <div
       :class="containerClasses"
@@ -180,6 +181,7 @@ onMounted(() => {
         :disabled="disabled"
         @click="prevOption"
         @blur="onBlur"
+        data-e2e="left-arrow-button"
       />
 
       <AntSkeleton
@@ -206,6 +208,7 @@ onMounted(() => {
         :disabled="disabled"
         @click="nextOption"
         @blur="onBlur"
+        data-e2e="right-arrow-button"
       />
     </div>
   </AntField>

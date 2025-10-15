@@ -174,6 +174,7 @@ onMounted(() => {
     :size="size"
     :expanded="false"
     :messages="messages"
+    data-e2e="radio"
   >
     <div
       class="flex items-center"

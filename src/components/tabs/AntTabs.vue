@@ -56,6 +56,7 @@ function clickTab(tabItem: TabItem) {
     <div
       class="flex gap-px bg-base-300 border-base-300 overflow-x-auto"
       :class="scrollContainerClasses"
+      data-e2e="tabs"
     >
       <slot>
         <AntTabItem

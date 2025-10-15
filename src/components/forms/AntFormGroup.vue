@@ -34,6 +34,7 @@ const classes = computed(() => {
   <section
     class="flex"
     :class="classes"
+    data-e2e="form-group"
   >
     <slot />
   </section>

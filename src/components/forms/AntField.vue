@@ -75,6 +75,8 @@ const descriptionClasses = computed(() => ({
   <div
     class="flex flex-col items-start"
     :class="fieldClasses"
+    :data-e2e-state="_state"
+    :data-e2e-skeleton="skeleton"
   >
     <AntInputLabel
       :label="label"

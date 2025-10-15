@@ -53,5 +53,6 @@ const buttonIcon = computed(() => {
   <AntButton
     :size="buttonSize"
     :icon-left="buttonIcon"
+    data-e2e="table-sort-button"
   />
 </template>

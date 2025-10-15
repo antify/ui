@@ -271,6 +271,7 @@ onMounted(() => {
       :state="state"
       :expanded="expanded"
       :messages="messages"
+      data-e2e="tag-input"
     >
       <AntSkeleton
         :visible="skeleton"

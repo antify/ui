@@ -240,6 +240,7 @@ function onClickRemoveButton() {
 
 <template>
   <AntField
+    data-e2e="select"
     :label="label"
     :size="size"
     :skeleton="skeleton"
@@ -249,7 +250,6 @@ function onClickRemoveButton() {
     :expanded="expanded"
     :messages="messages"
     label-for="noop"
-    data-e2e="select"
     @click-label="() => inputRef?.focus()"
   >
     <div

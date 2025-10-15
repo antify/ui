@@ -20,6 +20,7 @@ withDefaults(defineProps<{
       <div
         class="flex flex-col rounded-md bg-base-300 gap-px relative border border-base-300 overflow-hidden"
         :class="{'invisible': skeleton, 'shadow-md': shadow}"
+        data-e2e="list-group"
       >
         <slot />
       </div>

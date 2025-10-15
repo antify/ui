@@ -231,6 +231,7 @@ function onClickClearIcon() {
   <div
     class="block relative w-full h-fit"
     :class="_wrapperClass"
+    data-e2e="base-input"
   >
     <AntSkeleton
       :visible="skeleton"
@@ -271,6 +272,7 @@ function onClickClearIcon() {
         title=""
         v-bind="$attrs"
         @blur="onBlur"
+        :data-e2e-state="state"
       >
 
       <div

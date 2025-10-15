@@ -295,8 +295,9 @@ watch(_modelValue, (val) => {
         v-if="isOpen"
         ref="floating"
         :class="dropdownClasses"
-        data-e2e="select-menu"
         :style="{minWidth: `${elementSize.width.value}px!important`, ...floatingStyles}"
+        data-e2e="select-menu"
+        :data-e2e-state="state"
       >
         <div class="flex flex-col gap-px">
           <div

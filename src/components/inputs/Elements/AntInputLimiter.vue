@@ -52,7 +52,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div :class="classes">
+  <div :class="classes"
+    data-e2e="input-limiter"
+    :data-e2e-state="state"
+  >
     <AntSkeleton
       :visible="skeleton"
       rounded
