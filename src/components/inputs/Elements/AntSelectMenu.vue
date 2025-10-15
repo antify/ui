@@ -329,7 +329,7 @@ watch(_modelValue, (val) => {
           :class="{...dropDownItemClasses}"
         >
           <slot name="empty">
-            No options available
+            Keine Einträge vorhanden
           </slot>
         </div>
       </div>

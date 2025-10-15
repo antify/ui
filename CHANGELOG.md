@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 4.1.4 (2025-10-14)
+
+### 4.1.3 (2025-10-10)
+
+### 4.1.2 (2025-10-09)
+
+### 4.1.1 (2025-10-09)
+
+## 4.1.0 (2025-10-08)
+
+
+### Features
+
+* **AntModal:** Expose close modal function ([299ed3c](https://github.com/antify/ui/commit/299ed3c718796c05ba8678dddb82b90b9d234cce))
+
+## 4.0.0 (2025-10-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* **AntModal:** The `open` prop for visibility control is removed. Consumers must now use `v-if` for conditional rendering. Use `@close` to handle the closing action.
+
+### Features
+
+* **AntModal:** Replace `open` prop with v-if logic ([a9e97e2](https://github.com/antify/ui/commit/a9e97e255c17951fd6336f4e3ede0601ba4c382e))
+
+### 3.3.3 (2025-10-08)
+
 ### 3.3.2 (2025-10-07)
 
 ### 3.3.1 (2025-10-07)
