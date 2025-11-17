@@ -309,7 +309,7 @@ watch(_modelValue, (val) => {
               ...getActiveDropDownItemClasses(option),
               'font-bold': option.isGroupLabel,
             }"
-            @mousedown="(e) => onClickDropDownItem(e, option)"
+            @click="(e) => onClickDropDownItem(e, option)"
             @mouseover="() => focusedDropDownItem = !option.isGroupLabel && option.value !== undefined ? option.value : null"
           >
             <slot
