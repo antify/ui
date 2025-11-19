@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.1.8](https://github.com/antify/ui/compare/v4.1.7...v4.1.8) (2025-11-19)
+
+
+### Bug Fixes
+
+* **AntSelect:** fix on blur validation ([#237](https://github.com/antify/ui/issues/237)) ([5458c0a](https://github.com/antify/ui/commit/5458c0a5449ea5bfde0491c8a7c9d7fbe4d4cbe5))
+
 ### 4.1.7 (2025-11-17)
 
 ### 4.1.6 (2025-10-15)
