@@ -205,6 +205,10 @@ watch(_modelValue, () => {
 });
 
 function onBlur(e: FocusEvent) {
+  if (isOpen.value) {
+    return;
+  }
+
   emit('validate', props.modelValue);
   emit('blur', e);
 }
