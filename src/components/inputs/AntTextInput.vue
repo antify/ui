@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import {
-  onMounted,
+  onMounted, computed,
 } from 'vue';
 import AntField from '../forms/AntField.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
+import AntButton from '../AntButton.vue';
+import AntIcon from '../AntIcon.vue';
 import {
   Size,
 } from '../../enums/Size.enum';
@@ -17,11 +19,14 @@ import {
   useVModel,
 } from '@vueuse/core';
 import {
-  InputState,
+  InputState, Grouped, State,
 } from '../../enums';
 import {
   BaseInputType,
 } from './Elements/__types';
+import {
+  faMultiply,
+} from '@fortawesome/free-solid-svg-icons';
 
 defineOptions({
   inheritAttrs: false,
@@ -48,6 +53,7 @@ const props = withDefaults(defineProps<{
   limiter?: boolean;
   max?: number;
   messages?: string[];
+  nullable?: boolean;
 }>(), {
   state: InputState.base,
   inputRef: null,
@@ -58,10 +64,12 @@ const props = withDefaults(defineProps<{
   type: TextInputType.text,
   limiter: false,
   messages: () => [],
+  nullable: false,
 });
 
 const _value = useVModel(props, 'modelValue', emit);
 const _inputRef = useVModel(props, 'inputRef', emit);
+const _nullable = computed(() => props.nullable && _value.value);
 
 onMounted(() => {
   handleEnumValidation(props.size, Size, 'size');
@@ -82,20 +90,33 @@ onMounted(() => {
     :messages="messages"
     data-e2e="text-input"
   >
-    <AntBaseInput
-      v-model="_value"
-      v-model:input-ref="_inputRef"
-      :type="type as unknown as BaseInputType"
-      wrapper-class="grow"
-      :state="state"
-      :size="size"
-      :skeleton="skeleton"
-      :disabled="disabled"
-      :readonly="readonly"
-      :placeholder="placeholder !== undefined ? placeholder : label"
-      :show-icon="true"
-      v-bind="$attrs"
-      @validate="val => $emit('validate', val)"
-    />
+    <div class="flex">
+      <AntBaseInput
+        v-model="_value"
+        v-model:input-ref="_inputRef"
+        :type="type as unknown as BaseInputType"
+        wrapper-class="grow"
+        :state="state"
+        :size="size"
+        :skeleton="skeleton"
+        :disabled="disabled"
+        :readonly="readonly"
+        :placeholder="placeholder !== undefined ? placeholder : label"
+        :show-icon="true"
+        v-bind="$attrs"
+        @validate="val => $emit('validate', val)"
+        :grouped="_nullable ? Grouped.left : Grouped.none"
+      />
+      <AntButton
+        v-if="_nullable"
+        :disabled="disabled"
+        :icon-left="faMultiply"
+        :grouped="Grouped.right"
+        :state="state as unknown as State"
+        :skeleton="skeleton"
+        :size="size"
+        @click="_value = null" data-e2e="clear-button"
+      />
+    </div>
   </AntField>
 </template>
