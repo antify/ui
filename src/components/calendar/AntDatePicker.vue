@@ -170,7 +170,7 @@ onMounted(() => {
       <div
         v-for="day in weekDays"
         :key="day"
-        class="text-for-white-bg-font text-center p-2"
+        class="text-for-white-bg-font p-2 text-center"
       >
         <AntSkeleton
           :visible="skeleton"
@@ -194,11 +194,12 @@ onMounted(() => {
           >
             <AntTooltip :delay="300">
               <div
-                class="rounded-md flex items-center justify-center p-2 font-semibold cursor-pointer transition-colors grow"
+                class="rounded-md flex items-center justify-center p-2 font-semibold cursor-pointer transition-colors w-full h-full"
                 :class="{
                   'text-base-400': !day.isCurrentMonth,
                   'text-for-white-bg-font': day.isCurrentMonth,
                   'outline outline-primary-500': day.isToday,
+                  'bg-primary-100': day.isWeekend,
                   'hover:bg-base-200 hover:text-base-200-font': day.date !== format(modelValue, 'yyyy-MM-dd'),
                   '!bg-primary-500 !text-primary-500-font hover:bg-primary-300 hover:text-primary-300-font': day.date === format(modelValue, 'yyyy-MM-dd'),
                 }"
@@ -233,8 +234,8 @@ onMounted(() => {
     >
       <AntButton
         :skeleton="skeleton"
-        @click="() => $emit('update:modelValue', Date.now())"
         data-e2e="today-button"
+        @click="() => $emit('update:modelValue', Date.now())"
       >
         Heute
       </AntButton>
