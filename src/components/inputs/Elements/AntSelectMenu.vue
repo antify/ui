@@ -60,14 +60,6 @@ const {
   whileElementsMounted: autoUpdate,
   middleware: [
     offset(8),
-    autoPlacement({
-      allowedPlacements: [
-        'top-start',
-        'top-end',
-        'bottom-start',
-        'bottom-end',
-      ],
-    }),
     flip({
       fallbackPlacements: [
         'top-start',
