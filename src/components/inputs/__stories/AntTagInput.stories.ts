@@ -90,12 +90,12 @@ const options: SelectOption[] = [
   {
     label: 'Dog',
     value: '3',
-    deleted: true,
+    isDeleted: true,
   },
   {
     label: 'Chicken',
     value: '4',
-    deleted: true,
+    isDeleted: true,
   },
 ];
 

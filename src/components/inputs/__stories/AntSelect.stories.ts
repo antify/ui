@@ -145,7 +145,7 @@ const withDeletedSelectOptions: SelectOption[] = [
   {
     label: 'Lion',
     value: 'lion',
-    deleted: true,
+    isDeleted: true,
   },
 ];
 

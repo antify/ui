@@ -143,10 +143,10 @@ const filteredOptions = computed(() => {
   return props.options.filter(option => {
     // Remove all elements that are in modelValue from the filtered options
     if (_modelValue.value && !props.allowDuplicates) {
-      return !_modelValue.value?.includes(option.value) && !option.deleted;
+      return !_modelValue.value?.includes(option.value) && !option.isDeleted;
     }
 
-    return option.label.toLowerCase().includes(tagInput.value.toLowerCase()) && !option.deleted;
+    return option.label.toLowerCase().includes(tagInput.value.toLowerCase()) && !option.isDeleted;
   });
 });
 
@@ -297,7 +297,7 @@ onMounted(() => {
             >
               <span
                 :class="{
-                  'line-through': options.find((option: SelectOption) => option.value === tag)?.deleted
+                  'line-through': options.find((option: SelectOption) => option.value === tag)?.isDeleted
                 }"
               >
                 {{ options.find((option: SelectOption) => option.value === tag)?.label }}

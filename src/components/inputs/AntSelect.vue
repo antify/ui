@@ -126,7 +126,7 @@ const inputClasses = computed(() => {
     // Disabled
     'opacity-50 cursor-not-allowed': props.disabled,
     // Option deleted
-    'line-through': selectedOption.value?.deleted,
+    'line-through': selectedOption.value?.isDeleted,
   };
 });
 const placeholderClasses = computed(() => {
@@ -278,7 +278,7 @@ function onClickRemoveButton() {
           v-model="_modelValue"
           v-model:open="isOpen"
           v-model:focused="dropDownFocused"
-          :options="(options || []).filter(option => !option.deleted)"
+          :options="(options || []).filter(option => !option.isDeleted)"
           :size="size"
           :state="state"
           :close-on-enter="true"
