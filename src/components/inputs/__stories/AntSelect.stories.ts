@@ -129,6 +129,26 @@ const options: SelectOption[] = [
   },
 ];
 
+const withDeletedSelectOptions: SelectOption[] = [
+  {
+    label: 'Dog',
+    value: 'dog',
+  },
+  {
+    label: 'Cat',
+    value: 'cat',
+  },
+  {
+    label: 'Bird',
+    value: 'bird',
+  },
+  {
+    label: 'Lion',
+    value: 'lion',
+    isDeleted: true,
+  },
+];
+
 const manySelectOptions: SelectOption[] = [
   ...Array(24).keys(),
 ].map((key) => ({
@@ -256,6 +276,15 @@ export const WithSlots: Story = {
       },
     ],
     description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
+  },
+};
+
+export const withDeleted: Story = {
+  render: Docs.render,
+  args: {
+    ...Docs.args,
+    modelValue: 'lion',
+    options: withDeletedSelectOptions,
   },
 };
 

@@ -28,7 +28,7 @@ const meta: Meta<typeof AntTagInput> = {
       control: 'text',
       table: {
         type: {
-          summary: 'string|null',
+          summary: 'string[]|null',
         },
       },
     },
@@ -90,10 +90,12 @@ const options: SelectOption[] = [
   {
     label: 'Dog',
     value: '3',
+    isDeleted: true,
   },
   {
     label: 'Chicken',
     value: '4',
+    isDeleted: true,
   },
 ];
 
@@ -104,6 +106,33 @@ export const Docs: Story = {
     },
     setup() {
       const value: Ref<string[]> = ref([]);
+
+      return {
+        args,
+        value,
+      };
+    },
+    template: `
+      <div style="width: 360px">
+        <AntTagInput v-model="value" v-bind="args"/>
+      </div>
+    `,
+  }),
+  args: {
+    options,
+  },
+};
+
+export const withDeleted: Story = {
+  render: (args) => ({
+    components: {
+      AntTagInput,
+    },
+    setup() {
+      const value: Ref<string[]> = ref([
+        '3',
+        '4',
+      ]);
 
       return {
         args,
