@@ -143,10 +143,10 @@ const filteredOptions = computed(() => {
   return props.options.filter(option => {
     // Remove all elements that are in modelValue from the filtered options
     if (_modelValue.value && !props.allowDuplicates) {
-      return !_modelValue.value?.includes(option.value);
+      return !_modelValue.value?.includes(option.value) && !option.deleted;
     }
 
-    return option.label.toLowerCase().includes(tagInput.value.toLowerCase());
+    return option.label.toLowerCase().includes(tagInput.value.toLowerCase()) && !option.deleted;
   });
 });
 
@@ -295,7 +295,13 @@ onMounted(() => {
               :dismiss="!readonly"
               @close="removeTag(tag)"
             >
-              {{ options.find((option: SelectOption) => option.value === tag)?.label }}
+              <span
+                :class="{
+                  'line-through': options.find((option: SelectOption) => option.value === tag)?.deleted
+                }"
+              >
+                {{ options.find((option: SelectOption) => option.value === tag)?.label }}
+              </span>
             </AntTag>
           </div>
 
