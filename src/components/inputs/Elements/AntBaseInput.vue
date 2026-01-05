@@ -59,8 +59,8 @@ const props = withDefaults(defineProps<{
   iconLeft?: IconDefinition;
   nullable?: boolean;
   inputRef?: null | HTMLInputElement;
-  min?: string;
-  max?: string;
+  min?: string | number;
+  max?: string | number;
 }>(), {
   state: InputState.base,
   disabled: false,
@@ -271,8 +271,8 @@ function onClickClearIcon() {
         :max="max"
         title=""
         v-bind="$attrs"
-        @blur="onBlur"
         :data-e2e-state="state"
+        @blur="onBlur"
       >
 
       <div
