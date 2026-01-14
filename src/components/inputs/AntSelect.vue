@@ -44,6 +44,9 @@ import {
   IconSize,
 } from '../__types';
 import AntSelectMenu from './Elements/AntSelectMenu.vue';
+import {
+  useVModel,
+} from '@vueuse/core';
 
 defineOptions({
   inheritAttrs: false,
@@ -66,6 +69,7 @@ const props = withDefaults(defineProps<{
   wrapperClass?: string | Record<string, boolean>;
   expanded?: boolean;
   messages?: string[];
+  inputRef?: HTMLInputElement | null;
 }>(), {
   state: InputState.base,
   grouped: Grouped.none,
@@ -76,9 +80,11 @@ const props = withDefaults(defineProps<{
   nullable: false,
   expanded: true,
   messages: () => [],
+  inputRef: null,
 });
 const emit = defineEmits([
   'update:modelValue',
+  'update:inputRef',
   'blur',
   'validate',
 ]);
@@ -174,7 +180,9 @@ const iconSize = computed(() => {
 
   return IconSize.xs;
 });
-const inputRef = ref<HTMLElement | null>(null);
+const _inputRef = defineModel('inputRef', {
+  default: null,
+});
 const dropDownRef = ref<HTMLElement | null>(null);
 const focusedDropDownItem = ref<string | number | null>(null);
 // TODO:: Hotfix to prevent missing required prop warning. Fix it with https://github.com/antify/ui-module/issues/52
@@ -221,7 +229,7 @@ function onClickOutside() {
   }
 
   isOpen.value = false;
-  inputRef.value?.focus();
+  _inputRef.value?.focus();
 }
 
 function onClickSelectInput(e: MouseEvent) {
@@ -232,14 +240,14 @@ function onClickSelectInput(e: MouseEvent) {
   }
 
   if (isOpen.value) {
-    inputRef.value?.focus();
+    _inputRef.value?.focus();
   }
 
   isOpen.value = !isOpen.value;
 }
 
 function onClickRemoveButton() {
-  inputRef.value?.focus();
+  _inputRef.value?.focus();
   _modelValue.value = null;
 }
 </script>
@@ -256,7 +264,7 @@ function onClickRemoveButton() {
     :expanded="expanded"
     :messages="messages"
     label-for="noop"
-    @click-label="() => inputRef?.focus()"
+    @click-label="() => _inputRef?.focus()"
   >
     <div
       class="h-fit flex flex-row w-full"
@@ -305,12 +313,12 @@ function onClickRemoveButton() {
           >
             <!-- Input -->
             <div
-              ref="inputRef"
+              ref="_inputRef"
               :class="inputClasses"
               :tabindex="disabled || readonly ? -1 : 0"
               v-bind="$attrs"
               @mousedown="onClickSelectInput"
-              @click="() => inputRef?.focus()"
+              @click="() => _inputRef?.focus()"
               @blur="onBlur"
             >
               <div

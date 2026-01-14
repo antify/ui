@@ -4,7 +4,7 @@ import type {
 } from '@storybook/vue3';
 import {
   ref,
-  computed,
+  computed, onMounted,
 } from 'vue';
 import {
   Size,
@@ -243,7 +243,8 @@ export const Docs: Story = {
       };
     },
     template: `
-      <AntColorInput v-bind="args" v-model="modelValue" />
+      <pre>{{itemRef}}</pre>
+      <AntColorInput v-bind="args" v-model="modelValue"/>
     `,
   }),
   args: {

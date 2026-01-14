@@ -27,6 +27,9 @@ import Big from 'big.js';
 import {
   getDecimalPlaces,
 } from '../../utils';
+import {
+  useVModel,
+} from '@vueuse/core';
 
 Big.RM = Big.roundHalfEven;
 
@@ -54,6 +57,7 @@ const props = withDefaults(defineProps<{
   limiter?: boolean;
   messages?: string[];
   indicators?: boolean;
+  inputRef?: HTMLInputElement | null;
 }>(), {
   state: InputState.base,
   disabled: false,
@@ -64,6 +68,7 @@ const props = withDefaults(defineProps<{
   limiter: false,
   messages: () => [],
   indicators: false,
+  inputRef: null,
 });
 const emit = defineEmits([
   'update:modelValue',
@@ -86,6 +91,7 @@ const _modelValue = computed({
     emit('update:modelValue', Number(val));
   },
 });
+const _inputRef = useVModel(props, 'inputRef', emit);
 
 const isPrevButtonDisabled = computed(() => {
   if (props.disabled) {
@@ -172,13 +178,14 @@ function onButtonBlur() {
         :skeleton="skeleton"
         :disabled="isPrevButtonDisabled"
         :readonly="readonly"
+        data-e2e="decrement-button"
         @click="subtract"
         @blur="onButtonBlur"
-        data-e2e="decrement-button"
       />
 
       <AntBaseInput
         v-model.number="_modelValue"
+        v-model:input-ref="_inputRef"
         :type="BaseInputType.number"
         :grouped="indicators ? Grouped.center : Grouped.none"
         wrapper-class="grow"
@@ -204,9 +211,9 @@ function onButtonBlur() {
         :skeleton="skeleton"
         :disabled="isNextButtonDisabled"
         :readonly="readonly"
+        data-e2e="increment-button"
         @click="add"
         @blur="onButtonBlur"
-        data-e2e="increment-button"
       />
     </div>
   </AntField>
