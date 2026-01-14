@@ -11,9 +11,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import AntTransitionCollapseHeight from '../transitions/AntTransitionCollapseHeight.vue';
 import AntTooltip from '../AntTooltip.vue';
-import {
-  Position,
-} from '../../enums/Position.enum';
 
 const props = defineProps<{
   navbarItem: NavbarItemTypes;
@@ -49,88 +46,38 @@ function itemClick(): void {
 </script>
 
 <template>
-  <template v-if="shouldRenderTooltip">
-    <AntTooltip
-      :position="Position.right"
-      :delay="400"
+  <component
+    :is="shouldRenderTooltip ? AntTooltip : 'div'"
+  >
+    <component
+      :is="navbarItem.to && !navbarItem.disabled ? 'router-link' : 'div'"
+      :to="navbarItem.to && !navbarItem.disabled ? navbarItem.to : undefined"
+      v-bind="$attrs"
+      :class="itemClasses"
+      @click.stop="itemClick"
+      data-e2e="navbar-item"
     >
-      <component
-        :is="navbarItem.to && !navbarItem.disabled ? 'router-link' : 'div'"
-        :to="navbarItem.to && !navbarItem.disabled ? navbarItem.to : undefined"
-        v-bind="$attrs"
-        :class="itemClasses"
-        @click="itemClick"
-        data-e2e="navbar-item"
-      >
+      <AntIcon
+        v-if="navbarItem.icon"
+        :icon="navbarItem.icon"
+        :color="navbarItem.active ? 'text-primary-500' : 'text-for-white-bg-font'"
+      />
+
+      <div class="grow select-none">
+        {{ navbarItem.label }}
+      </div>
+
+      <div v-if="navbarItem.children && navbarItem.children.length > 0">
         <AntIcon
-          v-if="navbarItem.icon"
-          :icon="navbarItem.icon"
+          :icon="open ? faChevronUp : faChevronDown"
           :color="navbarItem.active ? 'text-primary-500' : 'text-for-white-bg-font'"
         />
+      </div>
+    </component>
 
-        <div class="grow select-none">
-          {{ navbarItem.label }}
-        </div>
-
-        <div
-          v-if="navbarItem.children && navbarItem.children.length > 0"
-        >
-          <AntIcon
-            v-if="!open"
-            :icon="faChevronDown"
-            :color="navbarItem.active ? 'text-primary-500' : 'text-for-white-bg-font'"
-          />
-
-          <AntIcon
-            v-if="open"
-            :icon="faChevronUp"
-            :color="navbarItem.active ? 'text-primary-500' : 'text-for-white-bg-font'"
-          />
-        </div>
-      </component>
-
-      <template #content>
-        <div v-if="navbarItem.disabled">
-          {{ navbarItem.tooltipMessage }}
-        </div>
-      </template>
-    </AntTooltip>
-  </template>
-
-  <component
-    v-else
-    :is="navbarItem.to && !navbarItem.disabled ? 'router-link' : 'div'"
-    :to="navbarItem.to && !navbarItem.disabled ? navbarItem.to : undefined"
-    v-bind="$attrs"
-    :class="itemClasses"
-    @click="itemClick"
-    data-e2e="navbar-item"
-  >
-    <AntIcon
-      v-if="navbarItem.icon"
-      :icon="navbarItem.icon"
-      :color="navbarItem.active ? 'text-primary-500' : 'text-for-white-bg-font'"
-    />
-
-    <div class="grow select-none">
-      {{ navbarItem.label }}
-    </div>
-
-    <div
-      v-if="navbarItem.children && navbarItem.children.length > 0"
-    >
-      <AntIcon
-        v-if="!open"
-        :icon="faChevronDown"
-        :color="navbarItem.active ? 'text-primary-500' : 'text-for-white-bg-font'"
-      />
-
-      <AntIcon
-        v-if="open"
-        :icon="faChevronUp"
-        :color="navbarItem.active ? 'text-primary-500' : 'text-for-white-bg-font'"
-      />
-    </div>
+    <template #content v-if="shouldRenderTooltip">
+      <div>{{ navbarItem.tooltipMessage }}</div>
+    </template>
   </component>
 
   <AntTransitionCollapseHeight
