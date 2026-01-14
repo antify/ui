@@ -24,6 +24,9 @@ import {
   handleEnumValidation,
 } from '../../handler';
 import Big from 'big.js';
+import {
+  useVModel,
+} from '@vueuse/core';
 
 defineOptions({
   inheritAttrs: false,
@@ -46,6 +49,7 @@ const props = withDefaults(defineProps<{
   wrapperClass?: string | Record<string, boolean>;
   messages?: string[];
   decimalPlaces?: number;
+  inputRef?: HTMLInputElement | null;
 }>(), {
   state: InputState.base,
   disabled: false,
@@ -55,9 +59,11 @@ const props = withDefaults(defineProps<{
   limiter: false,
   messages: () => [],
   decimalPlaces: 2,
+  inputRef: null,
 });
 const emit = defineEmits([
   'update:modelValue',
+  'update:inputRef',
   'validate',
 ]);
 
@@ -73,6 +79,7 @@ const _modelValue = computed({
     emit('update:modelValue', Number(val));
   },
 });
+const _inputRef = useVModel(props, 'inputRef', emit);
 
 onMounted(() => {
   handleEnumValidation(props.state, InputState, 'state');
@@ -97,6 +104,7 @@ onMounted(() => {
     >
       <AntBaseInput
         v-model="_modelValue"
+        v-model:input-ref="_inputRef"
         :type="BaseInputType.number"
         :grouped="Grouped.left"
         wrapper-class="flex-grow"

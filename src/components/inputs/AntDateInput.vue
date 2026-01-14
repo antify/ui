@@ -49,6 +49,7 @@ const props = withDefaults(defineProps<{
   min?: string;
   max?: string;
   nullable?: boolean;
+  inputRef?: HTMLInputElement | null;
 }>(), {
   state: InputState.base,
   type: AntDateInputTypes.date,
@@ -58,13 +59,15 @@ const props = withDefaults(defineProps<{
   size: Size.md,
   messages: () => [],
   nullable: false,
+  inputRef: null,
 });
 const emit = defineEmits([
   'update:modelValue',
+  'update:inputRef',
   'validate',
 ]);
 const _modelValue = useVModel(props, 'modelValue', emit);
-const inputRef = ref<null | HTMLInputElement>(null);
+const _inputRef = useVModel(props, 'inputRef', emit);
 const iconColor = computed(() => {
   switch (props.state) {
     case InputState.info:
@@ -90,7 +93,7 @@ onMounted(() => {
 
 function onClickCalendar() {
   if (!props.disabled && !props.readonly) {
-    inputRef.value?.showPicker();
+    _inputRef.value?.showPicker();
   } else {
     return;
   }
@@ -110,7 +113,7 @@ function onClickCalendar() {
     <div class="flex">
       <AntBaseInput
         v-model="_modelValue"
-        v-model:input-ref="inputRef"
+        v-model:input-ref="_inputRef"
         :type="type as unknown as BaseInputType"
         :state="state"
         :size="size"
@@ -143,8 +146,8 @@ function onClickCalendar() {
         :state="state as unknown as State"
         :skeleton="skeleton"
         :size="size"
-        @click="_modelValue = null"
         data-e2e="clear-button"
+        @click="_modelValue = null"
       />
     </div>
   </AntField>

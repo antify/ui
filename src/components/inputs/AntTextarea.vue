@@ -39,6 +39,7 @@ defineOptions({
 
 const emit = defineEmits([
   'update:modelValue',
+  'update:inputRef',
   'validate',
   'blur',
 ]);
@@ -59,6 +60,7 @@ const props = withDefaults(defineProps<{
   max?: number;
   messages?: string[];
   resize?: boolean;
+  inputRef?: HTMLInputElement | null;
 }>(), {
   state: InputState.base,
   disabled: false,
@@ -70,6 +72,7 @@ const props = withDefaults(defineProps<{
   limiter: false,
   resize: true,
   messages: () => [],
+  inputRef: null,
 });
 
 const _modelValue = useVModel(props, 'modelValue', emit);
@@ -134,7 +137,7 @@ const iconColor = computed(() => {
 });
 const _wrapperClass = computed(() => classesToObjectSyntax(props.wrapperClass));
 const icon = computed(() => icons[props.state]);
-const textAreaRef = ref();
+const _inputRef = useVModel(props, 'inputRef', emit);
 const getIconSize = computed(() => {
   if (props.size === Size.xs || props.size === Size.xs2) {
     return IconSize.xs;
@@ -176,7 +179,7 @@ function onBlur(e: FocusEvent) {
 }
 
 defineExpose({
-  getTextAreaRef: () => textAreaRef.value,
+  getTextAreaRef: () => _inputRef.value,
 });
 
 </script>
@@ -202,7 +205,7 @@ defineExpose({
       :class="{...{'-mr-px': grouped !== Grouped.none}, ..._wrapperClass}"
     >
       <textarea
-        ref="textAreaRef"
+        ref="_inputRef"
         v-model="_modelValue"
         :class="inputClasses"
         :placeholder="placeholder !== undefined ? placeholder : label"

@@ -214,6 +214,7 @@ function onKeyDownDropDown(e: KeyboardEvent) {
 
     if (nextOptionIndex !== null) {
       focusedDropDownItem.value = props.options[nextOptionIndex].value || null;
+      _modelValue.value = props.options[nextOptionIndex].value || null;
     }
   }
 
@@ -226,6 +227,7 @@ function onKeyDownDropDown(e: KeyboardEvent) {
 
     if (prevOptionIndex !== null) {
       focusedDropDownItem.value = props.options[prevOptionIndex].value || null;
+      _modelValue.value = props.options[prevOptionIndex].value || null;
     }
   }
 

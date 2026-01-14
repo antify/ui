@@ -36,6 +36,7 @@ import type {
 
 const emit = defineEmits([
   'update:modelValue',
+  'update:inputRef',
   'blur',
   'validate',
 ]);
@@ -61,6 +62,7 @@ const props = withDefaults(defineProps<{
   openOnFocus?: boolean;
   autoCloseAfterSelection?: boolean;
   createCallback?: (item: string) => Promise<SelectOption>;
+  inputRef: HTMLInputElement | null;
 }>(), {
   size: AntTagInputSize.md,
   state: InputState.base,
@@ -75,6 +77,7 @@ const props = withDefaults(defineProps<{
   skeleton: false,
   autoCloseAfterSelection: false,
   placeholder: 'Add new tag',
+  inputRef: null,
 });
 
 const _modelValue: Ref<(string | number)[] | null> = useVModel(props, 'modelValue', emit);
@@ -83,7 +86,7 @@ const dropDownOpen = ref(false);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const focusedDropDownItem: Ref<string | number | null> = ref(null);
 const tagInput = ref('');
-const inputRef: Ref<HTMLElement | null> = ref(null);
+const _inputRef = useVModel(props, 'inputRef', emit);
 const inputContainerClasses = computed(() => {
   const variants: Record<InputState, string> = {
     [InputState.base]: 'outline-base-300 focus-within:outline-base-300 focus-within:ring-primary-200 bg-white',
@@ -316,7 +319,7 @@ onMounted(() => {
             />
 
             <input
-              ref="inputRef"
+              ref="_inputRef"
               v-model="tagInput"
               type="text"
               :placeholder="placeholder"
@@ -340,7 +343,7 @@ onMounted(() => {
           :model-value="null"
           :auto-select-first-on-open="!allowCreate"
           :options="filteredOptions"
-          :input-ref="inputRef"
+          :input-ref="_inputRef"
           :size="size as unknown as Size"
           :state="state"
           :focus-on-open="false"

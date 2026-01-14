@@ -17,9 +17,13 @@ import ColorSelection from './ColorSelection.vue';
 import {
   ColorButtonSize,
 } from './AntColorInput.types';
+import {
+  useVModel,
+} from '@vueuse/core';
 
 const emit = defineEmits([
   'update:modelValue',
+  'update:itemRef',
   'validate',
   'blur',
 ]);
@@ -38,6 +42,7 @@ const props = withDefaults(defineProps<{
   nullable?: boolean;
   colorsPerRow?: number;
   dropdownWrapperClass?: string | Record<string, boolean>;
+  itemRef?: null | HTMLDivElement;
 }>(), {
   state: InputState.base,
   size: Size.md,
@@ -45,6 +50,7 @@ const props = withDefaults(defineProps<{
   messages: () => [],
   nullable: false,
   colorsPerRow: 4,
+  itemRef: null,
 });
 const _value = computed({
   get() {
@@ -126,7 +132,7 @@ const inputButtonSize = computed(() => {
   }
 });
 const showDropdown = ref<boolean>(false);
-const itemRef = ref<HTMLDivElement | null>(null);
+const _itemRef = useVModel(props, 'itemRef', emit);
 
 /**
  * Validate default value if given after delayed data fetching.
@@ -150,7 +156,7 @@ function onBlur(e: FocusEvent) {
 function onColorSelect(val: string | null) {
   emit('update:modelValue', val);
   nextTick(() => showDropdown.value = false);
-  itemRef.value?.focus();
+  _itemRef.value?.focus();
 }
 
 function onClick() {
@@ -202,7 +208,7 @@ onMounted(() => {
           rounded
         >
           <div
-            ref="itemRef"
+            ref="_itemRef"
             :class="itemClasses"
             :tabindex="disabled || readonly ? -1 : 0"
             @click="onClick"

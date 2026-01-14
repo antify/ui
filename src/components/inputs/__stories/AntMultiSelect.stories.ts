@@ -93,36 +93,6 @@ export default meta;
 
 type Story = StoryObj<typeof AntMultiSelect>;
 
-const options1: MultiSelectOption[] = [
-  {
-    label: 'Option 1',
-    value: '1',
-  },
-  {
-    label: 'Option 2',
-    value: '2',
-  },
-  {
-    label: 'Option 3',
-    value: '3',
-  },
-];
-
-const options2: MultiSelectOption[] = [
-  {
-    label: 'Option 4',
-    value: '4',
-  },
-  {
-    label: 'Option 5',
-    value: '5',
-  },
-  {
-    label: 'Option 6',
-    value: '6',
-  },
-];
-
 export const Docs: Story = {
   render: (args) => ({
     components: {
@@ -131,44 +101,36 @@ export const Docs: Story = {
     },
     setup() {
       const value = ref([
-        '26',
+        '1',
+        '2',
         '3',
       ]);
 
-      const currentOptions = ref(options1);
-      const selectOptions = (number?: number) => currentOptions.value = number === 1 ? options1 : options2;
-
       return {
         args,
-        value,
         State,
-        currentOptions,
-        selectOptions,
+        value,
       };
     },
     template: `
-        <div class="flex flex-col justify-center gap-2.5">
-          <div class="flex gap-2.5">
-            <AntButton
-              :state="currentOptions[0].value === '1' ? State.primary : State.base"
-              :filled="currentOptions[0].value === '1'"
-              @click="selectOptions(1)"
-            >
-              Options 1
-            </AntButton>
-            <AntButton
-              :state="currentOptions[0].value === '4' ? State.primary : State.base"
-              :filled="currentOptions[0].value === '4'"
-              @click="selectOptions()"
-            >
-              Options 2
-            </AntButton>
-          </div>
-          <AntMultiSelect v-bind="args" v-model="value" :options="currentOptions"/>
-        </div>
+          <AntMultiSelect v-bind="args" v-model="value"/>
     `,
   }),
   args: {
+    options:[
+      {
+        label: 'Option 1',
+        value: '1',
+      },
+      {
+        label: 'Option 2',
+        value: '2',
+      },
+      {
+        label: 'Option 3',
+        value: '3',
+      },
+    ],
     label: 'Label',
     description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
     nullable: true,
@@ -246,6 +208,19 @@ export const Summary: Story = {
   }),
   args: {
     placeholder: 'Placeholder',
-    options: options1,
+    options: [
+      {
+        label: 'Option 1',
+        value: '1',
+      },
+      {
+        label: 'Option 2',
+        value: '2',
+      },
+      {
+        label: 'Option 3',
+        value: '3',
+      },
+    ],
   },
 };

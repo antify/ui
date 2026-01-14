@@ -32,6 +32,9 @@ import AntCheckboxGroup from './AntCheckboxGroup.vue';
 import type {
   AntCheckboxType,
 } from './__types/AntCheckbox.types';
+import {
+  useVModel,
+} from '@vueuse/core';
 
 defineOptions({
   inheritAttrs: false,
@@ -56,6 +59,7 @@ const props = withDefaults(defineProps<{
   wrapperClass?: string | Record<string, boolean>;
   expanded?: boolean;
   messages?: string[];
+  inputRef?: HTMLInputElement | null;
 }>(), {
   state: InputState.base,
   grouped: Grouped.none,
@@ -68,9 +72,11 @@ const props = withDefaults(defineProps<{
   singularValueLabel: 'item selected',
   pluralValueLabel: 'items selected',
   messages: () => [],
+  inputRef: null,
 });
 const emit = defineEmits([
   'update:modelValue',
+  'update:inputRef',
   'blur',
   'validate',
 ]);
@@ -78,6 +84,7 @@ const isOpen = ref(false);
 const _modelValue = computed<string[]>(() => [
   ...props.modelValue || [],
 ]);
+const _inputRef = useVModel(props, 'inputRef', emit);
 let actuallyValueLength = ref<number>(0);
 
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
@@ -170,7 +177,6 @@ const iconSize = computed(() => {
 const selectedCheckboxes = ref<string[]>([
   ..._modelValue.value,
 ]);
-const inputRef = ref<HTMLElement | null>(null);
 
 watch(isOpen, (val) => {
   if (!val) {
@@ -212,7 +218,7 @@ function onClickSelectInput(e: MouseEvent) {
   }
 
   if (isOpen.value) {
-    inputRef.value?.focus();
+    _inputRef.value?.focus();
   }
 
   isOpen.value = !isOpen.value;
@@ -261,7 +267,7 @@ onMounted(() => {
     :messages="messages"
     label-for="noop"
     data-e2e="multi-select"
-    @click-label="() => inputRef?.focus()"
+    @click-label="() => _inputRef?.focus()"
   >
     <AntDropdown
       v-model:show-dropdown="isOpen"
@@ -277,12 +283,12 @@ onMounted(() => {
         <!-- Input -->
         <div class="flex">
           <div
-            ref="inputRef"
+            ref="_inputRef"
             :class="inputClasses"
             :tabindex="disabled || readonly ? -1 : 0"
             v-bind="$attrs"
             @mousedown="onClickSelectInput"
-            @click="() => inputRef?.focus()"
+            @click="() => _inputRef?.focus()"
             @blur="onBlur"
           >
             <slot name="icon" />
