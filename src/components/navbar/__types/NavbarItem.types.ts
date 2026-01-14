@@ -12,4 +12,6 @@ export type NavbarItemTypes = {
   click?: () => void;
   icon?: IconDefinition;
   children?: NavbarItemTypes[];
+  disabled?: boolean;
+  tooltipMessage?: string;
 };

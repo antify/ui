@@ -53,6 +53,8 @@ export const Docs: Story = {
       {
         icon: faBook,
         label: 'Navbar item',
+        disabled: true,
+        tooltipMessage: 'Du hast keine Berechtigung um Rollen zu sehen.',
       },
       {
         label: 'Navbar item',
