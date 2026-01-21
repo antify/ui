@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-  computed, onMounted, ref,
+  computed, onMounted,
 } from 'vue';
 import AntField from '../forms/AntField.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
@@ -67,7 +67,9 @@ const emit = defineEmits([
   'validate',
 ]);
 const _modelValue = useVModel(props, 'modelValue', emit);
-const _inputRef = useVModel(props, 'inputRef', emit);
+const _inputRef = defineModel<HTMLInputElement | null>('inputRef', {
+  default: null,
+});
 const iconColor = computed(() => {
   switch (props.state) {
     case InputState.info:
@@ -92,11 +94,11 @@ onMounted(() => {
 });
 
 function onClickCalendar() {
-  if (!props.disabled && !props.readonly) {
-    _inputRef.value?.showPicker();
-  } else {
+  if (props.disabled || props.readonly) {
     return;
   }
+
+  _inputRef.value?.showPicker();
 }
 </script>
 
