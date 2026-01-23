@@ -62,7 +62,7 @@ const props = withDefaults(defineProps<{
   openOnFocus?: boolean;
   autoCloseAfterSelection?: boolean;
   createCallback?: (item: string) => Promise<SelectOption>;
-  inputRef: HTMLInputElement | null;
+  inputRef?: HTMLInputElement | null;
 }>(), {
   size: AntTagInputSize.md,
   state: InputState.base,
