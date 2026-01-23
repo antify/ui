@@ -81,10 +81,10 @@ const arrowTransform = computed(() => {
 const svgPathClasses = computed(() => {
   const variants: Record<InputState, string> = {
     [InputState.base]: 'fill-white stroke-white',
-    [InputState.danger]: 'fill-danger-500 stroke-danger-500',
-    [InputState.info]: 'fill-info-500 stroke-info-500',
-    [InputState.success]: 'fill-success-500 stroke-success-500',
-    [InputState.warning]: 'fill-warning-500 stroke-warning-500',
+    [InputState.danger]: 'fill-danger-100',
+    [InputState.info]: 'fill-info-100',
+    [InputState.success]: 'fill-success-100',
+    [InputState.warning]: 'fill-warning-100',
   };
 
   return {
@@ -107,10 +107,10 @@ const arrowSvgPathClasses = computed(() => {
 const contentClasses = computed(() => {
   const variants: Record<InputState, string> = {
     [InputState.base]: 'text-for-white-bg-font bg-white border-base-300',
-    [InputState.danger]: 'text-danger-500-font bg-danger-500 border-danger-500',
-    [InputState.info]: 'text-info-500-font bg-info-500 border-info-500',
-    [InputState.success]: 'text-success-500-font bg-success-500 border-success-500',
-    [InputState.warning]: 'text-warning-500-font bg-warning-500 border-warning-500',
+    [InputState.danger]: 'text-danger-100-font bg-danger-100 border-danger-500',
+    [InputState.info]: 'text-info-100-font bg-info-100 border-info-500',
+    [InputState.success]: 'text-success-100-font bg-success-100 border-success-500',
+    [InputState.warning]: 'text-warning-100-font bg-warning-100 border-warning-500',
   };
 
   return {
