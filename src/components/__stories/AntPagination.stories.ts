@@ -5,9 +5,6 @@ import {
 import {
   type Meta, type StoryObj,
 } from '@storybook/vue3';
-import {
-  vueRouter,
-} from 'storybook-vue3-router';
 
 const meta: Meta<typeof AntPagination> = {
   title: 'Components/Pagination',
@@ -17,14 +14,6 @@ const meta: Meta<typeof AntPagination> = {
       sort: 'requiredFirst',
     },
   },
-  argTypes: {
-    pageQuery: {
-      description: 'Which query parameter should be used, for writing the current page into it.',
-    },
-  },
-  decorators: [
-    vueRouter(),
-  ],
 };
 
 export default meta;

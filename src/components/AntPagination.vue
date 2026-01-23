@@ -1,12 +1,4 @@
 <script lang="ts" setup>
-// @ts-nocheck
-/**
- * TODO:: test me in storybook through vue router
- * TODO:: Fix ts errors
- */
-import {
-  useRouter, useRoute,
-} from 'vue-router';
 import {
   computed,
 } from 'vue';
@@ -19,14 +11,12 @@ import {
   State, Grouped,
 } from '../enums';
 
-const emit = defineEmits([
-  'update:skeleton',
+defineEmits([
   'input',
 ]);
 const props = withDefaults(
   defineProps<{
     pages: number;
-    pageQuery?: string;
     skeleton?: boolean;
 
     /**
@@ -36,38 +26,12 @@ const props = withDefaults(
     lightVersion?: boolean;
   }>(),
   {
-    pageQuery: 'p',
     skeleton: false,
     lightVersion: false,
   },
 );
-const router = useRouter();
-const route = useRoute();
-const page = computed({
-  get() {
-    const _page = route.query[props.pageQuery] >= 1 ? Number.parseInt(route.query[props.pageQuery]) : 1;
-
-    if (_page <= 0 || _page > props.pages) {
-      return 1;
-    }
-
-    return _page;
-  },
-  set(val) {
-    const query = {
-      ...route.query,
-    };
-    query[props.pageQuery] = val;
-
-    (async () => {
-      await router.push({
-        ...route,
-        query,
-      });
-
-      emit('input', val);
-    })();
-  },
+const _page = defineModel<number>('page', {
+  default: 1,
 });
 
 /**
@@ -84,15 +48,15 @@ const page = computed({
 const defaultPagination = computed(() => {
   const pagination = [];
 
-  if (page.value > 2 && props.pages > 3) {
+  if (_page.value > 2 && props.pages > 3) {
     pagination.push(1);
 
-    if (page.value > 3) {
+    if (_page.value > 3) {
       pagination.push('...');
     }
   }
 
-  if (page.value === 1) {
+  if (_page.value === 1) {
     pagination.push(1);
 
     if (props.pages >= 2) {
@@ -102,7 +66,7 @@ const defaultPagination = computed(() => {
     if (props.pages >= 3) {
       pagination.push(3);
     }
-  } else if (page.value === props.pages) {
+  } else if (_page.value === props.pages) {
     if (props.pages - 2 >= 1) {
       pagination.push(props.pages - 2);
     }
@@ -111,13 +75,13 @@ const defaultPagination = computed(() => {
     }
     pagination.push(props.pages);
   } else {
-    pagination.push(page.value - 1);
-    pagination.push(page.value);
-    pagination.push(page.value + 1);
+    pagination.push(_page.value - 1);
+    pagination.push(_page.value);
+    pagination.push(_page.value + 1);
   }
 
-  if (page.value < props.pages - 1 && props.pages > 3) {
-    if (page.value < props.pages - 2) {
+  if (_page.value < props.pages - 1 && props.pages > 3) {
+    if (_page.value < props.pages - 2) {
       pagination.push('...');
     }
     pagination.push(props.pages);
@@ -141,19 +105,19 @@ const lightPagination = computed(() => {
 
   pagination.push(1);
 
-  if (page.value > 2) {
+  if (_page.value > 2) {
     pagination.push('...');
   }
 
-  if (page.value > 1) {
-    pagination.push(page.value);
+  if (_page.value > 1) {
+    pagination.push(_page.value);
   }
 
-  if (page.value < props.pages - 1) {
+  if (_page.value < props.pages - 1) {
     pagination.push('...');
   }
 
-  if (page.value < props.pages) {
+  if (_page.value < props.pages) {
     pagination.push(props.pages);
   }
 
@@ -182,24 +146,24 @@ const pagination = computed(() => {
         class="inline-flex gap-px"
       >
         <AntButton
-          :disabled="page === 1"
+          :disabled="_page === 1"
           :icon-left="faChevronLeft"
           :grouped="Grouped.left"
           :filled="false"
-          @click="() => page = page - 1"
           data-e2e="left-arrow-button"
+          @click="() => _page = _page - 1"
         />
 
         <AntButton
           v-for="(pageObj) in pagination"
           :key="`pagination-button-${pageObj}`"
-          :state="pageObj === page ? State.primary : State.base"
-          :class="{'text-primary-500 z-10': pageObj === page}"
+          :state="pageObj === _page ? State.primary : State.base"
+          :class="{'text-primary-500 z-10': pageObj === _page}"
           :disabled="pageObj === '...'"
           :grouped="Grouped.center"
           :filled="false"
-          :readonly="pageObj === page"
-          @click="() => page = pageObj"
+          :readonly="pageObj === _page"
+          @click="() => _page = pageObj as number"
         >
           {{ pageObj }}
         </AntButton>
@@ -207,10 +171,10 @@ const pagination = computed(() => {
         <AntButton
           :icon-left="faChevronRight"
           :grouped="Grouped.right"
-          :disabled="page === pages"
+          :disabled="_page === pages"
           :filled="false"
-          @click="() => page = page + 1"
           data-e2e="right-arrow-button"
+          @click="() => _page = _page + 1"
         />
       </div>
     </div>
