@@ -11,11 +11,9 @@ import {
   State, Grouped,
 } from '../enums';
 
-defineEmits([
-  'input',
-]);
 const props = withDefaults(
   defineProps<{
+    modelValue: number;
     pages: number;
     skeleton?: boolean;
 
@@ -30,8 +28,16 @@ const props = withDefaults(
     lightVersion: false,
   },
 );
-const _page = defineModel<number>('page', {
-  default: 1,
+const emits = defineEmits([
+  'update:modelValue',
+]);
+const _page = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(value: number) {
+    emits('update:modelValue', value);
+  },
 });
 
 /**
