@@ -68,6 +68,7 @@ import AntListGroup from './AntListGroup.vue';
 import AntListGroupItem from './AntListGroupItem.vue';
 import AntModal from './AntModal.vue';
 import AntPagination from './AntPagination.vue';
+import AntItemsPerPage from './AntItemsPerPage.vue';
 import AntPopover from './AntPopover.vue';
 import AntSkeleton from './AntSkeleton.vue';
 import AntSpinner from './AntSpinner.vue';
@@ -124,6 +125,7 @@ export {
   AntListGroupItem,
   AntModal,
   AntPagination,
+  AntItemsPerPage,
   AntPopover,
   AntSkeleton,
   AntSpinner,
