@@ -47,6 +47,7 @@
     "dist"
   ],
   "peerDependencies": {
+    "tailwindcss": "4.0.7",
     "vue": "^3.4.29"
   },
   "dependencies": {
@@ -63,7 +64,6 @@
     "@vueuse/components": "^10.11.1",
     "@vueuse/core": "^10.11.1",
     "@vueuse/router": "^10.11.1",
-    "tailwindcss": "4.0.7",
     "big.js": "^6.2.2"
   },
   "devDependencies": {
