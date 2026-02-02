@@ -101,7 +101,7 @@ function confirmDialog() {
       <Transition :name="'bounce'">
         <div
           v-if="openDialog"
-          class="flex flex-col gap-px bg-base-300 overflow-hidden cursor-auto w-96 border border-base-300 rounded-md shadow-md"
+          class="flex flex-col gap-px bg-base-300 overflow-hidden cursor-auto min-w-96 border border-base-300 rounded-md shadow-md"
         >
           <div
             v-if="title || $slots['title']"
