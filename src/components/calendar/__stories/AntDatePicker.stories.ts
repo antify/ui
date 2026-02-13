@@ -52,7 +52,7 @@ export const Docs: Story = {
     },
     template: `
       <div class="p-4">
-        <div class="dashed w-64">
+        <div class="dashed w-72.5">
           <AntCalendar
             v-bind="args"
             v-model="value"

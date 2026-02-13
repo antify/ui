@@ -149,6 +149,7 @@ onMounted(() => {
 <template>
   <div
     data-e2e="date-picker"
+    class="w-72"
   >
     <AntDateSwitcher
       v-model:month="currentMonthIndex"
