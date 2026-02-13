@@ -14,7 +14,6 @@ import {
   onMounted,
 } from 'vue';
 import AntDateSwitcher from './AntDateSwitcher.vue';
-import AntButton from '../AntButton.vue';
 import AntSkeleton from '../AntSkeleton.vue';
 import AntTooltip from '../AntTooltip.vue';
 
@@ -25,7 +24,6 @@ const props = withDefaults(defineProps<{
    */
   modelValue: number;
   showWeekend?: boolean;
-  showTodayButton?: boolean;
   showWeekNumbers?: boolean;
   skeleton?: boolean;
   /**
@@ -39,7 +37,6 @@ const props = withDefaults(defineProps<{
   }[];
 }>(), {
   showWeekend: false,
-  showTodayButton: true,
   showWeekNumbers: false,
   skeleton: false,
   specialDays: () => [],
@@ -149,7 +146,6 @@ onMounted(() => {
 <template>
   <div
     data-e2e="date-picker"
-    class="w-72"
   >
     <AntDateSwitcher
       v-model:month="currentMonthIndex"
@@ -160,31 +156,39 @@ onMounted(() => {
     <div
       class="grid gap-1 p-px"
       :style="{
-    gridTemplateColumns: showWeekNumbers
-      ? `40px repeat(${weekDays.length - 1}, minmax(0, 1fr))`
-      : `repeat(${weekDays.length}, minmax(0, 1fr))`
+    gridTemplateColumns: `repeat(${weekDays.length}, minmax(0, 1fr))`
   }"
     >
       <div
         v-for="day in weekDays"
         :key="day"
-        class="text-for-white-bg-font p-2 text-center"
+        class="text-for-white-bg-font text-center flex items-center justify-center"
       >
         <AntSkeleton
           :visible="skeleton"
           rounded
+          class="w-full"
         >
-          {{ day }}
+          <div class="flex items-center justify-center w-full py-2">
+            {{ day }}
+          </div>
         </AntSkeleton>
       </div>
 
       <template v-for="(week, wIndex) in matrix" :key="wIndex">
         <div
           v-if="showWeekNumbers"
-          class="flex items-center justify-center px-4 font-semibold border-base-300"
+          class="flex text-base-500 font-semibold bg-base-100 rounded-md"
         >
-          <AntSkeleton :visible="skeleton" rounded>
-            {{ week.weekNumber }}
+          <AntSkeleton
+            :visible="skeleton"
+            rounded
+            class="w-full"
+          >
+
+            <div class="flex items-center justify-center w-full py-2">
+              {{ week.weekNumber }}
+            </div>
           </AntSkeleton>
         </div>
 
@@ -227,19 +231,6 @@ onMounted(() => {
           </AntSkeleton>
         </template>
       </template>
-    </div>
-
-    <div
-      v-if="showTodayButton"
-      class="flex items-center justify-center p-2"
-    >
-      <AntButton
-        :skeleton="skeleton"
-        data-e2e="today-button"
-        @click="() => $emit('update:modelValue', Date.now())"
-      >
-        Heute
-      </AntButton>
     </div>
   </div>
 </template>
