@@ -4,6 +4,7 @@ import {
   format,
   addDays,
   subDays,
+  getISOWeek,
 } from 'date-fns';
 import {
   ref,
@@ -25,6 +26,7 @@ const props = withDefaults(defineProps<{
   modelValue: number;
   showWeekend?: boolean;
   showTodayButton?: boolean;
+  showWeekNumbers?: boolean;
   skeleton?: boolean;
   /**
    * To highlight specific days with a custom color e.g. legal holidays
@@ -38,6 +40,7 @@ const props = withDefaults(defineProps<{
 }>(), {
   showWeekend: false,
   showTodayButton: true,
+  showWeekNumbers: false,
   skeleton: false,
   specialDays: () => [],
 });
@@ -53,68 +56,61 @@ const currentMonthIndex = ref(new Date(props.modelValue).getMonth());
 const currentYear = ref(new Date(props.modelValue).getFullYear());
 const matrix = computed(() => {
   /**
-   * The picker always starts with Monday.
-   * So if the first day of the current month is for example a wednesday,
-   * the first two days (Monday and Tuesday) should be from the previous month.
-   * Also, the last days of the matrix should be filled with the next month's days.
-   */
+  * The picker always starts with Monday.
+  * So if the first day of the current month is for example a wednesday,
+  * the first two days (Monday and Tuesday) should be from the previous month.
+  * Also, the last days of the matrix should be filled with the next month's days.
+  */
   const firstDateOfMonth = new Date(currentYear.value, currentMonthIndex.value, 1);
-  const _matrix = Array.from({
-    length: COUNT_ROWS,
-  }, () => Array(COUNT_COLUMNS).fill(null));
+  const _matrix = [];
 
   // Emit on which weekday the first day of the month is.
-  const weekdayIndexOfFirstDay = (firstDateOfMonth.getDay() - 1); // 0 is Monday, 6 is Sunday
+  let weekdayIndexOfFirstDay = firstDateOfMonth.getDay() - 1;
+  if (weekdayIndexOfFirstDay === -1) {
+    weekdayIndexOfFirstDay = 6
+  }
 
   // Subtract the gap from the currentDate
   let currentDate = subDays(firstDateOfMonth, weekdayIndexOfFirstDay);
 
-  for (let weekIndex = 0; weekIndex < _matrix.length; weekIndex++) {
+  for (let weekIndex = 0; weekIndex < COUNT_ROWS; weekIndex++) {
+    const weekDays = [];
+
+    const weekNumber = getISOWeek(currentDate);
+
     for (let weekdayIndex = 0; weekdayIndex < COUNT_COLUMNS; weekdayIndex++) {
       const date = format(currentDate, 'yyyy-MM-dd');
       const isCurrentMonth = getMonth(currentDate) === currentMonthIndex.value;
 
-      _matrix[weekIndex][weekdayIndex] = {
+      weekDays.push({
         date,
         label: format(currentDate, 'd'),
         month: getMonth(currentDate),
         isCurrentMonth,
         isWeekend: weekdayIndex === 5 || weekdayIndex === 6,
         isToday: date === format(Date.now(), 'yyyy-MM-dd') && isCurrentMonth,
-        isSpecialDay: !!props.specialDays.find(specialDay => specialDay.date === date),
-        specialDayColor: props.specialDays.find(specialDay => specialDay.date === date)?.color,
-      };
+        isSpecialDay: !!props.specialDays.find(sd => sd.date === date),
+        specialDayColor: props.specialDays.find(sd => sd.date === date)?.color,
+      });
 
       currentDate = addDays(currentDate, 1);
     }
+
+    _matrix.push({
+      weekNumber,
+      days: props.showWeekend ? weekDays : weekDays.filter(day => !day.isWeekend)
+    });
   }
 
-  if (props.showWeekend) {
-    return _matrix;
-  }
-
-  // Filter out weekends
-  return _matrix.map(week => week.filter(day => !day.isWeekend));
+  return _matrix;
 });
 const weekDays = computed(() => {
   // TODO:: Add translation support
-  return props.showWeekend
-    ? [
-      'M',
-      'D',
-      'M',
-      'D',
-      'F',
-      'S',
-      'S',
-    ]
-    : [
-      'M',
-      'D',
-      'M',
-      'D',
-      'F',
-    ];
+  const days = props.showWeekend ? ['M', 'D', 'M', 'D', 'F', 'S', 'S'] : ['M', 'D', 'M', 'D', 'F'];
+  if (props.showWeekNumbers) {
+    return ['KW', ...days];
+  }
+  return days;
 });
 
 const getColorNumber = (color: string) => {
@@ -162,10 +158,11 @@ onMounted(() => {
 
     <div
       class="grid gap-1 p-px"
-      :class="{
-        'grid-cols-7': showWeekend,
-        'grid-cols-5': !showWeekend,
-      }"
+      :style="{
+    gridTemplateColumns: showWeekNumbers
+      ? `40px repeat(${weekDays.length - 1}, minmax(0, 1fr))`
+      : `repeat(${weekDays.length}, minmax(0, 1fr))`
+  }"
     >
       <div
         v-for="day in weekDays"
@@ -180,14 +177,17 @@ onMounted(() => {
         </AntSkeleton>
       </div>
 
-      <template
-        v-for="week in matrix"
-        :key="week"
-      >
-        <template
-          v-for="day in week"
-          :key="day.date"
+      <template v-for="(week, wIndex) in matrix" :key="wIndex">
+        <div
+          v-if="showWeekNumbers"
+          class="flex items-center justify-center px-4 font-semibold border-base-300"
         >
+          <AntSkeleton :visible="skeleton" rounded>
+            {{ week.weekNumber }}
+          </AntSkeleton>
+        </div>
+
+        <template v-for="day in week.days" :key="day.date">
           <AntSkeleton
             :visible="skeleton"
             rounded
