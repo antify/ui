@@ -63,6 +63,7 @@ const matrix = computed(() => {
 
   // Emit on which weekday the first day of the month is.
   let weekdayIndexOfFirstDay = firstDateOfMonth.getDay() - 1;
+
   if (weekdayIndexOfFirstDay === -1) {
     weekdayIndexOfFirstDay = 6;
   }
@@ -72,7 +73,6 @@ const matrix = computed(() => {
 
   for (let weekIndex = 0; weekIndex < COUNT_ROWS; weekIndex++) {
     const weekDays = [];
-
     const weekNumber = getISOWeek(currentDate);
 
     for (let weekdayIndex = 0; weekdayIndex < COUNT_COLUMNS; weekdayIndex++) {
