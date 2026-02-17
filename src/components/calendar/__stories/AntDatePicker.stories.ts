@@ -24,17 +24,8 @@ const meta: Meta<typeof AntCalendar> = {
     AntDateSwitcher,
   },
   argTypes: {
-    modelValue: {
-      control: 'date',
-    },
     onSelect: {
       action: 'select',
-    },
-    'onUpdate:modelValue': {
-      action: 'update:modelValue',
-    },
-    onChangeCurrentVisibleMonth: {
-      action: 'changeCurrentVisibleMonth',
     },
   },
 };
@@ -46,7 +37,7 @@ type Story = StoryObj<typeof AntCalendar>;
 export const Docs: Story = {
   parameters: {
     chromatic: {
-      // disableSnapshot: false,
+      disableSnapshot: false,
     },
   },
   render: (args) => ({
