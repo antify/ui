@@ -162,6 +162,7 @@ export const Summary: Story = {
               <AntCalendar
                 v-model="value"
                 :show-weekend="true"
+                :show-week-numbers="true"
                 :special-days="args.specialDays"
               />
             </div>
