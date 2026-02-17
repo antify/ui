@@ -43,11 +43,6 @@ export default meta;
 type Story = StoryObj<typeof AntCalendar>;
 
 export const Docs: Story = {
-  parameters: {
-    chromatic: {
-      disableSnapshot: false,
-    },
-  },
   render: (args) => ({
     components: {
       AntCalendar,
@@ -80,6 +75,11 @@ export const Docs: Story = {
 };
 
 export const Summary: Story = {
+  parameters: {
+    chromatic: {
+      disableSnapshot: false,
+    },
+  },
   render: (args) => ({
     components: {
       AntCalendar,
