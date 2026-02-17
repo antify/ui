@@ -64,7 +64,7 @@ const matrix = computed(() => {
   // Emit on which weekday the first day of the month is.
   let weekdayIndexOfFirstDay = firstDateOfMonth.getDay() - 1;
   if (weekdayIndexOfFirstDay === -1) {
-    weekdayIndexOfFirstDay = 6
+    weekdayIndexOfFirstDay = 6;
   }
 
   // Subtract the gap from the currentDate
@@ -95,7 +95,7 @@ const matrix = computed(() => {
 
     _matrix.push({
       weekNumber,
-      days: props.showWeekend ? weekDays : weekDays.filter(day => !day.isWeekend)
+      days: props.showWeekend ? weekDays : weekDays.filter(day => !day.isWeekend),
     });
   }
 
@@ -103,10 +103,28 @@ const matrix = computed(() => {
 });
 const weekDays = computed(() => {
   // TODO:: Add translation support
-  const days = props.showWeekend ? ['M', 'D', 'M', 'D', 'F', 'S', 'S'] : ['M', 'D', 'M', 'D', 'F'];
+  const days = props.showWeekend ? [
+    'M',
+    'D',
+    'M',
+    'D',
+    'F',
+    'S',
+    'S',
+  ] : [
+    'M',
+    'D',
+    'M',
+    'D',
+    'F',
+  ];
   if (props.showWeekNumbers) {
-    return ['KW', ...days];
+    return [
+      'KW',
+      ...days,
+    ];
   }
+
   return days;
 });
 
@@ -157,8 +175,8 @@ onMounted(() => {
     <div
       class="grid gap-1"
       :style="{
-    gridTemplateColumns: `repeat(${weekDays.length}, minmax(0, 1fr))`
-  }"
+        gridTemplateColumns: `repeat(${weekDays.length}, minmax(0, 1fr))`
+      }"
     >
       <div
         v-for="day in weekDays"
@@ -176,7 +194,10 @@ onMounted(() => {
         </AntSkeleton>
       </div>
 
-      <template v-for="(week, wIndex) in matrix" :key="wIndex">
+      <template
+        v-for="(week, wIndex) in matrix"
+        :key="wIndex"
+      >
         <div
           v-if="showWeekNumbers"
           class="flex text-base-500 font-semibold bg-base-100 rounded-md"
@@ -186,14 +207,16 @@ onMounted(() => {
             rounded
             class="w-full"
           >
-
             <div class="flex items-center justify-center w-full py-2">
               {{ week.weekNumber }}
             </div>
           </AntSkeleton>
         </div>
 
-        <template v-for="day in week.days" :key="day.date">
+        <template
+          v-for="day in week.days"
+          :key="day.date"
+        >
           <AntSkeleton
             :visible="skeleton"
             rounded
