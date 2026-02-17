@@ -4,7 +4,7 @@ import {
   type Meta, type StoryObj,
 } from '@storybook/vue3';
 import {
-  ref,
+  ref, watch,
 } from 'vue';
 import {
   addDays, format,
@@ -24,6 +24,14 @@ const meta: Meta<typeof AntCalendar> = {
     AntDateSwitcher,
   },
   argTypes: {
+    modelValue: {
+      control: 'number',
+      table: {
+        type: {
+          summary: 'number',
+        },
+      },
+    },
     onSelect: {
       action: 'select',
     },
@@ -45,10 +53,7 @@ export const Docs: Story = {
       AntCalendar,
     },
     setup() {
-      const value = ref(Date.now());
-
       return {
-        value,
         args,
       };
     },
@@ -57,12 +62,13 @@ export const Docs: Story = {
         <div class="dashed w-72.5">
           <AntCalendar
             v-bind="args"
-            v-model="value"
+            v-model="args.modelValue"
           />
         </div>
       </div>`,
   }),
   args: {
+    modelValue: new Date().setHours(0, 0, 0, 0),
     specialDays: [
       {
         name: 'Special Day',
@@ -180,5 +186,41 @@ export const Summary: Story = {
         color: 'warning-200',
       },
     ],
+  },
+};
+
+export const SpecificDateTest: Story = {
+  render: (args) => ({
+    components: {
+      AntCalendar,
+    },
+    setup() {
+      const value = ref(Number(args.modelValue));
+
+      return {
+        value,
+        args,
+      };
+    },
+    template: `
+      <div class="p-4 w-72.5">
+        <AntCalendar
+          v-bind="args"
+          v-model="value"
+        />
+        <div class="mt-2 text-xs text-gray-400">
+          Raw Timestamp: {{ value }}
+        </div>
+      </div>`,
+  }),
+  args: {
+    modelValue: new Date('2026-05-20').getTime(),
+    showWeekend: true,
+  },
+  argTypes: {
+    modelValue: {
+      control: 'number',
+      description: 'Timestamp in milliseconds',
+    },
   },
 };
