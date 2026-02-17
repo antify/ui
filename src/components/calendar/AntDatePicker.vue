@@ -151,10 +151,11 @@ onMounted(() => {
       v-model:month="currentMonthIndex"
       v-model:year="currentYear"
       :skeleton="skeleton"
+      class="pb-1"
     />
 
     <div
-      class="grid gap-1 p-px"
+      class="grid gap-1"
       :style="{
     gridTemplateColumns: `repeat(${weekDays.length}, minmax(0, 1fr))`
   }"
