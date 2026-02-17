@@ -188,39 +188,3 @@ export const Summary: Story = {
     ],
   },
 };
-
-export const SpecificDateTest: Story = {
-  render: (args) => ({
-    components: {
-      AntCalendar,
-    },
-    setup() {
-      const value = ref(Number(args.modelValue));
-
-      return {
-        value,
-        args,
-      };
-    },
-    template: `
-      <div class="p-4 w-72.5">
-        <AntCalendar
-          v-bind="args"
-          v-model="value"
-        />
-        <div class="mt-2 text-xs text-gray-400">
-          Raw Timestamp: {{ value }}
-        </div>
-      </div>`,
-  }),
-  args: {
-    modelValue: new Date('2026-05-20').getTime(),
-    showWeekend: true,
-  },
-  argTypes: {
-    modelValue: {
-      control: 'number',
-      description: 'Timestamp in milliseconds',
-    },
-  },
-};
