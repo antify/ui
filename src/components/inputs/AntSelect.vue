@@ -70,6 +70,7 @@ const props = withDefaults(defineProps<{
   expanded?: boolean;
   messages?: string[];
   inputRef?: HTMLInputElement | null;
+  maxHeight?: string;
 }>(), {
   state: InputState.base,
   grouped: Grouped.none,
@@ -81,6 +82,7 @@ const props = withDefaults(defineProps<{
   expanded: true,
   messages: () => [],
   inputRef: null,
+  maxHeight: '350px',
 });
 const emit = defineEmits([
   'update:modelValue',
@@ -290,7 +292,12 @@ function onClickRemoveButton() {
           :size="size"
           :state="state"
           :close-on-enter="true"
+          :max-height="maxHeight"
         >
+          <template #contentBefore>
+            <slot name="selectMenuContentBefore" />
+          </template>
+
           <template #contentLeft="props">
             <slot
               name="contentLeft"

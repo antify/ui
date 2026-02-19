@@ -18,9 +18,14 @@ import {
 } from '../__types/AntSelect.types';
 import {
   InputState,
-} from '../../../enums';
+} from '../../../enums/State.enum';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
+import AntSearch from '../AntSearch.vue';
+import AntButton from '../../AntButton.vue';
+import {
+  State, Grouped as GroupedEnum,
+} from '../../../enums';
 
 const meta: Meta<typeof AntSelect> = {
   title: 'Inputs/Select',
@@ -438,6 +443,134 @@ export const ellipsisText: Story = {
     nullable: true,
   },
 };
+
+export const AdvancedCustomDropdown: Story = {
+  render: (args) => ({
+    components: {
+      AntSelect,
+      AntSearch,
+      AntButton,
+      AntIcon,
+    },
+    setup() {
+      const searchTerm = ref('');
+      const activeFilter = ref('all');
+      const modelValue = ref(args.modelValue);
+
+      const rawPractitioners = [
+        {
+          name: 'Dr. Arnim Zola',
+          type: 'practitioner',
+          loc: 'Berlin',
+        },
+        {
+          name: 'Bucky Barnes',
+          type: 'pzrPractitioner',
+          loc: 'Berlin',
+        },
+        {
+          name: 'Steve Rogers',
+          type: 'practitioner',
+          loc: 'New York',
+        },
+        {
+          name: 'Natasha Romanoff',
+          type: 'pzrPractitioner',
+          loc: 'New York',
+        },
+        {
+          name: 'Sam Wilson',
+          type: 'practitioner',
+          loc: 'New York',
+        },
+      ];
+
+      const filteredOptions = computed(() => {
+        const search = searchTerm.value.toLowerCase();
+        const groups: Record<string, any[]> = {};
+
+        rawPractitioners.forEach(p => {
+          if ((activeFilter.value === 'all' || p.type === activeFilter.value) &&
+            p.name.toLowerCase().includes(search)) {
+            if (!groups[p.loc]) groups[p.loc] = [];
+            groups[p.loc].push({
+              label: p.name,
+              value: p.name,
+              // Поле 'tag' теперь поддерживается твоим AntSelectMenu
+              tag: p.type === 'practitioner' ? 'ZA' : 'ZMP',
+            });
+          }
+        });
+
+        const result: any[] = [];
+        Object.keys(groups).sort().forEach(loc => {
+          result.push({
+            label: loc,
+            isGroupLabel: true,
+          });
+          result.push(...groups[loc]);
+        });
+
+        return result;
+      });
+
+      return {
+        args,
+        modelValue,
+        searchTerm,
+        activeFilter,
+        filteredOptions,
+        State,
+        GroupedEnum,
+      };
+    },
+    template: `
+      <div class="p-10 h-[500px] bg-gray-50">
+        <AntSelect
+          v-bind="args"
+          v-model="modelValue"
+          :options="filteredOptions"
+        >
+          <template #selectMenuContentBefore>
+            <div class="p-2 border-b border-base-200 bg-white sticky top-0 z-30 flex flex-col gap-2">
+              <AntSearch v-model="searchTerm" placeholder="Search practitioner..." />
+
+              <div class="flex">
+                <AntButton
+                  :state="activeFilter === 'all' ? State.primary : State.base"
+                  :filled="activeFilter === 'all'"
+                  :grouped="GroupedEnum.left"
+                  size="sm"
+                  @click="activeFilter = 'all'"
+                >Alle</AntButton>
+                <AntButton
+                  :state="activeFilter === 'practitioner' ? State.primary : State.base"
+                  :filled="activeFilter === 'practitioner'"
+                  :grouped="GroupedEnum.center"
+                  size="sm"
+                  @click="activeFilter = 'practitioner'"
+                >ZA</AntButton>
+                <AntButton
+                  :state="activeFilter === 'pzrPractitioner' ? State.primary : State.base"
+                  :filled="activeFilter === 'pzrPractitioner'"
+                  :grouped="GroupedEnum.right"
+                  size="sm"
+                  @click="activeFilter = 'pzrPractitioner'"
+                >ZMP</AntButton>
+              </div>
+            </div>
+          </template>
+        </AntSelect>
+      </div>
+    `,
+  }),
+  args: {
+    label: 'Practitioner Search',
+    description: 'Sticky groups, Tags and Search inside base AntSelect',
+    modelValue: null,
+  },
+};
+
 export const summary: Story = {
   parameters: {
     chromatic: {

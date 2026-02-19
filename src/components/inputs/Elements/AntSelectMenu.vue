@@ -43,12 +43,14 @@ const props = withDefaults(defineProps<{
   closeOnEnter?: boolean;
   autoSelectFirstOnOpen?: boolean;
   closeOnSelectItem?: boolean;
+  maxHeight?: string;
 }>(), {
   state: InputState.base,
   focusOnOpen: true,
   closeOnEnter: false,
   autoSelectFirstOnOpen: true,
   closeOnSelectItem: true,
+  maxHeight: '350px',
 });
 const reference = ref<HTMLElement | null | undefined>(props.inputRef);
 const elementSize = useElementSize(reference);
@@ -289,10 +291,15 @@ watch(_modelValue, (val) => {
         v-if="isOpen"
         ref="floating"
         :class="dropdownClasses"
-        :style="{minWidth: `${elementSize.width.value}px!important`, ...floatingStyles}"
+        :style="{
+          minWidth: `${elementSize.width.value}px!important`,
+          maxHeight: props.maxHeight,
+          ...floatingStyles}"
         data-e2e="select-menu"
         :data-e2e-state="state"
       >
+        <slot name="contentBefore" />
+
         <div class="flex flex-col gap-px">
           <div
             v-for="(option, index) in options"
@@ -302,19 +309,35 @@ watch(_modelValue, (val) => {
               ...dropDownItemClasses,
               ...getActiveDropDownItemClasses(option),
               'font-bold': option.isGroupLabel,
+              'sticky top-0 z-20 border-y border-base-300 font-bold': option.isGroupLabel,
+              'cursor-pointer': !option.isGroupLabel
             }"
             @click="(e) => onClickDropDownItem(e, option)"
             @mouseover="() => focusedDropDownItem = !option.isGroupLabel && option.value !== undefined ? option.value : null"
           >
-            <slot
-              name="contentLeft"
-              v-bind="option"
-            />
-            {{ option.label }}
-            <slot
-              name="contentRight"
-              v-bind="option"
-            />
+            <div class="flex items-center justify-between w-full">
+              <div class="flex items-center gap-2">
+                <slot
+                  name="contentLeft"
+                  v-bind="option"
+                />
+                <span>{{ option.label }}</span>
+              </div>
+
+              <div
+                v-if="option.tag"
+                class="ml-2"
+              >
+                <span class="px-1 py-0.5 rounded bg-base-200 text-[12px] font-bold text-base-600">
+                  {{ option.tag }}
+                </span>
+              </div>
+
+              <slot
+                name="contentRight"
+                v-bind="option"
+              />
+            </div>
           </div>
         </div>
 
