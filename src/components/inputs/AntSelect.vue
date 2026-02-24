@@ -272,7 +272,7 @@ function onClickRemoveButton() {
       class="h-fit flex flex-row w-full"
     >
       <div
-        v-on-click-outside="[onClickOutside, { ignore: [dropDownRef] }]"
+        v-on-click-outside="onClickOutside"
         class="relative w-full"
         :class="{'cursor-pointer': !skeleton && !readonly}"
       >
@@ -310,6 +310,10 @@ function onClickRemoveButton() {
               name="contentRight"
               v-bind="{...props}"
             />
+          </template>
+
+          <template #empty>
+            <slot name="empty" />
           </template>
 
           <AntSkeleton

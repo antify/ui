@@ -318,7 +318,7 @@ watch(_modelValue, (val) => {
                 ...dropDownItemClasses,
                 ...getActiveDropDownItemClasses(option),
                 'font-bold': option.isGroupLabel,
-                'sticky top-0 z-20  border-base-300 font-bold': option.isGroupLabel,
+                'sticky top-0 z-20 border-base-300 font-bold': option.isGroupLabel,
                 'cursor-pointer': !option.isGroupLabel
               }"
               @click="(e) => onClickDropDownItem(e, option)"
@@ -351,7 +351,12 @@ watch(_modelValue, (val) => {
 
           <div
             v-if="options.length === 0"
-            :class="{...dropDownItemClasses}"
+            :class="[
+              dropDownItemClasses,
+              {
+                'flex items-center justify-center p-2 pt-2 bg-white font-medium italic text-center': $slots.contentBefore
+              }
+            ]"
           >
             <slot name="empty">
               Keine Einträge vorhanden

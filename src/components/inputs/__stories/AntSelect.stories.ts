@@ -650,7 +650,7 @@ export const AdvancedCustomDropdown: Story = {
           :options="filteredOptions"
         >
           <template #selectMenuContentBefore>
-            <div class="flex p-2 border-b border-base-200 bg-white gap-2">
+            <div class="flex p-2 border-b border-base-300 bg-white gap-2">
               <AntSearch v-model="searchTerm" placeholder="Search practitioner..." />
 
               <div class="flex">
@@ -674,6 +674,10 @@ export const AdvancedCustomDropdown: Story = {
                 >ZMP</AntButton>
               </div>
             </div>
+          </template>
+
+          <template #empty>
+            Es konnten keine Behandler gefunden werden
           </template>
         </AntSelect>
       </div>
