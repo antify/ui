@@ -98,7 +98,15 @@ const _modelValue = computed({
   },
 });
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
-const valueLabel = computed(() => props.options.find(option => option.value === _modelValue.value)?.label || null);
+
+const lastValidLabel = ref<string | null>(null);
+
+const valueLabel = computed(() => {
+  const found = props.options.find(option => option.value === _modelValue.value);
+
+  return found ? found.label : lastValidLabel.value;
+});
+
 const selectedOption = computed(() => props.options.find(option => option.value === _modelValue.value) || null);
 const inputClasses = computed(() => {
   const variants: Record<InputState, string> = {
@@ -225,12 +233,20 @@ function onBlur(e: FocusEvent) {
   emit('blur', e);
 }
 
-function onClickOutside() {
+function onClickOutside(e) {
   if (!isOpen.value) {
     return;
   }
 
+  const menuElement = dropDownRef.value?.floating;
+
+  if (menuElement && menuElement.contains(e.target as Node)) {
+    return;
+  }
+
   isOpen.value = false;
+
+  emit('validate', props.modelValue);
   _inputRef.value?.focus();
 }
 
@@ -252,6 +268,29 @@ function onClickRemoveButton() {
   _inputRef.value?.focus();
   _modelValue.value = null;
 }
+
+watch(() => props.options, (newOptions) => {
+  if (newOptions.length > 0 && !newOptions.find(o => o.value === focusedDropDownItem.value)) {
+    focusedDropDownItem.value = (newOptions[0].isGroupLabel
+      ? newOptions[1]?.value
+      : newOptions[0].value) ?? null;
+  }
+}, {
+  deep: true,
+});
+
+watch([
+  () => props.options,
+  () => _modelValue.value,
+], () => {
+  const found = props.options.find(option => option.value === _modelValue.value);
+
+  if (found) {
+    lastValidLabel.value = found.label;
+  }
+}, {
+  immediate: true,
+});
 </script>
 
 <template>

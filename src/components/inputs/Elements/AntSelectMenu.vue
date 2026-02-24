@@ -277,6 +277,10 @@ function onClickDropDownItem(e: MouseEvent, option: SelectOption) {
 watch(_modelValue, (val) => {
   focusedDropDownItem.value = Array.isArray(val) ? val[0] : val;
 });
+
+defineExpose({
+  floating,
+});
 </script>
 
 <template>

@@ -596,7 +596,8 @@ export const AdvancedCustomDropdown: Story = {
       ];
 
       const filteredOptions = computed(() => {
-        const search = searchTerm.value.toLowerCase();
+        const search = (searchTerm.value || '').toLowerCase();
+
         const groups: Record<string, {
           label: string;
           value: string;
