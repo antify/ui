@@ -272,7 +272,7 @@ function onClickRemoveButton() {
       class="h-fit flex flex-row w-full"
     >
       <div
-        v-on-click-outside="onClickOutside"
+        v-on-click-outside="[onClickOutside, { ignore: [dropDownRef] }]"
         class="relative w-full"
         :class="{'cursor-pointer': !skeleton && !readonly}"
       >

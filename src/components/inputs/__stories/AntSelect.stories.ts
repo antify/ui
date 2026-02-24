@@ -469,6 +469,56 @@ export const AdvancedCustomDropdown: Story = {
           loc: 'Berlin',
         },
         {
+          name: 'Dr. Arnim Zola',
+          type: 'practitioner',
+          loc: 'Berlin',
+        },
+        {
+          name: 'Bucky Barnes',
+          type: 'pzrPractitioner',
+          loc: 'Berlin',
+        },
+        {
+          name: 'Dr. Arnim Zola',
+          type: 'practitioner',
+          loc: 'Berlin',
+        },
+        {
+          name: 'Bucky Barnes',
+          type: 'pzrPractitioner',
+          loc: 'Berlin',
+        },
+        {
+          name: 'Dr. Arnim Zola',
+          type: 'practitioner',
+          loc: 'Berlin',
+        },
+        {
+          name: 'Bucky Barnes',
+          type: 'pzrPractitioner',
+          loc: 'Berlin',
+        },
+        {
+          name: 'Dr. Arnim Zola',
+          type: 'practitioner',
+          loc: 'Berlin',
+        },
+        {
+          name: 'Bucky Barnes',
+          type: 'pzrPractitioner',
+          loc: 'Berlin',
+        },
+        {
+          name: 'Dr. Arnim Zola',
+          type: 'practitioner',
+          loc: 'Berlin',
+        },
+        {
+          name: 'Bucky Barnes',
+          type: 'pzrPractitioner',
+          loc: 'Berlin',
+        },
+        {
           name: 'Steve Rogers',
           type: 'practitioner',
           loc: 'New York',
@@ -483,31 +533,99 @@ export const AdvancedCustomDropdown: Story = {
           type: 'practitioner',
           loc: 'New York',
         },
+        {
+          name: 'Dr. Arnim Zola',
+          type: 'practitioner',
+          loc: 'Passau',
+        },
+        {
+          name: 'Bucky Barnes',
+          type: 'pzrPractitioner',
+          loc: 'Passau',
+        },
+        {
+          name: 'Dr. Arnim Zola',
+          type: 'practitioner',
+          loc: 'Passau',
+        },
+        {
+          name: 'Bucky Barnes',
+          type: 'pzrPractitioner',
+          loc: 'Passau',
+        },
+        {
+          name: 'Dr. Arnim Zola',
+          type: 'practitioner',
+          loc: 'Passau',
+        },
+        {
+          name: 'Bucky Barnes',
+          type: 'pzrPractitioner',
+          loc: 'Passau',
+        },
+        {
+          name: 'Dr. Arnim Zola',
+          type: 'practitioner',
+          loc: 'Passau',
+        },
+        {
+          name: 'Bucky Barnes',
+          type: 'pzrPractitioner',
+          loc: 'Passau',
+        },
+        {
+          name: 'Dr. Arnim Zola',
+          type: 'practitioner',
+          loc: 'Passau',
+        },
+        {
+          name: 'Bucky Barnes',
+          type: 'pzrPractitioner',
+          loc: 'Passau',
+        },
+        {
+          name: 'Dr. Arnim Zola',
+          type: 'practitioner',
+          loc: 'Passau',
+        },
+        {
+          name: 'Bucky Barnes',
+          type: 'pzrPractitioner',
+          loc: 'Passau',
+        },
       ];
 
       const filteredOptions = computed(() => {
         const search = searchTerm.value.toLowerCase();
-        const groups: Record<string, any[]> = {};
+        const groups: Record<string, {
+          label: string;
+          value: string;
+          tag: string;
+        }[]> = {};
 
-        rawPractitioners.forEach(p => {
-          if ((activeFilter.value === 'all' || p.type === activeFilter.value) &&
-            p.name.toLowerCase().includes(search)) {
-            if (!groups[p.loc]) groups[p.loc] = [];
+        rawPractitioners.forEach((p, index) => {
+          if ((activeFilter.value === 'all' || p.type === activeFilter.value) && p.name.toLowerCase().includes(search)) {
+            if (!groups[p.loc]) {
+              groups[p.loc] = [];
+            }
+
             groups[p.loc].push({
               label: p.name,
-              value: p.name,
-              // Поле 'tag' теперь поддерживается твоим AntSelectMenu
+              value: `${p.name}-${p.loc}-${index}`,
               tag: p.type === 'practitioner' ? 'ZA' : 'ZMP',
             });
           }
         });
 
-        const result: any[] = [];
+        const result: SelectOption[] = [];
+
         Object.keys(groups).sort().forEach(loc => {
           result.push({
             label: loc,
+            value: `group-header-${loc}`,
             isGroupLabel: true,
           });
+
           result.push(...groups[loc]);
         });
 
@@ -525,14 +643,14 @@ export const AdvancedCustomDropdown: Story = {
       };
     },
     template: `
-      <div class="p-10 h-[500px] bg-gray-50">
+      <div>
         <AntSelect
           v-bind="args"
           v-model="modelValue"
           :options="filteredOptions"
         >
           <template #selectMenuContentBefore>
-            <div class="p-2 border-b border-base-200 bg-white sticky top-0 z-30 flex flex-col gap-2">
+            <div class="flex p-2 border-b border-base-200 bg-white gap-2">
               <AntSearch v-model="searchTerm" placeholder="Search practitioner..." />
 
               <div class="flex">
@@ -540,21 +658,18 @@ export const AdvancedCustomDropdown: Story = {
                   :state="activeFilter === 'all' ? State.primary : State.base"
                   :filled="activeFilter === 'all'"
                   :grouped="GroupedEnum.left"
-                  size="sm"
                   @click="activeFilter = 'all'"
                 >Alle</AntButton>
                 <AntButton
                   :state="activeFilter === 'practitioner' ? State.primary : State.base"
                   :filled="activeFilter === 'practitioner'"
                   :grouped="GroupedEnum.center"
-                  size="sm"
                   @click="activeFilter = 'practitioner'"
                 >ZA</AntButton>
                 <AntButton
                   :state="activeFilter === 'pzrPractitioner' ? State.primary : State.base"
                   :filled="activeFilter === 'pzrPractitioner'"
                   :grouped="GroupedEnum.right"
-                  size="sm"
                   @click="activeFilter = 'pzrPractitioner'"
                 >ZMP</AntButton>
               </div>

@@ -290,64 +290,73 @@ watch(_modelValue, (val) => {
       <div
         v-if="isOpen"
         ref="floating"
-        :class="dropdownClasses"
+        :class="[
+          dropdownClasses,
+          'flex flex-col overflow-hidden'
+        ]"
         :style="{
-          minWidth: `${elementSize.width.value}px!important`,
+          minWidth: `${elementSize.width.value}px`,
           maxHeight: props.maxHeight,
           ...floatingStyles}"
         data-e2e="select-menu"
         :data-e2e-state="state"
       >
-        <slot name="contentBefore" />
-
-        <div class="flex flex-col gap-px">
-          <div
-            v-for="(option, index) in options"
-            :key="`option-${index}`"
-            data-e2e="select-menu-item"
-            :class="{
-              ...dropDownItemClasses,
-              ...getActiveDropDownItemClasses(option),
-              'font-bold': option.isGroupLabel,
-              'sticky top-0 z-20 border-y border-base-300 font-bold': option.isGroupLabel,
-              'cursor-pointer': !option.isGroupLabel
-            }"
-            @click="(e) => onClickDropDownItem(e, option)"
-            @mouseover="() => focusedDropDownItem = !option.isGroupLabel && option.value !== undefined ? option.value : null"
-          >
-            <div class="flex items-center justify-between w-full">
-              <div class="flex items-center gap-2">
-                <slot
-                  name="contentLeft"
-                  v-bind="option"
-                />
-                <span>{{ option.label }}</span>
-              </div>
-
-              <div
-                v-if="option.tag"
-                class="ml-2"
-              >
-                <span class="px-1 py-0.5 rounded bg-base-200 text-[12px] font-bold text-base-600">
-                  {{ option.tag }}
-                </span>
-              </div>
-
-              <slot
-                name="contentRight"
-                v-bind="option"
-              />
-            </div>
-          </div>
+        <div
+          v-if="$slots.contentBefore"
+          class="flex-shrink-0 z-30"
+        >
+          <slot name="contentBefore" />
         </div>
 
-        <div
-          v-if="options.length === 0"
-          :class="{...dropDownItemClasses}"
-        >
-          <slot name="empty">
-            Keine Einträge vorhanden
-          </slot>
+        <div class="flex-grow overflow-y-auto min-h-0">
+          <div class="flex flex-col gap-px">
+            <div
+              v-for="(option, index) in options"
+              :key="`option-${index}`"
+              data-e2e="select-menu-item"
+              :class="{
+                ...dropDownItemClasses,
+                ...getActiveDropDownItemClasses(option),
+                'font-bold': option.isGroupLabel,
+                'sticky top-0 z-20  border-base-300 font-bold': option.isGroupLabel,
+                'cursor-pointer': !option.isGroupLabel
+              }"
+              @click="(e) => onClickDropDownItem(e, option)"
+              @mouseover="() => focusedDropDownItem = !option.isGroupLabel && option.value !== undefined ? option.value : null"
+            >
+              <div class="flex items-center justify-between w-full">
+                <div class="flex items-center gap-2">
+                  <slot
+                    name="contentLeft"
+                    v-bind="option"
+                  />
+                  <span>{{ option.label }}</span>
+                </div>
+
+                <div
+                  v-if="option.tag"
+                >
+                  <span class="px-1 py-0.5 rounded bg-base-200 text-[12px]">
+                    {{ option.tag }}
+                  </span>
+                </div>
+
+                <slot
+                  name="contentRight"
+                  v-bind="option"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div
+            v-if="options.length === 0"
+            :class="{...dropDownItemClasses}"
+          >
+            <slot name="empty">
+              Keine Einträge vorhanden
+            </slot>
+          </div>
         </div>
       </div>
     </teleport>
