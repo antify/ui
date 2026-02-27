@@ -90,7 +90,9 @@ const emit = defineEmits([
   'blur',
   'validate',
 ]);
-const isOpen = ref(false);
+const isOpen = defineModel<boolean>('open', {
+  default: false,
+});
 const _modelValue = computed({
   get: () => props.modelValue,
   set: (val: string | number | null) => {
@@ -269,6 +271,12 @@ function onClickRemoveButton() {
   _modelValue.value = null;
 }
 
+function onElementSelect(value: string | number | null) {
+  _modelValue.value = value;
+  emit('validate', value);
+  _inputRef.value?.focus();
+}
+
 watch(() => props.options, (newOptions) => {
   if (newOptions.length > 0 && !newOptions.find(o => o.value === focusedDropDownItem.value)) {
     focusedDropDownItem.value = (newOptions[0].isGroupLabel
@@ -332,6 +340,7 @@ watch([
           :state="state"
           :close-on-enter="true"
           :max-height="maxHeight"
+          @select-element="onElementSelect"
         >
           <template #contentBefore>
             <slot name="selectMenuContentBefore" />

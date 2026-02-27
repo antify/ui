@@ -11,7 +11,7 @@ import {
   faCake,
 } from '@fortawesome/free-solid-svg-icons';
 import {
-  computed, onMounted, ref, type Ref,
+  computed, onMounted, ref, type Ref, watch,
 } from 'vue';
 import {
   type SelectOption,
@@ -453,150 +453,161 @@ export const AdvancedCustomDropdown: Story = {
       AntIcon,
     },
     setup() {
-      const searchTerm = ref('');
+      const searchTerm = ref(null);
+      const isSelectOpen = ref(false);
       const activeFilter = ref('all');
       const modelValue = ref(args.modelValue);
 
       const rawPractitioners = [
         {
-          name: 'Dr. Arnim Zola',
-          type: 'practitioner',
-          loc: 'Berlin',
+          name: 'Item 1',
+          type: 'first',
+          loc: 'Group Name - First',
         },
         {
-          name: 'Bucky Barnes',
-          type: 'pzrPractitioner',
-          loc: 'Berlin',
+          name: 'Item 1',
+          type: 'first',
+          loc: 'Group Name - First',
         },
         {
-          name: 'Dr. Arnim Zola',
-          type: 'practitioner',
-          loc: 'Berlin',
+          name: 'Item 1',
+          type: 'first',
+          loc: 'Group Name - First',
         },
         {
-          name: 'Bucky Barnes',
-          type: 'pzrPractitioner',
-          loc: 'Berlin',
+          name: 'Item 1',
+          type: 'first',
+          loc: 'Group Name - First',
         },
         {
-          name: 'Dr. Arnim Zola',
-          type: 'practitioner',
-          loc: 'Berlin',
+          name: 'Item 1',
+          type: 'first',
+          loc: 'Group Name - First',
         },
         {
-          name: 'Bucky Barnes',
-          type: 'pzrPractitioner',
-          loc: 'Berlin',
+          name: 'Item 1',
+          type: 'first',
+          loc: 'Group Name - First',
         },
         {
-          name: 'Dr. Arnim Zola',
-          type: 'practitioner',
-          loc: 'Berlin',
+          name: 'Item 1',
+          type: 'first',
+          loc: 'Group Name - First',
         },
         {
-          name: 'Bucky Barnes',
-          type: 'pzrPractitioner',
-          loc: 'Berlin',
+          name: 'Item 2',
+          type: 'second',
+          loc: 'Group Name - Second',
         },
         {
-          name: 'Dr. Arnim Zola',
-          type: 'practitioner',
-          loc: 'Berlin',
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
         },
         {
-          name: 'Bucky Barnes',
-          type: 'pzrPractitioner',
-          loc: 'Berlin',
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
         },
         {
-          name: 'Dr. Arnim Zola',
-          type: 'practitioner',
-          loc: 'Berlin',
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
         },
         {
-          name: 'Bucky Barnes',
-          type: 'pzrPractitioner',
-          loc: 'Berlin',
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
         },
         {
-          name: 'Steve Rogers',
-          type: 'practitioner',
-          loc: 'New York',
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
         },
         {
-          name: 'Natasha Romanoff',
-          type: 'pzrPractitioner',
-          loc: 'New York',
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
         },
         {
-          name: 'Sam Wilson',
-          type: 'practitioner',
-          loc: 'New York',
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
         },
         {
-          name: 'Dr. Arnim Zola',
-          type: 'practitioner',
-          loc: 'Passau',
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
         },
         {
-          name: 'Bucky Barnes',
-          type: 'pzrPractitioner',
-          loc: 'Passau',
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
         },
         {
-          name: 'Dr. Arnim Zola',
-          type: 'practitioner',
-          loc: 'Passau',
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
         },
         {
-          name: 'Bucky Barnes',
-          type: 'pzrPractitioner',
-          loc: 'Passau',
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
         },
         {
-          name: 'Dr. Arnim Zola',
-          type: 'practitioner',
-          loc: 'Passau',
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
         },
         {
-          name: 'Bucky Barnes',
-          type: 'pzrPractitioner',
-          loc: 'Passau',
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
         },
         {
-          name: 'Dr. Arnim Zola',
-          type: 'practitioner',
-          loc: 'Passau',
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
         },
         {
-          name: 'Bucky Barnes',
-          type: 'pzrPractitioner',
-          loc: 'Passau',
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
         },
         {
-          name: 'Dr. Arnim Zola',
-          type: 'practitioner',
-          loc: 'Passau',
+          name: 'Item 4',
+          type: 'fourth',
+          loc: 'Group Name - Fourth',
         },
         {
-          name: 'Bucky Barnes',
-          type: 'pzrPractitioner',
-          loc: 'Passau',
+          name: 'Item 5',
+          type: 'fifth',
+          loc: 'Group Name - Fifth',
         },
         {
-          name: 'Dr. Arnim Zola',
-          type: 'practitioner',
-          loc: 'Passau',
+          name: 'Item 6',
+          type: 'sixth',
+          loc: 'Group Name - Sixth',
         },
         {
-          name: 'Bucky Barnes',
-          type: 'pzrPractitioner',
-          loc: 'Passau',
+          name: 'Item 7',
+          type: 'seventh',
+          loc: 'Group Name - Seventh',
         },
       ];
 
+      const typeToTag: Record<string, string> = {
+        first: 'FIRST',
+        second: 'SECOND',
+        third: 'THIRD',
+        fourth: 'FOURTH',
+        fifth: 'FIFTH',
+        sixth: 'SIXTH',
+        seventh: 'SEVENTH',
+      };
+
       const filteredOptions = computed(() => {
-        const search = (searchTerm.value || '').toLowerCase();
+        const search = searchTerm.value;
 
         const groups: Record<string, {
           label: string;
@@ -605,7 +616,10 @@ export const AdvancedCustomDropdown: Story = {
         }[]> = {};
 
         rawPractitioners.forEach((p, index) => {
-          if ((activeFilter.value === 'all' || p.type === activeFilter.value) && p.name.toLowerCase().includes(search)) {
+          const matchesFilter = activeFilter.value === 'all' || p.type === activeFilter.value;
+          const matchesSearch = !search || p.name.toLowerCase().includes(search.toLowerCase());
+
+          if (matchesFilter && matchesSearch) {
             if (!groups[p.loc]) {
               groups[p.loc] = [];
             }
@@ -613,7 +627,7 @@ export const AdvancedCustomDropdown: Story = {
             groups[p.loc].push({
               label: p.name,
               value: `${p.name}-${p.loc}-${index}`,
-              tag: p.type === 'practitioner' ? 'ZA' : 'ZMP',
+              tag: typeToTag[p.type] || 'Another',
             });
           }
         });
@@ -633,8 +647,15 @@ export const AdvancedCustomDropdown: Story = {
         return result;
       });
 
+      watch(isSelectOpen, (val) => {
+        if (!val) {
+          searchTerm.value = null;
+        }
+      });
+
       return {
         args,
+        isSelectOpen,
         modelValue,
         searchTerm,
         activeFilter,
@@ -648,11 +669,12 @@ export const AdvancedCustomDropdown: Story = {
         <AntSelect
           v-bind="args"
           v-model="modelValue"
+          v-model:open="isSelectOpen"
           :options="filteredOptions"
         >
           <template #selectMenuContentBefore>
             <div class="flex p-2 border-b border-base-300 bg-white gap-2">
-              <AntSearch v-model="searchTerm" placeholder="Search practitioner..." />
+              <AntSearch v-model="searchTerm" placeholder="Search..." />
 
               <div class="flex">
                 <AntButton
@@ -660,32 +682,62 @@ export const AdvancedCustomDropdown: Story = {
                   :filled="activeFilter === 'all'"
                   :grouped="GroupedEnum.left"
                   @click="activeFilter = 'all'"
-                >Alle</AntButton>
+                >All</AntButton>
                 <AntButton
-                  :state="activeFilter === 'practitioner' ? State.primary : State.base"
-                  :filled="activeFilter === 'practitioner'"
+                  :state="activeFilter === 'first' ? State.primary : State.base"
+                  :filled="activeFilter === 'first'"
                   :grouped="GroupedEnum.center"
-                  @click="activeFilter = 'practitioner'"
-                >ZA</AntButton>
+                  @click="activeFilter = 'first'"
+                >First</AntButton>
                 <AntButton
-                  :state="activeFilter === 'pzrPractitioner' ? State.primary : State.base"
-                  :filled="activeFilter === 'pzrPractitioner'"
+                  :state="activeFilter === 'second' ? State.primary : State.base"
+                  :filled="activeFilter === 'second'"
+                  :grouped="GroupedEnum.center"
+                  @click="activeFilter = 'second'"
+                >Second</AntButton>
+                <AntButton
+                  :state="activeFilter === 'third' ? State.primary : State.base"
+                  :filled="activeFilter === 'third'"
+                  :grouped="GroupedEnum.center"
+                  @click="activeFilter = 'third'"
+                >Third</AntButton>
+                <AntButton
+                  :state="activeFilter === 'fourth' ? State.primary : State.base"
+                  :filled="activeFilter === 'fourth'"
+                  :grouped="GroupedEnum.center"
+                  @click="activeFilter = 'fourth'"
+                >Fourth</AntButton>
+                <AntButton
+                  :state="activeFilter === 'fifth' ? State.primary : State.base"
+                  :filled="activeFilter === 'fifth'"
+                  :grouped="GroupedEnum.center"
+                  @click="activeFilter = 'fifth'"
+                >Fifth</AntButton>
+                <AntButton
+                  :state="activeFilter === 'sixth' ? State.primary : State.base"
+                  :filled="activeFilter === 'sixth'"
+                  :grouped="GroupedEnum.center"
+                  @click="activeFilter = 'sixth'"
+                >Sixth</AntButton>
+                <AntButton
+                  :state="activeFilter === 'seventh' ? State.primary : State.base"
+                  :filled="activeFilter === 'seventh'"
                   :grouped="GroupedEnum.right"
-                  @click="activeFilter = 'pzrPractitioner'"
-                >ZMP</AntButton>
+                  @click="activeFilter = 'seventh'"
+                >Seventh</AntButton>
               </div>
             </div>
           </template>
 
           <template #empty>
-            Es konnten keine Behandler gefunden werden
+            Mock message when no match is found
           </template>
         </AntSelect>
       </div>
     `,
   }),
   args: {
-    label: 'Practitioner Search',
+    label: 'Placeholder',
     description: 'Sticky groups, Tags and Search inside base AntSelect',
     modelValue: null,
   },

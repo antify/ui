@@ -274,6 +274,23 @@ function onClickDropDownItem(e: MouseEvent, option: SelectOption) {
   _modelValue.value = option.value || null;
 }
 
+function getOptionClasses(option: SelectOption, index: number) {
+  const prevOption = props.options[index - 1];
+
+  return {
+    ...dropDownItemClasses.value,
+    ...getActiveDropDownItemClasses(option),
+    'cursor-pointer': !option.isGroupLabel,
+    'sticky top-[-1px] z-20 font-bold bg-white': option.isGroupLabel,
+    'border-y border-base-300': option.isGroupLabel,
+    '-mt-px': option.isGroupLabel,
+    'border-t border-base-300':
+      !option.isGroupLabel &&
+      index !== 0 &&
+      (!prevOption || !prevOption.isGroupLabel),
+  };
+}
+
 watch(_modelValue, (val) => {
   focusedDropDownItem.value = Array.isArray(val) ? val[0] : val;
 });
@@ -313,18 +330,12 @@ defineExpose({
         </div>
 
         <div class="flex-grow overflow-y-auto min-h-0">
-          <div class="flex flex-col gap-px">
+          <div class="flex flex-col -mt-px">
             <div
               v-for="(option, index) in options"
               :key="`option-${index}`"
               data-e2e="select-menu-item"
-              :class="{
-                ...dropDownItemClasses,
-                ...getActiveDropDownItemClasses(option),
-                'font-bold': option.isGroupLabel,
-                'sticky top-0 z-20 border-base-300 font-bold': option.isGroupLabel,
-                'cursor-pointer': !option.isGroupLabel
-              }"
+              :class="getOptionClasses(option, index)"
               @click="(e) => onClickDropDownItem(e, option)"
               @mouseover="() => focusedDropDownItem = !option.isGroupLabel && option.value !== undefined ? option.value : null"
             >
