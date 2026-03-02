@@ -22,7 +22,7 @@ import type {
   Validator,
 } from '@antify/validate';
 import {
-  autoPlacement, autoUpdate, flip, offset, useFloating,
+  autoUpdate, flip, offset, useFloating,
 } from '@floating-ui/vue';
 
 const emit = defineEmits([
@@ -87,7 +87,7 @@ const dropdownClasses = computed(() => {
     [InputState.success]: 'bg-success-500 border-success-500',
     [InputState.info]: 'bg-info-500 border-info-500',
     [InputState.warning]: 'bg-warning-500 border-warning-500',
-    [InputState.danger]: 'bg-danger-500 border-danger-500',
+    [InputState.danger]: 'bg-danger-500 border-base-300',
   };
 
   return {
@@ -102,7 +102,7 @@ const dropDownItemClasses = computed(() => {
     [InputState.success]: 'bg-success-100 border-success-100-font',
     [InputState.info]: 'bg-info-100 border-info-100-font',
     [InputState.warning]: 'bg-warning-100 border-warning-100-font',
-    [InputState.danger]: 'bg-danger-100 border-danger-100-font',
+    [InputState.danger]: 'bg-white border-base-300',
   };
 
   return {
@@ -281,6 +281,7 @@ function getOptionClasses(option: SelectOption, index: number) {
     ...dropDownItemClasses.value,
     ...getActiveDropDownItemClasses(option),
     'cursor-pointer': !option.isGroupLabel,
+    'text-base-600' : true,
     'sticky top-[-1px] z-20 font-bold bg-white': option.isGroupLabel,
     'border-y border-base-300': option.isGroupLabel,
     '-mt-px': option.isGroupLabel,
@@ -313,7 +314,7 @@ defineExpose({
         ref="floating"
         :class="[
           dropdownClasses,
-          'flex flex-col overflow-hidden'
+          'flex flex-col overflow-hidden',
         ]"
         :style="{
           minWidth: `${elementSize.width.value}px`,
