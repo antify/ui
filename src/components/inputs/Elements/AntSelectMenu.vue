@@ -248,7 +248,7 @@ function getActiveDropDownItemClasses(option: SelectOption) {
     [InputState.success]: 'bg-success-200',
     [InputState.info]: 'bg-info-200',
     [InputState.warning]: 'bg-warning-200',
-    [InputState.danger]: 'bg-danger-200',
+    [InputState.danger]: '!bg-base-100',
   };
 
   return option.value === focusedDropDownItem.value ? {
