@@ -187,7 +187,7 @@ function onBlur(e: FocusEvent) {
       <div
         v-if="hasSlotContent($slots['default'])"
         class="relative flex items-center"
-        :class="props.size === Size.lg || props.size === Size.md ||props.size === Size.sm ? 'h-5' : 'h-4'"
+        :class="props.size === Size.lg || props.size === Size.md ||props.size === Size.sm ? 'min-h-5' : 'min-h-4'"
       >
         <span :class="valueClasses">
           <slot />
