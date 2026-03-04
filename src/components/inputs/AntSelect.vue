@@ -44,9 +44,6 @@ import {
   IconSize,
 } from '../__types';
 import AntSelectMenu from './Elements/AntSelectMenu.vue';
-import {
-  useVModel,
-} from '@vueuse/core';
 
 defineOptions({
   inheritAttrs: false,

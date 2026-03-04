@@ -1,9 +1,6 @@
 import {
   type Meta, type StoryObj,
 } from '@storybook/vue3';
-import {
-  Size,
-} from '../../../enums/Size.enum';
 import AntSelect from '../AntSelect.vue';
 import AntIcon from '../../AntIcon.vue';
 import AntDropdown from '../Elements/AntSelectMenu.vue';
@@ -16,15 +13,12 @@ import {
 import {
   type SelectOption,
 } from '../__types/AntSelect.types';
-import {
-  InputState,
-} from '../../../enums/State.enum';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
 import AntSearch from '../AntSearch.vue';
 import AntButton from '../../AntButton.vue';
 import {
-  State, Grouped as GroupedEnum,
+  State, Grouped as GroupedEnum, InputState, Size,
 } from '../../../enums';
 
 const meta: Meta<typeof AntSelect> = {
