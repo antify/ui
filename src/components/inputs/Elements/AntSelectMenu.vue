@@ -102,7 +102,7 @@ const dropDownItemClasses = computed(() => {
     [InputState.success]: 'bg-success-100 border-success-100-font',
     [InputState.info]: 'bg-info-100 border-info-100-font',
     [InputState.warning]: 'bg-warning-100 border-warning-100-font',
-    [InputState.danger]: 'bg-white border-base-300',
+    [InputState.danger]: 'bg-white border-base-300 text-for-white-bg-font',
   };
 
   return {
