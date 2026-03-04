@@ -277,16 +277,6 @@ function onElementSelect(value: string | number | null) {
   _inputRef.value?.focus();
 }
 
-watch(() => props.options, (newOptions) => {
-  if (newOptions.length > 0 && !newOptions.find(o => o.value === focusedDropDownItem.value)) {
-    focusedDropDownItem.value = (newOptions[0].isGroupLabel
-      ? newOptions[1]?.value
-      : newOptions[0].value) ?? null;
-  }
-}, {
-  deep: true,
-});
-
 watch([
   () => props.options,
   () => _modelValue.value,
