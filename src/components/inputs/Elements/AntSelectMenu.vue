@@ -82,32 +82,20 @@ const _modelValue = useVModel(props, 'modelValue', emit);
 const isOpen = useVModel(props, 'open', emit);
 const focusedDropDownItem = useVModel(props, 'focused', emit);
 const dropdownClasses = computed(() => {
-  const variants: Record<InputState, string> = {
-    [InputState.base]: 'bg-base-300 border-base-300',
-    [InputState.success]: 'bg-success-500 border-success-500',
-    [InputState.info]: 'bg-info-500 border-info-500',
-    [InputState.warning]: 'bg-warning-500 border-warning-500',
-    [InputState.danger]: 'bg-danger-500 border-base-300',
-  };
+  const baseVariant = 'bg-base-300 border-base-300';
 
   return {
     'w-fit border outline-none -mt-px overflow-y-auto shadow-md z-[90] max-h-[250px]': true,
     'rounded-md': true,
-    [variants[props.state]]: true,
+    [baseVariant]: true,
   };
 });
 const dropDownItemClasses = computed(() => {
-  const variants: Record<InputState, string> = {
-    [InputState.base]: 'bg-white text-for-white-bg-font',
-    [InputState.success]: 'bg-success-100 border-success-100-font',
-    [InputState.info]: 'bg-info-100 border-info-100-font',
-    [InputState.warning]: 'bg-warning-100 border-warning-100-font',
-    [InputState.danger]: 'bg-white border-base-300 text-for-white-bg-font',
-  };
+  const baseVariant = 'bg-white text-for-white-bg-font';
 
   return {
     'flex items-center select-none text-ellipsis overflow-hidden whitespace-nowrap min-h-fit': true,
-    [variants[props.state]]: true,
+    [baseVariant]: true,
     // Size
     'p-1 text-xs gap-1': props.size === Size.xs2,
     'p-1.5 text-xs gap1.5': props.size === Size.xs,
@@ -243,17 +231,11 @@ function getActiveDropDownItemClasses(option: SelectOption) {
     return {};
   }
 
-  const variants: Record<InputState, string> = {
-    [InputState.base]: '!bg-base-100',
-    [InputState.success]: 'bg-success-200',
-    [InputState.info]: 'bg-info-200',
-    [InputState.warning]: 'bg-warning-200',
-    [InputState.danger]: '!bg-base-100',
-  };
+  const activeClass = '!bg-base-100';
 
   return option.value === focusedDropDownItem.value ? {
     'bg-white': false,
-    [variants[props.state]]: true,
+    [activeClass]: true,
   } : {};
 }
 
