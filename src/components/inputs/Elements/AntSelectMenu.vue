@@ -82,20 +82,16 @@ const _modelValue = useVModel(props, 'modelValue', emit);
 const isOpen = useVModel(props, 'open', emit);
 const focusedDropDownItem = useVModel(props, 'focused', emit);
 const dropdownClasses = computed(() => {
-  const baseVariant = 'bg-base-300 border-base-300';
-
   return {
     'w-fit border outline-none -mt-px overflow-y-auto shadow-md z-[90] max-h-[250px]': true,
     'rounded-md': true,
-    [baseVariant]: true,
+    'bg-base-300 border-base-300': true,
   };
 });
 const dropDownItemClasses = computed(() => {
-  const baseVariant = 'bg-white text-for-white-bg-font';
-
   return {
     'flex items-center select-none text-ellipsis overflow-hidden whitespace-nowrap min-h-fit': true,
-    [baseVariant]: true,
+    'bg-white text-for-white-bg-font': true,
     // Size
     'p-1 text-xs gap-1': props.size === Size.xs2,
     'p-1.5 text-xs gap1.5': props.size === Size.xs,
@@ -231,11 +227,8 @@ function getActiveDropDownItemClasses(option: SelectOption) {
     return {};
   }
 
-  const activeClass = '!bg-base-100';
-
   return option.value === focusedDropDownItem.value ? {
-    'bg-white': false,
-    [activeClass]: true,
+    '!bg-base-100': true,
   } : {};
 }
 
