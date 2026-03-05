@@ -270,7 +270,9 @@ function onClickRemoveButton() {
 
 function onElementSelect(value: string | number | null) {
   _modelValue.value = value;
+
   emit('validate', value);
+
   _inputRef.value?.focus();
 }
 
