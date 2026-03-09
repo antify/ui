@@ -55,6 +55,8 @@ export const Default: Story = {
       const country1 = ref(null);
       const phone2 = ref(null);
       const country2 = ref(null);
+      const phone3 = ref(null);
+      const country3 = ref(null);
 
       return {
         args,
@@ -62,6 +64,8 @@ export const Default: Story = {
         country1,
         phone2,
         country2,
+        phone3,
+        country3,
       };
     },
     template: `
@@ -90,6 +94,20 @@ export const Default: Story = {
           />
           <div class="mt-2 text-md text-base-500">
             Data: {{ country2 || 'null' }} | {{ phone2 || 'null' }}
+          </div>
+        </div>
+
+        <div>
+          <h3 class="mb-2 text-sm font-bold text-gray-500">Numeric Code</h3>
+          <AntPhoneInput
+            v-bind="args"
+            v-model="phone3"
+            v-model:country-value="country3"
+            country-value-key="numericCode"
+            country-placeholder="Select for numeric output"
+          />
+          <div class="mt-2 text-md text-base-500">
+            Data: {{ country3 || 'null' }} | {{ phone3 || 'null' }}
           </div>
         </div>
       </div>

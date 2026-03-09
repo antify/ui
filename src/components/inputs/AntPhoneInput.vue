@@ -24,7 +24,7 @@ defineOptions({
 
 const props = withDefaults(defineProps<{
   modelValue: string | null;
-  countryValue: string | null;
+  countryValue: string | number | null;
   countries: Country[];
 
   //Common Props
@@ -45,6 +45,7 @@ const props = withDefaults(defineProps<{
   searchable?: boolean;
   countryMaxHeight?: string;
   autoSelectDefault?: boolean;
+  countryValueKey?: keyof Country;
 
   //AntBaseInput Props
   placeholder?: string;
@@ -57,6 +58,7 @@ const props = withDefaults(defineProps<{
   countryPlaceholder: 'Select country',
   autoSelectDefault: true,
   placeholder: 'Enter phone number',
+  countryValueKey: 'value',
   messages: () => [],
 });
 
@@ -69,8 +71,9 @@ const emit = defineEmits([
 ]);
 
 const _countryCode = useVModel(props, 'countryValue', emit);
-const currentCountry = computed(() => props.countries.find(c => c.value === props.countryValue));
-
+const currentCountry = computed(() => {
+  return props.countries.find(c => String(c[props.countryValueKey]) === String(props.countryValue));
+});
 const formattedNumber = computed({
   get: () => {
     const val = props.modelValue || null;
@@ -156,7 +159,7 @@ function onCountrySelect(country: Country) {
         :grouped="Grouped.left"
         :auto-select-default="autoSelectDefault"
         class="w-fit flex-shrink-0"
-        option-value-key="numericCode"
+        :option-value-key="(countryValueKey as string)"
         @select="onCountrySelect"
       />
 

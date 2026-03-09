@@ -24,7 +24,7 @@ import AntIcon from '../AntIcon.vue';
 import AntSkeleton from '../AntSkeleton.vue';
 
 const props = withDefaults(defineProps<{
-  modelValue: string | null;
+  modelValue: string | number | null;
   countries: Country[];
   label?: string;
   description?: string;
