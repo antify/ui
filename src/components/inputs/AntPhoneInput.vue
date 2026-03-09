@@ -69,30 +69,11 @@ const emit = defineEmits([
 ]);
 
 const _countryCode = useVModel(props, 'countryValue', emit);
-
 const currentCountry = computed(() => props.countries.find(c => c.value === props.countryValue));
-
-const formatByMask = (value: string, mask: string): string => {
-  if (!value) return '';
-  const digits = value.replace(/\D/g, '');
-  let result = '';
-  let digitIndex = 0;
-
-  for (let i = 0; i < mask.length && digitIndex < digits.length; i++) {
-    if (mask[i] === '#') {
-      result += digits[digitIndex] || '';
-      if (digits[digitIndex]) digitIndex++;
-    } else {
-      result += mask[i];
-    }
-  }
-
-  return result;
-};
 
 const formattedNumber = computed({
   get: () => {
-    const val = props.modelValue || '';
+    const val = props.modelValue || null;
     const mask = currentCountry.value?.mask;
 
     return mask ? formatByMask(val, mask) : val;
@@ -105,9 +86,39 @@ const formattedNumber = computed({
       const maxDigits = (mask.match(/#/g) || []).length;
       unmasked = unmasked.slice(0, maxDigits);
     }
+
     emit('update:modelValue', unmasked || null);
   },
 });
+
+const formatByMask = (value: string | null, mask: string): string | null => {
+  if (!value) {
+    return null;
+  }
+
+  const digits = value.replace(/\D/g, '');
+
+  if (digits.length === 0) {
+    return null;
+  }
+
+  let result = '';
+  let digitIndex = 0;
+
+  for (let i = 0; i < mask.length && digitIndex < digits.length; i++) {
+    if (mask[i] === '#') {
+      result += digits[digitIndex] || '';
+
+      if (digits[digitIndex]) {
+        digitIndex++;
+      }
+    } else {
+      result += mask[i];
+    }
+  }
+
+  return result || null;
+};
 
 function onCountrySelect(country: Country) {
   emit('select-country', country);
@@ -145,6 +156,7 @@ function onCountrySelect(country: Country) {
         :grouped="Grouped.left"
         :auto-select-default="autoSelectDefault"
         class="w-fit flex-shrink-0"
+        option-value-key="numericCode"
         @select="onCountrySelect"
       />
 

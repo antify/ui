@@ -53,7 +53,8 @@ const MainRender = (args: any) => ({
       <AntCountry v-bind="args" v-model="modelValue" />
 
       <div class="mt-2 text-md text-gray-400">
-        Value: {{ modelValue === null ? 'null' : modelValue }}
+        Selected Value ({{ args.optionValueKey || 'default' }}):
+        <span class="text-blue-500 font-bold">{{ modelValue === null ? 'null' : modelValue }}</span>
       </div>
     </div>
   `,
@@ -69,6 +70,17 @@ export const Docs: Story = {
     searchable: true,
     searchPlaceholder: 'Search for a country...',
     description: 'Select a country to see the dial code and flag integration.',
+  },
+};
+
+export const ValueKeyNumericCode: Story = {
+  render: MainRender,
+  args: {
+    ...Docs.args,
+    label: 'Value as Numeric Code',
+    description: 'Using the numericCode field from the data as the model value.',
+    optionValueKey: 'numericCode',
+    countries: COUNTRIES,
   },
 };
 

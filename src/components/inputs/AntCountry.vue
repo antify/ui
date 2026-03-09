@@ -42,6 +42,7 @@ const props = withDefaults(defineProps<{
   isGrouped?: boolean;
   autoSelectDefault?: boolean;
   emptyStateMessage?: string;
+  optionValueKey?: keyof Country;
 }>(), {
   size: Size.md,
   state: InputState.base,
@@ -53,6 +54,7 @@ const props = withDefaults(defineProps<{
   isGrouped: false,
   autoSelectDefault: true,
   emptyStateMessage: 'No countries found',
+  optionValueKey: 'value',
 });
 
 const emit = defineEmits([
@@ -78,7 +80,7 @@ const filteredOptions = computed(() => {
     c.value.toLowerCase().includes(query) ||
     c.dialCode.includes(query));
 });
-const selectedCountry = computed(() => props.countries.find(c => c.value === props.modelValue) || null);
+const selectedCountry = computed(() => props.countries.find(c => String(c[props.optionValueKey]) === String(props.modelValue)) || null);
 const rootComponent = computed(() => (props.isGrouped ? 'div' : AntField));
 const inputClasses = computed(() => {
   const variants: Record<InputState, string> = {
@@ -138,8 +140,10 @@ const skeletonGrouped = computed(() => props.grouped || Grouped.none);
 const iconSize = computed(() => (props.size === Size.lg || props.size === Size.md || props.size === Size.sm ? IconSize.sm : IconSize.xs));
 
 function onSelect(val: string | number | null) {
+  const country = props.countries.find(c => String(c[props.optionValueKey]) === String(val));
+
   emit('update:modelValue', val);
-  emit('select', props.countries.find(c => c.value === val));
+  emit('select', country || null);
 
   isOpen.value = false;
   inputRef.value?.focus();
@@ -177,7 +181,8 @@ function onClickOutside(e: Event) {
 
 onMounted(() => {
   if (props.autoSelectDefault && !props.modelValue && defaultCountry.value) {
-    onSelect(defaultCountry.value.value);
+    const defaultValue = defaultCountry.value[props.optionValueKey];
+    onSelect(defaultValue as string | number);
   }
 });
 
@@ -208,6 +213,7 @@ watch(isOpen, (val) => {
         v-model:focused="focusedItem"
         :options="filteredOptions"
         :model-value="modelValue"
+        :option-value-key="(optionValueKey as string)"
         :input-ref="inputRef"
         :max-height="maxHeight"
         :size="size"

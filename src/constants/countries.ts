@@ -2,8 +2,9 @@ export interface Country {
   value: string;
   label: string;
   dialCode: string;
-  flag: string;
-  phoneLength: number | number[];
+  numericCode: number;
+  flag?: string;
+  phoneLength?: number | number[];
   mask?: string;
   isDefault?: boolean;
   [key: string]: unknown;
@@ -14,6 +15,7 @@ export const COUNTRIES: Country[] = [
     value: 'KZ',
     label: 'Kazakhstan',
     dialCode: '+7',
+    numericCode: 7,
     flag: '🇰🇿',
     phoneLength: 10,
     mask: '### ### ## ##',
@@ -22,6 +24,7 @@ export const COUNTRIES: Country[] = [
     value: 'US',
     label: 'United States',
     dialCode: '+1',
+    numericCode: 1,
     flag: '🇺🇸',
     phoneLength: 10,
     mask: '(###) ###-####',
@@ -30,6 +33,7 @@ export const COUNTRIES: Country[] = [
     value: 'GB',
     label: 'United Kingdom',
     dialCode: '+44',
+    numericCode: 44,
     flag: '🇬🇧',
     phoneLength: 10,
     mask: '#### ######',
@@ -38,6 +42,7 @@ export const COUNTRIES: Country[] = [
     value: 'DE',
     label: 'Germany',
     dialCode: '+49',
+    numericCode: 49,
     flag: '🇩🇪',
     phoneLength: [
       6,
@@ -56,6 +61,7 @@ export const COUNTRIES: Country[] = [
     value: 'UZ',
     label: 'Uzbekistan',
     dialCode: '+998',
+    numericCode: 998,
     flag: '🇺🇿',
     phoneLength: 9,
     mask: '## ### ## ##',
@@ -64,6 +70,7 @@ export const COUNTRIES: Country[] = [
     value: 'FR',
     label: 'France',
     dialCode: '+33',
+    numericCode: 33,
     flag: '🇫🇷',
     phoneLength: 9,
     mask: '# ## ## ## ##',
@@ -72,6 +79,7 @@ export const COUNTRIES: Country[] = [
     value: 'ES',
     label: 'Spain',
     dialCode: '+34',
+    numericCode: 34,
     flag: '🇪🇸',
     phoneLength: 9,
     mask: '### ### ###',
@@ -80,6 +88,7 @@ export const COUNTRIES: Country[] = [
     value: 'IT',
     label: 'Italy',
     dialCode: '+39',
+    numericCode: 39,
     flag: '🇮🇹',
     phoneLength: [
       9,
@@ -91,6 +100,7 @@ export const COUNTRIES: Country[] = [
     value: 'UA',
     label: 'Ukraine',
     dialCode: '+380',
+    numericCode: 380,
     flag: '🇺🇦',
     phoneLength: 9,
     mask: '## ### ## ##',
@@ -99,6 +109,7 @@ export const COUNTRIES: Country[] = [
     value: 'GE',
     label: 'Georgia',
     dialCode: '+995',
+    numericCode: 995,
     flag: '🇬🇪',
     phoneLength: 9,
     mask: '### ### ###',
@@ -107,6 +118,7 @@ export const COUNTRIES: Country[] = [
     value: 'PL',
     label: 'Poland',
     dialCode: '+48',
+    numericCode: 48,
     flag: '🇵🇱',
     phoneLength: 9,
     mask: '### ### ###',
