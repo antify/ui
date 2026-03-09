@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-  computed, ref, watch,
+  computed, ref, watch, onMounted,
 } from 'vue';
 import {
   faChevronDown, faChevronUp,
@@ -38,6 +38,7 @@ const props = withDefaults(defineProps<{
   searchPlaceholder: string;
   searchable?: boolean;
   grouped?: Grouped;
+  showFlags?: boolean;
 }>(), {
   size: Size.md,
   state: InputState.base,
@@ -45,6 +46,7 @@ const props = withDefaults(defineProps<{
   placeholder: 'Select country',
   searchable: true,
   grouped: Grouped.none,
+  showFlags: true,
 });
 
 const emit = defineEmits([
@@ -56,8 +58,8 @@ const isOpen = ref(false);
 const searchQuery = ref<string | null>(null);
 const inputRef = ref<HTMLElement | null>(null);
 const focusedItem = ref<string | number | null>(null);
-const searchComponentRef = ref<any>(null);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
+const defaultCountry = computed(() => props.countries.find(c => c.isDefault));
 
 const filteredOptions = computed(() => {
   if (!props.searchable || !searchQuery.value) {
@@ -183,6 +185,12 @@ function onClickOutside(e: Event) {
 
   isOpen.value = false;
 }
+
+onMounted(() => {
+  if (!props.modelValue && defaultCountry.value) {
+    onSelect(defaultCountry.value.value);
+  }
+});
 </script>
 
 <template>
@@ -214,9 +222,8 @@ function onClickOutside(e: Event) {
             class="p-2 border-b border-base-200 bg-white"
           >
             <AntSearch
-              ref="searchComponentRef"
               v-model="searchQuery"
-              :size="Size.sm"
+              :size="Size.lg"
               :placeholder="searchPlaceholder"
               class="w-full"
             />
@@ -237,14 +244,20 @@ function onClickOutside(e: Event) {
           >
             <div class="flex items-center gap-2 overflow-hidden">
               <template v-if="selectedCountry">
-                <span class="text-lg">{{ selectedCountry.flag }}</span>
+                <span
+                  v-if="showFlags"
+                  class="text-lg"
+                >
+                  {{ selectedCountry.flag }}
+                </span>
                 <span class="truncate font-medium">{{ selectedCountry.dialCode }}</span>
-                <span class="truncate text-base-500">{{ selectedCountry.label }}</span>
+                <span class="truncate ">{{ selectedCountry.label }}</span>
               </template>
               <span
                 v-else
-                class="text-base-400"
+                class="text-base-500"
               >
+                hello
                 {{ placeholder }}
               </span>
             </div>
@@ -256,21 +269,26 @@ function onClickOutside(e: Event) {
               :size="iconSize"
             />
           </div>
+        </AntSkeleton>
 
-          <template #contentLeft="option">
-            <span class="text-lg">{{ option.flag }}</span>
-          </template>
+        <template #contentLeft="option">
+          <span
+            v-if="showFlags"
+            class="text-lg"
+          >
+            {{ (option as CountryOption).flag }}
+          </span>
+        </template>
 
-          <template #contentRight="option">
-            <span class="text-xs text-base-400 ml-auto">{{ option.dialCode }}</span>
-          </template>
+        <template #contentRight="option">
+          <span class="text-xs ml-auto">{{ option.dialCode }}</span>
+        </template>
 
-          <template #empty>
-            <div class="p-4 text-center text-sm text-base-500">
-              No countries found
-            </div>
-          </template>
-        </antskeleton>
+        <template #empty>
+          <div class="p-4 text-center text-sm text-base-500">
+            No countries found
+          </div>
+        </template>
       </AntSelectMenu>
     </div>
   </AntField>

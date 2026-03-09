@@ -3,4 +3,5 @@ export type CountryOption = {
   label: string;
   dialCode: string;
   flag: string;
+  isDefault?: boolean;
 } & Record<string, unknown>;

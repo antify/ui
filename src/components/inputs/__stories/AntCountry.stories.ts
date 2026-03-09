@@ -1,11 +1,12 @@
 import {
   type Meta, type StoryObj,
 } from '@storybook/vue3';
-import AntCountry, {
-  type CountryOption,
-} from '../AntCountry.vue';
+import AntCountry from '../AntCountry.vue';
 import {
-  computed, ref,
+  type CountryOption,
+} from '../__types/AntCountry.types';
+import {
+  ref,
 } from 'vue';
 import {
   InputState, Size,
@@ -13,16 +14,17 @@ import {
 
 const countries: CountryOption[] = [
   {
-    value: 'DE',
-    label: 'Germany',
-    flag: '🇩🇪',
-    dialCode: '+49',
-  },
-  {
     value: 'US',
     label: 'United States',
     flag: '🇺🇸',
     dialCode: '+1',
+  },
+  {
+    value: 'DE',
+    label: 'Germany',
+    flag: '🇩🇪',
+    dialCode: '+49',
+    // isDefault: true,
   },
   {
     value: 'GB',
@@ -83,81 +85,45 @@ const meta: Meta<typeof AntCountry> = {
     },
   },
   argTypes: {
-    modelValue: {
-      control: 'text',
-      table: {
-        type: {
-          summary: 'string|null',
-        },
-      },
-    },
-    // Добавляем управление новым пропом searchable
-    searchable: {
-      control: 'boolean',
-      description: 'Whether to show the search input in the dropdown',
-      table: {
-        defaultValue: {
-          summary: 'true',
-        },
-      },
-    },
-    searchPlaceholder: {
-      control: 'text',
-      description: 'Placeholder for the search input',
-    },
     state: {
-      control: {
-        type: 'select',
-      },
+      control: 'select',
       options: Object.values(InputState),
     },
     size: {
-      control: {
-        type: 'select',
-      },
+      control: 'select',
       options: Object.values(Size),
-      table: {
-        defaultValue: {
-          summary: Size.md,
-        },
-      },
-    },
-    countries: {
-      description: 'List of countries with flag and dial codes',
     },
   },
 };
 
 export default meta;
-
 type Story = StoryObj<typeof AntCountry>;
 
-export const Docs: Story = {
-  render: (args) => ({
-    components: {
-      AntCountry,
-    },
-    setup() {
-      const modelValue = computed({
-        get: () => args.modelValue,
-        set: (val) => (args.modelValue = val),
-      });
+const MainRender = (args: any) => ({
+  components: {
+    AntCountry,
+  },
+  setup() {
+    const modelValue = ref(args.modelValue);
 
-      return {
-        args,
-        modelValue,
-      };
-    },
-    template: `
-      <div class="p-10 h-[400px]">
-        <AntCountry v-bind="args" v-model="modelValue" />
-        <div class="mt-4 text-sm text-gray-500">Selected Value: {{ modelValue }}</div>
-      </div>
-    `,
-  }),
+    return {
+      args,
+      modelValue,
+    };
+  },
+  template: `
+    <div class="p-10 h-[400px]">
+      <AntCountry v-bind="args" v-model="modelValue" />
+      <div class="mt-4 text-xs text-gray-400 font-mono">Value: {{ modelValue || 'null' }}</div>
+    </div>
+  `,
+});
+
+export const Docs: Story = {
+  render: MainRender,
   args: {
     modelValue: 'DE',
-    label: 'Country',
+    label: 'Country Selector',
     countries,
     searchable: true,
     searchPlaceholder: 'Search for a country...',
@@ -165,111 +131,110 @@ export const Docs: Story = {
   },
 };
 
-export const WithoutSearch: Story = {
-  render: Docs.render,
-  args: {
-    ...Docs.args,
-    label: 'Select Country (No Search)',
-    searchable: false, // Теперь скроется только панель поиска внутри меню
-    description: 'The dropdown is visible, but the search bar is hidden.',
-  },
-};
-
-export const States: Story = {
+export const DefaultCountry: Story = {
   render: (args) => ({
     components: {
       AntCountry,
     },
     setup() {
-      const val = ref('US');
+      // Инициализируем null, чтобы увидеть как сработает автовыбор США в onMounted
+      const val = ref(null);
+
+      return {
+        args,
+        val,
+      };
+    },
+    template: `
+      <div class="p-10">
+        <h3 class="mb-2 text-sm font-bold text-primary-500">Auto-selection Test (Initial value: null)</h3>
+        <AntCountry v-bind="args" v-model="val" />
+        <div class="mt-4 p-2 bg-gray-50 border rounded text-xs">
+          Resulting v-model: <b>{{ val }}</b>
+        </div>
+      </div>
+    `,
+  }),
+  args: {
+    countries,
+    modelValue: null,
+    label: 'Default Country Logic',
+    searchPlaceholder: 'Search...',
+  },
+};
+
+export const WithoutSearch: Story = {
+  render: MainRender,
+  args: {
+    ...Docs.args,
+    label: 'No Search Field',
+    searchable: false,
+  },
+};
+
+export const WithoutFlags: Story = {
+  render: MainRender,
+  args: {
+    ...Docs.args,
+    label: 'No Flags Mode',
+    showFlags: false,
+  },
+};
+
+export const Skeleton: Story = {
+  render: MainRender,
+  args: {
+    ...Docs.args,
+    skeleton: true,
+  },
+};
+
+export const summary: Story = {
+  parameters: {
+    chromatic: {
+      disableSnapshot: false,
+    },
+  },
+  render: (args) => ({
+    components: {
+      AntCountry,
+    },
+    setup() {
+      const val = ref('DE');
 
       return {
         args,
         val,
         InputState,
-      };
-    },
-    template: `
-      <div class="p-10 flex flex-col gap-6">
-        <AntCountry v-bind="args" v-model="val" :state="InputState.base" label="Base State" />
-        <AntCountry v-bind="args" v-model="val" :state="InputState.info" label="Info State" />
-        <AntCountry v-bind="args" v-model="val" :state="InputState.success" label="Success State" />
-        <AntCountry v-bind="args" v-model="val" :state="InputState.warning" label="Warning State" />
-        <AntCountry v-bind="args" v-model="val" :state="InputState.danger" label="Danger State" />
-      </div>
-    `,
-  }),
-  args: {
-    countries,
-    searchPlaceholder: 'Search...',
-  },
-};
-
-export const Sizes: Story = {
-  render: (args) => ({
-    components: {
-      AntCountry,
-    },
-    setup() {
-      const val = ref('GB');
-
-      return {
-        args,
-        val,
         Size,
       };
     },
     template: `
-      <div class="p-10 flex flex-col gap-6">
-        <AntCountry v-bind="args" v-model="val" :size="Size.sm" label="Small" />
-        <AntCountry v-bind="args" v-model="val" :size="Size.md" label="Medium" />
-        <AntCountry v-bind="args" v-model="val" :size="Size.lg" label="Large" />
+      <div class="p-4 flex flex-col gap-6">
+        <div class="flex flex-wrap gap-4">
+          <AntCountry v-bind="args" v-model="val" :state="InputState.base" label="Base" class="w-64"/>
+          <AntCountry v-bind="args" v-model="val" :state="InputState.info" label="Info" class="w-64"/>
+          <AntCountry v-bind="args" v-model="val" :state="InputState.success" label="Success" class="w-64"/>
+          <AntCountry v-bind="args" v-model="val" :state="InputState.warning" label="Warning" class="w-64"/>
+          <AntCountry v-bind="args" v-model="val" :state="InputState.danger" label="Danger" class="w-64"/>
+        </div>
+
+        <div class="flex items-end gap-4">
+          <AntCountry v-bind="args" v-model="val" :size="Size.sm" label="Small" class="w-64"/>
+          <AntCountry v-bind="args" v-model="val" :size="Size.md" label="Medium" class="w-64"/>
+          <AntCountry v-bind="args" v-model="val" :size="Size.lg" label="Large" class="w-64"/>
+        </div>
+
+        <div class="flex gap-4">
+          <AntCountry v-bind="args" model-value="FR" disabled label="Disabled" class="w-64" />
+          <AntCountry v-bind="args" model-value="FR" readonly label="Readonly" class="w-64" />
+          <AntCountry v-bind="args" model-value="FR" skeleton label="Skeleton" class="w-64" />
+        </div>
       </div>
     `,
   }),
   args: {
     countries,
     searchPlaceholder: 'Search...',
-  },
-};
-
-export const DisabledAndReadonly: Story = {
-  render: (args) => ({
-    components: {
-      AntCountry,
-    },
-    setup() {
-      return {
-        args,
-      };
-    },
-    template: `
-      <div class="p-10 flex flex-col gap-6">
-        <AntCountry v-bind="args" model-value="FR" disabled label="Disabled" />
-        <AntCountry v-bind="args" model-value="FR" readonly label="Readonly" />
-        <AntCountry v-bind="args" model-value="FR" skeleton label="Skeleton" />
-      </div>
-    `,
-  }),
-  args: {
-    countries,
-    searchPlaceholder: 'Search...',
-  },
-};
-
-export const EmptySearch: Story = {
-  render: Docs.render,
-  args: {
-    ...Docs.args,
-    countries: [],
-    label: 'Empty Country List',
-  },
-};
-
-export const Skeleton: Story = {
-  render: Docs.render,
-  args: {
-    ...Docs.args,
-    skeleton: true,
   },
 };
