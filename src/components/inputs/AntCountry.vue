@@ -12,8 +12,8 @@ import {
   IconSize,
 } from '../__types';
 import {
-  type CountryOption,
-} from './__types/AntCountry.types';
+  type Country,
+} from '../../constants/countries';
 import {
   vOnClickOutside,
 } from '@vueuse/components';
@@ -25,7 +25,7 @@ import AntSkeleton from '../AntSkeleton.vue';
 
 const props = withDefaults(defineProps<{
   modelValue: string | null;
-  countries: CountryOption[];
+  countries: Country[];
   label?: string;
   description?: string;
   placeholder?: string;
@@ -39,6 +39,9 @@ const props = withDefaults(defineProps<{
   searchable?: boolean;
   grouped?: Grouped;
   showFlags?: boolean;
+  isGrouped?: boolean;
+  autoSelectDefault?: boolean;
+  emptyStateMessage?: string;
 }>(), {
   size: Size.md,
   state: InputState.base,
@@ -47,6 +50,9 @@ const props = withDefaults(defineProps<{
   searchable: true,
   grouped: Grouped.none,
   showFlags: true,
+  isGrouped: false,
+  autoSelectDefault: true,
+  emptyStateMessage: 'No countries found',
 });
 
 const emit = defineEmits([
@@ -58,62 +64,23 @@ const isOpen = ref(false);
 const searchQuery = ref<string | null>(null);
 const inputRef = ref<HTMLElement | null>(null);
 const focusedItem = ref<string | number | null>(null);
+const selectMenuRef = ref<any>(null);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const defaultCountry = computed(() => props.countries.find(c => c.isDefault));
 
 const filteredOptions = computed(() => {
   if (!props.searchable || !searchQuery.value) {
-    return props.countries.map(c => ({
-      value: c.value,
-      label: c.label,
-      dialCode: c.dialCode,
-      flag: c.flag,
-    }));
+    return props.countries;
   }
-
   const query = searchQuery.value.toLowerCase();
 
-  return props.countries
-    .filter(c => c.label.toLowerCase().includes(query) ||
-      c.value.toLowerCase().includes(query) ||
-      c.dialCode.includes(query))
-    .map(c => ({
-      value: c.value,
-      label: c.label,
-      dialCode: c.dialCode,
-      flag: c.flag,
-    }));
+  return props.countries.filter(c => c.label.toLowerCase().includes(query) ||
+    c.value.toLowerCase().includes(query) ||
+    c.dialCode.includes(query));
 });
 
 const selectedCountry = computed(() => props.countries.find(c => c.value === props.modelValue) || null);
-
-watch(isOpen, (val) => {
-  if (!val) {
-    searchQuery.value = null;
-  }
-});
-
-function onSelect(val: string | number | null) {
-  emit('update:modelValue', val);
-  emit('select', props.countries.find(c => c.value === val));
-  isOpen.value = false;
-}
-
-function toggleMenu(e: MouseEvent) {
-  e.preventDefault();
-
-  if (props.disabled || props.readonly) {
-    return;
-  }
-
-  e.stopPropagation();
-
-  if (isOpen.value) {
-    inputRef.value?.focus();
-  }
-
-  isOpen.value = !isOpen.value;
-}
+const rootComponent = computed(() => (props.isGrouped ? 'div' : AntField));
 
 const inputClasses = computed(() => {
   const variants: Record<InputState, string> = {
@@ -138,7 +105,25 @@ const inputClasses = computed(() => {
     'p-2.5 text-sm': props.size === Size.lg,
     'focus:ring-2': !hasInputState.value && (props.size === Size.sm || props.size === Size.xs || props.size === Size.xs2),
     'focus:ring-4': !hasInputState.value && (props.size === Size.lg || props.size === Size.md),
-    'rounded-md': true,
+    'rounded-md': props.grouped === Grouped.none,
+    'rounded-tl-md rounded-bl-md rounded-tr-none rounded-br-none': props.grouped === Grouped.left,
+    'rounded-none': props.grouped === Grouped.center,
+    'rounded-tr-md rounded-br-md rounded-tl-none rounded-bl-none': props.grouped === Grouped.right,
+  };
+});
+
+const placeholderClasses = computed(() => {
+  const variants: Record<InputState, string> = {
+    [InputState.base]: 'text-base-500',
+    [InputState.success]: 'text-success-700',
+    [InputState.info]: 'text-info-700',
+    [InputState.warning]: 'text-warning-700',
+    [InputState.danger]: 'text-danger-700',
+  };
+
+  return {
+    'select-none text-ellipsis overflow-hidden whitespace-nowrap w-full': true,
+    [variants[props.state]]: true,
   };
 });
 
@@ -154,52 +139,54 @@ const arrowClasses = computed(() => {
   return variants[props.state];
 });
 
-const skeletonGrouped = computed(() => {
-  return props.grouped || Grouped.none;
-});
+const skeletonGrouped = computed(() => props.grouped || Grouped.none);
+const iconSize = computed(() => (props.size === Size.lg || props.size === Size.md || props.size === Size.sm ? IconSize.sm : IconSize.xs));
 
-const iconSize = computed(() => {
-  if (props.size === Size.lg || props.size === Size.md || props.size === Size.sm) {
-    return IconSize.sm;
-  }
+function onSelect(val: string | number | null) {
+  emit('update:modelValue', val);
+  emit('select', props.countries.find(c => c.value === val));
+  isOpen.value = false;
+  inputRef.value?.focus();
+}
 
-  return IconSize.xs;
-});
-
-const selectMenuRef = ref<any>(null);
+function toggleMenu(e: MouseEvent) {
+  if (props.disabled || props.readonly) return;
+  e.preventDefault();
+  e.stopPropagation();
+  if (isOpen.value) inputRef.value?.focus();
+  isOpen.value = !isOpen.value;
+}
 
 function onClickOutside(e: Event) {
-  if (!isOpen.value) {
-    return;
-  }
-
+  if (!isOpen.value) return;
   const menuElement = selectMenuRef.value?.floating;
   const triggerElement = inputRef.value;
-
-  if (
-    (menuElement && menuElement.contains(e.target as Node)) ||
-    (triggerElement && triggerElement.contains(e.target as Node))
-  ) {
-    return;
-  }
-
+  if ((menuElement && menuElement.contains(e.target as Node)) || (triggerElement && triggerElement.contains(e.target as Node))) return;
   isOpen.value = false;
 }
 
 onMounted(() => {
-  if (!props.modelValue && defaultCountry.value) {
+  if (props.autoSelectDefault && !props.modelValue && defaultCountry.value) {
     onSelect(defaultCountry.value.value);
+  }
+});
+
+watch(isOpen, (val) => {
+  if (!val) {
+    searchQuery.value = null;
   }
 });
 </script>
 
 <template>
-  <AntField
-    :label="label"
-    :description="description"
+  <component
+    :is="rootComponent"
+    :label="isGrouped ? undefined : label"
+    :description="isGrouped ? undefined : description"
     :state="state"
     :size="size"
     :skeleton="skeleton"
+    class="ant-country"
   >
     <div
       v-on-click-outside="onClickOutside"
@@ -246,25 +233,25 @@ onMounted(() => {
               <template v-if="selectedCountry">
                 <span
                   v-if="showFlags"
-                  class="text-lg"
-                >
-                  {{ selectedCountry.flag }}
-                </span>
+                  class="text-lg leading-none"
+                >{{ selectedCountry.flag }}</span>
                 <span class="truncate font-medium">{{ selectedCountry.dialCode }}</span>
-                <span class="truncate ">{{ selectedCountry.label }}</span>
+                <span
+                  v-if="!isGrouped"
+                  class="truncate"
+                >{{ selectedCountry.label }}</span>
               </template>
-              <span
+              <div
                 v-else
-                class="text-base-500"
+                :class="placeholderClasses"
               >
-                hello
                 {{ placeholder }}
-              </span>
+              </div>
             </div>
 
             <AntIcon
               :icon="isOpen ? faChevronUp : faChevronDown"
-              class="ml-2"
+              class="ml-2 flex-shrink-0"
               :class="arrowClasses"
               :size="iconSize"
             />
@@ -275,21 +262,17 @@ onMounted(() => {
           <span
             v-if="showFlags"
             class="text-lg"
-          >
-            {{ (option as CountryOption).flag }}
-          </span>
+          >{{ (option as Country).flag }}</span>
         </template>
-
         <template #contentRight="option">
-          <span class="text-xs ml-auto">{{ option.dialCode }}</span>
+          <span class="text-xs ml-auto">{{ (option as Country).dialCode }}</span>
         </template>
-
         <template #empty>
-          <div class="p-4 text-center text-sm text-base-500">
-            No countries found
+          <div class="p-2 text-center text-sm text-base-500">
+            {{ emptyStateMessage }}
           </div>
         </template>
       </AntSelectMenu>
     </div>
-  </AntField>
+  </component>
 </template>
