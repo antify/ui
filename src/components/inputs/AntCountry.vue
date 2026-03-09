@@ -67,21 +67,19 @@ const focusedItem = ref<string | number | null>(null);
 const selectMenuRef = ref<any>(null);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const defaultCountry = computed(() => props.countries.find(c => c.isDefault));
-
 const filteredOptions = computed(() => {
   if (!props.searchable || !searchQuery.value) {
     return props.countries;
   }
+
   const query = searchQuery.value.toLowerCase();
 
   return props.countries.filter(c => c.label.toLowerCase().includes(query) ||
     c.value.toLowerCase().includes(query) ||
     c.dialCode.includes(query));
 });
-
 const selectedCountry = computed(() => props.countries.find(c => c.value === props.modelValue) || null);
 const rootComponent = computed(() => (props.isGrouped ? 'div' : AntField));
-
 const inputClasses = computed(() => {
   const variants: Record<InputState, string> = {
     [InputState.base]: 'outline-base-300 bg-white focus:ring-primary-200',
@@ -111,7 +109,6 @@ const inputClasses = computed(() => {
     'rounded-tr-md rounded-br-md rounded-tl-none rounded-bl-none': props.grouped === Grouped.right,
   };
 });
-
 const placeholderClasses = computed(() => {
   const variants: Record<InputState, string> = {
     [InputState.base]: 'text-base-500',
@@ -126,7 +123,6 @@ const placeholderClasses = computed(() => {
     [variants[props.state]]: true,
   };
 });
-
 const arrowClasses = computed(() => {
   const variants: Record<InputState, string> = {
     [InputState.base]: 'text-for-white-bg-font',
@@ -138,30 +134,44 @@ const arrowClasses = computed(() => {
 
   return variants[props.state];
 });
-
 const skeletonGrouped = computed(() => props.grouped || Grouped.none);
 const iconSize = computed(() => (props.size === Size.lg || props.size === Size.md || props.size === Size.sm ? IconSize.sm : IconSize.xs));
 
 function onSelect(val: string | number | null) {
   emit('update:modelValue', val);
   emit('select', props.countries.find(c => c.value === val));
+
   isOpen.value = false;
   inputRef.value?.focus();
 }
 
 function toggleMenu(e: MouseEvent) {
-  if (props.disabled || props.readonly) return;
+  if (props.disabled || props.readonly) {
+    return;
+  }
+
   e.preventDefault();
   e.stopPropagation();
-  if (isOpen.value) inputRef.value?.focus();
+
+  if (isOpen.value) {
+    inputRef.value?.focus();
+  }
+
   isOpen.value = !isOpen.value;
 }
 
 function onClickOutside(e: Event) {
-  if (!isOpen.value) return;
+  if (!isOpen.value) {
+    return;
+  }
+
   const menuElement = selectMenuRef.value?.floating;
   const triggerElement = inputRef.value;
-  if ((menuElement && menuElement.contains(e.target as Node)) || (triggerElement && triggerElement.contains(e.target as Node))) return;
+
+  if ((menuElement && menuElement.contains(e.target as Node)) || (triggerElement && triggerElement.contains(e.target as Node))) {
+    return;
+  }
+
   isOpen.value = false;
 }
 
@@ -235,12 +245,15 @@ watch(isOpen, (val) => {
                   v-if="showFlags"
                   class="text-lg leading-none"
                 >{{ selectedCountry.flag }}</span>
+
                 <span class="truncate font-medium">{{ selectedCountry.dialCode }}</span>
+
                 <span
                   v-if="!isGrouped"
                   class="truncate"
                 >{{ selectedCountry.label }}</span>
               </template>
+
               <div
                 v-else
                 :class="placeholderClasses"
@@ -264,9 +277,11 @@ watch(isOpen, (val) => {
             class="text-lg"
           >{{ (option as Country).flag }}</span>
         </template>
+
         <template #contentRight="option">
-          <span class="text-xs ml-auto">{{ (option as Country).dialCode }}</span>
+          <span class="text-md ml-auto">{{ (option as Country).dialCode }}</span>
         </template>
+
         <template #empty>
           <div class="p-2 text-center text-sm text-base-500">
             {{ emptyStateMessage }}

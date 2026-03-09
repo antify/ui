@@ -2,11 +2,12 @@ import {
   type Meta, type StoryObj,
 } from '@storybook/vue3';
 import AntCountry from '../AntCountry.vue';
+import AntField from '../../../components/forms/AntField.vue';
 import {
   ref,
 } from 'vue';
 import {
-  InputState, Size,
+  InputState, Size, Grouped,
 } from '../../../enums';
 import {
   COUNTRIES,
@@ -48,9 +49,12 @@ const MainRender = (args: any) => ({
     };
   },
   template: `
-    <div class="p-10 h-[400px]">
+    <div>
       <AntCountry v-bind="args" v-model="modelValue" />
-      <div class="mt-4 text-xs text-gray-400 font-mono">Value: {{ modelValue || null }}</div>
+
+      <div class="mt-2 text-md text-gray-400">
+        Value: {{ modelValue === null ? 'null' : modelValue }}
+      </div>
     </div>
   `,
 });
@@ -69,33 +73,13 @@ export const Docs: Story = {
 };
 
 export const DefaultCountry: Story = {
-  render: (args) => ({
-    components: {
-      AntCountry,
-    },
-    setup() {
-      const val = ref(null);
-
-      return {
-        args,
-        val,
-      };
-    },
-    template: `
-      <div class="p-10">
-        <h3 class="mb-2 text-sm font-bold text-primary-500">Auto-selection Test (Initial value: null)</h3>
-        <AntCountry v-bind="args" v-model="val" />
-        <div class="mt-4 p-2 bg-gray-50 border rounded text-xs">
-          Resulting v-model: <b>{{ val }}</b>
-        </div>
-      </div>
-    `,
-  }),
+  render: MainRender,
   args: {
-    countries: COUNTRIES,
-    modelValue: null,
+    ...Docs.args,
     label: 'Default Country Logic',
-    searchPlaceholder: 'Search...',
+    description: 'Automatically selects Germany (DE) as it is marked as isDefault: true in our data.',
+    modelValue: null,
+    autoSelectDefault: true,
   },
 };
 
@@ -121,33 +105,52 @@ export const GroupedMode: Story = {
   render: (args) => ({
     components: {
       AntCountry,
+      AntField,
     },
     setup() {
-      const val = ref('KZ');
+      const modelValue = ref(args.modelValue);
 
       return {
         args,
-        val,
+        modelValue,
       };
     },
     template: `
-      <div class="p-10">
-        <h3 class="mb-4 text-sm font-bold text-gray-500">Grouped Mode (Phone Input Style)</h3>
-        <div class="flex items-center">
-          <AntCountry
-            v-bind="args"
-            v-model="val"
-            class="w-fit"
-          />
+      <div>
+        <AntField
+          :label="args.label"
+          :description="args.description"
+          :size="args.size"
+          :state="args.state"
+        >
+          <div class="flex items-center">
+            <AntCountry
+              v-bind="args"
+              v-model="modelValue"
+              class="w-fit flex-shrink-0"
+            />
+
+            <div
+              class="flex-grow border border-l-0 p-2 text-sm text-gray-400 bg-gray-50 border-base-300 rounded-r-md h-[36px] flex items-center"
+            >
+              Input area...
+            </div>
+          </div>
+        </AntField>
+
+        <div class="mt-2 text-md text-gray-400">
+          Value: {{ modelValue || null }}
         </div>
-        <p class="mt-2 text-xs text-gray-400 italic">Only flag and dial code are shown when isGrouped is true.</p>
       </div>
     `,
   }),
   args: {
     ...Docs.args,
-    label: 'Grouped Style',
+    label: 'Grouped Mode (Phone Input Style)',
+    description: 'When isGrouped is true, label and description must be provided by a parent AntField.',
     isGrouped: true,
+    grouped: Grouped.left,
+    modelValue: 'DE',
     countries: COUNTRIES,
   },
 };
@@ -157,6 +160,7 @@ export const GermanEmptyState: Story = {
   args: {
     ...Docs.args,
     label: 'German Empty State',
+    description: 'Custom empty state message: "Keine Länder gefunden". Open the dropdown to see it.',
     searchPlaceholder: 'Land suchen...',
     emptyStateMessage: 'Keine Länder gefunden',
     countries: [],
