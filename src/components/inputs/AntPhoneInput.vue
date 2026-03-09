@@ -1,5 +1,8 @@
 <script lang="ts" setup>
 import {
+  computed,
+} from 'vue';
+import {
   useVModel,
 } from '@vueuse/core';
 import AntField from '../forms/AntField.vue';
@@ -23,22 +26,37 @@ const props = withDefaults(defineProps<{
   modelValue: string | null;
   countryValue: string | null;
   countries: Country[];
-  label?: string;
-  description?: string;
-  placeholder?: string;
+
+  //Common Props
   size?: Size;
   state?: InputState;
   disabled?: boolean;
   readonly?: boolean;
   skeleton?: boolean;
-  searchable?: boolean;
-  searchPlaceholder?: string;
+
+  //AntField Props
+  label?: string;
+  description?: string;
   messages?: string[];
+
+  //AntCountry Props
+  countryPlaceholder?: string;
+  searchPlaceholder?: string;
+  searchable?: boolean;
+  countryMaxHeight?: string;
+  autoSelectDefault?: boolean;
+
+  //AntBaseInput Props
+  placeholder?: string;
+
 }>(), {
   size: Size.md,
   state: InputState.base,
   searchable: true,
   searchPlaceholder: 'Search country...',
+  countryPlaceholder: 'Select country',
+  autoSelectDefault: true,
+  placeholder: 'Enter phone number',
   messages: () => [],
 });
 
@@ -50,11 +68,50 @@ const emit = defineEmits([
   'blur',
 ]);
 
-const _phoneNumber = useVModel(props, 'modelValue', emit);
 const _countryCode = useVModel(props, 'countryValue', emit);
+
+const currentCountry = computed(() => props.countries.find(c => c.value === props.countryValue));
+
+const formatByMask = (value: string, mask: string): string => {
+  if (!value) return '';
+  const digits = value.replace(/\D/g, '');
+  let result = '';
+  let digitIndex = 0;
+
+  for (let i = 0; i < mask.length && digitIndex < digits.length; i++) {
+    if (mask[i] === '#') {
+      result += digits[digitIndex] || '';
+      if (digits[digitIndex]) digitIndex++;
+    } else {
+      result += mask[i];
+    }
+  }
+
+  return result;
+};
+
+const formattedNumber = computed({
+  get: () => {
+    const val = props.modelValue || '';
+    const mask = currentCountry.value?.mask;
+
+    return mask ? formatByMask(val, mask) : val;
+  },
+  set: (val: string | null) => {
+    let unmasked = val ? val.replace(/\D/g, '') : '';
+    const mask = currentCountry.value?.mask;
+
+    if (mask) {
+      const maxDigits = (mask.match(/#/g) || []).length;
+      unmasked = unmasked.slice(0, maxDigits);
+    }
+    emit('update:modelValue', unmasked || null);
+  },
+});
 
 function onCountrySelect(country: Country) {
   emit('select-country', country);
+  emit('update:modelValue', null);
 }
 </script>
 
@@ -81,24 +138,27 @@ function onCountrySelect(country: Country) {
         :readonly="readonly"
         :skeleton="skeleton"
         :searchable="searchable"
+        :placeholder="countryPlaceholder"
         :search-placeholder="searchPlaceholder"
+        :max-height="countryMaxHeight"
         :is-grouped="true"
         :grouped="Grouped.left"
+        :auto-select-default="autoSelectDefault"
         class="w-fit flex-shrink-0"
         @select="onCountrySelect"
       />
 
       <AntBaseInput
-        v-model="_phoneNumber"
+        v-model="formattedNumber"
         :type="BaseInputType.text"
-        :grouped="Grouped.right"
-        wrapper-class="flex-grow"
         :state="state"
         :size="size"
         :skeleton="skeleton"
         :disabled="disabled"
         :readonly="readonly"
         :placeholder="placeholder"
+        :grouped="Grouped.right"
+        wrapper-class="flex-grow"
         v-bind="$attrs"
         @validate="val => $emit('validate', val)"
         @blur="e => $emit('blur', e)"

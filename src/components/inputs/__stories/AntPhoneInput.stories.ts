@@ -35,9 +35,6 @@ const meta: Meta<typeof AntPhoneInput> = {
       },
       options: Object.values(InputState),
     },
-    onSelectCountry: {
-      action: 'select-country',
-    },
     onValidate: {
       action: 'validate',
     },
@@ -54,101 +51,121 @@ export const Default: Story = {
       AntPhoneInput,
     },
     setup() {
-      const phoneNumber = ref('');
-      const countryCode = ref('KZ');
+      const phone1 = ref(null);
+      const country1 = ref(null);
+      const phone2 = ref(null);
+      const country2 = ref(null);
 
       return {
         args,
-        phoneNumber,
-        countryCode,
+        phone1,
+        country1,
+        phone2,
+        country2,
       };
     },
     template: `
-      <AntPhoneInput
-        v-bind="args"
-        v-model="phoneNumber"
-        v-model:country-value="countryCode"
-      />
-      <div class="mt-4 text-xs text-gray-500">
-        Output: {{ countryCode }} {{ phoneNumber }}
+      <div class="space-y-4">
+        <div>
+          <h3 class="mb-2 text-sm font-bold text-gray-500">With Search (Default)</h3>
+          <AntPhoneInput
+            v-bind="args"
+            v-model="phone1"
+            v-model:country-value="country1"
+          />
+          <div class="mt-2 text-md text-base-500">
+            Data: {{ country1 || 'null' }} | {{ phone1 || 'null' }}
+          </div>
+        </div>
+
+        <hr class="border-gray-200" />
+
+        <div>
+          <h3 class="mb-2 text-sm font-bold text-gray-500">Without Search</h3>
+          <AntPhoneInput
+            v-bind="args"
+            v-model="phone2"
+            v-model:country-value="country2"
+            :searchable="false"
+          />
+          <div class="mt-2 text-md text-base-500">
+            Data: {{ country2 || 'null' }} | {{ phone2 || 'null' }}
+          </div>
+        </div>
       </div>
     `,
   }),
   args: {
     label: 'Phone Number',
     description: 'Enter your mobile phone number',
-    placeholder: '707 123 45 67',
+    placeholder: 'Enter digits',
+    countryPlaceholder: 'Select your country',
     countries: COUNTRIES,
+    autoSelectDefault: false,
     size: Size.md,
     state: InputState.base,
   },
 };
 
-export const States: Story = {
-  render: () => ({
-    components: {
-      AntPhoneInput,
+export const summary: Story = {
+  parameters: {
+    chromatic: {
+      disableSnapshot: false,
     },
-    setup() {
-      return {
-        COUNTRIES,
-        InputState,
-      };
-    },
-    template: `
-      <div class="flex flex-col gap-6">
-        <AntPhoneInput
-          label="Success State"
-          :state="InputState.success"
-          :countries="COUNTRIES"
-          model-value="7012223344"
-          country-value="KZ"
-        />
-        <AntPhoneInput
-          label="Danger State"
-          :state="InputState.danger"
-          :countries="COUNTRIES"
-          :messages="['This phone number is already registered']"
-          model-value="7012223344"
-          country-value="KZ"
-        />
-        <AntPhoneInput
-          label="Disabled"
-          disabled
-          :countries="COUNTRIES"
-          model-value="7012223344"
-          country-value="DE"
-        />
-      </div>
-    `,
-  }),
-};
-
-export const Skeleton: Story = {
-  args: {
-    label: 'Phone Number',
-    skeleton: true,
-    countries: COUNTRIES,
   },
-};
-
-export const Sizes: Story = {
-  render: () => ({
+  render: (args) => ({
     components: {
       AntPhoneInput,
     },
     setup() {
+      const phone = ref(null);
+      const country = ref('DE');
+
       return {
+        args,
+        phone,
+        country,
+        InputState,
         Size,
         COUNTRIES,
       };
     },
     template: `
       <div class="flex flex-col gap-4">
-        <AntPhoneInput :size="Size.sm" label="Small" :countries="COUNTRIES" />
-        <AntPhoneInput :size="Size.md" label="Medium" :countries="COUNTRIES" />
-        <AntPhoneInput :size="Size.lg" label="Large" :countries="COUNTRIES" />
+        <div class="flex flex-col gap-4">
+          <h2 class="text-xl font-bold border-b pb-2 text-gray-700">Input States (Germany Case)</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <AntPhoneInput v-bind="args" v-model="phone" v-model:country-value="country" :state="InputState.base" label="Base State" />
+            <AntPhoneInput v-bind="args" v-model="phone" v-model:country-value="country" :state="InputState.info" label="Info State" :messages="['Bitte geben Sie Ihre Mobilnummer ein']" />
+            <AntPhoneInput v-bind="args" v-model="phone" v-model:country-value="country" :state="InputState.success" label="Success State" />
+            <AntPhoneInput v-bind="args" v-model="phone" v-model:country-value="country" :state="InputState.warning" label="Warning State" :messages="['Prüfen Sie die Vorwahl']" />
+            <AntPhoneInput v-bind="args" v-model="phone" v-model:country-value="country" :state="InputState.danger" label="Danger State" :messages="['Ungültige Telefonnummer']" />
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          <h2 class="text-xl font-bold border-b pb-2 text-gray-700">Sizes</h2>
+          <div class="flex flex-col gap-4">
+            <AntPhoneInput v-bind="args" v-model="phone" v-model:country-value="country" :size="Size.sm" label="Small (sm)" />
+            <AntPhoneInput v-bind="args" v-model="phone" v-model:country-value="country" :size="Size.md" label="Medium (md)" />
+            <AntPhoneInput v-bind="args" v-model="phone" v-model:country-value="country" :size="Size.lg" label="Large (lg)" />
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          <h2 class="text-xl font-bold border-b pb-2 text-gray-700">Special Modes</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <AntPhoneInput v-bind="args" country-value="DE" model-value="1512345678" disabled label="Disabled" />
+            <AntPhoneInput v-bind="args" country-value="DE" model-value="1512345678" readonly label="Readonly" />
+            <AntPhoneInput v-bind="args" skeleton label="Skeleton" />
+          </div>
+        </div>
       </div>
     `,
   }),
+  args: {
+    countries: COUNTRIES,
+    countryPlaceholder: 'Land wählen',
+    searchPlaceholder: 'Suchen...',
+  },
 };
