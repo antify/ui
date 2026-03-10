@@ -72,6 +72,7 @@ const props = withDefaults(defineProps<{
 });
 const emit = defineEmits([
   'update:modelValue',
+  'update:inputRef',
   'validate',
 ]);
 
