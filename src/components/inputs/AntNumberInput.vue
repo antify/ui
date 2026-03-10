@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-  computed, onMounted,
+  computed, onMounted, nextTick,
 } from 'vue';
 import AntButton from '../AntButton.vue';
 import AntField from '../forms/AntField.vue';
@@ -58,6 +58,8 @@ const props = withDefaults(defineProps<{
   messages?: string[];
   indicators?: boolean;
   inputRef?: HTMLInputElement | null;
+  clearOnFocus?: boolean;
+  defaultValue?: number;
 }>(), {
   state: InputState.base,
   disabled: false,
@@ -69,90 +71,121 @@ const props = withDefaults(defineProps<{
   messages: () => [],
   indicators: false,
   inputRef: null,
+  clearOnFocus: false,
+  defaultValue: 0,
 });
 const emit = defineEmits([
   'update:modelValue',
   'update:inputRef',
   'validate',
+  'focus',
+  'blur',
 ]);
+
+const _inputRef = useVModel(props, 'inputRef', emit);
 
 const _modelValue = computed({
   get: () => {
-    if(!props.modelValue) {
+    if (props.modelValue === null || props.modelValue === undefined) {
       return props.modelValue;
     }
 
-    const modelDecimalPlaces = getDecimalPlaces(props.modelValue || 0);
-    const stepDecimalPlaces = getDecimalPlaces(props.steps);
-    const decimalPlaces = Math.max(modelDecimalPlaces, stepDecimalPlaces);
+    const dp = getPrecision();
 
-    return String(new Big(props.modelValue).toFixed(decimalPlaces));
+    return String(new Big(props.modelValue).toFixed(dp));
   },
-  set: (val: string) => {
-    emit('update:modelValue', Number(val));
+  set: (val: any) => {
+    const num = (val === '' || val === null) ? null : Number(val);
+    emit('update:modelValue', num);
   },
 });
-const _inputRef = useVModel(props, 'inputRef', emit);
+
+async function onInputFocus(e: FocusEvent) {
+  if (props.clearOnFocus) {
+    emit('update:modelValue', null);
+    await nextTick();
+  }
+
+  const el = e.target as HTMLInputElement;
+  if (el) {
+    const originalType = el.type;
+    el.type = 'text';
+
+    setTimeout(() => {
+      const length = el.value ? String(el.value).length : 0;
+      el.setSelectionRange(length, length);
+      el.type = originalType;
+    }, 0);
+  }
+  emit('focus', e);
+}
+
+function getPrecision() {
+  const modelDecimalPlaces = getDecimalPlaces(props.modelValue || 0);
+  const stepDecimalPlaces = getDecimalPlaces(props.steps);
+
+  return Math.max(modelDecimalPlaces, stepDecimalPlaces);
+}
+
+function subtract() {
+  const dp = getPrecision();
+
+  const current = props.modelValue !== null ? new Big(props.modelValue) : new Big(props.max || 0);
+  let result = current.sub(props.steps);
+
+  if (props.min !== undefined && result.lt(props.min)) {
+    result = new Big(props.min);
+  }
+
+  emit('update:modelValue', Number(result.toFixed(dp)));
+}
+
+function add() {
+  const dp = getPrecision();
+
+  const current = props.modelValue !== null ? new Big(props.modelValue) : new Big(props.min || 0);
+  let result = current.add(props.steps);
+
+  if (props.max !== undefined && result.gt(props.max)) {
+    result = new Big(props.max);
+  }
+
+  emit('update:modelValue', Number(result.toFixed(dp)));
+}
 
 const isPrevButtonDisabled = computed(() => {
-  if (props.disabled) {
+  if (props.disabled || props.readonly) {
     return true;
   }
 
-  if (_modelValue.value === null) {
+  if (props.modelValue === null) {
     return false;
   }
 
-  return props.min !== undefined ? Number(_modelValue.value) <= props.min : false;
+  return props.min !== undefined ? Number(props.modelValue) <= props.min : false;
 });
+
 const isNextButtonDisabled = computed(() => {
-  if (props.disabled) {
+  if (props.disabled || props.readonly) {
     return true;
   }
 
-  if (_modelValue.value === null) {
+  if (props.modelValue === null) {
     return false;
   }
 
-  return props.max !== undefined ? Number(_modelValue.value) >= props.max : false;
+  return props.max !== undefined ? Number(props.modelValue) >= props.max : false;
 });
+
+function onButtonBlur() {
+  emit('validate', props.modelValue);
+  emit('blur');
+}
 
 onMounted(() => {
   handleEnumValidation(props.size, Size, 'size');
   handleEnumValidation(props.state, InputState, 'state');
 });
-
-function subtract() {
-  const modelDecimalPlaces = getDecimalPlaces(_modelValue.value || 0);
-  const stepDecimalPlaces = getDecimalPlaces(props.steps);
-  const decimalPlaces = Math.max(modelDecimalPlaces, stepDecimalPlaces);
-
-  if (_modelValue.value === null) {
-    _modelValue.value = String(props.max || new Big(0).toFixed(decimalPlaces));
-  } else if (props.max !== undefined && Number(_modelValue.value) - props.steps > props.max) {
-    _modelValue.value = String(props.max);
-  } else {
-    _modelValue.value = new Big(_modelValue.value).sub(props.steps).toFixed(decimalPlaces);
-  }
-}
-
-function add() {
-  const modelDecimalPlaces = getDecimalPlaces(_modelValue.value || 0);
-  const stepDecimalPlaces = getDecimalPlaces(props.steps);
-  const decimalPlaces = Math.max(modelDecimalPlaces, stepDecimalPlaces);
-
-  if (_modelValue.value === null) {
-    return _modelValue.value = String(props.min || new Big(0).toFixed(decimalPlaces));
-  } else if (props.min !== undefined && Number(_modelValue.value) + props.steps < props.min) {
-    return _modelValue.value = String(props.min);
-  } else {
-    _modelValue.value = new Big(_modelValue.value).add(props.steps).toFixed(decimalPlaces);
-  }
-}
-
-function onButtonBlur() {
-  emit('validate', _modelValue.value);
-}
 </script>
 
 <template>
@@ -185,7 +218,7 @@ function onButtonBlur() {
       />
 
       <AntBaseInput
-        v-model.number="_modelValue"
+        v-model="_modelValue"
         v-model:input-ref="_inputRef"
         :type="BaseInputType.number"
         :grouped="indicators ? Grouped.center : Grouped.none"
@@ -201,6 +234,8 @@ function onButtonBlur() {
         :show-icon="false"
         v-bind="$attrs"
         @validate="val => $emit('validate', val)"
+        @focus="onInputFocus"
+        @blur="onButtonBlur"
       />
 
       <AntButton
@@ -219,3 +254,18 @@ function onButtonBlur() {
     </div>
   </AntField>
 </template>
+
+<style scoped>
+:deep(input) {
+  text-align: right !important;
+}
+
+:deep(input::-webkit-outer-spin-button),
+:deep(input::-webkit-inner-spin-button) {
+  -webkit-appearance: none;
+  margin: 0;
+}
+:deep(input[type=number]) {
+  -moz-appearance: textfield;
+}
+</style>

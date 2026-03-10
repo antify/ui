@@ -50,6 +50,33 @@ const meta: Meta<typeof AntNumberInput> = {
         },
       },
     },
+    steps: {
+      control: {
+        type: 'number',
+      },
+    },
+    min: {
+      control: {
+        type: 'number',
+      },
+    },
+    max: {
+      control: {
+        type: 'number',
+      },
+    },
+    clearOnFocus: {
+      control: {
+        type: 'boolean',
+      },
+      description: 'Clears the input or sets to defaultValue when focused',
+    },
+    defaultValue: {
+      control: {
+        type: 'number',
+      },
+      description: 'The value used when resetting or as a starting point for indicators',
+    },
     placeholder: {
       table: {
         defaultValue: {
@@ -69,23 +96,167 @@ export const Docs: Story = {
     components: {
       AntNumberInput,
     },
-    setup() {
-      return {
-        args,
-      };
-    },
-    template: `
-      <AntNumberInput
-        v-bind="args"
-        v-model="args.modelValue"
-      />`,
+    setup() { return {
+      args,
+    }; },
+    template: '<AntNumberInput v-bind="args" v-model="args.modelValue" />',
   }),
   args: {
     modelValue: null,
     steps: 1,
-    label: 'Label',
-    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
+    label: 'Standard Number Input',
+    description: 'Basic usage with manual entry or indicators',
   },
+};
+
+export const SpecialBehaviors: Story = {
+  render: (args) => ({
+    components: {
+      AntNumberInput,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
+    setup() {
+      const val1 = ref(42);
+      const val2 = ref(100);
+
+      return {
+        args,
+        val1,
+        val2,
+      };
+    },
+    template: `
+      <AntFormGroup>
+        <AntFormGroup direction="column">
+          <AntFormGroup>
+            <AntFormGroupLabel>Clear on Focus (to 0)</AntFormGroupLabel>
+            <AntNumberInput
+              v-bind="args"
+              v-model="val1"
+              :clearOnFocus="true"
+              :defaultValue="0"
+              label="Click me"
+              description="Value will reset to 0 when you focus the input"
+            />
+          </AntFormGroup>
+
+          <AntFormGroup>
+            <AntFormGroupLabel>Clear on Focus (to Default 100)</AntFormGroupLabel>
+            <AntNumberInput
+              v-bind="args"
+              v-model="val2"
+              :clearOnFocus="true"
+              :defaultValue="100"
+              label="Reset to 100"
+              description="Focus to see it jump back to 100"
+            />
+          </AntFormGroup>
+        </AntFormGroup>
+      </AntFormGroup>`,
+  }),
+};
+
+export const ClearToNullOnFocus: Story = {
+  render: (args) => ({
+    components: {
+      AntNumberInput,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
+    setup() {
+      const myValue = ref(12345);
+
+      return {
+        args,
+        myValue,
+      };
+    },
+    template: `
+      <AntFormGroup class="w-80">
+        <AntFormGroupLabel>Case: Full Clear on Focus</AntFormGroupLabel>
+        <AntNumberInput
+          v-bind="args"
+          v-model="myValue"
+          :clearOnFocus="true"
+          placeholder="Enter new number..."
+          label="Amount"
+          description="Click in the field to make the existing value (12345) disappear"
+        />
+        <p class="text-xs text-gray-500 mt-2">
+          Model value: <span class="font-mono text-primary-600">{{ myValue ?? 'null' }}</span>
+        </p>
+      </AntFormGroup>
+    `,
+  }),
+};
+
+export const PrecisionAndSteps: Story = {
+  render: (args) => ({
+    components: {
+      AntNumberInput,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
+    setup() {
+      const floatVal = ref(0.5);
+
+      return {
+        args,
+        floatVal,
+      };
+    },
+    template: `
+      <AntFormGroup>
+        <AntFormGroup direction="row">
+          <AntFormGroup>
+            <AntFormGroupLabel>Integer (Step 1)</AntFormGroupLabel>
+            <AntNumberInput v-bind="args" :steps="1" v-model="args.modelValue" />
+          </AntFormGroup>
+
+          <AntFormGroup>
+            <AntFormGroupLabel>Currency Style (Step 0.01)</AntFormGroupLabel>
+            <AntNumberInput v-bind="args" :steps="0.01" v-model="floatVal" indicators />
+          </AntFormGroup>
+
+          <AntFormGroup>
+            <AntFormGroupLabel>High Precision (Step 0.0005)</AntFormGroupLabel>
+            <AntNumberInput v-bind="args" :steps="0.0005" v-model="floatVal" indicators />
+          </AntFormGroup>
+        </AntFormGroup>
+      </AntFormGroup>`,
+  }),
+};
+
+export const Limits: Story = {
+  render: (args) => ({
+    components: {
+      AntNumberInput,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
+    setup() {
+      const limitedVal = ref(5);
+
+      return {
+        args,
+        limitedVal,
+      };
+    },
+    template: `
+      <AntFormGroup class="w-96">
+        <AntFormGroupLabel>Min: 0 | Max: 10</AntFormGroupLabel>
+        <AntNumberInput
+          v-bind="args"
+          v-model="limitedVal"
+          :min="0"
+          :max="10"
+          indicators
+          limiter
+          label="Try to exceed limits"
+        />
+      </AntFormGroup>`,
+  }),
 };
 
 export const WithIndicators: Story = {
