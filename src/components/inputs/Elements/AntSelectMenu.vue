@@ -22,7 +22,7 @@ import type {
   Validator,
 } from '@antify/validate';
 import {
-  autoPlacement, autoUpdate, flip, offset, useFloating,
+  autoUpdate, flip, offset, useFloating,
 } from '@floating-ui/vue';
 
 const emit = defineEmits([
@@ -43,12 +43,14 @@ const props = withDefaults(defineProps<{
   closeOnEnter?: boolean;
   autoSelectFirstOnOpen?: boolean;
   closeOnSelectItem?: boolean;
+  maxHeight?: string;
 }>(), {
   state: InputState.base,
   focusOnOpen: true,
   closeOnEnter: false,
   autoSelectFirstOnOpen: true,
   closeOnSelectItem: true,
+  maxHeight: '350px',
 });
 const reference = ref<HTMLElement | null | undefined>(props.inputRef);
 const elementSize = useElementSize(reference);
@@ -80,32 +82,16 @@ const _modelValue = useVModel(props, 'modelValue', emit);
 const isOpen = useVModel(props, 'open', emit);
 const focusedDropDownItem = useVModel(props, 'focused', emit);
 const dropdownClasses = computed(() => {
-  const variants: Record<InputState, string> = {
-    [InputState.base]: 'bg-base-300 border-base-300',
-    [InputState.success]: 'bg-success-500 border-success-500',
-    [InputState.info]: 'bg-info-500 border-info-500',
-    [InputState.warning]: 'bg-warning-500 border-warning-500',
-    [InputState.danger]: 'bg-danger-500 border-danger-500',
-  };
-
   return {
     'w-fit border outline-none -mt-px overflow-y-auto shadow-md z-[90] max-h-[250px]': true,
     'rounded-md': true,
-    [variants[props.state]]: true,
+    'bg-base-300 border-base-300': true,
   };
 });
 const dropDownItemClasses = computed(() => {
-  const variants: Record<InputState, string> = {
-    [InputState.base]: 'bg-white text-for-white-bg-font',
-    [InputState.success]: 'bg-success-100 border-success-100-font',
-    [InputState.info]: 'bg-info-100 border-info-100-font',
-    [InputState.warning]: 'bg-warning-100 border-warning-100-font',
-    [InputState.danger]: 'bg-danger-100 border-danger-100-font',
-  };
-
   return {
     'flex items-center select-none text-ellipsis overflow-hidden whitespace-nowrap min-h-fit': true,
-    [variants[props.state]]: true,
+    'bg-white text-for-white-bg-font': true,
     // Size
     'p-1 text-xs gap-1': props.size === Size.xs2,
     'p-1.5 text-xs gap1.5': props.size === Size.xs,
@@ -241,17 +227,8 @@ function getActiveDropDownItemClasses(option: SelectOption) {
     return {};
   }
 
-  const variants: Record<InputState, string> = {
-    [InputState.base]: '!bg-base-100',
-    [InputState.success]: 'bg-success-200',
-    [InputState.info]: 'bg-info-200',
-    [InputState.warning]: 'bg-warning-200',
-    [InputState.danger]: 'bg-danger-200',
-  };
-
   return option.value === focusedDropDownItem.value ? {
-    'bg-white': false,
-    [variants[props.state]]: true,
+    '!bg-base-100': true,
   } : {};
 }
 
@@ -272,8 +249,30 @@ function onClickDropDownItem(e: MouseEvent, option: SelectOption) {
   _modelValue.value = option.value || null;
 }
 
+function getOptionClasses(option: SelectOption, index: number) {
+  const prevOption = props.options[index - 1];
+
+  return {
+    ...dropDownItemClasses.value,
+    ...getActiveDropDownItemClasses(option),
+    'cursor-pointer': !option.isGroupLabel,
+    'text-base-600' : true,
+    'sticky top-[-1px] z-20 font-bold bg-white': option.isGroupLabel,
+    'border-y border-base-300': option.isGroupLabel,
+    '-mt-px': option.isGroupLabel,
+    'border-t border-base-300':
+      !option.isGroupLabel &&
+      index !== 0 &&
+      (!prevOption || !prevOption.isGroupLabel),
+  };
+}
+
 watch(_modelValue, (val) => {
   focusedDropDownItem.value = Array.isArray(val) ? val[0] : val;
+});
+
+defineExpose({
+  floating,
 });
 </script>
 
@@ -288,43 +287,72 @@ watch(_modelValue, (val) => {
       <div
         v-if="isOpen"
         ref="floating"
-        :class="dropdownClasses"
-        :style="{minWidth: `${elementSize.width.value}px!important`, ...floatingStyles}"
+        :class="[
+          dropdownClasses,
+          'flex flex-col overflow-hidden',
+        ]"
+        :style="{
+          minWidth: `${elementSize.width.value}px`,
+          maxHeight: props.maxHeight,
+          ...floatingStyles}"
         data-e2e="select-menu"
         :data-e2e-state="state"
       >
-        <div class="flex flex-col gap-px">
-          <div
-            v-for="(option, index) in options"
-            :key="`option-${index}`"
-            data-e2e="select-menu-item"
-            :class="{
-              ...dropDownItemClasses,
-              ...getActiveDropDownItemClasses(option),
-              'font-bold': option.isGroupLabel,
-            }"
-            @click="(e) => onClickDropDownItem(e, option)"
-            @mouseover="() => focusedDropDownItem = !option.isGroupLabel && option.value !== undefined ? option.value : null"
-          >
-            <slot
-              name="contentLeft"
-              v-bind="option"
-            />
-            {{ option.label }}
-            <slot
-              name="contentRight"
-              v-bind="option"
-            />
-          </div>
+        <div
+          v-if="$slots.contentBefore"
+          class="flex-shrink-0 z-30"
+        >
+          <slot name="contentBefore" />
         </div>
 
-        <div
-          v-if="options.length === 0"
-          :class="{...dropDownItemClasses}"
-        >
-          <slot name="empty">
-            Keine Einträge vorhanden
-          </slot>
+        <div class="flex-grow overflow-y-auto min-h-0">
+          <div class="flex flex-col -mt-px">
+            <div
+              v-for="(option, index) in options"
+              :key="`option-${index}`"
+              data-e2e="select-menu-item"
+              :class="getOptionClasses(option, index)"
+              @click="(e) => onClickDropDownItem(e, option)"
+              @mouseover="() => focusedDropDownItem = !option.isGroupLabel && option.value !== undefined ? option.value : null"
+            >
+              <div class="flex items-center justify-between w-full">
+                <div class="flex items-center gap-2">
+                  <slot
+                    name="contentLeft"
+                    v-bind="option"
+                  />
+                  <span>{{ option.label }}</span>
+                </div>
+
+                <div
+                  v-if="option.tag"
+                >
+                  <span class="px-1 py-0.5 rounded bg-base-200 text-[12px]">
+                    {{ option.tag }}
+                  </span>
+                </div>
+
+                <slot
+                  name="contentRight"
+                  v-bind="option"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div
+            v-if="options.length === 0"
+            :class="[
+              dropDownItemClasses,
+              {
+                'flex items-center justify-center p-2 pt-2 bg-white font-medium italic text-center': $slots.contentBefore
+              }
+            ]"
+          >
+            <slot name="empty">
+              Keine Einträge vorhanden
+            </slot>
+          </div>
         </div>
       </div>
     </teleport>

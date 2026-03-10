@@ -1,9 +1,6 @@
 import {
   type Meta, type StoryObj,
 } from '@storybook/vue3';
-import {
-  Size,
-} from '../../../enums/Size.enum';
 import AntSelect from '../AntSelect.vue';
 import AntIcon from '../../AntIcon.vue';
 import AntDropdown from '../Elements/AntSelectMenu.vue';
@@ -11,16 +8,18 @@ import {
   faCake,
 } from '@fortawesome/free-solid-svg-icons';
 import {
-  computed, onMounted, ref, type Ref,
+  computed, onMounted, ref, type Ref, watch,
 } from 'vue';
 import {
   type SelectOption,
 } from '../__types/AntSelect.types';
-import {
-  InputState,
-} from '../../../enums';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
+import AntSearch from '../AntSearch.vue';
+import AntButton from '../../AntButton.vue';
+import {
+  State, Grouped as GroupedEnum, InputState, Size,
+} from '../../../enums';
 
 const meta: Meta<typeof AntSelect> = {
   title: 'Inputs/Select',
@@ -438,6 +437,306 @@ export const ellipsisText: Story = {
     nullable: true,
   },
 };
+
+export const AdvancedCustomDropdown: Story = {
+  render: (args) => ({
+    components: {
+      AntSelect,
+      AntSearch,
+      AntButton,
+      AntIcon,
+    },
+    setup() {
+      const searchTerm = ref(null);
+      const isSelectOpen = ref(false);
+      const activeFilter = ref('all');
+      const modelValue = ref(args.modelValue);
+
+      const rawPractitioners = [
+        {
+          name: 'Item 1',
+          type: 'first',
+          loc: 'Group Name - First',
+        },
+        {
+          name: 'Item 1',
+          type: 'first',
+          loc: 'Group Name - First',
+        },
+        {
+          name: 'Item 1',
+          type: 'first',
+          loc: 'Group Name - First',
+        },
+        {
+          name: 'Item 1',
+          type: 'first',
+          loc: 'Group Name - First',
+        },
+        {
+          name: 'Item 1',
+          type: 'first',
+          loc: 'Group Name - First',
+        },
+        {
+          name: 'Item 1',
+          type: 'first',
+          loc: 'Group Name - First',
+        },
+        {
+          name: 'Item 1',
+          type: 'first',
+          loc: 'Group Name - First',
+        },
+        {
+          name: 'Item 2',
+          type: 'second',
+          loc: 'Group Name - Second',
+        },
+        {
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
+        },
+        {
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
+        },
+        {
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
+        },
+        {
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
+        },
+        {
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
+        },
+        {
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
+        },
+        {
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
+        },
+        {
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
+        },
+        {
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
+        },
+        {
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
+        },
+        {
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
+        },
+        {
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
+        },
+        {
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
+        },
+        {
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
+        },
+        {
+          name: 'Item 3',
+          type: 'third',
+          loc: 'Group Name - Third',
+        },
+        {
+          name: 'Item 4',
+          type: 'fourth',
+          loc: 'Group Name - Fourth',
+        },
+        {
+          name: 'Item 5',
+          type: 'fifth',
+          loc: 'Group Name - Fifth',
+        },
+        {
+          name: 'Item 6',
+          type: 'sixth',
+          loc: 'Group Name - Sixth',
+        },
+        {
+          name: 'Item 7',
+          type: 'seventh',
+          loc: 'Group Name - Seventh',
+        },
+      ];
+
+      const typeToTag: Record<string, string> = {
+        first: 'FIRST',
+        second: 'SECOND',
+        third: 'THIRD',
+        fourth: 'FOURTH',
+        fifth: 'FIFTH',
+        sixth: 'SIXTH',
+        seventh: 'SEVENTH',
+      };
+
+      const filteredOptions = computed(() => {
+        const search = searchTerm.value;
+
+        const groups: Record<string, {
+          label: string;
+          value: string;
+          tag: string;
+        }[]> = {};
+
+        rawPractitioners.forEach((p, index) => {
+          const matchesFilter = activeFilter.value === 'all' || p.type === activeFilter.value;
+          const matchesSearch = !search || p.name.toLowerCase().includes(search.toLowerCase());
+
+          if (matchesFilter && matchesSearch) {
+            if (!groups[p.loc]) {
+              groups[p.loc] = [];
+            }
+
+            groups[p.loc].push({
+              label: p.name,
+              value: `${p.name}-${p.loc}-${index}`,
+              tag: typeToTag[p.type] || 'Another',
+            });
+          }
+        });
+
+        const result: SelectOption[] = [];
+
+        Object.keys(groups).sort().forEach(loc => {
+          result.push({
+            label: loc,
+            value: `group-header-${loc}`,
+            isGroupLabel: true,
+          });
+
+          result.push(...groups[loc]);
+        });
+
+        return result;
+      });
+
+      watch(isSelectOpen, (val) => {
+        if (!val) {
+          searchTerm.value = null;
+        }
+      });
+
+      return {
+        args,
+        isSelectOpen,
+        modelValue,
+        searchTerm,
+        activeFilter,
+        filteredOptions,
+        State,
+        GroupedEnum,
+      };
+    },
+    template: `
+      <div>
+        <AntSelect
+          v-bind="args"
+          v-model="modelValue"
+          v-model:open="isSelectOpen"
+          :options="filteredOptions"
+        >
+          <template #selectMenuContentBefore>
+            <div class="flex p-2 border-b border-base-300 bg-white gap-2">
+              <AntSearch v-model="searchTerm" placeholder="Search..." />
+
+              <div class="flex">
+                <AntButton
+                  :state="activeFilter === 'all' ? State.primary : State.base"
+                  :filled="activeFilter === 'all'"
+                  :grouped="GroupedEnum.left"
+                  @click="activeFilter = 'all'"
+                >All</AntButton>
+                <AntButton
+                  :state="activeFilter === 'first' ? State.primary : State.base"
+                  :filled="activeFilter === 'first'"
+                  :grouped="GroupedEnum.center"
+                  @click="activeFilter = 'first'"
+                >First</AntButton>
+                <AntButton
+                  :state="activeFilter === 'second' ? State.primary : State.base"
+                  :filled="activeFilter === 'second'"
+                  :grouped="GroupedEnum.center"
+                  @click="activeFilter = 'second'"
+                >Second</AntButton>
+                <AntButton
+                  :state="activeFilter === 'third' ? State.primary : State.base"
+                  :filled="activeFilter === 'third'"
+                  :grouped="GroupedEnum.center"
+                  @click="activeFilter = 'third'"
+                >Third</AntButton>
+                <AntButton
+                  :state="activeFilter === 'fourth' ? State.primary : State.base"
+                  :filled="activeFilter === 'fourth'"
+                  :grouped="GroupedEnum.center"
+                  @click="activeFilter = 'fourth'"
+                >Fourth</AntButton>
+                <AntButton
+                  :state="activeFilter === 'fifth' ? State.primary : State.base"
+                  :filled="activeFilter === 'fifth'"
+                  :grouped="GroupedEnum.center"
+                  @click="activeFilter = 'fifth'"
+                >Fifth</AntButton>
+                <AntButton
+                  :state="activeFilter === 'sixth' ? State.primary : State.base"
+                  :filled="activeFilter === 'sixth'"
+                  :grouped="GroupedEnum.center"
+                  @click="activeFilter = 'sixth'"
+                >Sixth</AntButton>
+                <AntButton
+                  :state="activeFilter === 'seventh' ? State.primary : State.base"
+                  :filled="activeFilter === 'seventh'"
+                  :grouped="GroupedEnum.right"
+                  @click="activeFilter = 'seventh'"
+                >Seventh</AntButton>
+              </div>
+            </div>
+          </template>
+
+          <template #empty>
+            Mock message when no match is found
+          </template>
+        </AntSelect>
+      </div>
+    `,
+  }),
+  args: {
+    label: 'Placeholder',
+    description: 'Sticky groups, Tags and Search inside base AntSelect',
+    modelValue: null,
+  },
+};
+
 export const summary: Story = {
   parameters: {
     chromatic: {

@@ -3,4 +3,5 @@ export type SelectOption = {
   value?: string | number;
   isGroupLabel?: boolean;
   isDeleted?: boolean;
+  tag?: string;
 } & Record<string, unknown>;

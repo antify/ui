@@ -44,9 +44,6 @@ import {
   IconSize,
 } from '../__types';
 import AntSelectMenu from './Elements/AntSelectMenu.vue';
-import {
-  useVModel,
-} from '@vueuse/core';
 
 defineOptions({
   inheritAttrs: false,
@@ -70,6 +67,7 @@ const props = withDefaults(defineProps<{
   expanded?: boolean;
   messages?: string[];
   inputRef?: HTMLInputElement | null;
+  maxHeight?: string;
 }>(), {
   state: InputState.base,
   grouped: Grouped.none,
@@ -81,6 +79,7 @@ const props = withDefaults(defineProps<{
   expanded: true,
   messages: () => [],
   inputRef: null,
+  maxHeight: '350px',
 });
 const emit = defineEmits([
   'update:modelValue',
@@ -88,7 +87,9 @@ const emit = defineEmits([
   'blur',
   'validate',
 ]);
-const isOpen = ref(false);
+const isOpen = defineModel<boolean>('open', {
+  default: false,
+});
 const _modelValue = computed({
   get: () => props.modelValue,
   set: (val: string | number | null) => {
@@ -96,7 +97,15 @@ const _modelValue = computed({
   },
 });
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
-const valueLabel = computed(() => props.options.find(option => option.value === _modelValue.value)?.label || null);
+
+const lastValidLabel = ref<string | null>(null);
+
+const valueLabel = computed(() => {
+  const found = props.options.find(option => option.value === _modelValue.value);
+
+  return found ? found.label : lastValidLabel.value;
+});
+
 const selectedOption = computed(() => props.options.find(option => option.value === _modelValue.value) || null);
 const inputClasses = computed(() => {
   const variants: Record<InputState, string> = {
@@ -223,12 +232,20 @@ function onBlur(e: FocusEvent) {
   emit('blur', e);
 }
 
-function onClickOutside() {
+function onClickOutside(e) {
   if (!isOpen.value) {
     return;
   }
 
+  const menuElement = dropDownRef.value?.floating;
+
+  if (menuElement && menuElement.contains(e.target as Node)) {
+    return;
+  }
+
   isOpen.value = false;
+
+  emit('validate', props.modelValue);
   _inputRef.value?.focus();
 }
 
@@ -250,6 +267,27 @@ function onClickRemoveButton() {
   _inputRef.value?.focus();
   _modelValue.value = null;
 }
+
+function onElementSelect(value: string | number | null) {
+  _modelValue.value = value;
+
+  emit('validate', value);
+
+  _inputRef.value?.focus();
+}
+
+watch([
+  () => props.options,
+  () => _modelValue.value,
+], () => {
+  const found = props.options.find(option => option.value === _modelValue.value);
+
+  if (found) {
+    lastValidLabel.value = found.label;
+  }
+}, {
+  immediate: true,
+});
 </script>
 
 <template>
@@ -290,7 +328,13 @@ function onClickRemoveButton() {
           :size="size"
           :state="state"
           :close-on-enter="true"
+          :max-height="maxHeight"
+          @select-element="onElementSelect"
         >
+          <template #contentBefore>
+            <slot name="selectMenuContentBefore" />
+          </template>
+
           <template #contentLeft="props">
             <slot
               name="contentLeft"
@@ -303,6 +347,10 @@ function onClickRemoveButton() {
               name="contentRight"
               v-bind="{...props}"
             />
+          </template>
+
+          <template #empty>
+            <slot name="empty" />
           </template>
 
           <AntSkeleton
