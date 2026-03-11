@@ -59,6 +59,7 @@ const props = withDefaults(defineProps<{
   indicators?: boolean;
   inputRef?: HTMLInputElement | null;
   clearOnFocus?: boolean;
+  selectAllOnFocus?: boolean;
   defaultValue?: number;
 }>(), {
   state: InputState.base,
@@ -72,6 +73,7 @@ const props = withDefaults(defineProps<{
   indicators: false,
   inputRef: null,
   clearOnFocus: false,
+  selectAllOnFocus: false,
   defaultValue: 0,
 });
 const emit = defineEmits([
@@ -107,13 +109,19 @@ async function onInputFocus(e: FocusEvent) {
   }
 
   const el = e.target as HTMLInputElement;
+
   if (el) {
     const originalType = el.type;
     el.type = 'text';
 
     setTimeout(() => {
-      const length = el.value ? String(el.value).length : 0;
-      el.setSelectionRange(length, length);
+      if (props.selectAllOnFocus && !props.clearOnFocus && el.value) {
+        el.setSelectionRange(0, el.value.length);
+      } else {
+        const length = el.value ? String(el.value).length : 0;
+        el.setSelectionRange(length, length);
+      }
+
       el.type = originalType;
     }, 0);
   }

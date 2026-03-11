@@ -134,7 +134,6 @@ export const SpecialBehaviors: Story = {
             <AntNumberInput
               v-bind="args"
               v-model="val1"
-              :clearOnFocus="true"
               :defaultValue="0"
               label="Click me"
               description="Value will reset to 0 when you focus the input"
@@ -146,7 +145,6 @@ export const SpecialBehaviors: Story = {
             <AntNumberInput
               v-bind="args"
               v-model="val2"
-              :clearOnFocus="true"
               :defaultValue="100"
               label="Reset to 100"
               description="Focus to see it jump back to 100"
@@ -185,6 +183,39 @@ export const ClearToNullOnFocus: Story = {
         />
         <p class="text-xs text-gray-500 mt-2">
           Model value: <span class="font-mono text-primary-600">{{ myValue ?? 'null' }}</span>
+        </p>
+      </AntFormGroup>
+    `,
+  }),
+};
+
+export const SelectAllOnFocus: Story = {
+  render: (args) => ({
+    components: {
+      AntNumberInput,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
+    setup() {
+      const val = ref(999.99);
+
+      return {
+        args,
+        val,
+      };
+    },
+    template: `
+      <AntFormGroup class="w-80">
+        <AntFormGroupLabel>Case: Select All on Focus</AntFormGroupLabel>
+        <AntNumberInput
+          v-bind="args"
+          v-model="val"
+          :selectAllOnFocus="true"
+          label="Price"
+          description="Click to select the entire number for quick replacement"
+        />
+        <p class="text-xs text-gray-500 mt-2">
+          Focus the input to see the selection effect.
         </p>
       </AntFormGroup>
     `,
