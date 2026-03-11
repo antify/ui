@@ -28,10 +28,8 @@ const meta: Meta<typeof AntDateInput> = {
   },
   argTypes: {
     modelValue: {
-      table: {
-        type: {
-          summary: 'string|null',
-        },
+      control: {
+        type: 'text',
       },
     },
     type: {
