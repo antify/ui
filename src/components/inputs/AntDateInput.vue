@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-  computed, onMounted,
+  computed, onMounted, ref,
 } from 'vue';
 import AntField from '../forms/AntField.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
@@ -9,9 +9,6 @@ import AntIcon from '../AntIcon.vue';
 import {
   Size,
 } from '../../enums/Size.enum';
-import {
-  useVModel,
-} from '@vueuse/core';
 import {
   Grouped, InputState, State,
 } from '../../enums';
@@ -66,7 +63,7 @@ const emit = defineEmits([
   'update:inputRef',
   'validate',
 ]);
-const _modelValue = useVModel(props, 'modelValue', emit);
+const _modelValue = ref<string | null>(props.modelValue);
 const _inputRef = defineModel<HTMLInputElement | null>('inputRef', {
   default: null,
 });
@@ -100,6 +97,18 @@ function onClickCalendar() {
 
   _inputRef.value?.showPicker();
 }
+
+const onBlur = () => {
+  if (!_modelValue.value) {
+    _modelValue.value = null;
+
+    emit('update:modelValue', null);
+
+    return;
+  }
+
+  emit('update:modelValue', _modelValue.value);
+};
 </script>
 
 <template>
@@ -127,6 +136,7 @@ function onClickCalendar() {
         :max="max"
         :grouped="_nullable ? Grouped.left : Grouped.none"
         v-bind="$attrs"
+        @blur="onBlur"
         @validate="val => $emit('validate', val)"
       >
         <template #icon-right>
