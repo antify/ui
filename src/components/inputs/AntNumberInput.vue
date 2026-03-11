@@ -61,6 +61,9 @@ const props = withDefaults(defineProps<{
   clearOnFocus?: boolean;
   selectAllOnFocus?: boolean;
   defaultValue?: number;
+  integer?: boolean;
+  maxPrecision?: number;
+  maxLength?: number;
 }>(), {
   state: InputState.base,
   disabled: false,
@@ -75,6 +78,9 @@ const props = withDefaults(defineProps<{
   clearOnFocus: false,
   selectAllOnFocus: false,
   defaultValue: 0,
+  integer: false,
+  maxPrecision: 16,
+  maxLength: 15,
 });
 const emit = defineEmits([
   'update:modelValue',
@@ -88,16 +94,50 @@ const _inputRef = useVModel(props, 'inputRef', emit);
 
 const _modelValue = computed({
   get: () => {
-    if (props.modelValue === null || props.modelValue === undefined) {
-      return props.modelValue;
-    }
+    if (props.modelValue === null || props.modelValue === undefined) return '';
 
     const dp = getPrecision();
 
-    return String(new Big(props.modelValue).toFixed(dp));
+    return new Big(props.modelValue).toFixed(dp);
   },
-  set: (val: any) => {
-    const num = (val === '' || val === null) ? null : Number(val);
+  set: (val: string | number | null) => {
+    if (val === '' || val === null || val === undefined) {
+      emit('update:modelValue', null);
+
+      return;
+    }
+
+    const stringVal = String(val);
+
+    if (props.integer) {
+      const cleanVal = stringVal.replace('-', '');
+
+      if (cleanVal.length > 15) {
+        return;
+      }
+
+      const parsed = parseInt(stringVal, 10);
+      if (!isNaN(parsed)) {
+        emit('update:modelValue', parsed);
+      }
+
+      return;
+    }
+
+    const [
+      integerPart,
+    ] = stringVal.split('.');
+    const cleanIntegerPart = integerPart.replace('-', '');
+
+    if (cleanIntegerPart.length > 15) {
+      return;
+    }
+
+    const num = Number(stringVal);
+    if (isNaN(num)) {
+      return;
+    }
+
     emit('update:modelValue', num);
   },
 });
@@ -129,10 +169,13 @@ async function onInputFocus(e: FocusEvent) {
 }
 
 function getPrecision() {
+  if (props.integer) return 0;
+
   const modelDecimalPlaces = getDecimalPlaces(props.modelValue || 0);
   const stepDecimalPlaces = getDecimalPlaces(props.steps);
+  const detectedPrecision = Math.max(modelDecimalPlaces, stepDecimalPlaces);
 
-  return Math.max(modelDecimalPlaces, stepDecimalPlaces);
+  return Math.min(detectedPrecision, props.maxPrecision);
 }
 
 function subtract() {

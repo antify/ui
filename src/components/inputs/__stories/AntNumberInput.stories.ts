@@ -84,6 +84,24 @@ const meta: Meta<typeof AntNumberInput> = {
         },
       },
     },
+    integer: {
+      control: {
+        type: 'boolean',
+      },
+      description: 'Restricts input to whole numbers only',
+    },
+    maxPrecision: {
+      control: {
+        type: 'number',
+      },
+      description: 'Limits the number of decimal places',
+    },
+    maxLength: {
+      control: {
+        type: 'number',
+      },
+      description: 'Maximum character length to prevent JS Number overflow bugs',
+    },
   },
 };
 
@@ -219,6 +237,80 @@ export const SelectAllOnFocus: Story = {
         </p>
       </AntFormGroup>
     `,
+  }),
+};
+
+export const PrecisionModes: Story = {
+  render: (args) => ({
+    components: {
+      AntNumberInput,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
+    setup() {
+      const intVal = ref(10);
+      const bugProtectionVal = ref(111111111111111);
+      const longFloatVal = ref(1.123456789);
+
+      return {
+        args,
+        intVal,
+        bugProtectionVal,
+        longFloatVal,
+      };
+    },
+    template: `
+      <AntFormGroup>
+        <AntFormGroup direction="column">
+          <AntFormGroup>
+            <AntFormGroupLabel>Integer Mode</AntFormGroupLabel>
+            <AntNumberInput
+              v-bind="args"
+              v-model="intVal"
+              :integer="true"
+              label="Integer Only"
+              description="Decimal points are automatically stripped"
+            />
+          </AntFormGroup>
+
+          <AntFormGroup>
+            <AntFormGroupLabel>Safe Length Protection</AntFormGroupLabel>
+            <AntNumberInput
+              v-bind="args"
+              v-model="bugProtectionVal"
+              label="15-Digit Limit"
+              description="Prevents precision loss by blocking input after 15 digits"
+            />
+            <div class="mt-2 flex items-center gap-2">
+              <div class="h-1.5 flex-grow bg-gray-100 rounded-full overflow-hidden" style="max-width: 240px">
+                <div
+                  class="h-full transition-all duration-300"
+                  :class="String(bugProtectionVal ?? '').length >= 15 ? 'bg-orange-500' : 'bg-blue-500'"
+                  :style="{ width: (Math.min(String(bugProtectionVal ?? '').length, 15) / 15 * 100) + '%' }"
+                ></div>
+              </div>
+              <span
+                class="text-xs font-mono w-12"
+                :class="String(bugProtectionVal ?? '').length >= 15 ? 'text-orange-600 font-bold' : 'text-gray-400'"
+              >
+                {{ String(bugProtectionVal ?? '').length }}/15
+              </span>
+            </div>
+          </AntFormGroup>
+
+          <AntFormGroup>
+            <AntFormGroupLabel>High Precision</AntFormGroupLabel>
+            <AntNumberInput
+              v-bind="args"
+              v-model="longFloatVal"
+              :maxPrecision="8"
+              :steps="0.00000001"
+              label="Decimal Support"
+              description="Maintains accuracy for small fractional steps"
+            />
+          </AntFormGroup>
+        </AntFormGroup>
+      </AntFormGroup>`,
   }),
 };
 
