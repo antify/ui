@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-  computed, onMounted, ref,
+  computed, nextTick, onMounted, ref,
 } from 'vue';
 import AntField from '../forms/AntField.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
@@ -137,7 +137,7 @@ const onBlur = () => {
         :grouped="_nullable ? Grouped.left : Grouped.none"
         v-bind="$attrs"
         @blur="onBlur"
-        @validate="val => $emit('validate', val)"
+        @validate="val => nextTick(() => $emit('validate', val))"
       >
         <template #icon-right>
           <AntIcon
