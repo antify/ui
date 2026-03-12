@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-  computed, nextTick, onMounted, ref,
+  computed, nextTick, onMounted, ref, watch,
 } from 'vue';
 import AntField from '../forms/AntField.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
@@ -109,6 +109,10 @@ const onBlur = () => {
 
   emit('update:modelValue', _modelValue.value);
 };
+
+watch(() => props.modelValue, (val) => {
+  _modelValue.value = val;
+});
 </script>
 
 <template>
