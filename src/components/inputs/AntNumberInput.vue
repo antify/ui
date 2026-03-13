@@ -106,6 +106,7 @@ const _modelValue = computed({
     const stringVal = String(val);
 
     const num = Number(stringVal);
+
     if (isNaN(num)) {
       return;
     }
@@ -156,9 +157,8 @@ async function onInputFocus(e: FocusEvent) {
 function getPrecision() {
   const modelDecimalPlaces = getDecimalPlaces(props.modelValue || 0);
   const stepDecimalPlaces = getDecimalPlaces(props.steps);
-  const detectedPrecision = Math.max(modelDecimalPlaces, stepDecimalPlaces);
 
-  return Math.min(detectedPrecision, stepDecimalPlaces);
+  return Math.max(modelDecimalPlaces, stepDecimalPlaces);
 }
 
 function subtract() {
@@ -211,9 +211,23 @@ const isNextButtonDisabled = computed(() => {
   return props.max !== undefined ? Number(props.modelValue) >= props.max : false;
 });
 
-function onButtonBlur() {
+async function onButtonBlur(e: FocusEvent) {
+  if (props.modelValue !== null) {
+    const dp = getPrecision();
+    const formattedValue = Number(new Big(props.modelValue).toFixed(dp));
+
+    emit('update:modelValue', formattedValue);
+  }
+
+  await nextTick();
+
+  const el = e.target as HTMLInputElement;
+  if (el && _modelValue.value !== undefined) {
+    el.value = _modelValue.value;
+  }
+
   emit('validate', props.modelValue);
-  emit('blur');
+  emit('blur', e);
 }
 
 onMounted(() => {
