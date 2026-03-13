@@ -77,7 +77,7 @@ const props = withDefaults(defineProps<{
   inputRef: null,
   clearOnFocus: false,
   selectAllOnFocus: false,
-  defaultValue: 0,
+  defaultValue: null,
   integer: false,
   maxPrecision: 16,
   maxLength: 15,
@@ -144,7 +144,9 @@ const _modelValue = computed({
 
 async function onInputFocus(e: FocusEvent) {
   if (props.clearOnFocus) {
-    emit('update:modelValue', null);
+    const valueToSet = props.defaultValue !== undefined ? props.defaultValue : null;
+
+    emit('update:modelValue', valueToSet);
     await nextTick();
   }
 
@@ -155,7 +157,7 @@ async function onInputFocus(e: FocusEvent) {
     el.type = 'text';
 
     setTimeout(() => {
-      if (props.selectAllOnFocus && !props.clearOnFocus && el.value) {
+      if ((props.selectAllOnFocus || props.clearOnFocus) && el.value !== '') {
         el.setSelectionRange(0, el.value.length);
       } else {
         const length = el.value ? String(el.value).length : 0;

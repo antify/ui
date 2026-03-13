@@ -152,6 +152,7 @@ export const SpecialBehaviors: Story = {
             <AntNumberInput
               v-bind="args"
               v-model="val1"
+              :clearOnFocus="true"
               :defaultValue="0"
               label="Click me"
               description="Value will reset to 0 when you focus the input"
@@ -163,6 +164,7 @@ export const SpecialBehaviors: Story = {
             <AntNumberInput
               v-bind="args"
               v-model="val2"
+              :clearOnFocus="true"
               :defaultValue="100"
               label="Reset to 100"
               description="Focus to see it jump back to 100"
