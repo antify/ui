@@ -66,6 +66,10 @@ export const Default: Story = {
     setup() {
       const phoneDefault = ref(null);
       const countryDefault = ref(null);
+
+      const phoneNumericDefault = ref(null);
+      const countryNumericDefault = ref(null);
+
       const phone1 = ref(null);
       const country1 = ref(null);
       const phone2 = ref(null);
@@ -86,6 +90,8 @@ export const Default: Story = {
         args,
         phoneDefault,
         countryDefault,
+        phoneNumericDefault,
+        countryNumericDefault,
         phone1,
         country1,
         phone2,
@@ -104,7 +110,7 @@ export const Default: Story = {
         <div>
           <h3 class="mb-2 text-sm font-bold text-base-600 uppercase tracking-wider">Default Country Prop</h3>
           <p class="mb-2 text-xs text-base-400 italic text-wrap">
-            Initial values are null. Component selects Germany (DE) automatically via "defaultCountryValue" prop.
+            Initial values are null. Component selects Germany via <b>default-country-value="DE"</b> using the default "value" key.
           </p>
           <AntPhoneInput
             v-bind="args"
@@ -114,8 +120,27 @@ export const Default: Story = {
             :auto-select-default="true"
             placeholder="Initialized with DE"
           />
-          <div class="mt-2 text-md font-medium">
-            Current: {{ countryDefault || 'null' }} | {{ phoneDefault || 'null' }}
+          <div class="mt-2 text-md text-base-500">
+            Date: {{ countryDefault || 'null' }} | {{ phoneDefault || 'null' }}
+          </div>
+        </div>
+
+        <div>
+          <h3 class="mb-2 text-sm font-bold text-base-600 uppercase tracking-wider">Default by Numeric Code (49)</h3>
+          <p class="mb-2 text-xs text-base-400 italic text-wrap">
+            Initial values are null. Component selects Germany via <b>numericCode: 49</b>. We tell the component to use "numericCode" as the value key.
+          </p>
+          <AntPhoneInput
+            v-bind="args"
+            v-model="phoneNumericDefault"
+            v-model:country-value="countryNumericDefault"
+            :default-country-value="49"
+            :auto-select-default="true"
+            country-value-key="numericCode"
+            placeholder="Initialized with 49"
+          />
+          <div class="mt-2 text-md text-base-500">
+            Data: {{ countryNumericDefault || 'null' }} | {{ phoneNumericDefault || 'null' }}
           </div>
         </div>
 

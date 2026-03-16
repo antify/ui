@@ -103,7 +103,7 @@ export const DefaultByNumericCode: Story = {
     label: 'Default by Numeric Code',
     description: 'Using numericCode: 33 (France) as the default value.',
     optionValueKey: 'numericCode',
-    defaultCountryValue: 33, // Передаем число
+    defaultCountryValue: 33,
     autoSelectDefault: true,
     modelValue: null,
   },
@@ -157,14 +157,14 @@ export const GroupedMode: Story = {
             />
 
             <div
-              class="flex-grow border border-l-0 p-2 text-sm text-gray-400 bg-gray-50 border-base-300 rounded-r-md h-[36px] flex items-center"
+              class="flex-grow border border-l-0 p-2 text-sm text-base-400 bg-base-50 border-base-300 rounded-r-md h-[36px] flex items-center"
             >
               Input area...
             </div>
           </div>
         </AntField>
 
-        <div class="mt-2 text-md text-gray-400">
+        <div class="mt-2 text-md text-base-400">
           Value: {{ modelValue || null }}
         </div>
       </div>
