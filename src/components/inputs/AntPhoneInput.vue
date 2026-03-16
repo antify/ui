@@ -50,7 +50,7 @@ const props = withDefaults(defineProps<{
 
   //AntBaseInput Props
   placeholder?: string;
-
+  nullable?: boolean;
 }>(), {
   size: Size.md,
   state: InputState.base,
@@ -62,6 +62,7 @@ const props = withDefaults(defineProps<{
   countryValueKey: 'value',
   countryErrorMessage: 'Please select a country code or start with "+"',
   messages: () => [],
+  nullable: true,
 });
 
 const emit = defineEmits([
@@ -308,6 +309,7 @@ watch(_countryCode, (newCountryId, oldCountryId) => {
 
       <AntBaseInput
         v-model="formattedNumber"
+        :nullable="nullable"
         :type="BaseInputType.text"
         :state="showCountryError ? InputState.danger : state"
         :size="size"
