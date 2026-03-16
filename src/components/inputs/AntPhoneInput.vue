@@ -51,6 +51,7 @@ const props = withDefaults(defineProps<{
   //AntBaseInput Props
   placeholder?: string;
   nullable?: boolean;
+  clearCountryOnClear?: boolean;
 }>(), {
   size: Size.md,
   state: InputState.base,
@@ -63,6 +64,7 @@ const props = withDefaults(defineProps<{
   countryErrorMessage: 'Please select a country code or start with "+"',
   messages: () => [],
   nullable: true,
+  clearCountryOnClear: true,
 });
 
 const emit = defineEmits([
@@ -131,6 +133,10 @@ const formattedNumber = computed({
   set: (val: string | null) => {
     if (!val) {
       _phoneNumber.value = null;
+
+      if (props.clearCountryOnClear) {
+        _countryCode.value = null;
+      }
 
       return;
     }

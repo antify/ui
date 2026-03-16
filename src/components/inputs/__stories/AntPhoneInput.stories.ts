@@ -38,6 +38,19 @@ const meta: Meta<typeof AntPhoneInput> = {
     onValidate: {
       action: 'validate',
     },
+    clearCountryOnClear: {
+      control: 'boolean',
+      description: 'Determines if the country selection should be cleared when the phone number input is cleared.',
+      table: {
+        defaultValue: {
+          summary: 'true',
+        },
+      },
+    },
+    nullable: {
+      control: 'boolean',
+      description: 'Shows the clear icon in the input field.',
+    },
   },
 };
 
@@ -57,6 +70,15 @@ export const Default: Story = {
       const country2 = ref(null);
       const phone3 = ref(null);
       const country3 = ref(null);
+      const phone4 = ref('123456');
+      const country4 = ref('DE');
+
+      const phonePaste = ref(null);
+      const countryPaste = ref(null);
+
+      const copyToClipboard = (text: string) => {
+        navigator.clipboard.writeText(text);
+      };
 
       return {
         args,
@@ -66,12 +88,63 @@ export const Default: Story = {
         country2,
         phone3,
         country3,
+        phone4,
+        country4,
+        phonePaste,
+        countryPaste,
+        copyToClipboard,
       };
     },
     template: `
-      <div class="space-y-4">
+      <div class="grid grid-cols-2 gap-x-12 gap-y-12">
         <div>
-          <h3 class="mb-2 text-sm font-bold text-gray-500">With Search (Default)</h3>
+          <h3 class="mb-2 text-sm font-bold text-gray-500 uppercase tracking-wider">Auto-detect Country on Paste</h3>
+          <p class="mb-2 text-xs text-gray-400 italic text-wrap">
+            Click a number to copy, then paste it (Ctrl+V) into the input to see auto-detection in action.
+          </p>
+
+          <div class="flex gap-2 mb-4">
+            <button
+              v-for="num in ['+4915211111111', '+3715211111111', '+3725211111111']"
+              @click="copyToClipboard(num)"
+              class="px-2 py-1 text-xs bg-white border border-gray-300 rounded hover:bg-gray-100 transition-colors text-gray-600"
+              title="Click to copy"
+            >
+              📋 {{ num }}
+            </button>
+          </div>
+
+          <AntPhoneInput
+            v-bind="args"
+            v-model="phonePaste"
+            v-model:country-value="countryPaste"
+            placeholder="Paste a number starting with +..."
+          />
+
+          <div class="mt-2 text-md text-base-500">
+            Data: {{ countryPaste || 'null' }} | {{ phonePaste || 'null' }}
+          </div>
+        </div>
+
+        <div>
+          <h3 class="mb-2 text-sm font-bold text-gray-500 uppercase tracking-wider">Keep Country on Clear</h3>
+          <p class="mb-2 text-xs text-gray-400 italic text-wrap">
+            Try clicking the "X" icon. The phone number will be null, but the country (DE) will remain selected.
+          </p>
+          <AntPhoneInput
+            v-bind="args"
+            v-model="phone4"
+            v-model:country-value="country4"
+            :clear-country-on-clear="false"
+            :nullable="true"
+          />
+          <div class="mt-2 text-md text-base-500">
+            Data: {{ country4 || 'null' }} | {{ phone4 || 'null' }}
+          </div>
+        </div>
+
+        <div>
+          <h3 class="mb-2 text-sm font-bold text-gray-500 uppercase tracking-wider">With Search (Default)</h3>
           <AntPhoneInput
             v-bind="args"
             v-model="phone1"
@@ -82,10 +155,8 @@ export const Default: Story = {
           </div>
         </div>
 
-        <hr class="border-gray-200" />
-
         <div>
-          <h3 class="mb-2 text-sm font-bold text-gray-500">Without Search</h3>
+          <h3 class="mb-2 text-sm font-bold text-gray-500 uppercase tracking-wider">Without Search</h3>
           <AntPhoneInput
             v-bind="args"
             v-model="phone2"
@@ -99,7 +170,7 @@ export const Default: Story = {
         </div>
 
         <div>
-          <h3 class="mb-2 text-sm font-bold text-gray-500">Numeric Code</h3>
+          <h3 class="mb-2 text-sm font-bold text-gray-500 uppercase tracking-wider">Numeric Code Output</h3>
           <AntPhoneInput
             v-bind="args"
             v-model="phone3"
@@ -123,6 +194,8 @@ export const Default: Story = {
     autoSelectDefault: false,
     size: Size.md,
     state: InputState.base,
+    clearCountryOnClear: true,
+    nullable: true,
   },
 };
 
@@ -152,7 +225,7 @@ export const summary: Story = {
     template: `
       <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-4">
-          <h2 class="text-xl font-bold border-b pb-2 text-gray-700">Input States (Germany Case)</h2>
+          <h2 class="text-xl font-bold border-b pb-2 text-gray-700">Input States</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <AntPhoneInput v-bind="args" v-model="phone" v-model:country-value="country" :state="InputState.base" label="Base State" />
             <AntPhoneInput v-bind="args" v-model="phone" v-model:country-value="country" :state="InputState.info" label="Info State" :messages="['Bitte geben Sie Ihre Mobilnummer ein']" />
