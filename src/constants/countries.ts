@@ -26,7 +26,6 @@ export const COUNTRIES: Country[] = [
     numericCode: 49,
     flag: '🇩🇪',
     mask: '### #######',
-    isDefault: true,
   },
   {
     value: 'FR',

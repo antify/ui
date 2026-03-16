@@ -52,7 +52,7 @@ const MainRender = (args: any) => ({
     <div>
       <AntCountry v-bind="args" v-model="modelValue" />
 
-      <div class="mt-2 text-md text-gray-400">
+      <div class="mt-2 text-md text-base-400">
         Selected Value ({{ args.optionValueKey || 'default' }}):
         <span class="text-blue-500 font-bold">{{ modelValue === null ? 'null' : modelValue }}</span>
       </div>
@@ -92,6 +92,20 @@ export const DefaultCountry: Story = {
     description: 'Automatically selects Germany (DE) as it is marked as isDefault: true in our data.',
     modelValue: null,
     autoSelectDefault: true,
+    defaultCountryValue: 'DE',
+  },
+};
+
+export const DefaultByNumericCode: Story = {
+  render: MainRender,
+  args: {
+    ...Docs.args,
+    label: 'Default by Numeric Code',
+    description: 'Using numericCode: 33 (France) as the default value.',
+    optionValueKey: 'numericCode',
+    defaultCountryValue: 33, // Передаем число
+    autoSelectDefault: true,
+    modelValue: null,
   },
 };
 

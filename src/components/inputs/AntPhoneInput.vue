@@ -47,6 +47,7 @@ const props = withDefaults(defineProps<{
   autoSelectDefault?: boolean;
   countryValueKey?: keyof Country;
   countryErrorMessage?: string;
+  defaultCountryValue?: string | number | null;
 
   //AntBaseInput Props
   placeholder?: string;
@@ -65,6 +66,7 @@ const props = withDefaults(defineProps<{
   messages: () => [],
   nullable: true,
   clearCountryOnClear: true,
+  defaultCountryValue: null,
 });
 
 const emit = defineEmits([
@@ -310,6 +312,7 @@ watch(_countryCode, (newCountryId, oldCountryId) => {
         class="w-fit flex-shrink-0"
         :show-dial-code-in-menu="true"
         :option-value-key="countryValueKey"
+        :default-country-value="defaultCountryValue"
         @select="onCountrySelect"
       />
 
