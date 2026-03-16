@@ -89,6 +89,7 @@ export const Default: Story = {
           <AntPhoneInput
             v-bind="args"
             v-model="phone2"
+            country-value-key="dialCode"
             v-model:country-value="country2"
             :searchable="false"
           />
