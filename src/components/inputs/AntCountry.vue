@@ -43,6 +43,8 @@ const props = withDefaults(defineProps<{
   autoSelectDefault?: boolean;
   emptyStateMessage?: string;
   optionValueKey?: keyof Country;
+  showDialCodeInMenu: boolean;
+  showIsoCode: boolean;
 }>(), {
   size: Size.md,
   state: InputState.base,
@@ -55,6 +57,8 @@ const props = withDefaults(defineProps<{
   autoSelectDefault: true,
   emptyStateMessage: 'No countries found',
   optionValueKey: 'value',
+  showDialCodeInMenu: false,
+  showIsoCode: false,
 });
 
 const emit = defineEmits([
@@ -285,7 +289,26 @@ watch(isOpen, (val) => {
         </template>
 
         <template #contentRight="option">
-          <span class="text-md ml-auto">{{ (option as Country).dialCode }}</span>
+          <slot
+            name="right"
+            :option="(option as Country)"
+          >
+            <div class="ml-auto flex items-center gap-2">
+              <span
+                v-if="showIsoCode"
+                class="text-md font-mono uppercase text-base-400"
+              >
+                {{ (option as Country).value }}
+              </span>
+
+              <span
+                v-if="showDialCodeInMenu"
+                class="text-md text-base-400"
+              >
+                {{ (option as Country).dialCode }}
+              </span>
+            </div>
+          </slot>
         </template>
 
         <template #empty>

@@ -173,14 +173,6 @@ export const COUNTRIES: Country[] = [
     mask: '### ### ###',
   },
   {
-    value: 'BG',
-    label: 'България',
-    dialCode: '+359',
-    numericCode: 359,
-    flag: '🇧🇬',
-    mask: '### ### ###',
-  },
-  {
     value: 'LT',
     label: 'Lietuva',
     dialCode: '+370',
