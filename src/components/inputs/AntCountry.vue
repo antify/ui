@@ -43,8 +43,8 @@ const props = withDefaults(defineProps<{
   autoSelectDefault?: boolean;
   emptyStateMessage?: string;
   optionValueKey?: keyof Country;
-  showDialCodeInMenu: boolean;
-  showIsoCode: boolean;
+  showDialCodeInMenu?: boolean;
+  showIsoCode?: boolean;
 }>(), {
   size: Size.md,
   state: InputState.base,

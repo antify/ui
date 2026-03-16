@@ -299,8 +299,8 @@ watch(_countryCode, (newVal) => {
         :grouped="Grouped.left"
         :auto-select-default="autoSelectDefault"
         class="w-fit flex-shrink-0"
-        :option-value-key="(countryValueKey as string)"
         :show-dial-code-in-menu="true"
+        :option-value-key="countryValueKey"
         @select="onCountrySelect"
       />
 
