@@ -84,24 +84,6 @@ const meta: Meta<typeof AntNumberInput> = {
         },
       },
     },
-    integer: {
-      control: {
-        type: 'boolean',
-      },
-      description: 'Restricts input to whole numbers only',
-    },
-    maxPrecision: {
-      control: {
-        type: 'number',
-      },
-      description: 'Limits the number of decimal places',
-    },
-    maxLength: {
-      control: {
-        type: 'number',
-      },
-      description: 'Maximum character length to prevent JS Number overflow bugs',
-    },
   },
 };
 
