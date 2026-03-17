@@ -136,18 +136,12 @@ async function onInputFocus(e: FocusEvent) {
 
   const el = e.target as HTMLInputElement;
 
-  if (el) {
+  if (el && props.selectAllOnFocus && el.value !== '') {
     const originalType = el.type;
     el.type = 'text';
 
     setTimeout(() => {
-      if ((props.selectAllOnFocus || props.clearOnFocus) && el.value !== '') {
-        el.setSelectionRange(0, el.value.length);
-      } else {
-        const length = el.value ? String(el.value).length : 0;
-        el.setSelectionRange(length, length);
-      }
-
+      el.setSelectionRange(0, el.value.length);
       el.type = originalType;
     }, 0);
   }
