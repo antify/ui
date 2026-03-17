@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-  computed, onMounted, nextTick, ref,
+  computed, onMounted, nextTick, ref, useId,
 } from 'vue';
 import AntButton from '../AntButton.vue';
 import AntField from '../forms/AntField.vue';
@@ -80,13 +80,13 @@ const emit = defineEmits([
   'blur',
 ]);
 
-const id = `numberInput-${new Date().getTime()}`;
+const id = useId();
 const _inputRef = useVModel(props, 'inputRef', emit);
 const isFocused = ref(false);
 
 const _modelValue = computed({
   get: () => {
-    if (props.modelValue === null || props.modelValue === undefined) {
+    if (props.modelValue === null || props.modelValue === undefined || props.modelValue === '') {
       return '';
     }
 
@@ -115,18 +115,6 @@ const _modelValue = computed({
     const num = Number(val);
 
     if (isNaN(num)) {
-      return;
-    }
-
-    if (props.max !== undefined && num > props.max) {
-      emit('update:modelValue', props.max);
-
-      return;
-    }
-
-    if (props.min !== undefined && num < props.min) {
-      emit('update:modelValue', props.min);
-
       return;
     }
 
@@ -240,6 +228,26 @@ async function onButtonBlur(e: FocusEvent) {
   emit('blur', e);
 }
 
+async function onKeyDown(e: KeyboardEvent) {
+  if (e.key === '.' || e.key === ',') {
+    const el = e.target as HTMLInputElement;
+
+    if (el.value.includes('.') || el.value.includes(',')) {
+      return;
+    }
+
+    const originalType = el.type;
+    el.type = 'text';
+
+    await nextTick();
+
+    const len = el.value.length;
+    el.setSelectionRange(len, len);
+
+    el.type = originalType;
+  }
+}
+
 onMounted(() => {
   handleEnumValidation(props.size, Size, 'size');
   handleEnumValidation(props.state, InputState, 'state');
@@ -297,6 +305,7 @@ onMounted(() => {
         @validate="val => $emit('validate', val)"
         @focus="onInputFocus"
         @blur="onButtonBlur"
+        @keydown="onKeyDown"
       />
 
       <AntButton

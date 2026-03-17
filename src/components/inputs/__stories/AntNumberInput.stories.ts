@@ -65,13 +65,6 @@ const meta: Meta<typeof AntNumberInput> = {
         type: 'number',
       },
     },
-    placeholder: {
-      table: {
-        defaultValue: {
-          summary: 'this.label',
-        },
-      },
-    },
   },
 };
 
@@ -84,10 +77,15 @@ export const Docs: Story = {
     components: {
       AntNumberInput,
     },
-    setup() { return {
-      args,
-    }; },
-    template: '<AntNumberInput v-bind="args" v-model="args.modelValue" />',
+    setup() {
+      const value = ref(args.modelValue);
+
+      return {
+        args,
+        value,
+      };
+    },
+    template: '<AntNumberInput v-bind="args" v-model="value" />',
   }),
   args: {
     modelValue: null,
@@ -122,9 +120,6 @@ export const SelectAllOnFocus: Story = {
           label="Price"
           description="Click to select the entire number for quick replacement"
         />
-        <p class="text-xs text-base-500 mt-2">
-          Focus the input to see the selection effect.
-        </p>
       </AntFormGroup>
     `,
   }),
@@ -138,30 +133,31 @@ export const PrecisionAndSteps: Story = {
       AntFormGroupLabel,
     },
     setup() {
+      // Явные локальные переменные для каждого инпута
+      const intVal = ref(null);
       const floatVal = ref(0.5);
 
       return {
         args,
+        intVal,
         floatVal,
       };
     },
     template: `
-      <AntFormGroup>
-        <AntFormGroup direction="row">
-          <AntFormGroup>
-            <AntFormGroupLabel>Integer (Step 1)</AntFormGroupLabel>
-            <AntNumberInput v-bind="args" :steps="1" v-model="args.modelValue" />
-          </AntFormGroup>
+      <AntFormGroup direction="row">
+        <AntFormGroup>
+          <AntFormGroupLabel>Integer (Step 1)</AntFormGroupLabel>
+          <AntNumberInput v-bind="args" :steps="1" v-model="intVal" />
+        </AntFormGroup>
 
-          <AntFormGroup>
-            <AntFormGroupLabel>Currency Style (Step 0.01)</AntFormGroupLabel>
-            <AntNumberInput v-bind="args" :steps="0.01" v-model="floatVal" indicators />
-          </AntFormGroup>
+        <AntFormGroup>
+          <AntFormGroupLabel>Currency Style (Step 0.01)</AntFormGroupLabel>
+          <AntNumberInput v-bind="args" :steps="0.01" v-model="floatVal" indicators />
+        </AntFormGroup>
 
-          <AntFormGroup>
-            <AntFormGroupLabel>High Precision (Step 0.0005)</AntFormGroupLabel>
-            <AntNumberInput v-bind="args" :steps="0.0005" v-model="floatVal" indicators />
-          </AntFormGroup>
+        <AntFormGroup>
+          <AntFormGroupLabel>High Precision (Step 0.0005)</AntFormGroupLabel>
+          <AntNumberInput v-bind="args" :steps="0.0005" v-model="floatVal" indicators />
         </AntFormGroup>
       </AntFormGroup>`,
   }),
@@ -203,21 +199,21 @@ export const WithIndicators: Story = {
     components: {
       AntNumberInput,
       AntFormGroup,
-      AntFormGroupLabel,
     },
     setup() {
+      const val1 = ref(null);
+      const val2 = ref(null);
+
       return {
         args,
+        val1,
+        val2,
       };
     },
     template: `
-      <AntFormGroup>
-        <AntFormGroup direction="column">
-          <AntNumberInput v-bind="args" v-model="args.modelValue" label="Label"
-                          description="Lorem ipsum dolor sit amet"/>
-          <AntNumberInput v-bind="args" v-model="args.modelValue" label="Label"
-                          description="Lorem ipsum dolor sit amet" :steps="0.0001"/>
-        </AntFormGroup>
+      <AntFormGroup direction="column">
+        <AntNumberInput v-bind="args" v-model="val1" label="Step 1" :steps="1"/>
+        <AntNumberInput v-bind="args" v-model="val2" label="Step 0.0001" :steps="0.0001"/>
       </AntFormGroup>`,
   }),
   args: {
