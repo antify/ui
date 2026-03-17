@@ -127,7 +127,7 @@ export const Docs: Story = {
   },
 };
 
-export const SpecialBehaviors: Story = {
+export const FocusBehaviors: Story = {
   render: (args) => ({
     components: {
       AntNumberInput,
@@ -135,77 +135,68 @@ export const SpecialBehaviors: Story = {
       AntFormGroupLabel,
     },
     setup() {
-      const val1 = ref(42);
-      const val2 = ref(100);
+      const valNull = ref<number | null>(12345);
+      const valZero = ref(42);
+      const valDefault = ref(100);
 
       return {
         args,
-        val1,
-        val2,
+        valNull,
+        valZero,
+        valDefault,
       };
     },
     template: `
-      <AntFormGroup>
-        <AntFormGroup direction="column">
-          <AntFormGroup>
-            <AntFormGroupLabel>Clear on Focus (to 0)</AntFormGroupLabel>
-            <AntNumberInput
-              v-bind="args"
-              v-model="val1"
-              :clearOnFocus="true"
-              :defaultValue="0"
-              label="Click me"
-              description="Value will reset to 0 when you focus the input"
-            />
-          </AntFormGroup>
+      <AntFormGroup direction="column" class="w-96">
+        <AntFormGroup>
+          <AntFormGroupLabel>Clear to null (Empty)</AntFormGroupLabel>
+          <AntNumberInput
+            v-bind="args"
+            v-model="valNull"
+            :clearOnFocus="true"
+            label="Amount"
+            placeholder="Will be null on focus"
+            description="Focus to make the value disappear completely"
+          />
+          <p class="text-xs text-base-500 mt-1">
+            Model value: <span class="font-mono text-primary-600">{{ valNull ?? 'null' }}</span>
+          </p>
+        </AntFormGroup>
 
-          <AntFormGroup>
-            <AntFormGroupLabel>Clear on Focus (to Default 100)</AntFormGroupLabel>
-            <AntNumberInput
-              v-bind="args"
-              v-model="val2"
-              :clearOnFocus="true"
-              :defaultValue="100"
-              label="Reset to 100"
-              description="Focus to see it jump back to 100"
-            />
-          </AntFormGroup>
+        <hr class="border-base-200 my-4" />
+
+        <AntFormGroup>
+          <AntFormGroupLabel>Clear to 0</AntFormGroupLabel>
+          <AntNumberInput
+            v-bind="args"
+            v-model="valZero"
+            :clearOnFocus="true"
+            :defaultValue="0"
+            label="Click me"
+            description="Value will reset to 0 when you focus"
+          />
+          <p class="text-xs text-base-500 mt-1">
+            Model value: <span class="font-mono text-primary-600">{{ valZero }}</span>
+          </p>
+        </AntFormGroup>
+
+        <hr class="border-base-200 my-4" />
+
+        <AntFormGroup>
+          <AntFormGroupLabel>Clear to Default (100)</AntFormGroupLabel>
+          <AntNumberInput
+            v-bind="args"
+            v-model="valDefault"
+            :clearOnFocus="true"
+            :defaultValue="100"
+            label="Reset to 100"
+            description="Focus to see it jump back to 100"
+          />
+          <p class="text-xs text-base-500 mt-1">
+            Model value: <span class="font-mono text-primary-600">{{ valDefault }}</span>
+          </p>
         </AntFormGroup>
       </AntFormGroup>`,
-  }),
-};
-
-export const ClearToNullOnFocus: Story = {
-  render: (args) => ({
-    components: {
-      AntNumberInput,
-      AntFormGroup,
-      AntFormGroupLabel,
-    },
-    setup() {
-      const myValue = ref(12345);
-
-      return {
-        args,
-        myValue,
-      };
-    },
-    template: `
-      <AntFormGroup class="w-80">
-        <AntFormGroupLabel>Case: Full Clear on Focus</AntFormGroupLabel>
-        <AntNumberInput
-          v-bind="args"
-          v-model="myValue"
-          :clearOnFocus="true"
-          placeholder="Enter new number..."
-          label="Amount"
-          description="Click in the field to make the existing value (12345) disappear"
-        />
-        <p class="text-xs text-gray-500 mt-2">
-          Model value: <span class="font-mono text-primary-600">{{ myValue ?? 'null' }}</span>
-        </p>
-      </AntFormGroup>
-    `,
   }),
 };
 
@@ -234,7 +225,7 @@ export const SelectAllOnFocus: Story = {
           label="Price"
           description="Click to select the entire number for quick replacement"
         />
-        <p class="text-xs text-gray-500 mt-2">
+        <p class="text-xs text-base-500 mt-2">
           Focus the input to see the selection effect.
         </p>
       </AntFormGroup>
