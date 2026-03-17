@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-  computed, onMounted, nextTick,
+  computed, onMounted, nextTick, ref,
 } from 'vue';
 import AntButton from '../AntButton.vue';
 import AntField from '../forms/AntField.vue';
@@ -58,9 +58,7 @@ const props = withDefaults(defineProps<{
   messages?: string[];
   indicators?: boolean;
   inputRef?: HTMLInputElement | null;
-  clearOnFocus?: boolean;
   selectAllOnFocus?: boolean;
-  defaultValue?: number | null;
 }>(), {
   state: InputState.base,
   disabled: false,
@@ -72,9 +70,7 @@ const props = withDefaults(defineProps<{
   messages: () => [],
   indicators: false,
   inputRef: null,
-  clearOnFocus: false,
   selectAllOnFocus: false,
-  defaultValue: null,
 });
 const emit = defineEmits([
   'update:modelValue',
@@ -84,7 +80,9 @@ const emit = defineEmits([
   'blur',
 ]);
 
+const id = `numberInput-${new Date().getTime()}`;
 const _inputRef = useVModel(props, 'inputRef', emit);
+const isFocused = ref(false);
 
 const _modelValue = computed({
   get: () => {
@@ -92,9 +90,20 @@ const _modelValue = computed({
       return '';
     }
 
+    if (isFocused.value) {
+      return props.modelValue.toString();
+    }
+
+    const bigValue = new Big(props.modelValue);
+    const isInteger = bigValue.mod(1).eq(0);
+
+    if (isInteger) {
+      return props.modelValue.toString();
+    }
+
     const dp = getPrecision();
 
-    return new Big(props.modelValue).toFixed(dp);
+    return bigValue.toFixed(dp);
   },
   set: (val: string | number | null) => {
     if (val === '' || val === null || val === undefined) {
@@ -103,9 +112,7 @@ const _modelValue = computed({
       return;
     }
 
-    const stringVal = String(val);
-
-    const num = Number(stringVal);
+    const num = Number(val);
 
     if (isNaN(num)) {
       return;
@@ -116,23 +123,29 @@ const _modelValue = computed({
 
       return;
     }
+
     if (props.min !== undefined && num < props.min) {
       emit('update:modelValue', props.min);
 
       return;
     }
 
-    emit('update:modelValue', num);
+    let finalVal = num;
+
+    if (props.max !== undefined && num > props.max) {
+      finalVal = props.max;
+    }
+
+    if (props.min !== undefined && num < props.min) {
+      finalVal = props.min;
+    }
+
+    emit('update:modelValue', finalVal);
   },
 });
 
 async function onInputFocus(e: FocusEvent) {
-  if (props.clearOnFocus) {
-    const valueToSet = props.defaultValue !== undefined ? props.defaultValue : null;
-
-    emit('update:modelValue', valueToSet);
-    await nextTick();
-  }
+  isFocused.value = true;
 
   const el = e.target as HTMLInputElement;
 
@@ -206,6 +219,8 @@ const isNextButtonDisabled = computed(() => {
 });
 
 async function onButtonBlur(e: FocusEvent) {
+  isFocused.value = false;
+
   if (props.modelValue !== null) {
     const dp = getPrecision();
     const formattedValue = Number(new Big(props.modelValue).toFixed(dp));
@@ -216,6 +231,7 @@ async function onButtonBlur(e: FocusEvent) {
   await nextTick();
 
   const el = e.target as HTMLInputElement;
+
   if (el && _modelValue.value !== undefined) {
     el.value = _modelValue.value;
   }
@@ -233,6 +249,7 @@ onMounted(() => {
 <template>
   <AntField
     :label="label"
+    :label-for="id"
     :size="size"
     :skeleton="skeleton"
     :description="description"
@@ -260,6 +277,7 @@ onMounted(() => {
       />
 
       <AntBaseInput
+        :id="id"
         v-model="_modelValue"
         v-model:input-ref="_inputRef"
         :type="BaseInputType.number"
@@ -268,6 +286,7 @@ onMounted(() => {
         :state="state"
         :size="size"
         :skeleton="skeleton"
+        :step="steps"
         :min="min"
         :max="max"
         :disabled="disabled"

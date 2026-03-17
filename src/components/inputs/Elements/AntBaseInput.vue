@@ -61,6 +61,7 @@ const props = withDefaults(defineProps<{
   inputRef?: null | HTMLInputElement;
   min?: string | number;
   max?: string | number;
+  step?: string | number;
 }>(), {
   state: InputState.base,
   disabled: false,
@@ -73,6 +74,7 @@ const props = withDefaults(defineProps<{
   default: false,
   nullable: false,
   inputRef: null,
+  step: 1,
 });
 const slot = useSlots();
 const hasInputState = computed(() => props.skeleton || props.disabled);
@@ -270,6 +272,7 @@ function onClickClearIcon() {
         :min="min"
         :max="max"
         title=""
+        :step="step"
         v-bind="$attrs"
         :data-e2e-state="state"
         @blur="onBlur"
