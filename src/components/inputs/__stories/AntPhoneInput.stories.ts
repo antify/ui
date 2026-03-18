@@ -65,10 +65,10 @@ export const Default: Story = {
     },
     setup() {
       const phoneDefault = ref(null);
-      const countryDefault = ref(null);
+      const countryDefault = ref('DE');
 
       const phoneNumericDefault = ref(null);
-      const countryNumericDefault = ref(null);
+      const countryNumericDefault = ref(49);
 
       const phone1 = ref(null);
       const country1 = ref(null);
@@ -116,8 +116,6 @@ export const Default: Story = {
             v-bind="args"
             v-model="phoneDefault"
             v-model:country-value="countryDefault"
-            default-country-value="DE"
-            :auto-select-default="true"
             placeholder="Initialized with DE"
           />
           <div class="mt-2 text-md text-base-500">
@@ -134,8 +132,6 @@ export const Default: Story = {
             v-bind="args"
             v-model="phoneNumericDefault"
             v-model:country-value="countryNumericDefault"
-            :default-country-value="49"
-            :auto-select-default="true"
             country-value-key="numericCode"
             placeholder="Initialized with 49"
           />
@@ -238,7 +234,6 @@ export const Default: Story = {
     placeholder: 'Enter digits',
     countryPlaceholder: 'Select your country',
     countries: COUNTRIES,
-    autoSelectDefault: false,
     size: Size.md,
     state: InputState.base,
     clearCountryOnClear: true,

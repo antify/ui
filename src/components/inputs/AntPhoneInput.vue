@@ -44,10 +44,8 @@ const props = withDefaults(defineProps<{
   searchPlaceholder?: string;
   searchable?: boolean;
   countryMaxHeight?: string;
-  autoSelectDefault?: boolean;
   countryValueKey?: keyof Country;
   countryErrorMessage?: string;
-  defaultCountryValue?: string | number | null;
 
   //AntBaseInput Props
   placeholder?: string;
@@ -59,14 +57,12 @@ const props = withDefaults(defineProps<{
   searchable: true,
   searchPlaceholder: 'Search country...',
   countryPlaceholder: 'Select country',
-  autoSelectDefault: true,
   placeholder: 'Enter phone number',
   countryValueKey: 'value',
   countryErrorMessage: 'Please select a country code or start with "+"',
   messages: () => [],
   nullable: true,
   clearCountryOnClear: true,
-  defaultCountryValue: 'DE',
   countries: () => COUNTRIES,
 });
 
@@ -78,7 +74,7 @@ const emit = defineEmits([
   'blur',
 ]);
 
-const _countryCode = useVModel(props, 'countryValue', emit);
+const _countryValue = useVModel(props, 'countryValue', emit);
 const _phoneNumber = useVModel(props, 'modelValue', emit);
 
 const updateFullValue = (countryId: string | number | null, rawPhone: string | null) => {
@@ -138,7 +134,7 @@ const formattedNumber = computed({
       _phoneNumber.value = null;
 
       if (props.clearCountryOnClear) {
-        _countryCode.value = null;
+        _countryValue.value = null;
       }
 
       return;
@@ -152,7 +148,7 @@ const formattedNumber = computed({
       for (const country of sortedCountries) {
         if (val.startsWith(country.dialCode)) {
           const newCountryValue = country[props.countryValueKey] as string | number;
-          _countryCode.value = newCountryValue;
+          _countryValue.value = newCountryValue;
           _phoneNumber.value = val;
 
           return;
@@ -163,7 +159,7 @@ const formattedNumber = computed({
       return;
     }
 
-    updateFullValue(_countryCode.value, val);
+    updateFullValue(_countryValue.value, val);
   },
 });
 
@@ -251,7 +247,7 @@ function onPaste(event: ClipboardEvent) {
 
     for (const country of sortedCountries) {
       if (cleanInput.startsWith(country.dialCode)) {
-        _countryCode.value = country[props.countryValueKey] as string | number;
+        _countryValue.value = country[props.countryValueKey] as string | number;
         _phoneNumber.value = cleanInput;
 
         return;
@@ -259,11 +255,11 @@ function onPaste(event: ClipboardEvent) {
     }
     _phoneNumber.value = cleanInput;
   } else {
-    updateFullValue(_countryCode.value, cleanInput);
+    updateFullValue(_countryValue.value, cleanInput);
   }
 }
 
-watch(_countryCode, (newCountryId, oldCountryId) => {
+watch(_countryValue, (newCountryId, oldCountryId) => {
   if (newCountryId === oldCountryId) {
     return;
   }
@@ -296,7 +292,7 @@ watch(_countryCode, (newCountryId, oldCountryId) => {
       @click.prevent
     >
       <AntCountry
-        v-model="_countryCode"
+        v-model="_countryValue"
         :countries="countries"
         :size="size"
         :state="showCountryError ? InputState.danger : state"
@@ -309,11 +305,9 @@ watch(_countryCode, (newCountryId, oldCountryId) => {
         :max-height="countryMaxHeight"
         :is-grouped="true"
         :grouped="Grouped.left"
-        :auto-select-default="autoSelectDefault"
         class="w-fit flex-shrink-0"
         :show-dial-code-in-menu="true"
         :option-value-key="countryValueKey"
-        :default-country-value="defaultCountryValue"
         @select="onCountrySelect"
       />
 
