@@ -90,9 +90,8 @@ export const DefaultCountry: Story = {
     ...Docs.args,
     label: 'Default Country Logic',
     description: 'Automatically selects Germany (DE) as it is marked as isDefault: true in our data.',
-    modelValue: null,
+    modelValue: 'DE',
     autoSelectDefault: true,
-    defaultCountryValue: 'DE',
   },
 };
 
@@ -103,9 +102,8 @@ export const DefaultByNumericCode: Story = {
     label: 'Default by Numeric Code',
     description: 'Using numericCode: 33 (France) as the default value.',
     optionValueKey: 'numericCode',
-    defaultCountryValue: 33,
     autoSelectDefault: true,
-    modelValue: null,
+    modelValue: 33,
   },
 };
 

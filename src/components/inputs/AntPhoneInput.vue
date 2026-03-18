@@ -66,7 +66,7 @@ const props = withDefaults(defineProps<{
   messages: () => [],
   nullable: true,
   clearCountryOnClear: true,
-  defaultCountryValue: null,
+  defaultCountryValue: 'DE',
   countries: () => COUNTRIES,
 });
 

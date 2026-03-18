@@ -26,7 +26,6 @@ import AntSkeleton from '../AntSkeleton.vue';
 const props = withDefaults(defineProps<{
   modelValue: string | number | null;
   countries?: Country[];
-  defaultCountryValue?: string | number | null;
   label?: string;
   description?: string;
   placeholder?: string;
@@ -60,7 +59,6 @@ const props = withDefaults(defineProps<{
   optionValueKey: 'value',
   showDialCodeInMenu: false,
   showIsoCode: false,
-  defaultCountryValue: null,
   countries: () => COUNTRIES,
 });
 
@@ -75,11 +73,6 @@ const inputRef = ref<HTMLElement | null>(null);
 const focusedItem = ref<string | number | null>(null);
 const selectMenuRef = ref<any>(null);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
-const defaultCountry = computed(() => {
-  if (!props.defaultCountryValue) return null;
-
-  return props.countries.find(c => String(c[props.optionValueKey]) === String(props.defaultCountryValue));
-});
 const filteredOptions = computed(() => {
   if (!props.searchable || !searchQuery.value) {
     return props.countries;
@@ -189,23 +182,6 @@ function onClickOutside(e: Event) {
 
   isOpen.value = false;
 }
-
-onMounted(() => {
-  if (props.autoSelectDefault && (props.modelValue === null || props.modelValue === undefined || props.modelValue === '')) {
-
-    if (defaultCountry.value) {
-      const defaultValue = defaultCountry.value[props.optionValueKey];
-      onSelect(defaultValue as string | number);
-    }
-    else {
-      const legacyDefault = props.countries.find(c => c.isDefault);
-
-      if (legacyDefault) {
-        onSelect(legacyDefault[props.optionValueKey] as string | number);
-      }
-    }
-  }
-});
 
 watch(isOpen, (val) => {
   if (!val) {
