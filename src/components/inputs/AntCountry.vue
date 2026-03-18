@@ -12,7 +12,7 @@ import {
   IconSize,
 } from '../__types';
 import {
-  type Country,
+  type Country, COUNTRIES,
 } from '../../constants/countries';
 import {
   vOnClickOutside,
@@ -25,7 +25,7 @@ import AntSkeleton from '../AntSkeleton.vue';
 
 const props = withDefaults(defineProps<{
   modelValue: string | number | null;
-  countries: Country[];
+  countries?: Country[];
   defaultCountryValue?: string | number | null;
   label?: string;
   description?: string;
@@ -61,6 +61,7 @@ const props = withDefaults(defineProps<{
   showDialCodeInMenu: false,
   showIsoCode: false,
   defaultCountryValue: null,
+  countries: () => COUNTRIES,
 });
 
 const emit = defineEmits([

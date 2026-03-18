@@ -15,7 +15,7 @@ import {
   BaseInputType,
 } from './Elements/__types';
 import {
-  type Country,
+  type Country, COUNTRIES,
 } from '../../constants/countries';
 
 defineOptions({
@@ -25,7 +25,7 @@ defineOptions({
 const props = withDefaults(defineProps<{
   modelValue: string | null;
   countryValue: string | number | null;
-  countries: Country[];
+  countries?: Country[];
 
   //Common Props
   size?: Size;
@@ -67,6 +67,7 @@ const props = withDefaults(defineProps<{
   nullable: true,
   clearCountryOnClear: true,
   defaultCountryValue: null,
+  countries: () => COUNTRIES,
 });
 
 const emit = defineEmits([
