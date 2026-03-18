@@ -74,6 +74,81 @@ export const Docs: Story = {
   },
 };
 
+export const WeekNumberStyling: Story = {
+  render: (args) => ({
+    components: {
+      AntCalendar,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
+    setup() {
+      const value = ref(new Date('2026-01-01').getTime());
+
+      return {
+        value,
+        args,
+      };
+    },
+    template: `
+      <AntFormGroup class="p-4 flex flex-col gap-4 w-fit">
+        <AntFormGroupLabel>Week Number Styling (Presets)</AntFormGroupLabel>
+
+        <AntFormGroup class="grid grid-cols-3 gap-10">
+          <div class="flex flex-col w-64 gap-2">
+            <span class="text-sm font-medium text-base-500">1. Default (Base 100/500)</span>
+            <AntCalendar
+              v-model="value"
+              :show-week-numbers="true"
+              week-number-bg-color="bg-base-100"
+              week-number-text-color="text-base-500"
+            />
+          </div>
+
+          <div class="flex flex-col w-64 gap-2">
+            <span class="text-sm font-medium text-base-500">2. Primary (Brand)</span>
+            <AntCalendar
+              v-model="value"
+              :show-week-numbers="true"
+              week-number-bg-color="bg-primary-100"
+              week-number-text-color="text-primary-800"
+            />
+          </div>
+
+          <div class="flex flex-col w-64 gap-2">
+            <span class="text-sm font-medium text-base-500">3. Info (Light Blue)</span>
+            <AntCalendar
+              v-model="value"
+              :show-week-numbers="true"
+              week-number-bg-color="bg-info-100"
+              week-number-text-color="text-info-700"
+            />
+          </div>
+
+          <div class="flex flex-col w-64 gap-2">
+            <span class="text-sm font-medium text-base-500">4. Success (Greenish)</span>
+            <AntCalendar
+              v-model="value"
+              :show-week-numbers="true"
+              week-number-bg-color="bg-success-100"
+              week-number-text-color="text-success-800"
+            />
+          </div>
+
+          <div class="flex flex-col w-64 gap-2">
+            <span class="text-sm font-medium text-base-500">5. Dark Minimal (Base 200)</span>
+            <AntCalendar
+              v-model="value"
+              :show-week-numbers="true"
+              week-number-bg-color="bg-base-200"
+              week-number-text-color="text-base-700"
+            />
+          </div>
+        </AntFormGroup>
+      </AntFormGroup>
+    `,
+  }),
+};
+
 export const Summary: Story = {
   parameters: {
     chromatic: {
