@@ -42,8 +42,8 @@ const props = withDefaults(defineProps<{
   showWeekNumbers: false,
   skeleton: false,
   specialDays: () => [],
-  weekNumberBgColor: 'bg-base-100',
-  weekNumberTextColor: 'text-base-500',
+  weekNumberBgColor: 'bg-base-200',
+  weekNumberTextColor: 'text-base-700',
 });
 const emit = defineEmits([
   'select',

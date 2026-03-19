@@ -90,10 +90,10 @@ export const WeekNumberStyling: Story = {
       };
     },
     template: `
-      <AntFormGroup class="p-4 flex flex-col gap-4 w-fit">
+      <AntFormGroup class="p-4 flex gap-4 w-fit">
         <AntFormGroupLabel>Week Number Styling (Presets)</AntFormGroupLabel>
 
-        <AntFormGroup class="grid grid-cols-3 gap-10">
+        <AntFormGroup class="grid grid-cols-4 gap-10">
           <div class="flex flex-col w-64 gap-2">
             <span class="text-sm font-medium text-base-500">1. Default (Base 100/500)</span>
             <AntCalendar
@@ -134,15 +134,6 @@ export const WeekNumberStyling: Story = {
             />
           </div>
 
-          <div class="flex flex-col w-64 gap-2">
-            <span class="text-sm font-medium text-base-500">5. Dark Minimal (Base 200)</span>
-            <AntCalendar
-              v-model="value"
-              :show-week-numbers="true"
-              week-number-bg-color="bg-base-200"
-              week-number-text-color="text-base-700"
-            />
-          </div>
         </AntFormGroup>
       </AntFormGroup>
     `,
