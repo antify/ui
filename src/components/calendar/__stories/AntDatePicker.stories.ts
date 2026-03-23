@@ -99,8 +99,8 @@ export const WeekNumberStyling: Story = {
             <AntCalendar
               v-model="value"
               :show-week-numbers="true"
-              week-number-bg-color="bg-base-100"
-              week-number-text-color="text-base-500"
+              week-number-bg-class="bg-base-100"
+              week-number-text-class="text-base-500"
             />
           </div>
 
@@ -109,8 +109,8 @@ export const WeekNumberStyling: Story = {
             <AntCalendar
               v-model="value"
               :show-week-numbers="true"
-              week-number-bg-color="bg-primary-100"
-              week-number-text-color="text-primary-800"
+              week-number-bg-class="bg-primary-100"
+              week-number-text-class="text-primary-800"
             />
           </div>
 
@@ -119,8 +119,8 @@ export const WeekNumberStyling: Story = {
             <AntCalendar
               v-model="value"
               :show-week-numbers="true"
-              week-number-bg-color="bg-info-100"
-              week-number-text-color="text-info-700"
+              week-number-bg-class="bg-info-100"
+              week-number-text-class="text-info-700"
             />
           </div>
 
@@ -129,8 +129,8 @@ export const WeekNumberStyling: Story = {
             <AntCalendar
               v-model="value"
               :show-week-numbers="true"
-              week-number-bg-color="bg-success-100"
-              week-number-text-color="text-success-800"
+              week-number-bg-class="bg-success-100"
+              week-number-text-class="text-success-800"
             />
           </div>
 
