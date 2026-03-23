@@ -35,15 +35,15 @@ const props = withDefaults(defineProps<{
     date: string;
     color: string;
   }[];
-  weekNumberBgColor?: string;
-  weekNumberTextColor?: string;
+  weekNumberBgClass?: string;
+  weekNumberTextClass?: string;
 }>(), {
   showWeekend: false,
   showWeekNumbers: false,
   skeleton: false,
   specialDays: () => [],
-  weekNumberBgColor: 'bg-base-200',
-  weekNumberTextColor: 'text-base-700',
+  weekNumberBgClass: 'bg-base-200',
+  weekNumberTextClass: 'text-base-700',
 });
 const emit = defineEmits([
   'select',
@@ -184,11 +184,11 @@ onMounted(() => {
     >
       <div
         v-for="(day, index) in weekDays"
-        :key="day"
+        :key="`${day}-${index}`"
         class="text-center flex items-center justify-center rounded-md"
         :class="[
           (showWeekNumbers && index === 0)
-            ? `${weekNumberBgColor} ${weekNumberTextColor}`
+            ? `${weekNumberBgClass} ${weekNumberTextClass}`
             : 'text-for-white-bg-font'
         ]"
       >
@@ -210,7 +210,7 @@ onMounted(() => {
         <div
           v-if="showWeekNumbers"
           class="flex font-semibold rounded-md transition-colors"
-          :class="[weekNumberBgColor, weekNumberTextColor]"
+          :class="[weekNumberBgClass, weekNumberTextClass]"
         >
           <AntSkeleton
             :visible="skeleton"
