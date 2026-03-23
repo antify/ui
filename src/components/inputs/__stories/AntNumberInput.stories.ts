@@ -13,6 +13,9 @@ import {
 } from 'vue';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
+import {
+  fn,
+} from '@storybook/test';
 
 const meta: Meta<typeof AntNumberInput> = {
   title: 'Inputs/Number Input',
@@ -78,20 +81,18 @@ export const Docs: Story = {
       AntNumberInput,
     },
     setup() {
-      const value = ref(args.modelValue);
-
       return {
         args,
-        value,
       };
     },
-    template: '<AntNumberInput v-bind="args" v-model="value" />',
+    template: '<AntNumberInput v-bind="args" v-model="args.modelValue" />',
   }),
   args: {
     modelValue: null,
     steps: 1,
     label: 'Standard Number Input',
     description: 'Basic usage with manual entry or indicators',
+    onValidate: fn(),
   },
 };
 

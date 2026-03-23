@@ -302,7 +302,6 @@ onMounted(() => {
         :placeholder="placeholder || label"
         :show-icon="false"
         v-bind="$attrs"
-        @validate="val => $emit('validate', val)"
         @focus="onInputFocus"
         @blur="onButtonBlur"
         @keydown="onKeyDown"
@@ -324,18 +323,3 @@ onMounted(() => {
     </div>
   </AntField>
 </template>
-
-<style scoped>
-:deep(input) {
-  text-align: right !important;
-}
-
-:deep(input::-webkit-outer-spin-button),
-:deep(input::-webkit-inner-spin-button) {
-  -webkit-appearance: none;
-  margin: 0;
-}
-:deep(input[type=number]) {
-  -moz-appearance: textfield;
-}
-</style>
