@@ -95,12 +95,10 @@ export const WeekNumberStyling: Story = {
 
         <AntFormGroup class="grid grid-cols-4 gap-10">
           <div class="flex flex-col w-64 gap-2">
-            <span class="text-sm font-medium text-base-500">1. Default (Base 100/500)</span>
+            <span class="text-sm font-medium text-base-500">1. Default (Base 200/700)</span>
             <AntCalendar
               v-model="value"
               :show-week-numbers="true"
-              week-number-bg-class="bg-base-100"
-              week-number-text-class="text-base-500"
             />
           </div>
 
