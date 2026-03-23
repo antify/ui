@@ -42,7 +42,7 @@ defineOptions({
  * Additionally, the initial value (if none is given) gets set to "0" with the same amount of decimals as used in the steps.
  */
 const props = withDefaults(defineProps<{
-  modelValue: number | null;
+  modelValue: number | null | string;
   label?: string;
   placeholder?: string;
   description?: string;
@@ -87,7 +87,7 @@ const isFocused = ref(false);
 const _modelValue = computed({
   get: () => {
     if (props.modelValue === null || props.modelValue === undefined || props.modelValue === '') {
-      return '';
+      return null;
     }
 
     if (isFocused.value) {
@@ -209,11 +209,13 @@ const isNextButtonDisabled = computed(() => {
 async function onButtonBlur(e: FocusEvent) {
   isFocused.value = false;
 
+  let finalValue = props.modelValue;
+
   if (props.modelValue !== null) {
     const dp = getPrecision();
-    const formattedValue = Number(new Big(props.modelValue).toFixed(dp));
+    finalValue = Number(new Big(props.modelValue).toFixed(dp));
 
-    emit('update:modelValue', formattedValue);
+    emit('update:modelValue', finalValue);
   }
 
   await nextTick();
@@ -224,11 +226,33 @@ async function onButtonBlur(e: FocusEvent) {
     el.value = _modelValue.value;
   }
 
-  emit('validate', props.modelValue);
+  emit('validate', finalValue);
   emit('blur', e);
 }
 
 async function onKeyDown(e: KeyboardEvent) {
+  const allowedKeys = [
+    'Backspace',
+    'Delete',
+    'Tab',
+    'Escape',
+    'Enter',
+    'ArrowLeft',
+    'ArrowRight',
+    'Home',
+    'End',
+  ];
+
+  if (allowedKeys.includes(e.key)) {
+    return;
+  }
+
+  if (!/^[0-9.,-]$/.test(e.key)) {
+    e.preventDefault();
+
+    return;
+  }
+
   if (e.key === '.' || e.key === ',') {
     const el = e.target as HTMLInputElement;
 
