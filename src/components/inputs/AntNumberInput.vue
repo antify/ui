@@ -132,7 +132,7 @@ const _modelValue = computed({
   },
 });
 
-async function onInputFocus(e: FocusEvent) {
+function onInputFocus(e: FocusEvent) {
   isFocused.value = true;
 
   const el = e.target as HTMLInputElement;
@@ -206,7 +206,7 @@ const isNextButtonDisabled = computed(() => {
   return props.max !== undefined ? Number(props.modelValue) >= props.max : false;
 });
 
-async function onButtonBlur(e: FocusEvent) {
+function onButtonBlur(e: FocusEvent) {
   isFocused.value = false;
 
   let finalValue = props.modelValue;
@@ -218,8 +218,6 @@ async function onButtonBlur(e: FocusEvent) {
     emit('update:modelValue', finalValue);
   }
 
-  await nextTick();
-
   const el = e.target as HTMLInputElement;
 
   if (el && _modelValue.value !== undefined) {
@@ -230,7 +228,7 @@ async function onButtonBlur(e: FocusEvent) {
   emit('blur', e);
 }
 
-async function onKeyDown(e: KeyboardEvent) {
+function onKeyDown(e: KeyboardEvent) {
   if (e.ctrlKey || e.metaKey) {
     return;
   }
