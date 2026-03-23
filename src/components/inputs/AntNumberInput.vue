@@ -253,28 +253,10 @@ async function onKeyDown(e: KeyboardEvent) {
     return;
   }
 
-  if (!/^[0-9.,-]$/.test(e.key)) {
+  if (!/^[0-9.-]$/.test(e.key)) {
     e.preventDefault();
 
     return;
-  }
-
-  if (e.key === '.' || e.key === ',') {
-    const el = e.target as HTMLInputElement;
-
-    if (el.value.includes('.') || el.value.includes(',')) {
-      return;
-    }
-
-    const originalType = el.type;
-    el.type = 'text';
-
-    await nextTick();
-
-    const len = el.value.length;
-    el.setSelectionRange(len, len);
-
-    el.type = originalType;
   }
 }
 

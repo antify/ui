@@ -180,18 +180,20 @@ export const Limits: Story = {
     },
     template: `
       <AntFormGroup class="w-96">
-        <AntFormGroupLabel>Min: 0 | Max: 10</AntFormGroupLabel>
+        <AntFormGroupLabel>Min: {{ args.min }} | Max: {{ args.max }}</AntFormGroupLabel>
         <AntNumberInput
           v-bind="args"
           v-model="limitedVal"
-          :min="0"
-          :max="10"
-          indicators
-          limiter
           label="Try to exceed limits"
         />
       </AntFormGroup>`,
   }),
+  args: {
+    min: 0,
+    max: 10,
+    indicators: true,
+    limiter: true,
+  },
 };
 
 export const WithIndicators: Story = {
