@@ -42,7 +42,7 @@ defineOptions({
  * Additionally, the initial value (if none is given) gets set to "0" with the same amount of decimals as used in the steps.
  */
 const props = withDefaults(defineProps<{
-  modelValue: number | null | string;
+  modelValue: number | null;
   label?: string;
   placeholder?: string;
   description?: string;
@@ -326,6 +326,7 @@ onMounted(() => {
         :placeholder="placeholder || label"
         :show-icon="false"
         v-bind="$attrs"
+        @validate="(val) => $emit('validate', val)"
         @focus="onInputFocus"
         @blur="onButtonBlur"
         @keydown="onKeyDown"

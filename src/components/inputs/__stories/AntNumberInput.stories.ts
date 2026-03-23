@@ -134,7 +134,6 @@ export const PrecisionAndSteps: Story = {
       AntFormGroupLabel,
     },
     setup() {
-      // Явные локальные переменные для каждого инпута
       const intVal = ref(null);
       const floatVal = ref(0.5);
 
