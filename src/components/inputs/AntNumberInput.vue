@@ -312,7 +312,6 @@ onMounted(() => {
         :placeholder="placeholder || label"
         :show-icon="false"
         v-bind="$attrs"
-        @validate="(val) => $emit('validate', val)"
         @focus="onInputFocus"
         @blur="onButtonBlur"
         @keydown="onKeyDown"
