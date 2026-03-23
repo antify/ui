@@ -231,6 +231,10 @@ async function onButtonBlur(e: FocusEvent) {
 }
 
 async function onKeyDown(e: KeyboardEvent) {
+  if (e.ctrlKey || e.metaKey) {
+    return;
+  }
+
   const allowedKeys = [
     'Backspace',
     'Delete',
@@ -239,6 +243,8 @@ async function onKeyDown(e: KeyboardEvent) {
     'Enter',
     'ArrowLeft',
     'ArrowRight',
+    'ArrowUp',
+    'ArrowDown',
     'Home',
     'End',
   ];
