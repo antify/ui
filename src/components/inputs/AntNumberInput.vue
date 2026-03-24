@@ -113,22 +113,9 @@ const _modelValue = computed({
     }
 
     const num = Number(val);
-
-    if (isNaN(num)) {
-      return;
+    if (!isNaN(num)) {
+      emit('update:modelValue', num);
     }
-
-    let finalVal = num;
-
-    if (props.max !== undefined && num > props.max) {
-      finalVal = props.max;
-    }
-
-    if (props.min !== undefined && num < props.min) {
-      finalVal = props.min;
-    }
-
-    emit('update:modelValue', finalVal);
   },
 });
 
@@ -209,22 +196,28 @@ const isNextButtonDisabled = computed(() => {
 function onButtonBlur(e: FocusEvent) {
   isFocused.value = false;
 
-  let finalValue = props.modelValue;
-
   if (props.modelValue !== null) {
+    let finalValue = props.modelValue;
     const dp = getPrecision();
-    finalValue = Number(new Big(props.modelValue).toFixed(dp));
 
-    emit('update:modelValue', finalValue);
+    if (props.max !== undefined && finalValue > props.max) {
+      finalValue = props.max;
+    }
+    if (props.min !== undefined && finalValue < props.min) {
+      finalValue = props.min;
+    }
+
+    const roundedValue = Number(new Big(finalValue).toFixed(dp));
+
+    emit('update:modelValue', roundedValue);
+
+    if (_inputRef.value) {
+      _inputRef.value.value = roundedValue.toString();
+    }
+
+    emit('validate', roundedValue);
   }
 
-  const el = e.target as HTMLInputElement;
-
-  if (el && _modelValue.value !== undefined) {
-    el.value = _modelValue.value;
-  }
-
-  emit('validate', finalValue);
   emit('blur', e);
 }
 
