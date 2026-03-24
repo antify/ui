@@ -110,7 +110,7 @@ export const WeekNumberStyling: Story = {
 
         <AntFormGroup class="grid grid-cols-4 gap-10">
           <div class="flex flex-col w-64 gap-2">
-            <span class="text-sm font-medium text-for-white-bg-font">1. Default (Base 200/700)</span>
+            <span class="text-sm font-medium text-for-white-bg-font">1. Default (Base 200)</span>
             <AntCalendar
               v-model="value"
               :show-week-numbers="true"
@@ -118,7 +118,7 @@ export const WeekNumberStyling: Story = {
           </div>
 
           <div class="flex flex-col w-64 gap-2">
-            <span class="text-sm font-medium text-for-white-bg-font">2. Primary (Brand)</span>
+            <span class="text-sm font-medium text-for-white-bg-font">2. Primary 900</span>
             <AntCalendar
               v-model="value"
               :show-week-numbers="true"
@@ -127,7 +127,7 @@ export const WeekNumberStyling: Story = {
           </div>
 
           <div class="flex flex-col w-64 gap-2">
-            <span class="text-sm font-medium text-for-white-bg-font">3. Info (Light Blue)</span>
+            <span class="text-sm font-medium text-for-white-bg-font">3. Info 100</span>
             <AntCalendar
               v-model="value"
               :show-week-numbers="true"
@@ -136,7 +136,7 @@ export const WeekNumberStyling: Story = {
           </div>
 
           <div class="flex flex-col w-64 gap-2">
-            <span class="text-sm font-medium text-for-white-bg-font">4. Success (Greenish)</span>
+            <span class="text-sm font-medium text-for-white-bg-font">4. Success 500</span>
             <AntCalendar
               v-model="value"
               :show-week-numbers="true"
