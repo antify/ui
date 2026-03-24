@@ -35,15 +35,16 @@ const props = withDefaults(defineProps<{
     date: string;
     color: string;
   }[];
-  weekNumberBgClass?: string;
-  weekNumberTextClass?: string;
+  /**
+   * Color token used for the week number column (e.g., 'base-200', 'primary-500').
+   */
+  weekNumberColor?: string;
 }>(), {
   showWeekend: false,
   showWeekNumbers: false,
   skeleton: false,
   specialDays: () => [],
-  weekNumberBgClass: 'bg-base-200',
-  weekNumberTextClass: 'text-base-700',
+  weekNumberColor: 'base-200',
 });
 const emit = defineEmits([
   'select',
@@ -138,6 +139,18 @@ const getColorNumber = (color: string) => {
   return match ? parseInt(match[0], 10) : null;
 };
 
+const getContrastTextColor = (colorToken: string) => {
+  const match = colorToken.match(/(\d+)/);
+  const weight = match ? parseInt(match[0], 10) : 0;
+
+  return weight < 500 ? 'var(--color-for-white-bg-font)' : '#fff';
+};
+
+const weekNumberStyles = computed(() => ({
+  backgroundColor: `var(--color-${props.weekNumberColor})`,
+  color: getContrastTextColor(props.weekNumberColor),
+}));
+
 watch(() => props.modelValue, (val) => {
   const date = new Date(val);
   currentMonthIndex.value = date.getMonth();
@@ -186,11 +199,8 @@ onMounted(() => {
         v-for="(day, index) in weekDays"
         :key="`${day}-${index}`"
         class="text-center flex items-center justify-center rounded-md"
-        :class="[
-          (showWeekNumbers && index === 0)
-            ? `${weekNumberBgClass} ${weekNumberTextClass}`
-            : 'text-for-white-bg-font'
-        ]"
+        :class="[!(showWeekNumbers && index === 0) ? 'text-for-white-bg-font' : '']"
+        :style="showWeekNumbers && index === 0 ? weekNumberStyles : {}"
       >
         <AntSkeleton
           :visible="skeleton"
@@ -210,7 +220,7 @@ onMounted(() => {
         <div
           v-if="showWeekNumbers"
           class="flex font-semibold rounded-md transition-colors"
-          :class="[weekNumberBgClass, weekNumberTextClass]"
+          :style="weekNumberStyles"
         >
           <AntSkeleton
             :visible="skeleton"

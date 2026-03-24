@@ -95,7 +95,7 @@ export const WeekNumberStyling: Story = {
 
         <AntFormGroup class="grid grid-cols-4 gap-10">
           <div class="flex flex-col w-64 gap-2">
-            <span class="text-sm font-medium text-base-500">1. Default (Base 200/700)</span>
+            <span class="text-sm font-medium text-for-white-bg-font">1. Default (Base 200/700)</span>
             <AntCalendar
               v-model="value"
               :show-week-numbers="true"
@@ -103,32 +103,29 @@ export const WeekNumberStyling: Story = {
           </div>
 
           <div class="flex flex-col w-64 gap-2">
-            <span class="text-sm font-medium text-base-500">2. Primary (Brand)</span>
+            <span class="text-sm font-medium text-for-white-bg-font">2. Primary (Brand)</span>
             <AntCalendar
               v-model="value"
               :show-week-numbers="true"
-              week-number-bg-class="bg-primary-100"
-              week-number-text-class="text-primary-800"
+              week-number-color="primary-900"
             />
           </div>
 
           <div class="flex flex-col w-64 gap-2">
-            <span class="text-sm font-medium text-base-500">3. Info (Light Blue)</span>
+            <span class="text-sm font-medium text-for-white-bg-font">3. Info (Light Blue)</span>
             <AntCalendar
               v-model="value"
               :show-week-numbers="true"
-              week-number-bg-class="bg-info-100"
-              week-number-text-class="text-info-700"
+              week-number-color="info-100"
             />
           </div>
 
           <div class="flex flex-col w-64 gap-2">
-            <span class="text-sm font-medium text-base-500">4. Success (Greenish)</span>
+            <span class="text-sm font-medium text-for-white-bg-font">4. Success (Greenish)</span>
             <AntCalendar
               v-model="value"
               :show-week-numbers="true"
-              week-number-bg-class="bg-success-100"
-              week-number-text-class="text-success-800"
+              week-number-color="success-500"
             />
           </div>
 
