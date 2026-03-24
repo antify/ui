@@ -32,6 +32,21 @@ const meta: Meta<typeof AntCalendar> = {
         },
       },
     },
+    weekNumberColor: {
+      control: 'text',
+      description: "Color token e.g. 'base-200', 'primary-500'. Automatically calculates contrast text color.",
+      table: {
+        type: {
+          summary: 'string',
+        },
+        defaultValue: {
+          summary: 'base-200',
+        },
+      },
+    },
+    showWeekNumbers: {
+      control: 'boolean',
+    },
     onSelect: {
       action: 'select',
     },
