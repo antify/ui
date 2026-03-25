@@ -36,11 +36,11 @@ const props = withDefaults(defineProps<{
     color: string;
   }[];
   /**
-   * Color token used for the week number text column (e.g., 'base-200-font', 'primary-500-font').
+   * Color token used for weekNumberTextColor of week number column (e.g., 'base-200-font', 'primary-500-font').
    */
   weekNumberTextColor?: string;
   /**
-   * Color token used for the week number background column (e.g., 'base-200', 'primary-500').
+   * Color token used for weekNumberBackgroundColor of week number column (e.g., 'base-200', 'primary-500').
    */
   weekNumberBackgroundColor?: string;
 }>(), {
