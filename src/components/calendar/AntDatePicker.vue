@@ -197,7 +197,6 @@ onMounted(() => {
         v-for="(day, index) in weekDays"
         :key="`${day}-${index}`"
         class="text-center flex items-center justify-center rounded-md"
-        :class="(showWeekNumbers && index === 0) ? '' : 'text-for-white-bg-font'"
         :style="showWeekNumbers && index === 0 ? weekNumberStyles : {}"
       >
         <AntSkeleton
