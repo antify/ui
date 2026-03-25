@@ -32,15 +32,27 @@ const meta: Meta<typeof AntCalendar> = {
         },
       },
     },
-    weekNumberColor: {
+    weekNumberTextColor: {
       control: 'text',
-      description: "Color token e.g. 'base-200', 'primary-500'. Automatically calculates contrast text color.",
+      description: "Color token e.g. 'base-300-font', 'primary-500-font'. Automatically calculates contrast text color.",
       table: {
         type: {
           summary: 'string',
         },
         defaultValue: {
-          summary: 'base-200',
+          summary: 'base-300-font',
+        },
+      },
+    },
+    weekNumberBackgroundColor: {
+      control: 'text',
+      description: "Color token e.g. 'base-300', 'primary-500'. Automatically calculates contrast text color.",
+      table: {
+        type: {
+          summary: 'string',
+        },
+        defaultValue: {
+          summary: 'base-300',
         },
       },
     },
@@ -122,7 +134,8 @@ export const WeekNumberStyling: Story = {
             <AntCalendar
               v-model="value"
               :show-week-numbers="true"
-              week-number-color="primary-900"
+              week-number-text-color="primary-900-font"
+              week-number-background-color="primary-900"
             />
           </div>
 
@@ -131,7 +144,8 @@ export const WeekNumberStyling: Story = {
             <AntCalendar
               v-model="value"
               :show-week-numbers="true"
-              week-number-color="info-100"
+              week-number-text-color="info-100-font"
+              week-number-background-color="info-100"
             />
           </div>
 
@@ -140,7 +154,8 @@ export const WeekNumberStyling: Story = {
             <AntCalendar
               v-model="value"
               :show-week-numbers="true"
-              week-number-color="success-500"
+              week-number-text-color="success-500-font"
+              week-number-background-color="success-500"
             />
           </div>
 
