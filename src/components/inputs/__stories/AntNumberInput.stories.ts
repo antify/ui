@@ -13,6 +13,9 @@ import {
 } from 'vue';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
+import {
+  fn,
+} from '@storybook/test';
 
 const meta: Meta<typeof AntNumberInput> = {
   title: 'Inputs/Number Input',
@@ -50,11 +53,19 @@ const meta: Meta<typeof AntNumberInput> = {
         },
       },
     },
-    placeholder: {
-      table: {
-        defaultValue: {
-          summary: 'this.label',
-        },
+    steps: {
+      control: {
+        type: 'number',
+      },
+    },
+    min: {
+      control: {
+        type: 'number',
+      },
+    },
+    max: {
+      control: {
+        type: 'number',
       },
     },
   },
@@ -74,17 +85,114 @@ export const Docs: Story = {
         args,
       };
     },
-    template: `
-      <AntNumberInput
-        v-bind="args"
-        v-model="args.modelValue"
-      />`,
+    template: '<AntNumberInput v-bind="args" v-model="args.modelValue" />',
   }),
   args: {
     modelValue: null,
     steps: 1,
-    label: 'Label',
-    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
+    label: 'Standard Number Input',
+    description: 'Basic usage with manual entry or indicators',
+    onValidate: fn(),
+  },
+};
+
+export const SelectAllOnFocus: Story = {
+  render: (args) => ({
+    components: {
+      AntNumberInput,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
+    setup() {
+      const val = ref(999.99);
+
+      return {
+        args,
+        val,
+      };
+    },
+    template: `
+      <AntFormGroup class="w-80">
+        <AntFormGroupLabel>Select All on Focus</AntFormGroupLabel>
+        <AntNumberInput
+          v-bind="args"
+          v-model="val"
+          :selectAllOnFocus="true"
+          label="Price"
+          description="Click to select the entire number for quick replacement"
+        />
+      </AntFormGroup>
+    `,
+  }),
+};
+
+export const PrecisionAndSteps: Story = {
+  render: (args) => ({
+    components: {
+      AntNumberInput,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
+    setup() {
+      const intVal = ref(null);
+      const floatVal = ref(0.5);
+
+      return {
+        args,
+        intVal,
+        floatVal,
+      };
+    },
+    template: `
+      <AntFormGroup direction="row">
+        <AntFormGroup>
+          <AntFormGroupLabel>Integer (Step 1)</AntFormGroupLabel>
+          <AntNumberInput v-bind="args" :steps="1" v-model="intVal" />
+        </AntFormGroup>
+
+        <AntFormGroup>
+          <AntFormGroupLabel>Currency Style (Step 0.01)</AntFormGroupLabel>
+          <AntNumberInput v-bind="args" :steps="0.01" v-model="floatVal" indicators />
+        </AntFormGroup>
+
+        <AntFormGroup>
+          <AntFormGroupLabel>High Precision (Step 0.0005)</AntFormGroupLabel>
+          <AntNumberInput v-bind="args" :steps="0.0005" v-model="floatVal" indicators />
+        </AntFormGroup>
+      </AntFormGroup>`,
+  }),
+};
+
+export const Limits: Story = {
+  render: (args) => ({
+    components: {
+      AntNumberInput,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
+    setup() {
+      const limitedVal = ref(5);
+
+      return {
+        args,
+        limitedVal,
+      };
+    },
+    template: `
+      <AntFormGroup class="w-96">
+        <AntFormGroupLabel>Min: {{ args.min }} | Max: {{ args.max }}</AntFormGroupLabel>
+        <AntNumberInput
+          v-bind="args"
+          v-model="limitedVal"
+          label="Try to exceed limits"
+        />
+      </AntFormGroup>`,
+  }),
+  args: {
+    min: 0,
+    max: 10,
+    indicators: true,
+    limiter: true,
   },
 };
 
@@ -93,21 +201,21 @@ export const WithIndicators: Story = {
     components: {
       AntNumberInput,
       AntFormGroup,
-      AntFormGroupLabel,
     },
     setup() {
+      const val1 = ref(null);
+      const val2 = ref(null);
+
       return {
         args,
+        val1,
+        val2,
       };
     },
     template: `
-      <AntFormGroup>
-        <AntFormGroup direction="column">
-          <AntNumberInput v-bind="args" v-model="args.modelValue" label="Label"
-                          description="Lorem ipsum dolor sit amet"/>
-          <AntNumberInput v-bind="args" v-model="args.modelValue" label="Label"
-                          description="Lorem ipsum dolor sit amet" :steps="0.0001"/>
-        </AntFormGroup>
+      <AntFormGroup direction="column">
+        <AntNumberInput v-bind="args" v-model="val1" label="Step 1" :steps="1"/>
+        <AntNumberInput v-bind="args" v-model="val2" label="Step 0.0001" :steps="0.0001"/>
       </AntFormGroup>`,
   }),
   args: {

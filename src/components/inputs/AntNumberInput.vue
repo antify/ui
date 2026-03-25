@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-  computed, onMounted,
+  computed, onMounted, nextTick, ref, useId,
 } from 'vue';
 import AntButton from '../AntButton.vue';
 import AntField from '../forms/AntField.vue';
@@ -58,6 +58,7 @@ const props = withDefaults(defineProps<{
   messages?: string[];
   indicators?: boolean;
   inputRef?: HTMLInputElement | null;
+  selectAllOnFocus?: boolean;
 }>(), {
   state: InputState.base,
   disabled: false,
@@ -69,95 +70,197 @@ const props = withDefaults(defineProps<{
   messages: () => [],
   indicators: false,
   inputRef: null,
+  selectAllOnFocus: false,
 });
 const emit = defineEmits([
   'update:modelValue',
   'update:inputRef',
   'validate',
+  'focus',
+  'blur',
 ]);
+
+const id = useId();
+const _inputRef = useVModel(props, 'inputRef', emit);
+const isFocused = ref(false);
 
 const _modelValue = computed({
   get: () => {
-    if(!props.modelValue) {
-      return props.modelValue;
+    if (props.modelValue === null || props.modelValue === undefined || props.modelValue === '') {
+      return null;
     }
 
-    const modelDecimalPlaces = getDecimalPlaces(props.modelValue || 0);
-    const stepDecimalPlaces = getDecimalPlaces(props.steps);
-    const decimalPlaces = Math.max(modelDecimalPlaces, stepDecimalPlaces);
+    if (isFocused.value) {
+      return props.modelValue.toString();
+    }
 
-    return String(new Big(props.modelValue).toFixed(decimalPlaces));
+    const bigValue = new Big(props.modelValue);
+    const isInteger = bigValue.mod(1).eq(0);
+
+    if (isInteger) {
+      return props.modelValue.toString();
+    }
+
+    const dp = getPrecision();
+
+    return bigValue.toFixed(dp);
   },
-  set: (val: string) => {
-    emit('update:modelValue', Number(val));
+  set: (val: string | number | null) => {
+    if (val === '' || val === null || val === undefined) {
+      emit('update:modelValue', null);
+
+      return;
+    }
+
+    const num = Number(val);
+    if (!isNaN(num)) {
+      emit('update:modelValue', num);
+    }
   },
 });
-const _inputRef = useVModel(props, 'inputRef', emit);
+
+function onInputFocus(e: FocusEvent) {
+  isFocused.value = true;
+
+  const el = e.target as HTMLInputElement;
+
+  if (el && props.selectAllOnFocus && el.value !== '') {
+    const originalType = el.type;
+    el.type = 'text';
+
+    setTimeout(() => {
+      el.setSelectionRange(0, el.value.length);
+      el.type = originalType;
+    }, 0);
+  }
+  emit('focus', e);
+}
+
+function getPrecision() {
+  const modelDecimalPlaces = getDecimalPlaces(props.modelValue || 0);
+  const stepDecimalPlaces = getDecimalPlaces(props.steps);
+
+  return Math.max(modelDecimalPlaces, stepDecimalPlaces);
+}
+
+function subtract() {
+  const dp = getPrecision();
+
+  const current = props.modelValue !== null ? new Big(props.modelValue) : new Big(props.max || 0);
+  let result = current.sub(props.steps);
+
+  if (props.min !== undefined && result.lt(props.min)) {
+    result = new Big(props.min);
+  }
+
+  emit('update:modelValue', Number(result.toFixed(dp)));
+}
+
+function add() {
+  const dp = getPrecision();
+
+  const current = props.modelValue !== null ? new Big(props.modelValue) : new Big(props.min || 0);
+  let result = current.add(props.steps);
+
+  if (props.max !== undefined && result.gt(props.max)) {
+    result = new Big(props.max);
+  }
+
+  emit('update:modelValue', Number(result.toFixed(dp)));
+}
 
 const isPrevButtonDisabled = computed(() => {
-  if (props.disabled) {
+  if (props.disabled || props.readonly) {
     return true;
   }
 
-  if (_modelValue.value === null) {
+  if (props.modelValue === null) {
     return false;
   }
 
-  return props.min !== undefined ? Number(_modelValue.value) <= props.min : false;
+  return props.min !== undefined ? Number(props.modelValue) <= props.min : false;
 });
+
 const isNextButtonDisabled = computed(() => {
-  if (props.disabled) {
+  if (props.disabled || props.readonly) {
     return true;
   }
 
-  if (_modelValue.value === null) {
+  if (props.modelValue === null) {
     return false;
   }
 
-  return props.max !== undefined ? Number(_modelValue.value) >= props.max : false;
+  return props.max !== undefined ? Number(props.modelValue) >= props.max : false;
 });
+
+function onButtonBlur(e: FocusEvent) {
+  isFocused.value = false;
+
+  if (props.modelValue !== null) {
+    let finalValue = props.modelValue;
+    const dp = getPrecision();
+
+    if (props.max !== undefined && finalValue > props.max) {
+      finalValue = props.max;
+    }
+    if (props.min !== undefined && finalValue < props.min) {
+      finalValue = props.min;
+    }
+
+    const roundedValue = Number(new Big(finalValue).toFixed(dp));
+
+    emit('update:modelValue', roundedValue);
+
+    if (_inputRef.value) {
+      _inputRef.value.value = roundedValue.toString();
+    }
+
+    emit('validate', roundedValue);
+  }
+
+  emit('blur', e);
+}
+
+function onKeyDown(e: KeyboardEvent) {
+  if (e.ctrlKey || e.metaKey) {
+    return;
+  }
+
+  const allowedKeys = [
+    'Backspace',
+    'Delete',
+    'Tab',
+    'Escape',
+    'Enter',
+    'ArrowLeft',
+    'ArrowRight',
+    'ArrowUp',
+    'ArrowDown',
+    'Home',
+    'End',
+  ];
+
+  if (allowedKeys.includes(e.key)) {
+    return;
+  }
+
+  if (!/^[0-9.-]$/.test(e.key)) {
+    e.preventDefault();
+
+    return;
+  }
+}
 
 onMounted(() => {
   handleEnumValidation(props.size, Size, 'size');
   handleEnumValidation(props.state, InputState, 'state');
 });
-
-function subtract() {
-  const modelDecimalPlaces = getDecimalPlaces(_modelValue.value || 0);
-  const stepDecimalPlaces = getDecimalPlaces(props.steps);
-  const decimalPlaces = Math.max(modelDecimalPlaces, stepDecimalPlaces);
-
-  if (_modelValue.value === null) {
-    _modelValue.value = String(props.max || new Big(0).toFixed(decimalPlaces));
-  } else if (props.max !== undefined && Number(_modelValue.value) - props.steps > props.max) {
-    _modelValue.value = String(props.max);
-  } else {
-    _modelValue.value = new Big(_modelValue.value).sub(props.steps).toFixed(decimalPlaces);
-  }
-}
-
-function add() {
-  const modelDecimalPlaces = getDecimalPlaces(_modelValue.value || 0);
-  const stepDecimalPlaces = getDecimalPlaces(props.steps);
-  const decimalPlaces = Math.max(modelDecimalPlaces, stepDecimalPlaces);
-
-  if (_modelValue.value === null) {
-    return _modelValue.value = String(props.min || new Big(0).toFixed(decimalPlaces));
-  } else if (props.min !== undefined && Number(_modelValue.value) + props.steps < props.min) {
-    return _modelValue.value = String(props.min);
-  } else {
-    _modelValue.value = new Big(_modelValue.value).add(props.steps).toFixed(decimalPlaces);
-  }
-}
-
-function onButtonBlur() {
-  emit('validate', _modelValue.value);
-}
 </script>
 
 <template>
   <AntField
     :label="label"
+    :label-for="id"
     :size="size"
     :skeleton="skeleton"
     :description="description"
@@ -185,7 +288,8 @@ function onButtonBlur() {
       />
 
       <AntBaseInput
-        v-model.number="_modelValue"
+        :id="id"
+        v-model="_modelValue"
         v-model:input-ref="_inputRef"
         :type="BaseInputType.number"
         :grouped="indicators ? Grouped.center : Grouped.none"
@@ -193,6 +297,7 @@ function onButtonBlur() {
         :state="state"
         :size="size"
         :skeleton="skeleton"
+        :step="steps"
         :min="min"
         :max="max"
         :disabled="disabled"
@@ -200,7 +305,9 @@ function onButtonBlur() {
         :placeholder="placeholder || label"
         :show-icon="false"
         v-bind="$attrs"
-        @validate="val => $emit('validate', val)"
+        @focus="onInputFocus"
+        @blur="onButtonBlur"
+        @keydown="onKeyDown"
       />
 
       <AntButton
