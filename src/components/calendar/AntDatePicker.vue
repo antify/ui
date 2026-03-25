@@ -36,15 +36,20 @@ const props = withDefaults(defineProps<{
     color: string;
   }[];
   /**
-   * Color token used for the week number column (e.g., 'base-200', 'primary-500').
+   * Color token used for the week number text column (e.g., 'base-200-font', 'primary-500-font').
    */
-  weekNumberColor?: string;
+  weekNumberTextColor?: string;
+  /**
+   * Color token used for the week number background column (e.g., 'base-200', 'primary-500').
+   */
+  weekNumberBackgroundColor?: string;
 }>(), {
   showWeekend: false,
   showWeekNumbers: false,
   skeleton: false,
   specialDays: () => [],
-  weekNumberColor: 'base-200',
+  weekNumberTextColor: 'base-300-font',
+  weekNumberBackgroundColor: 'base-300',
 });
 const emit = defineEmits([
   'select',
@@ -139,16 +144,9 @@ const getColorNumber = (color: string) => {
   return match ? parseInt(match[0], 10) : null;
 };
 
-const getContrastTextColor = (colorToken: string) => {
-  const match = colorToken.match(/(\d+)/);
-  const weight = match ? parseInt(match[0], 10) : 0;
-
-  return weight < 500 ? 'var(--color-for-white-bg-font)' : '#fff';
-};
-
 const weekNumberStyles = computed(() => ({
-  backgroundColor: `var(--color-${props.weekNumberColor})`,
-  color: getContrastTextColor(props.weekNumberColor),
+  backgroundColor: `var(--color-${props.weekNumberBackgroundColor})`,
+  color: `var(--color-${props.weekNumberTextColor})`,
 }));
 
 watch(() => props.modelValue, (val) => {
@@ -199,7 +197,7 @@ onMounted(() => {
         v-for="(day, index) in weekDays"
         :key="`${day}-${index}`"
         class="text-center flex items-center justify-center rounded-md"
-        :class="[!(showWeekNumbers && index === 0) ? 'text-for-white-bg-font' : '']"
+        :class="(showWeekNumbers && index === 0) ? '' : 'text-for-white-bg-font'"
         :style="showWeekNumbers && index === 0 ? weekNumberStyles : {}"
       >
         <AntSkeleton
