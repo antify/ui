@@ -10,6 +10,34 @@ export interface Country {
   [key: string]: unknown;
 }
 
+export const COUNTRY_LOCALES: Record<string, Record<string, string>> = {
+  de: {
+    GB: 'Vereinigtes Königreich',
+    DE: 'Deutschland',
+    FR: 'Frankreich',
+    ES: 'Spanien',
+    IT: 'Italien',
+    PL: 'Polen',
+    AT: 'Österreich',
+    BE: 'Belgien',
+    CH: 'Schweiz',
+    NL: 'Niederlande',
+    PT: 'Portugal',
+    SE: 'Schweden',
+    NO: 'Norwegen',
+    DK: 'Dänemark',
+    FI: 'Finnland',
+    CZ: 'Tschechien',
+    HU: 'Ungarn',
+    GR: 'Griechenland',
+    IE: 'Irland',
+    RO: 'Rumänien',
+    LT: 'Litauen',
+    LV: 'Lettland',
+    EE: 'Estland',
+  },
+};
+
 export const COUNTRIES: Country[] = [
   {
     value: 'GB',
@@ -21,7 +49,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'DE',
-    label: 'Deutschland',
+    label: 'Germany',
     dialCode: '+49',
     numericCode: 49,
     flag: '🇩🇪',
@@ -37,7 +65,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'ES',
-    label: 'España',
+    label: 'Spain',
     dialCode: '+34',
     numericCode: 34,
     flag: '🇪🇸',
@@ -45,7 +73,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'IT',
-    label: 'Italia',
+    label: 'Italy',
     dialCode: '+39',
     numericCode: 39,
     flag: '🇮🇹',
@@ -53,7 +81,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'PL',
-    label: 'Polska',
+    label: 'Poland',
     dialCode: '+48',
     numericCode: 48,
     flag: '🇵🇱',
@@ -61,7 +89,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'AT',
-    label: 'Österreich',
+    label: 'Austria',
     dialCode: '+43',
     numericCode: 43,
     flag: '🇦🇹',
@@ -69,7 +97,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'BE',
-    label: 'België',
+    label: 'Belgium',
     dialCode: '+32',
     numericCode: 32,
     flag: '🇧🇪',
@@ -77,7 +105,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'CH',
-    label: 'Schweiz',
+    label: 'Switzerland',
     dialCode: '+41',
     numericCode: 41,
     flag: '🇨🇭',
@@ -85,7 +113,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'NL',
-    label: 'Nederland',
+    label: 'Netherlands',
     dialCode: '+31',
     numericCode: 31,
     flag: '🇳🇱',
@@ -101,7 +129,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'SE',
-    label: 'Sverige',
+    label: 'Sweden',
     dialCode: '+46',
     numericCode: 46,
     flag: '🇸🇪',
@@ -109,7 +137,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'NO',
-    label: 'Norge',
+    label: 'Norway',
     dialCode: '+47',
     numericCode: 47,
     flag: '🇳🇴',
@@ -117,7 +145,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'DK',
-    label: 'Danmark',
+    label: 'Denmark',
     dialCode: '+45',
     numericCode: 45,
     flag: '🇩🇰',
@@ -125,7 +153,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'FI',
-    label: 'Suomi',
+    label: 'Finland',
     dialCode: '+358',
     numericCode: 358,
     flag: '🇫🇮',
@@ -133,7 +161,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'CZ',
-    label: 'Česko',
+    label: 'Czech Republic',
     dialCode: '+420',
     numericCode: 420,
     flag: '🇨🇿',
@@ -141,7 +169,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'HU',
-    label: 'Magyarország',
+    label: 'Hungary',
     dialCode: '+36',
     numericCode: 36,
     flag: '🇭🇺',
@@ -149,7 +177,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'GR',
-    label: 'Ελλάδα',
+    label: 'Greece',
     dialCode: '+30',
     numericCode: 30,
     flag: '🇬🇷',
@@ -157,7 +185,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'IE',
-    label: 'Éire',
+    label: 'Ireland',
     dialCode: '+353',
     numericCode: 353,
     flag: '🇮🇪',
@@ -165,7 +193,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'RO',
-    label: 'România',
+    label: 'Romania',
     dialCode: '+40',
     numericCode: 40,
     flag: '🇷🇴',
@@ -173,7 +201,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'LT',
-    label: 'Lietuva',
+    label: 'Lithuania',
     dialCode: '+370',
     numericCode: 370,
     flag: '🇱🇹',
@@ -181,7 +209,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'LV',
-    label: 'Latvija',
+    label: 'Latvia',
     dialCode: '+371',
     numericCode: 371,
     flag: '🇱🇻',
@@ -189,7 +217,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'EE',
-    label: 'Eesti',
+    label: 'Estonia',
     dialCode: '+372',
     numericCode: 372,
     flag: '🇪🇪',

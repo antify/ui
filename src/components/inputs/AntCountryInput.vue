@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-  computed, ref, watch, onMounted,
+  computed, ref, watch,
 } from 'vue';
 import {
   faChevronDown, faChevronUp,
@@ -12,7 +12,7 @@ import {
   IconSize,
 } from '../__types';
 import {
-  type Country, COUNTRIES,
+  type Country, COUNTRIES, COUNTRY_LOCALES,
 } from '../../constants/countries';
 import {
   vOnClickOutside,
@@ -40,11 +40,11 @@ const props = withDefaults(defineProps<{
   grouped?: Grouped;
   showFlags?: boolean;
   isGrouped?: boolean;
-  autoSelectDefault?: boolean;
   emptyStateMessage?: string;
   optionValueKey?: keyof Country;
   showDialCodeInMenu?: boolean;
   showIsoCode?: boolean;
+  locale?: 'EN' | 'DE' | string;
 }>(), {
   size: Size.md,
   state: InputState.base,
@@ -54,12 +54,12 @@ const props = withDefaults(defineProps<{
   grouped: Grouped.none,
   showFlags: true,
   isGrouped: false,
-  autoSelectDefault: true,
   emptyStateMessage: 'No countries found',
   optionValueKey: 'value',
   showDialCodeInMenu: false,
   showIsoCode: false,
   countries: () => COUNTRIES,
+  locale: 'en',
 });
 
 const emit = defineEmits([
@@ -73,18 +73,37 @@ const inputRef = ref<HTMLElement | null>(null);
 const focusedItem = ref<string | number | null>(null);
 const selectMenuRef = ref<any>(null);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
-const filteredOptions = computed(() => {
-  if (!props.searchable || !searchQuery.value) {
+const localizedCountries = computed(() => {
+  if (!props.locale || props.locale.toLowerCase() === 'en') {
     return props.countries;
+  }
+
+  const currentLocale = props.locale.toLowerCase();
+  const translations = COUNTRY_LOCALES[currentLocale];
+
+  if (!translations) {
+    return props.countries;
+  }
+
+  return props.countries.map(country => ({
+    ...country,
+    label: translations[country.value] || country.label,
+  }));
+});
+const filteredOptions = computed(() => {
+  const options = localizedCountries.value;
+
+  if (!props.searchable || !searchQuery.value) {
+    return options;
   }
 
   const query = searchQuery.value.toLowerCase();
 
-  return props.countries.filter(c => c.label.toLowerCase().includes(query) ||
+  return options.filter(c => c.label.toLowerCase().includes(query) ||
     c.value.toLowerCase().includes(query) ||
     c.dialCode.includes(query));
 });
-const selectedCountry = computed(() => props.countries.find(c => String(c[props.optionValueKey]) === String(props.modelValue)) || null);
+const selectedCountry = computed(() => localizedCountries.value.find(c => String(c[props.optionValueKey]) === String(props.modelValue)) || null);
 const rootComponent = computed(() => (props.isGrouped ? 'div' : AntField));
 const inputClasses = computed(() => {
   const variants: Record<InputState, string> = {
@@ -144,7 +163,7 @@ const skeletonGrouped = computed(() => props.grouped || Grouped.none);
 const iconSize = computed(() => (props.size === Size.lg || props.size === Size.md || props.size === Size.sm ? IconSize.sm : IconSize.xs));
 
 function onSelect(val: string | number | null) {
-  const country = props.countries.find(c => String(c[props.optionValueKey]) === String(val));
+  const country = localizedCountries.value.find(c => String(c[props.optionValueKey]) === String(val));
 
   emit('update:modelValue', val);
   emit('select', country || null);

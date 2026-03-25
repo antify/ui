@@ -6,7 +6,7 @@ import {
   useVModel,
 } from '@vueuse/core';
 import AntField from '../forms/AntField.vue';
-import AntCountry from './AntCountry.vue';
+import AntCountryInput from './AntCountryInput.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
 import {
   Size, InputState, Grouped,
@@ -39,7 +39,7 @@ const props = withDefaults(defineProps<{
   description?: string;
   messages?: string[];
 
-  //AntCountry Props
+  //AntCountryInput Props
   countryPlaceholder?: string;
   searchPlaceholder?: string;
   searchable?: boolean;
@@ -51,6 +51,7 @@ const props = withDefaults(defineProps<{
   placeholder?: string;
   nullable?: boolean;
   clearCountryOnClear?: boolean;
+  locale?: 'en' | 'de' | string;
 }>(), {
   size: Size.md,
   state: InputState.base,
@@ -64,6 +65,7 @@ const props = withDefaults(defineProps<{
   nullable: true,
   clearCountryOnClear: true,
   countries: () => COUNTRIES,
+  locale: 'en',
 });
 
 const emit = defineEmits([
@@ -291,10 +293,11 @@ watch(_countryValue, (newCountryId, oldCountryId) => {
       class="flex relative w-full"
       @click.prevent
     >
-      <AntCountry
+      <AntCountryInput
         v-model="_countryValue"
         :countries="countries"
         :size="size"
+        :locale="locale"
         :state="showCountryError ? InputState.danger : state"
         :disabled="disabled"
         :readonly="readonly"

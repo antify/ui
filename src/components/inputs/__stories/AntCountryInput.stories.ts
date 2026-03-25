@@ -1,7 +1,7 @@
 import {
   type Meta, type StoryObj,
 } from '@storybook/vue3';
-import AntCountry from '../AntCountry.vue';
+import AntCountryInput from '../AntCountryInput.vue';
 import AntField from '../../../components/forms/AntField.vue';
 import {
   ref,
@@ -13,9 +13,9 @@ import {
   COUNTRIES,
 } from '../../../constants/countries';
 
-const meta: Meta<typeof AntCountry> = {
-  title: 'Inputs/Country',
-  component: AntCountry,
+const meta: Meta<typeof AntCountryInput> = {
+  title: 'Inputs/Country Input',
+  component: AntCountryInput,
   parameters: {
     controls: {
       sort: 'requiredFirst',
@@ -30,15 +30,23 @@ const meta: Meta<typeof AntCountry> = {
       control: 'select',
       options: Object.values(Size),
     },
+    locale: {
+      control: 'inline-radio',
+      options: [
+        'en',
+        'de',
+      ],
+      description: 'Language for country labels',
+    },
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof AntCountry>;
+type Story = StoryObj<typeof AntCountryInput>;
 
 const MainRender = (args: any) => ({
   components: {
-    AntCountry,
+    AntCountryInput,
   },
   setup() {
     const modelValue = ref(args.modelValue);
@@ -50,7 +58,7 @@ const MainRender = (args: any) => ({
   },
   template: `
     <div>
-      <AntCountry v-bind="args" v-model="modelValue" />
+      <AntCountryInput v-bind="args" v-model="modelValue" />
 
       <div class="mt-2 text-md text-base-400">
         Selected Value ({{ args.optionValueKey || 'default' }}):
@@ -64,7 +72,6 @@ export const Docs: Story = {
   render: MainRender,
   args: {
     modelValue: null,
-    autoSelectDefault: false,
     label: 'Country Selector',
     countries: COUNTRIES,
     searchable: true,
@@ -91,7 +98,6 @@ export const DefaultCountry: Story = {
     label: 'Default Country Logic',
     description: 'Automatically selects Germany (DE) as it is marked as isDefault: true in our data.',
     modelValue: 'DE',
-    autoSelectDefault: true,
   },
 };
 
@@ -102,8 +108,45 @@ export const DefaultByNumericCode: Story = {
     label: 'Default by Numeric Code',
     description: 'Using numericCode: 33 (France) as the default value.',
     optionValueKey: 'numericCode',
-    autoSelectDefault: true,
     modelValue: 33,
+  },
+};
+
+export const Localization: Story = {
+  render: (args: any) => ({
+    components: {
+      AntCountryInput,
+    },
+    setup() {
+      const modelValue = ref('DE');
+
+      return {
+        args,
+        modelValue,
+      };
+    },
+    template: `
+    <div class="flex flex-col gap-4">
+      <div>
+        <p class="text-xs text-base-400 mb-1">Current Locale: <b>{{ args.locale }}</b></p>
+        <AntCountryInput v-bind="args" v-model="modelValue" />
+      </div>
+
+      <div class="p-4 border border-dashed border-base-300 rounded-md bg-base-50">
+        <p class="text-sm italic text-base-500">
+          Try switching the <b>locale</b> control in the panel below to see labels change between
+          "Germany" (EN) and "Deutschland" (DE).
+        </p>
+      </div>
+    </div>
+  `,
+  }),
+  args: {
+    ...Docs.args,
+    label: 'Localized Selector',
+    locale: 'de',
+    searchPlaceholder: 'Land suchen...',
+    description: 'The labels and search logic adapt based on the provided locale.',
   },
 };
 
@@ -128,7 +171,7 @@ export const WithoutFlags: Story = {
 export const GroupedMode: Story = {
   render: (args) => ({
     components: {
-      AntCountry,
+      AntCountryInput,
       AntField,
     },
     setup() {
@@ -148,7 +191,7 @@ export const GroupedMode: Story = {
           :state="args.state"
         >
           <div class="flex items-center">
-            <AntCountry
+            <AntCountryInput
               v-bind="args"
               v-model="modelValue"
               class="w-fit flex-shrink-0"
@@ -207,7 +250,7 @@ export const summary: Story = {
   },
   render: (args) => ({
     components: {
-      AntCountry,
+      AntCountryInput,
     },
     setup() {
       const val = ref('DE');
@@ -223,23 +266,23 @@ export const summary: Story = {
     template: `
       <div class="p-4 flex flex-col gap-6">
         <div class="flex flex-wrap gap-4">
-          <AntCountry v-bind="args" v-model="val" :countries="COUNTRIES" :state="InputState.base" label="Base" class="w-64"/>
-          <AntCountry v-bind="args" v-model="val" :countries="COUNTRIES" :state="InputState.info" label="Info" class="w-64"/>
-          <AntCountry v-bind="args" v-model="val" :countries="COUNTRIES" :state="InputState.success" label="Success" class="w-64"/>
-          <AntCountry v-bind="args" v-model="val" :countries="COUNTRIES" :state="InputState.warning" label="Warning" class="w-64"/>
-          <AntCountry v-bind="args" v-model="val" :countries="COUNTRIES" :state="InputState.danger" label="Danger" class="w-64"/>
+          <AntCountryInput v-bind="args" v-model="val" :countries="COUNTRIES" :state="InputState.base" label="Base" class="w-64"/>
+          <AntCountryInput v-bind="args" v-model="val" :countries="COUNTRIES" :state="InputState.info" label="Info" class="w-64"/>
+          <AntCountryInput v-bind="args" v-model="val" :countries="COUNTRIES" :state="InputState.success" label="Success" class="w-64"/>
+          <AntCountryInput v-bind="args" v-model="val" :countries="COUNTRIES" :state="InputState.warning" label="Warning" class="w-64"/>
+          <AntCountryInput v-bind="args" v-model="val" :countries="COUNTRIES" :state="InputState.danger" label="Danger" class="w-64"/>
         </div>
 
         <div class="flex items-end gap-4">
-          <AntCountry v-bind="args" v-model="val" :countries="COUNTRIES" :size="Size.sm" label="Small" class="w-64"/>
-          <AntCountry v-bind="args" v-model="val" :countries="COUNTRIES" :size="Size.md" label="Medium" class="w-64"/>
-          <AntCountry v-bind="args" v-model="val" :countries="COUNTRIES" :size="Size.lg" label="Large" class="w-64"/>
+          <AntCountryInput v-bind="args" v-model="val" :countries="COUNTRIES" :size="Size.sm" label="Small" class="w-64"/>
+          <AntCountryInput v-bind="args" v-model="val" :countries="COUNTRIES" :size="Size.md" label="Medium" class="w-64"/>
+          <AntCountryInput v-bind="args" v-model="val" :countries="COUNTRIES" :size="Size.lg" label="Large" class="w-64"/>
         </div>
 
         <div class="flex gap-4">
-          <AntCountry v-bind="args" :countries="COUNTRIES" model-value="FR" disabled label="Disabled" class="w-64" />
-          <AntCountry v-bind="args" :countries="COUNTRIES" model-value="FR" readonly label="Readonly" class="w-64" />
-          <AntCountry v-bind="args" :countries="COUNTRIES" model-value="FR" skeleton label="Skeleton" class="w-64" />
+          <AntCountryInput v-bind="args" :countries="COUNTRIES" model-value="FR" disabled label="Disabled" class="w-64" />
+          <AntCountryInput v-bind="args" :countries="COUNTRIES" model-value="FR" readonly label="Readonly" class="w-64" />
+          <AntCountryInput v-bind="args" :countries="COUNTRIES" model-value="FR" skeleton label="Skeleton" class="w-64" />
         </div>
       </div>
     `,

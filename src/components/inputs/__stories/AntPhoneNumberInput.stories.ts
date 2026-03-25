@@ -1,7 +1,7 @@
 import type {
   Meta, StoryObj,
 } from '@storybook/vue3';
-import AntPhoneInput from '../AntPhoneInput.vue';
+import AntPhoneNumberInput from '../AntPhoneNumberInput.vue';
 import {
   Size, InputState,
 } from '../../../enums';
@@ -12,9 +12,9 @@ import {
   COUNTRIES,
 } from '../../../constants/countries';
 
-const meta: Meta<typeof AntPhoneInput> = {
-  title: 'Inputs/Phone Input',
-  component: AntPhoneInput,
+const meta: Meta<typeof AntPhoneNumberInput> = {
+  title: 'Inputs/Phone Number Input',
+  component: AntPhoneNumberInput,
   parameters: {
     docs: {
       description: {
@@ -51,17 +51,25 @@ const meta: Meta<typeof AntPhoneInput> = {
       control: 'boolean',
       description: 'Shows the clear icon in the input field.',
     },
+    locale: {
+      control: 'inline-radio',
+      options: [
+        'en',
+        'de',
+      ],
+      description: 'Language for country names translation',
+    },
   },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof AntPhoneInput>;
+type Story = StoryObj<typeof AntPhoneNumberInput>;
 
 export const Default: Story = {
   render: (args) => ({
     components: {
-      AntPhoneInput,
+      AntPhoneNumberInput,
     },
     setup() {
       const phoneDefault = ref(null);
@@ -112,9 +120,10 @@ export const Default: Story = {
           <p class="mb-2 text-xs text-base-400 italic text-wrap">
             Initial values are null. Component selects Germany via <b>default-country-value="DE"</b> using the default "value" key.
           </p>
-          <AntPhoneInput
+          <AntPhoneNumberInput
             v-bind="args"
             v-model="phoneDefault"
+            :locale="args.locale"
             v-model:country-value="countryDefault"
             placeholder="Initialized with DE"
           />
@@ -128,7 +137,7 @@ export const Default: Story = {
           <p class="mb-2 text-xs text-base-400 italic text-wrap">
             Initial values are null. Component selects Germany via <b>numericCode: 49</b>. We tell the component to use "numericCode" as the value key.
           </p>
-          <AntPhoneInput
+          <AntPhoneNumberInput
             v-bind="args"
             v-model="phoneNumericDefault"
             v-model:country-value="countryNumericDefault"
@@ -157,7 +166,7 @@ export const Default: Story = {
             </button>
           </div>
 
-          <AntPhoneInput
+          <AntPhoneNumberInput
             v-bind="args"
             v-model="phonePaste"
             v-model:country-value="countryPaste"
@@ -174,7 +183,7 @@ export const Default: Story = {
           <p class="mb-2 text-xs text-base-400 italic text-wrap">
             Try clicking the "X" icon. The phone number will be null, but the country (DE) will remain selected.
           </p>
-          <AntPhoneInput
+          <AntPhoneNumberInput
             v-bind="args"
             v-model="phone4"
             v-model:country-value="country4"
@@ -188,7 +197,7 @@ export const Default: Story = {
 
         <div>
           <h3 class="mb-2 text-sm font-bold text-base-600 uppercase tracking-wider">With Search (Default)</h3>
-          <AntPhoneInput
+          <AntPhoneNumberInput
             v-bind="args"
             v-model="phone1"
             v-model:country-value="country1"
@@ -200,7 +209,7 @@ export const Default: Story = {
 
         <div>
           <h3 class="mb-2 text-sm font-bold text-base-600 uppercase tracking-wider">Without Search</h3>
-          <AntPhoneInput
+          <AntPhoneNumberInput
             v-bind="args"
             v-model="phone2"
             country-value-key="dialCode"
@@ -214,7 +223,7 @@ export const Default: Story = {
 
         <div>
           <h3 class="mb-2 text-sm font-bold text-base-600 uppercase tracking-wider">Numeric Code Output</h3>
-          <AntPhoneInput
+          <AntPhoneNumberInput
             v-bind="args"
             v-model="phone3"
             v-model:country-value="country3"
@@ -238,6 +247,7 @@ export const Default: Story = {
     state: InputState.base,
     clearCountryOnClear: true,
     nullable: true,
+    locale: 'de',
   },
 };
 
@@ -249,7 +259,7 @@ export const summary: Story = {
   },
   render: (args) => ({
     components: {
-      AntPhoneInput,
+      AntPhoneNumberInput,
     },
     setup() {
       const phone = ref(null);
@@ -267,31 +277,31 @@ export const summary: Story = {
     template: `
       <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-4">
-          <h2 class="text-xl font-bold border-b pb-2 text-base-700">Input States</h2>
+          <h2 class="text-xl font-bold border-b pb-2 text-base-700">Phone Number Input States</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <AntPhoneInput v-bind="args" v-model="phone" v-model:country-value="country" :state="InputState.base" label="Base State" />
-            <AntPhoneInput v-bind="args" v-model="phone" v-model:country-value="country" :state="InputState.info" label="Info State" :messages="['Bitte geben Sie Ihre Mobilnummer ein']" />
-            <AntPhoneInput v-bind="args" v-model="phone" v-model:country-value="country" :state="InputState.success" label="Success State" />
-            <AntPhoneInput v-bind="args" v-model="phone" v-model:country-value="country" :state="InputState.warning" label="Warning State" :messages="['Prüfen Sie die Vorwahl']" />
-            <AntPhoneInput v-bind="args" v-model="phone" v-model:country-value="country" :state="InputState.danger" label="Danger State" :messages="['Ungültige Telefonnummer']" />
+            <AntPhoneNumberInput v-bind="args" v-model="phone" v-model:country-value="country" :state="InputState.base" label="Base State" />
+            <AntPhoneNumberInput v-bind="args" v-model="phone" v-model:country-value="country" :state="InputState.info" label="Info State" :messages="['Bitte geben Sie Ihre Mobilnummer ein']" />
+            <AntPhoneNumberInput v-bind="args" v-model="phone" v-model:country-value="country" :state="InputState.success" label="Success State" />
+            <AntPhoneNumberInput v-bind="args" v-model="phone" v-model:country-value="country" :state="InputState.warning" label="Warning State" :messages="['Prüfen Sie die Vorwahl']" />
+            <AntPhoneNumberInput v-bind="args" v-model="phone" v-model:country-value="country" :state="InputState.danger" label="Danger State" :messages="['Ungültige Telefonnummer']" />
           </div>
         </div>
 
         <div class="flex flex-col gap-4">
           <h2 class="text-xl font-bold border-b pb-2 text-base-700">Sizes</h2>
           <div class="flex flex-col gap-4">
-            <AntPhoneInput v-bind="args" v-model="phone" v-model:country-value="country" :size="Size.sm" label="Small (sm)" />
-            <AntPhoneInput v-bind="args" v-model="phone" v-model:country-value="country" :size="Size.md" label="Medium (md)" />
-            <AntPhoneInput v-bind="args" v-model="phone" v-model:country-value="country" :size="Size.lg" label="Large (lg)" />
+            <AntPhoneNumberInput v-bind="args" v-model="phone" v-model:country-value="country" :size="Size.sm" label="Small (sm)" />
+            <AntPhoneNumberInput v-bind="args" v-model="phone" v-model:country-value="country" :size="Size.md" label="Medium (md)" />
+            <AntPhoneNumberInput v-bind="args" v-model="phone" v-model:country-value="country" :size="Size.lg" label="Large (lg)" />
           </div>
         </div>
 
         <div class="flex flex-col gap-4">
           <h2 class="text-xl font-bold border-b pb-2 text-base-700">Special Modes</h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <AntPhoneInput v-bind="args" country-value="DE" model-value="1512345678" disabled label="Disabled" />
-            <AntPhoneInput v-bind="args" country-value="DE" model-value="1512345678" readonly label="Readonly" />
-            <AntPhoneInput v-bind="args" skeleton label="Skeleton" />
+            <AntPhoneNumberInput v-bind="args" country-value="DE" model-value="1512345678" disabled label="Disabled" />
+            <AntPhoneNumberInput v-bind="args" country-value="DE" model-value="1512345678" readonly label="Readonly" />
+            <AntPhoneNumberInput v-bind="args" skeleton label="Skeleton" />
           </div>
         </div>
       </div>
