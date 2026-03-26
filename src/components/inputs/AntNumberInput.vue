@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-  computed, onMounted, nextTick, ref, useId,
+  computed, onMounted, ref, useId,
 } from 'vue';
 import AntButton from '../AntButton.vue';
 import AntField from '../forms/AntField.vue';
@@ -59,6 +59,7 @@ const props = withDefaults(defineProps<{
   indicators?: boolean;
   inputRef?: HTMLInputElement | null;
   selectAllOnFocus?: boolean;
+  autocomplete?: 'on' | 'off' | string;
 }>(), {
   state: InputState.base,
   disabled: false,
@@ -71,6 +72,7 @@ const props = withDefaults(defineProps<{
   indicators: false,
   inputRef: null,
   selectAllOnFocus: false,
+  autocomplete: 'off',
 });
 const emit = defineEmits([
   'update:modelValue',
@@ -203,6 +205,7 @@ function onButtonBlur(e: FocusEvent) {
     if (props.max !== undefined && finalValue > props.max) {
       finalValue = props.max;
     }
+
     if (props.min !== undefined && finalValue < props.min) {
       finalValue = props.min;
     }
@@ -223,6 +226,19 @@ function onButtonBlur(e: FocusEvent) {
 
 function onKeyDown(e: KeyboardEvent) {
   if (e.ctrlKey || e.metaKey) {
+    return;
+  }
+
+  if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    add();
+
+    return;
+  }
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    subtract();
+
     return;
   }
 
@@ -293,6 +309,7 @@ onMounted(() => {
         v-model:input-ref="_inputRef"
         :type="BaseInputType.number"
         :grouped="indicators ? Grouped.center : Grouped.none"
+        :autocomplete="autocomplete"
         wrapper-class="grow"
         :state="state"
         :size="size"

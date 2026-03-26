@@ -68,6 +68,21 @@ const meta: Meta<typeof AntNumberInput> = {
         type: 'number',
       },
     },
+    autocomplete: {
+      control: {
+        type: 'inline-radio',
+      },
+      options: [
+        'on',
+        'off',
+      ],
+      description: 'Enables or disables browser suggestions and autocomplete.',
+      table: {
+        defaultValue: {
+          summary: 'off',
+        },
+      },
+    },
   },
 };
 
@@ -93,6 +108,7 @@ export const Docs: Story = {
     label: 'Standard Number Input',
     description: 'Basic usage with manual entry or indicators',
     onValidate: fn(),
+    autocomplete: 'off',
   },
 };
 
