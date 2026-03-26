@@ -35,7 +35,8 @@ const props = withDefaults(defineProps<{
   modelValue: string | string[] | number | number[] | null;
   focused: string | number | null;
   open: boolean;
-  options: SelectOption[];
+  options: any[];
+  optionValueKey?: string;
   state?: InputState;
   validator?: Validator;
   size?: Size;
@@ -45,6 +46,7 @@ const props = withDefaults(defineProps<{
   closeOnSelectItem?: boolean;
   maxHeight?: string;
 }>(), {
+  optionValueKey: 'value',
   state: InputState.base,
   focusOnOpen: true,
   closeOnEnter: false,
@@ -105,9 +107,9 @@ watch(isOpen, () => {
   nextTick(() => {
     if (props.autoSelectFirstOnOpen) {
       focusedDropDownItem.value =
-        typeof _modelValue.value === 'string' || typeof _modelValue.value === 'number' ? _modelValue.value :
-          Array.isArray(_modelValue.value) ? _modelValue.value[0] :
-            (props.options[0]?.value || null);
+        (typeof _modelValue.value === 'string' || typeof _modelValue.value === 'number')
+          ? _modelValue.value
+          : getOptionValue(props.options[0]);
     } else {
       focusedDropDownItem.value = null;
     }
@@ -195,12 +197,13 @@ function onKeyDownDropDown(e: KeyboardEvent) {
     e.preventDefault();
     isOpen.value = true;
 
-    const index = props.options.findIndex(option => option.value === focusedDropDownItem.value);
+    const index = props.options.findIndex(option => getOptionValue(option) === focusedDropDownItem.value);
     const nextOptionIndex = getNextFocusableSelectOption(index);
 
     if (nextOptionIndex !== null) {
-      focusedDropDownItem.value = props.options[nextOptionIndex].value || null;
-      _modelValue.value = props.options[nextOptionIndex].value || null;
+      const nextVal = getOptionValue(props.options[nextOptionIndex]);
+      focusedDropDownItem.value = nextVal;
+      _modelValue.value = nextVal;
     }
   }
 
@@ -208,7 +211,7 @@ function onKeyDownDropDown(e: KeyboardEvent) {
     e.preventDefault();
     isOpen.value = true;
 
-    const index = props.options.findIndex(option => option.value === focusedDropDownItem.value);
+    const index = props.options.findIndex(option => getOptionValue(option) === focusedDropDownItem.value);
     const prevOptionIndex = getPrevFocusableSelectOption(index);
 
     if (prevOptionIndex !== null) {
@@ -227,7 +230,7 @@ function getActiveDropDownItemClasses(option: SelectOption) {
     return {};
   }
 
-  return option.value === focusedDropDownItem.value ? {
+  return getOptionValue(option) === focusedDropDownItem.value ? {
     '!bg-base-100': true,
   } : {};
 }
@@ -245,8 +248,9 @@ function onClickDropDownItem(e: MouseEvent, option: SelectOption) {
     isOpen.value = false;
   }
 
-  emit('selectElement', option.value);
-  _modelValue.value = option.value || null;
+  const val = getOptionValue(option);
+  emit('selectElement', val);
+  _modelValue.value = val;
 }
 
 function getOptionClasses(option: SelectOption, index: number) {
@@ -265,6 +269,14 @@ function getOptionClasses(option: SelectOption, index: number) {
       index !== 0 &&
       (!prevOption || !prevOption.isGroupLabel),
   };
+}
+
+function getOptionValue(option: any): string | number | null {
+  if (!option) {
+    return null;
+  }
+
+  return option[props.optionValueKey] !== undefined ? option[props.optionValueKey] : option.value;
 }
 
 watch(_modelValue, (val) => {
@@ -313,7 +325,7 @@ defineExpose({
               data-e2e="select-menu-item"
               :class="getOptionClasses(option, index)"
               @click="(e) => onClickDropDownItem(e, option)"
-              @mouseover="() => focusedDropDownItem = !option.isGroupLabel && option.value !== undefined ? option.value : null"
+              @mouseover="() => focusedDropDownItem = !option.isGroupLabel ? getOptionValue(option) : null"
             >
               <div class="flex items-center justify-between w-full">
                 <div class="flex items-center gap-2">
