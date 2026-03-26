@@ -74,7 +74,6 @@ const props = withDefaults(defineProps<{
   default: false,
   nullable: false,
   inputRef: null,
-  step: 1,
 });
 const slot = useSlots();
 const hasInputState = computed(() => props.skeleton || props.disabled);
@@ -163,26 +162,13 @@ const icon = computed(() => icons[props.state]);
 const _modelValue = computed<string | number | null>({
   get: () => props.modelValue,
   set: (val: string | number | null) => {
-    if (props.type === BaseInputType.number) {
-      if (val === '' || val === null || val === undefined) {
-        emit('update:modelValue', null);
-
-        return;
-      }
-
-      const num = Number(val);
-
-      if (!isNaN(num)) {
-        emit('update:modelValue', num);
-      }
-
-      return;
+    if (props.type === BaseInputType.number && typeof val !== 'number') {
+      return emit('update:modelValue', null);
     }
 
     emit('update:modelValue', val);
   },
 });
-
 const inputIconSize = computed(() => {
   if (props.size === Size.xs || props.size === Size.xs2) {
     return IconSize.xs;
@@ -285,7 +271,6 @@ function onClickClearIcon() {
         :min="min"
         :max="max"
         title=""
-        :step="step"
         v-bind="$attrs"
         :data-e2e-state="state"
         @blur="onBlur"
