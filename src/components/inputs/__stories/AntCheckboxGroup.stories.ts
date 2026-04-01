@@ -60,7 +60,7 @@ export const Docs: Story = {
       };
     },
     template: `
-      <AntCheckboxGroup v-bind="args" v-model="args.modelValue"/>
+        <AntCheckboxGroup v-bind="args" v-model="args.modelValue"/>
     `,
   }),
   args: {
@@ -80,6 +80,45 @@ export const Docs: Story = {
       },
       {
         label: 'Checkbox 4',
+        value: 'checkbox-4',
+      },
+    ],
+  },
+};
+
+export const WithLongContent: Story = {
+  render: (args) => ({
+    components: {
+      AntCheckboxGroup,
+    },
+    setup() {
+      return {
+        args,
+      };
+    },
+    template: `
+        <div class="w-[150px]">
+          <AntCheckboxGroup v-bind="args" v-model="args.modelValue"/>
+        </div>
+    `,
+  }),
+  args: {
+    modelValue: [],
+    checkboxes: [
+      {
+        label: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam',
+        value: 'checkbox-1',
+      },
+      {
+        label: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam',
+        value: 'checkbox-2',
+      },
+      {
+        label: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam',
+        value: 'checkbox-3',
+      },
+      {
+        label: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam',
         value: 'checkbox-4',
       },
     ],

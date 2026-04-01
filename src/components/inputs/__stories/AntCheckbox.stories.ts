@@ -62,7 +62,7 @@ export const Docs: Story = {
     },
     template: `
       <div class="m-2">
-        <AntCheckbox v-bind="args" v-model="value"/>
+          <AntCheckbox v-bind="args" v-model="value">Value</AntCheckbox>
         <span class="text-sm text-gray-500">Reactive value: {{ value }}</span>
       </div>
     `,

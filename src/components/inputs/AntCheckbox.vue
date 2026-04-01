@@ -188,8 +188,8 @@ onMounted(() => {
     :expanded="false"
     :messages="messages"
   >
-    <div class="flex items-center gap-1.5">
-      <div class="relative full-height flex items-center">
+    <div class="flex gap-1.5">
+      <div class="relative full-height flex">
         <input
           v-model="_modelValue"
           :class="inputClasses"
@@ -218,19 +218,14 @@ onMounted(() => {
         />
       </div>
 
-      <div
-        class="flex items-center"
-        :class="props.size === Size.md ? 'h-5' : 'h-4'"
-      >
-        <span :class="contentClasses">
-          <AntSkeleton
-            :visible="skeleton"
-            rounded
-          >
-            <slot />
-          </AntSkeleton>
-        </span>
-      </div>
+      <span :class="contentClasses">
+        <AntSkeleton
+          :visible="skeleton"
+          rounded
+        >
+          <slot />
+        </AntSkeleton>
+      </span>
     </div>
   </AntField>
 </template>
