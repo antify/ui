@@ -116,7 +116,7 @@ export const Default: Story = {
     template: `
       <div class="grid grid-cols-2 gap-x-12 gap-y-12">
         <div>
-          <h3 class="mb-2 text-sm font-bold text-base-600 uppercase tracking-wider">Default Country Prop</h3>
+          <h3 class="mb-2 text-sm font-bold text-for-white-bg-font uppercase tracking-wider">Default Country Prop</h3>
           <p class="mb-2 text-xs text-base-400 italic text-wrap">
             Initial values are null. Component selects Germany via <b>default-country-value="DE"</b> using the default "value" key.
           </p>
@@ -124,16 +124,17 @@ export const Default: Story = {
             v-bind="args"
             v-model="phoneDefault"
             :locale="args.locale"
+            country-value-key="value"
             v-model:country-value="countryDefault"
             placeholder="Initialized with DE"
           />
-          <div class="mt-2 text-md text-base-500">
+          <div class="mt-2 text-md text-for-white-bg-font">
             Data: {{ countryDefault || 'null' }} | {{ phoneDefault || 'null' }}
           </div>
         </div>
 
         <div>
-          <h3 class="mb-2 text-sm font-bold text-base-600 uppercase tracking-wider">Default by Numeric Code (49)</h3>
+          <h3 class="mb-2 text-sm font-bold text-for-white-bg-font uppercase tracking-wider">Default by Numeric Code (49)</h3>
           <p class="mb-2 text-xs text-base-400 italic text-wrap">
             Initial values are null. Component selects Germany via <b>numericCode: 49</b>. We tell the component to use "numericCode" as the value key.
           </p>
@@ -144,13 +145,13 @@ export const Default: Story = {
             country-value-key="numericCode"
             placeholder="Initialized with 49"
           />
-          <div class="mt-2 text-md text-base-500">
+          <div class="mt-2 text-md text-for-white-bg-font">
             Data: {{ countryNumericDefault || 'null' }} | {{ phoneNumericDefault || 'null' }}
           </div>
         </div>
 
         <div>
-          <h3 class="mb-2 text-sm font-bold text-base-600 uppercase tracking-wider">Auto-detect Country on Paste</h3>
+          <h3 class="mb-2 text-sm font-bold text-for-white-bg-font uppercase tracking-wider">Auto-detect Country on Paste</h3>
           <p class="mb-2 text-xs text-base-400 italic text-wrap">
             Click a number to copy, then paste it (Ctrl+V) into the input to see auto-detection in action.
           </p>
@@ -159,7 +160,7 @@ export const Default: Story = {
             <button
               v-for="num in ['+4915211111111', '+3715211111111', '+3725211111111']"
               @click="copyToClipboard(num)"
-              class="px-2 py-1 text-xs bg-white border border-base-300 rounded hover:bg-base-100 transition-colors text-base-600"
+              class="px-2 py-1 text-xs bg-white border border-base-300 rounded hover:bg-base-100 transition-colors text-for-white-bg-font"
               title="Click to copy"
             >
               {{ num }}
@@ -173,13 +174,13 @@ export const Default: Story = {
             placeholder="Paste a number starting with +..."
           />
 
-          <div class="mt-2 text-md text-base-500">
+          <div class="mt-2 text-md text-for-white-bg-font">
             Data: {{ countryPaste || 'null' }} | {{ phonePaste || 'null' }}
           </div>
         </div>
 
         <div>
-          <h3 class="mb-2 text-sm font-bold text-base-600 uppercase tracking-wider">Keep Country on Clear</h3>
+          <h3 class="mb-2 text-sm font-bold text-for-white-bg-font uppercase tracking-wider">Keep Country on Clear</h3>
           <p class="mb-2 text-xs text-base-400 italic text-wrap">
             Try clicking the "X" icon. The phone number will be null, but the country (DE) will remain selected.
           </p>
@@ -189,40 +190,40 @@ export const Default: Story = {
             v-model:country-value="country4"
             :clear-country-on-clear="false"
             :nullable="true"
+            country-value-key="value"
           />
-          <div class="mt-2 text-md text-base-500">
+          <div class="mt-2 text-md text-for-white-bg-font">
             Data: {{ country4 || 'null' }} | {{ phone4 || 'null' }}
           </div>
         </div>
 
         <div>
-          <h3 class="mb-2 text-sm font-bold text-base-600 uppercase tracking-wider">With Search (Default)</h3>
+          <h3 class="mb-2 text-sm font-bold text-for-white-bg-font uppercase tracking-wider">With Search (Default)</h3>
           <AntPhoneNumberInput
             v-bind="args"
             v-model="phone1"
             v-model:country-value="country1"
           />
-          <div class="mt-2 text-md text-base-500">
+          <div class="mt-2 text-md text-for-white-bg-font">
             Data: {{ country1 || 'null' }} | {{ phone1 || 'null' }}
           </div>
         </div>
 
         <div>
-          <h3 class="mb-2 text-sm font-bold text-base-600 uppercase tracking-wider">Without Search</h3>
+          <h3 class="mb-2 text-sm font-bold text-for-white-bg-font uppercase tracking-wider">Without Search</h3>
           <AntPhoneNumberInput
             v-bind="args"
             v-model="phone2"
-            country-value-key="dialCode"
             v-model:country-value="country2"
             :searchable="false"
           />
-          <div class="mt-2 text-md text-base-500">
+          <div class="mt-2 text-md text-for-white-bg-font">
             Data: {{ country2 || 'null' }} | {{ phone2 || 'null' }}
           </div>
         </div>
 
         <div>
-          <h3 class="mb-2 text-sm font-bold text-base-600 uppercase tracking-wider">Numeric Code Output</h3>
+          <h3 class="mb-2 text-sm font-bold text-for-white-bg-font uppercase tracking-wider">Numeric Code Output</h3>
           <AntPhoneNumberInput
             v-bind="args"
             v-model="phone3"
@@ -230,7 +231,7 @@ export const Default: Story = {
             country-value-key="numericCode"
             country-placeholder="Select for numeric output"
           />
-          <div class="mt-2 text-md text-base-500">
+          <div class="mt-2 text-md text-for-white-bg-font">
             Data: {{ country3 || 'null' }} | {{ phone3 || 'null' }}
           </div>
         </div>

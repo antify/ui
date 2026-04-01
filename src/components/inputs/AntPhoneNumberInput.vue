@@ -59,7 +59,7 @@ const props = withDefaults(defineProps<{
   searchPlaceholder: 'Search country...',
   countryPlaceholder: 'Select country',
   placeholder: 'Enter phone number',
-  countryValueKey: 'value',
+  countryValueKey: 'dialCode',
   countryErrorMessage: 'Please select a country code or start with "+"',
   messages: () => [],
   nullable: true,

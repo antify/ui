@@ -41,6 +41,11 @@ const props = withDefaults(defineProps<{
   showFlags?: boolean;
   isGrouped?: boolean;
   emptyStateMessage?: string;
+  /**
+   * Key from the Country object used as the value for modelValue.
+   * Useful when you need to bind the select to dialCode, numericCode or ISO value.
+   * @default 'value'
+   */
   optionValueKey?: keyof Country;
   showDialCodeInMenu?: boolean;
   showIsoCode?: boolean;
