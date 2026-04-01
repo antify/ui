@@ -248,7 +248,6 @@ export const Default: Story = {
     countries: COUNTRIES,
     size: Size.md,
     state: InputState.base,
-    clearCountryOnClear: true,
     nullable: true,
     locale: 'de',
   },

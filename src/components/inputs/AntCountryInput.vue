@@ -1,22 +1,22 @@
 <script lang="ts" setup>
 import {
-  computed, ref, watch,
+  computed, ref, nextTick,
 } from 'vue';
 import {
   faChevronDown, faChevronUp,
 } from '@fortawesome/free-solid-svg-icons';
 import {
-  Size, InputState, Grouped,
+  Size, InputState, Grouped, Locale,
 } from '../../enums';
 import {
   IconSize,
 } from '../__types';
 import {
-  type Country, COUNTRIES, COUNTRY_LOCALES,
+  COUNTRIES,
 } from '../../constants/countries';
-import {
-  vOnClickOutside,
-} from '@vueuse/components';
+import type {
+  Country,
+} from '../../types';
 import AntField from '../forms/AntField.vue';
 import AntSelectMenu from './Elements/AntSelectMenu.vue';
 import AntSearch from './AntSearch.vue';
@@ -49,7 +49,7 @@ const props = withDefaults(defineProps<{
   optionValueKey?: keyof Country;
   showDialCodeInMenu?: boolean;
   showIsoCode?: boolean;
-  locale?: 'en' | 'de' | string;
+  locale?: Locale;
 }>(), {
   size: Size.md,
   state: InputState.base,
@@ -64,7 +64,7 @@ const props = withDefaults(defineProps<{
   showDialCodeInMenu: false,
   showIsoCode: false,
   countries: () => COUNTRIES,
-  locale: 'en',
+  locale: Locale.en,
 });
 
 const emit = defineEmits([
@@ -76,23 +76,15 @@ const isOpen = ref(false);
 const searchQuery = ref<string | null>(null);
 const inputRef = ref<HTMLElement | null>(null);
 const focusedItem = ref<string | number | null>(null);
-const selectMenuRef = ref<any>(null);
+const selectMenuRef = ref<InstanceType<typeof AntSelectMenu> | null>(null);
+const searchInputRef = ref<HTMLInputElement | null>(null);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const localizedCountries = computed(() => {
-  if (!props.locale || props.locale.toLowerCase() === 'en') {
-    return props.countries;
-  }
-
-  const currentLocale = props.locale.toLowerCase();
-  const translations = COUNTRY_LOCALES[currentLocale];
-
-  if (!translations) {
-    return props.countries;
-  }
+  const currentLocale = (props.locale || Locale.en).toLowerCase();
 
   return props.countries.map(country => ({
     ...country,
-    label: translations[country.value] || country.label,
+    label: country.label[currentLocale] || country.label['en'] || Object.values(country.label)[0],
   }));
 });
 const filteredOptions = computed(() => {
@@ -128,7 +120,6 @@ const inputClasses = computed(() => {
     'flex items-center justify-between transition-colors border-none outline relative w-full cursor-pointer': true,
     'outline-offset-[-1px] outline-1 focus:outline-offset-[-1px] focus:outline-1': true,
     [variants[props.state]]: true,
-    invisible: props.skeleton,
     'opacity-50 cursor-not-allowed': props.disabled,
     'read-only:cursor-default': props.readonly,
     'p-1 text-xs': props.size === Size.xs2,
@@ -171,47 +162,6 @@ const arrowClasses = computed(() => {
 });
 const skeletonGrouped = computed(() => props.grouped || Grouped.none);
 const iconSize = computed(() => (props.size === Size.lg || props.size === Size.md || props.size === Size.sm ? IconSize.sm : IconSize.xs));
-
-function onSelect(val: string | number | null) {
-  const country = localizedCountries.value.find(c => String(c[props.optionValueKey]) === String(val));
-
-  emit('update:modelValue', val);
-  emit('select', country || null);
-
-  isOpen.value = false;
-  inputRef.value?.focus();
-}
-
-function toggleMenu(e: MouseEvent) {
-  if (props.disabled || props.readonly) {
-    return;
-  }
-
-  e.preventDefault();
-  e.stopPropagation();
-
-  if (isOpen.value) {
-    inputRef.value?.focus();
-  }
-
-  isOpen.value = !isOpen.value;
-}
-
-function onClickOutside(e: Event) {
-  if (!isOpen.value) {
-    return;
-  }
-
-  const menuElement = selectMenuRef.value?.floating;
-  const triggerElement = inputRef.value;
-
-  if ((menuElement && menuElement.contains(e.target as Node)) || (triggerElement && triggerElement.contains(e.target as Node))) {
-    return;
-  }
-
-  isOpen.value = false;
-}
-
 const fieldProps = computed(() => {
   if (props.isGrouped) {
     return {};
@@ -226,21 +176,46 @@ const fieldProps = computed(() => {
   };
 });
 
-watch(isOpen, (val) => {
-  if (!val) {
-    searchQuery.value = null;
+function onSelect(val: string | number | null) {
+  const country = localizedCountries.value.find(country => String(country[props.optionValueKey]) === String(val));
+
+  emit('update:modelValue', val);
+  emit('select', country || null);
+
+  isOpen.value = false;
+  searchQuery.value = null;
+  inputRef.value?.focus();
+}
+
+async function toggleMenu(e: MouseEvent) {
+  if (props.disabled || props.readonly) {
+    return;
   }
-});
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  isOpen.value = !isOpen.value;
+
+  if (isOpen.value) {
+    if (props.searchable) {
+      await nextTick();
+
+      searchInputRef.value?.focus();
+    }
+  } else {
+    searchQuery.value = null;
+    inputRef.value?.focus();
+  }
+}
 </script>
 
 <template>
   <component
     :is="rootComponent"
     v-bind="fieldProps"
-    class="ant-country"
   >
     <div
-      v-on-click-outside="onClickOutside"
       class="relative w-full"
     >
       <AntSelectMenu
@@ -253,6 +228,7 @@ watch(isOpen, (val) => {
         :max-height="maxHeight"
         :size="size"
         @select-element="onSelect"
+        @click-outside="searchQuery = null"
       >
         <template #contentBefore>
           <div
@@ -260,6 +236,7 @@ watch(isOpen, (val) => {
             class="p-2 border-b border-base-300 bg-white"
           >
             <AntSearch
+              v-model:input-ref="searchInputRef"
               v-model="searchQuery"
               :size="Size.lg"
               :placeholder="searchPlaceholder"
@@ -316,27 +293,27 @@ watch(isOpen, (val) => {
           <span
             v-if="showFlags"
             class="text-lg"
-          >{{ (option as Country).flag }}</span>
+          >{{ (option as any).flag }}</span>
         </template>
 
         <template #contentRight="option">
           <slot
             name="right"
-            :option="(option as Country & { isoCode: string })"
+            :option="(option as any)"
           >
             <div class="ml-auto flex items-center gap-2">
               <span
                 v-if="showIsoCode"
                 class="text-md font-mono uppercase text-for-white-bg-font"
               >
-                {{ (option as Country).isoCode }}
+                {{ (option as any).isoCode }}
               </span>
 
               <span
                 v-if="showDialCodeInMenu"
                 class="text-md text-for-white-bg-font"
               >
-                {{ (option as Country).dialCode }}
+                {{ (option as any).dialCode }}
               </span>
             </div>
           </slot>

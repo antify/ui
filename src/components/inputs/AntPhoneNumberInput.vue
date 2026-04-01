@@ -9,14 +9,22 @@ import AntField from '../forms/AntField.vue';
 import AntCountryInput from './AntCountryInput.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
 import {
-  Size, InputState, Grouped,
+  Size, InputState, Grouped, Locale,
 } from '../../enums';
 import {
   BaseInputType,
 } from './Elements/__types';
 import {
-  type Country, COUNTRIES,
+  COUNTRIES,
 } from '../../constants/countries';
+import type {
+  Country,
+} from '../../types';
+import {
+  ref, nextTick,
+} from 'vue';
+
+const phoneInputNativeRef = ref<HTMLInputElement | null>(null);
 
 defineOptions({
   inheritAttrs: false,
@@ -51,7 +59,7 @@ const props = withDefaults(defineProps<{
   placeholder?: string;
   nullable?: boolean;
   clearCountryOnClear?: boolean;
-  locale?: 'en' | 'de' | string;
+  locale?: Locale;
 }>(), {
   size: Size.md,
   state: InputState.base,
@@ -63,9 +71,8 @@ const props = withDefaults(defineProps<{
   countryErrorMessage: 'Please select a country code or start with "+"',
   messages: () => [],
   nullable: true,
-  clearCountryOnClear: true,
   countries: () => COUNTRIES,
-  locale: 'en',
+  locale: Locale.en,
 });
 
 const emit = defineEmits([
@@ -125,7 +132,9 @@ const sortedCountriesByDialCode = computed(() => {
 });
 
 const findCountryByPhone = (phone: string): Country | undefined => {
-  if (!phone.startsWith('+')) return undefined;
+  if (!phone.startsWith('+')) {
+    return undefined;
+  }
 
   return sortedCountriesByDialCode.value.find(country => phone.startsWith(country.dialCode));
 };
@@ -146,10 +155,6 @@ const formattedNumber = computed({
   set: (val: string | null) => {
     if (!val) {
       _phoneNumber.value = null;
-
-      if (props.clearCountryOnClear) {
-        _countryValue.value = null;
-      }
 
       return;
     }
@@ -205,6 +210,10 @@ const formatByMask = (value: string | null, mask: string): string | null => {
 
 function onCountrySelect(country: Country) {
   emit('select-country', country);
+
+  nextTick(() => {
+    phoneInputNativeRef.value?.focus();
+  });
 }
 
 function onKeyPress(event: KeyboardEvent) {
@@ -266,7 +275,6 @@ watch(_countryValue, (newCountryId, oldCountryId) => {
 
   const fullVal = props.modelValue || '';
   const oldCountry = props.countries.find(c => String(c[props.countryValueKey]) === String(oldCountryId));
-
   let body = fullVal;
 
   if (oldCountry && fullVal.startsWith(oldCountry.dialCode)) {
@@ -314,17 +322,19 @@ watch(_countryValue, (newCountryId, oldCountryId) => {
 
       <AntBaseInput
         v-model="formattedNumber"
+        v-model:input-ref="phoneInputNativeRef"
         :nullable="nullable"
         :type="BaseInputType.text"
         :state="showCountryError ? InputState.danger : state"
         :size="size"
         :skeleton="skeleton"
+        v-bind="$attrs"
         :disabled="disabled"
         :readonly="readonly"
         :placeholder="placeholder"
         :grouped="Grouped.right"
         wrapper-class="flex-grow"
-        v-bind="$attrs"
+        class="-ml-px"
         @validate="val => $emit('validate', val)"
         @blur="e => $emit('blur', e)"
         @keydown="onKeyPress"
@@ -333,13 +343,3 @@ watch(_countryValue, (newCountryId, oldCountryId) => {
     </div>
   </AntField>
 </template>
-
-<style scoped>
-:deep(.ant-country) {
-  @apply z-10;
-}
-
-.flex > :not(:first-child) {
-  margin-left: -1px;
-}
-</style>
