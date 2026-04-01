@@ -188,49 +188,49 @@ onMounted(() => {
     :expanded="false"
     :messages="messages"
   >
-    <div class="flex items-center gap-1.5">
-      <div class="relative full-height flex items-center">
-        <input
-          v-model="_modelValue"
-          :class="inputClasses"
-          type="checkbox"
-          :aria-checked="_modelValue"
-          :disabled="disabled || readonly"
-          @blur="onBlur"
-        >
-
-        <div
-          class="absolute flex items-center justify-center !text-white pointer-events-none"
-          :class="size === Size.lg || size === Size.md || size === Size.sm ? 'h-5 w-5' : 'h-4 w-4'"
-        >
-          <AntIcon
-            v-if="_modelValue"
-            :icon="faCheck"
-            :size="itemSize"
-            :color="iconColor"
-          />
-        </div>
-
+    <div class="flex gap-1.5">
+      <div
+        class="relative flex"
+        :class="{
+          'h-5 w-5': size === Size.lg || size === Size.md || size === Size.sm,
+          'h-4 w-4': size === Size.xs || size === Size.xs2,
+        }"
+      >
         <AntSkeleton
           :visible="skeleton"
-          absolute
           rounded
-        />
+        >
+          <input
+            v-model="_modelValue"
+            :class="inputClasses"
+            type="checkbox"
+            :aria-checked="_modelValue"
+            :disabled="disabled || readonly"
+            @blur="onBlur"
+          >
+
+          <div
+            class="absolute flex items-center justify-center !text-white pointer-events-none"
+            :class="size === Size.lg || size === Size.md || size === Size.sm ? 'h-5 w-5' : 'h-4 w-4'"
+          >
+            <AntIcon
+              v-if="_modelValue"
+              :icon="faCheck"
+              :size="itemSize"
+              :color="iconColor"
+            />
+          </div>
+        </AntSkeleton>
       </div>
 
-      <div
-        class="flex items-center"
-        :class="props.size === Size.md ? 'h-5' : 'h-4'"
-      >
-        <span :class="contentClasses">
-          <AntSkeleton
-            :visible="skeleton"
-            rounded
-          >
-            <slot />
-          </AntSkeleton>
-        </span>
-      </div>
+      <span :class="contentClasses">
+        <AntSkeleton
+          :visible="skeleton"
+          rounded
+        >
+          <slot />
+        </AntSkeleton>
+      </span>
     </div>
   </AntField>
 </template>
