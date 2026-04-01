@@ -30,6 +30,13 @@ const meta: Meta<typeof AntCountryInput> = {
       control: 'select',
       options: Object.values(Size),
     },
+    grouped: {
+      control: {
+        type: 'select',
+      },
+      options: Object.values(Grouped),
+      description: 'Where is this fields position in a group',
+    },
     locale: {
       control: 'inline-radio',
       options: [
