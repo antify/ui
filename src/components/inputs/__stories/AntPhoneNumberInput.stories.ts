@@ -90,8 +90,10 @@ export const Default: Story = {
       const phonePaste = ref(null);
       const countryPaste = ref(null);
 
-      const copyToClipboard = (text: string) => {
-        navigator.clipboard.writeText(text);
+      const copyToClipboard = async (text: string) => {
+        await navigator.clipboard?.writeText(text).catch((err) => {
+          console.warn('Copy failed', err);
+        });
       };
 
       return {
@@ -264,7 +266,7 @@ export const summary: Story = {
     },
     setup() {
       const phone = ref(null);
-      const country = ref('DE');
+      const country = ref('+49');
 
       return {
         args,
@@ -300,9 +302,9 @@ export const summary: Story = {
         <div class="flex flex-col gap-4">
           <h2 class="text-xl font-bold border-b pb-2 text-base-700">Special Modes</h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <AntPhoneNumberInput v-bind="args" country-value="DE" model-value="1512345678" disabled label="Disabled" />
-            <AntPhoneNumberInput v-bind="args" country-value="DE" model-value="1512345678" readonly label="Readonly" />
-            <AntPhoneNumberInput v-bind="args" skeleton label="Skeleton" />
+            <AntPhoneNumberInput v-bind="args" v-model="phone" country-value="DE" model-value="1512345678" disabled label="Disabled" />
+            <AntPhoneNumberInput v-bind="args" v-model="phone" country-value="DE" model-value="1512345678" readonly label="Readonly" />
+            <AntPhoneNumberInput v-bind="args" v-model="phone" country-value="DE" skeleton label="Skeleton" />
           </div>
         </div>
       </div>

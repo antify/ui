@@ -35,7 +35,7 @@ const props = withDefaults(defineProps<{
   readonly?: boolean;
   skeleton?: boolean;
   maxHeight?: string;
-  searchPlaceholder: string;
+  searchPlaceholder?: string;
   searchable?: boolean;
   grouped?: Grouped;
   showFlags?: boolean;
@@ -107,6 +107,7 @@ const filteredOptions = computed(() => {
 
   return filtered.map(country => ({
     ...country,
+    isoCode: country.value,
     value: country[props.optionValueKey] as string | number,
   }));
 });
@@ -211,6 +212,20 @@ function onClickOutside(e: Event) {
   isOpen.value = false;
 }
 
+const fieldProps = computed(() => {
+  if (props.isGrouped) {
+    return {};
+  }
+
+  return {
+    label: props.label,
+    description: props.description,
+    state: props.state,
+    size: props.size,
+    skeleton: props.skeleton,
+  };
+});
+
 watch(isOpen, (val) => {
   if (!val) {
     searchQuery.value = null;
@@ -221,11 +236,7 @@ watch(isOpen, (val) => {
 <template>
   <component
     :is="rootComponent"
-    :label="isGrouped ? undefined : label"
-    :description="isGrouped ? undefined : description"
-    :state="state"
-    :size="size"
-    :skeleton="skeleton"
+    v-bind="fieldProps"
     class="ant-country"
   >
     <div
@@ -311,14 +322,14 @@ watch(isOpen, (val) => {
         <template #contentRight="option">
           <slot
             name="right"
-            :option="(option as Country)"
+            :option="(option as Country & { isoCode: string })"
           >
             <div class="ml-auto flex items-center gap-2">
               <span
                 v-if="showIsoCode"
                 class="text-md font-mono uppercase text-for-white-bg-font"
               >
-                {{ (option as Country).value }}
+                {{ (option as Country).isoCode }}
               </span>
 
               <span

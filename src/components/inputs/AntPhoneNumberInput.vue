@@ -99,7 +99,7 @@ const updateFullValue = (countryId: string | number | null, rawPhone: string | n
 const showCountryError = computed(() => {
   const val = props.modelValue || '';
 
-  return !props.countryValue && val.length > 0 && !val.startsWith('+');
+  return props.countryValue == null && val.length > 0 && !val.startsWith('+');
 });
 
 const allMessages = computed(() => {
@@ -117,6 +117,18 @@ const allMessages = computed(() => {
 const currentCountry = computed(() => {
   return props.countries.find(c => String(c[props.countryValueKey]) === String(props.countryValue));
 });
+
+const sortedCountriesByDialCode = computed(() => {
+  return [
+    ...props.countries,
+  ].sort((a, b) => b.dialCode.length - a.dialCode.length);
+});
+
+const findCountryByPhone = (phone: string): Country | undefined => {
+  if (!phone.startsWith('+')) return undefined;
+
+  return sortedCountriesByDialCode.value.find(country => phone.startsWith(country.dialCode));
+};
 
 const formattedNumber = computed({
   get: () => {
@@ -143,19 +155,12 @@ const formattedNumber = computed({
     }
 
     if (val.startsWith('+')) {
-      const sortedCountries = [
-        ...props.countries,
-      ].sort((a, b) => b.dialCode.length - a.dialCode.length);
+      const country = findCountryByPhone(val);
 
-      for (const country of sortedCountries) {
-        if (val.startsWith(country.dialCode)) {
-          const newCountryValue = country[props.countryValueKey] as string | number;
-          _countryValue.value = newCountryValue;
-          _phoneNumber.value = val;
-
-          return;
-        }
+      if (country) {
+        _countryValue.value = country[props.countryValueKey] as string | number;
       }
+
       _phoneNumber.value = val;
 
       return;
@@ -243,17 +248,10 @@ function onPaste(event: ClipboardEvent) {
   const cleanInput = pasteData.replace(/[^\d+]/g, '');
 
   if (cleanInput.startsWith('+')) {
-    const sortedCountries = [
-      ...props.countries,
-    ].sort((a, b) => b.dialCode.length - a.dialCode.length);
+    const country = findCountryByPhone(cleanInput);
 
-    for (const country of sortedCountries) {
-      if (cleanInput.startsWith(country.dialCode)) {
-        _countryValue.value = country[props.countryValueKey] as string | number;
-        _phoneNumber.value = cleanInput;
-
-        return;
-      }
+    if (country) {
+      _countryValue.value = country[props.countryValueKey] as string | number;
     }
     _phoneNumber.value = cleanInput;
   } else {
@@ -329,7 +327,7 @@ watch(_countryValue, (newCountryId, oldCountryId) => {
         v-bind="$attrs"
         @validate="val => $emit('validate', val)"
         @blur="e => $emit('blur', e)"
-        @keypress="onKeyPress"
+        @keydown="onKeyPress"
         @paste="onPaste"
       />
     </div>

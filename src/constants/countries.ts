@@ -7,7 +7,6 @@ export interface Country {
   phoneLength?: number | number[];
   mask?: string;
   isDefault?: boolean;
-  [key: string]: unknown;
 }
 
 export const COUNTRY_LOCALES: Record<string, Record<string, string>> = {
