@@ -44,7 +44,7 @@ const props = withDefaults(defineProps<{
   optionValueKey?: keyof Country;
   showDialCodeInMenu?: boolean;
   showIsoCode?: boolean;
-  locale?: 'EN' | 'DE' | string;
+  locale?: 'en' | 'de' | string;
 }>(), {
   size: Size.md,
   state: InputState.base,
@@ -92,18 +92,22 @@ const localizedCountries = computed(() => {
 });
 const filteredOptions = computed(() => {
   const options = localizedCountries.value;
+  const query = searchQuery.value?.toLowerCase();
 
-  if (!props.searchable || !searchQuery.value) {
-    return options;
-  }
+  const filtered = !props.searchable || !query
+    ? options
+    : options.filter(country => country.label.toLowerCase().includes(query) ||
+      country.value.toLowerCase().includes(query) ||
+      country.dialCode.includes(query));
 
-  const query = searchQuery.value.toLowerCase();
-
-  return options.filter(c => c.label.toLowerCase().includes(query) ||
-    c.value.toLowerCase().includes(query) ||
-    c.dialCode.includes(query));
+  return filtered.map(country => ({
+    ...country,
+    value: country[props.optionValueKey] as string | number,
+  }));
 });
-const selectedCountry = computed(() => localizedCountries.value.find(c => String(c[props.optionValueKey]) === String(props.modelValue)) || null);
+const selectedCountry = computed(() => {
+  return localizedCountries.value.find(country => String(country[props.optionValueKey]) === String(props.modelValue)) || null;
+});
 const rootComponent = computed(() => (props.isGrouped ? 'div' : AntField));
 const inputClasses = computed(() => {
   const variants: Record<InputState, string> = {
@@ -229,7 +233,6 @@ watch(isOpen, (val) => {
         v-model:focused="focusedItem"
         :options="filteredOptions"
         :model-value="modelValue"
-        :option-value-key="(optionValueKey as string)"
         :input-ref="inputRef"
         :max-height="maxHeight"
         :size="size"
@@ -238,7 +241,7 @@ watch(isOpen, (val) => {
         <template #contentBefore>
           <div
             v-if="searchable"
-            class="p-2 border-b border-base-200 bg-white"
+            class="p-2 border-b border-base-300 bg-white"
           >
             <AntSearch
               v-model="searchQuery"
@@ -308,14 +311,14 @@ watch(isOpen, (val) => {
             <div class="ml-auto flex items-center gap-2">
               <span
                 v-if="showIsoCode"
-                class="text-md font-mono uppercase text-base-400"
+                class="text-md font-mono uppercase text-for-white-bg-font"
               >
                 {{ (option as Country).value }}
               </span>
 
               <span
                 v-if="showDialCodeInMenu"
-                class="text-md text-base-400"
+                class="text-md text-for-white-bg-font"
               >
                 {{ (option as Country).dialCode }}
               </span>
@@ -324,7 +327,7 @@ watch(isOpen, (val) => {
         </template>
 
         <template #empty>
-          <div class="p-2 text-center text-sm text-base-500">
+          <div class="p-2 text-center text-sm text-for-white-bg-font">
             {{ emptyStateMessage }}
           </div>
         </template>

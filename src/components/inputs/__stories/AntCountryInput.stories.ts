@@ -96,7 +96,7 @@ export const DefaultCountry: Story = {
   args: {
     ...Docs.args,
     label: 'Default Country Logic',
-    description: 'Automatically selects Germany (DE) as it is marked as isDefault: true in our data.',
+    description: 'Preselects Germany (DE) by providing modelValue: "DE" to the component.',
     modelValue: 'DE',
   },
 };

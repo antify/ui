@@ -128,7 +128,7 @@ export const Default: Story = {
             placeholder="Initialized with DE"
           />
           <div class="mt-2 text-md text-base-500">
-            Date: {{ countryDefault || 'null' }} | {{ phoneDefault || 'null' }}
+            Data: {{ countryDefault || 'null' }} | {{ phoneDefault || 'null' }}
           </div>
         </div>
 
