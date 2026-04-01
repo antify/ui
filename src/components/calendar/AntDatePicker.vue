@@ -35,11 +35,21 @@ const props = withDefaults(defineProps<{
     date: string;
     color: string;
   }[];
+  /**
+   * Color token used for weekNumberTextColor of week number column (e.g., 'base-200-font', 'primary-500-font').
+   */
+  weekNumberTextColor?: string;
+  /**
+   * Color token used for weekNumberBackgroundColor of week number column (e.g., 'base-200', 'primary-500').
+   */
+  weekNumberBackgroundColor?: string;
 }>(), {
   showWeekend: false,
   showWeekNumbers: false,
   skeleton: false,
   specialDays: () => [],
+  weekNumberTextColor: 'base-300-font',
+  weekNumberBackgroundColor: 'base-300',
 });
 const emit = defineEmits([
   'select',
@@ -134,6 +144,11 @@ const getColorNumber = (color: string) => {
   return match ? parseInt(match[0], 10) : null;
 };
 
+const weekNumberStyles = computed(() => ({
+  backgroundColor: `var(--color-${props.weekNumberBackgroundColor})`,
+  color: `var(--color-${props.weekNumberTextColor})`,
+}));
+
 watch(() => props.modelValue, (val) => {
   const date = new Date(val);
   currentMonthIndex.value = date.getMonth();
@@ -179,9 +194,9 @@ onMounted(() => {
       }"
     >
       <div
-        v-for="day in weekDays"
-        :key="day"
-        class="text-for-white-bg-font text-center flex items-center justify-center"
+        v-for="(day, index) in weekDays"
+        :key="`${day}-${index}`"
+        class="text-center flex items-center justify-center rounded-md"
       >
         <AntSkeleton
           :visible="skeleton"
@@ -200,7 +215,8 @@ onMounted(() => {
       >
         <div
           v-if="showWeekNumbers"
-          class="flex text-base-500 font-semibold bg-base-100 rounded-md"
+          class="flex font-semibold rounded-md transition-colors"
+          :style="weekNumberStyles"
         >
           <AntSkeleton
             :visible="skeleton"

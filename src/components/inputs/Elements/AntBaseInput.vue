@@ -61,6 +61,7 @@ const props = withDefaults(defineProps<{
   inputRef?: null | HTMLInputElement;
   min?: string | number;
   max?: string | number;
+  step?: string | number;
 }>(), {
   state: InputState.base,
   disabled: false,
