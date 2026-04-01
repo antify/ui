@@ -189,33 +189,38 @@ onMounted(() => {
     :messages="messages"
   >
     <div class="flex gap-1.5">
-      <div class="relative full-height flex">
-        <input
-          v-model="_modelValue"
-          :class="inputClasses"
-          type="checkbox"
-          :aria-checked="_modelValue"
-          :disabled="disabled || readonly"
-          @blur="onBlur"
-        >
-
-        <div
-          class="absolute flex items-center justify-center !text-white pointer-events-none"
-          :class="size === Size.lg || size === Size.md || size === Size.sm ? 'h-5 w-5' : 'h-4 w-4'"
-        >
-          <AntIcon
-            v-if="_modelValue"
-            :icon="faCheck"
-            :size="itemSize"
-            :color="iconColor"
-          />
-        </div>
-
+      <div
+        class="relative flex"
+        :class="{
+          'h-5 w-5': size === Size.lg || size === Size.md || size === Size.sm,
+          'h-4 w-4': size === Size.xs || size === Size.xs2,
+        }"
+      >
         <AntSkeleton
           :visible="skeleton"
-          absolute
           rounded
-        />
+        >
+          <input
+            v-model="_modelValue"
+            :class="inputClasses"
+            type="checkbox"
+            :aria-checked="_modelValue"
+            :disabled="disabled || readonly"
+            @blur="onBlur"
+          >
+
+          <div
+            class="absolute flex items-center justify-center !text-white pointer-events-none"
+            :class="size === Size.lg || size === Size.md || size === Size.sm ? 'h-5 w-5' : 'h-4 w-4'"
+          >
+            <AntIcon
+              v-if="_modelValue"
+              :icon="faCheck"
+              :size="itemSize"
+              :color="iconColor"
+            />
+          </div>
+        </AntSkeleton>
       </div>
 
       <span :class="contentClasses">
