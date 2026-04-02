@@ -54,7 +54,7 @@ const props = withDefaults(defineProps<{
   countryMaxHeight?: string;
   countryValueKey?: CountryValueKey;
   countryErrorMessage?: string;
-  conuntrySortable?: boolean;
+  countrySortable?: boolean;
 
   //AntBaseInput Props
   placeholder?: string;
@@ -69,7 +69,7 @@ const props = withDefaults(defineProps<{
   placeholder: 'Enter phone number',
   countryValueKey: CountryValueKey.dialCode,
   countryErrorMessage: 'Please select a country code or start with "+"',
-  conuntrySortable: true,
+  countrySortable: true,
   messages: () => [],
   nullable: true,
   countries: () => COUNTRIES,
@@ -318,7 +318,7 @@ watch(_countryValue, (newCountryId, oldCountryId) => {
         class="w-fit flex-shrink-0"
         :show-dial-code-in-menu="true"
         :option-value-key="countryValueKey"
-        :sortable="conuntrySortable"
+        :sortable="countrySortable"
         @select="onCountrySelect"
       />
 

@@ -81,6 +81,7 @@ const focusedItem = ref<string | number | null>(null);
 const selectMenuRef = ref<InstanceType<typeof AntSelectMenu> | null>(null);
 const searchInputRef = ref<HTMLInputElement | null>(null);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
+
 const filteredOptions = computed(() => {
   const query = searchQuery.value?.trim().toLowerCase();
   const currentLocale = (props.locale || Locale.en).toLowerCase();
@@ -90,7 +91,8 @@ const filteredOptions = computed(() => {
       ...props.countries,
     ]
     : props.countries.filter(country => {
-      const labelText = country.label[currentLocale].toLowerCase() || '';
+      const labelValue = country.label[currentLocale] || country.label[Locale.en] || '';
+      const labelText = labelValue.toLowerCase();
       const isoCode = country.isoCode.toLowerCase();
       const dialCode = country.dialCode;
 

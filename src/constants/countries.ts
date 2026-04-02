@@ -13,6 +13,19 @@ export enum Locale {
   de = 'de',
 }
 
+/**
+ * TODO: Detailed verification and data enrichment required.
+ * * ATTENTION:
+ * 1. The physical order of this array is pre-sorted by English labels (label.en).
+ * 2. Country ISO codes (isoCode) are NOT the same as phone dial codes (dialCode).
+ * Verify each dialCode and numericCode against official ITU-T standards.
+ * 3. Some territories share the same dialCode (e.g., US, CA, and various islands use +1),
+ * ensure the 'findCountryByPhone' logic in components handles these overlaps.
+ * 4. Phone masks need to be validated for each region to ensure correct formatting.
+ * 5. Kazahsctan was removed because he had the same dialCode of number as Rissia
+ * 6. Most of the countries have +1 in dialCode check it in future
+ */
+
 export const COUNTRIES: Country[] = [
   {
     value: 'AF',
@@ -87,18 +100,6 @@ export const COUNTRIES: Country[] = [
     mask: '####',
   },
   {
-    value: 'AG',
-    isoCode: 'AG',
-    label: {
-      de: 'Antigua und Barbuda',
-      en: 'Antigua and Barbuda',
-    },
-    dialCode: '+1',
-    numericCode: 28,
-    flag: '🇦🇬',
-    mask: '### ### ####',
-  },
-  {
     value: 'AR',
     isoCode: 'AR',
     label: {
@@ -106,7 +107,7 @@ export const COUNTRIES: Country[] = [
       en: 'Argentina',
     },
     dialCode: '+54',
-    numericCode: 54,
+    numericCode: 32,
     flag: '🇦🇷',
     mask: '### ### ####',
   },
@@ -142,7 +143,7 @@ export const COUNTRIES: Country[] = [
       en: 'Australia',
     },
     dialCode: '+61',
-    numericCode: 61,
+    numericCode: 36,
     flag: '🇦🇺',
     mask: '### ### ###',
   },
@@ -154,7 +155,7 @@ export const COUNTRIES: Country[] = [
       en: 'Austria',
     },
     dialCode: '+43',
-    numericCode: 43,
+    numericCode: 40,
     flag: '🇦🇹',
     mask: '### #######',
   },
@@ -166,21 +167,9 @@ export const COUNTRIES: Country[] = [
       en: 'Azerbaijan',
     },
     dialCode: '+994',
-    numericCode: 994,
+    numericCode: 31,
     flag: '🇦🇿',
     mask: '## ### ## ##',
-  },
-  {
-    value: 'BS',
-    isoCode: 'BS',
-    label: {
-      de: 'Bahamas',
-      en: 'Bahamas',
-    },
-    dialCode: '+1',
-    numericCode: 44,
-    flag: '🇧🇸',
-    mask: '### ### ####',
   },
   {
     value: 'BH',
@@ -207,18 +196,6 @@ export const COUNTRIES: Country[] = [
     mask: '#### ######',
   },
   {
-    value: 'BB',
-    isoCode: 'BB',
-    label: {
-      de: 'Barbados',
-      en: 'Barbados',
-    },
-    dialCode: '+1',
-    numericCode: 52,
-    flag: '🇧🇧',
-    mask: '### ### ####',
-  },
-  {
     value: 'BY',
     isoCode: 'BY',
     label: {
@@ -226,7 +203,7 @@ export const COUNTRIES: Country[] = [
       en: 'Belarus',
     },
     dialCode: '+375',
-    numericCode: 375,
+    numericCode: 112,
     flag: '🇧🇾',
     mask: '## ### ## ##',
   },
@@ -238,7 +215,7 @@ export const COUNTRIES: Country[] = [
       en: 'Belgium',
     },
     dialCode: '+32',
-    numericCode: 32,
+    numericCode: 56,
     flag: '🇧🇪',
     mask: '### ## ## ##',
   },
@@ -322,7 +299,7 @@ export const COUNTRIES: Country[] = [
       en: 'Brazil',
     },
     dialCode: '+55',
-    numericCode: 55,
+    numericCode: 76,
     flag: '🇧🇷',
     mask: '## ##### ####',
   },
@@ -331,7 +308,7 @@ export const COUNTRIES: Country[] = [
     isoCode: 'BN',
     label: {
       de: 'Brunei Darussalam',
-      en: 'Brunei',
+      en: 'Brunei Darussalam',
     },
     dialCode: '+673',
     numericCode: 96,
@@ -346,7 +323,7 @@ export const COUNTRIES: Country[] = [
       en: 'Bulgaria',
     },
     dialCode: '+359',
-    numericCode: 359,
+    numericCode: 100,
     flag: '🇧🇬',
     mask: '### ### ###',
   },
@@ -397,18 +374,6 @@ export const COUNTRIES: Country[] = [
     numericCode: 120,
     flag: '🇨🇲',
     mask: '#### ####',
-  },
-  {
-    value: 'CA',
-    isoCode: 'CA',
-    label: {
-      de: 'Kanada',
-      en: 'Canada',
-    },
-    dialCode: '+1',
-    numericCode: 124,
-    flag: '🇨🇦',
-    mask: '### ### ####',
   },
   {
     value: 'CV',
@@ -526,7 +491,7 @@ export const COUNTRIES: Country[] = [
       en: 'Croatia',
     },
     dialCode: '+385',
-    numericCode: 385,
+    numericCode: 191,
     flag: '🇭🇷',
     mask: '## #### ###',
   },
@@ -550,7 +515,7 @@ export const COUNTRIES: Country[] = [
       en: 'Cyprus',
     },
     dialCode: '+357',
-    numericCode: 357,
+    numericCode: 196,
     flag: '🇨🇾',
     mask: '## ######',
   },
@@ -562,7 +527,7 @@ export const COUNTRIES: Country[] = [
       en: 'Czech Republic',
     },
     dialCode: '+420',
-    numericCode: 420,
+    numericCode: 203,
     flag: '🇨🇿',
     mask: '### ### ###',
   },
@@ -574,7 +539,7 @@ export const COUNTRIES: Country[] = [
       en: 'Denmark',
     },
     dialCode: '+45',
-    numericCode: 45,
+    numericCode: 208,
     flag: '🇩🇰',
     mask: '## ## ## ##',
   },
@@ -589,30 +554,6 @@ export const COUNTRIES: Country[] = [
     numericCode: 262,
     flag: '🇩🇯',
     mask: '## ## ## ##',
-  },
-  {
-    value: 'DM',
-    isoCode: 'DM',
-    label: {
-      de: 'Dominica',
-      en: 'Dominica',
-    },
-    dialCode: '+1',
-    numericCode: 212,
-    flag: '🇩🇲',
-    mask: '### ### ####',
-  },
-  {
-    value: 'DO',
-    isoCode: 'DO',
-    label: {
-      de: 'Dominikanische Republik',
-      en: 'Dominican Republic',
-    },
-    dialCode: '+1',
-    numericCode: 214,
-    flag: '🇩🇴',
-    mask: '### ### ####',
   },
   {
     value: 'EC',
@@ -819,18 +760,6 @@ export const COUNTRIES: Country[] = [
     mask: '## ## ##',
   },
   {
-    value: 'GD',
-    isoCode: 'GD',
-    label: {
-      de: 'Grenada',
-      en: 'Grenada',
-    },
-    dialCode: '+1',
-    numericCode: 308,
-    flag: '🇬🇩',
-    mask: '### ### ####',
-  },
-  {
     value: 'GT',
     isoCode: 'GT',
     label: {
@@ -1023,18 +952,6 @@ export const COUNTRIES: Country[] = [
     mask: '### #######',
   },
   {
-    value: 'JM',
-    isoCode: 'JM',
-    label: {
-      de: 'Jamaika',
-      en: 'Jamaica',
-    },
-    dialCode: '+1',
-    numericCode: 388,
-    flag: '🇯🇲',
-    mask: '### ### ####',
-  },
-  {
     value: 'JP',
     isoCode: 'JP',
     label: {
@@ -1057,18 +974,6 @@ export const COUNTRIES: Country[] = [
     numericCode: 400,
     flag: '🇯🇴',
     mask: '# #### ####',
-  },
-  {
-    value: 'KZ',
-    isoCode: 'KZ',
-    label: {
-      de: 'Kasachstan',
-      en: 'Kazakhstan',
-    },
-    dialCode: '+7',
-    numericCode: 398,
-    flag: '🇰🇿',
-    mask: '### ### ## ##',
   },
   {
     value: 'KE',
@@ -1732,7 +1637,7 @@ export const COUNTRIES: Country[] = [
   },
   {
     value: 'RO',
-    isoCode: 'DE',
+    isoCode: 'RO',
     label: {
       de: 'Rumänien',
       en: 'Romania',
@@ -1765,42 +1670,6 @@ export const COUNTRIES: Country[] = [
     numericCode: 646,
     flag: '🇷🇼',
     mask: '### ### ###',
-  },
-  {
-    value: 'KN',
-    isoCode: 'KN',
-    label: {
-      de: 'St. Kitts und Nevis',
-      en: 'Saint Kitts and Nevis',
-    },
-    dialCode: '+1',
-    numericCode: 659,
-    flag: '🇰🇳',
-    mask: '### ### ####',
-  },
-  {
-    value: 'LC',
-    isoCode: 'LC',
-    label: {
-      de: 'St. Lucia',
-      en: 'Saint Lucia',
-    },
-    dialCode: '+1',
-    numericCode: 662,
-    flag: '🇱🇨',
-    mask: '### ### ####',
-  },
-  {
-    value: 'VC',
-    isoCode: 'VC',
-    label: {
-      de: 'St. Vincent und die Grenadinen',
-      en: 'Saint Vincent and the Grenadines',
-    },
-    dialCode: '+1',
-    numericCode: 670,
-    flag: '🇻🇨',
-    mask: '### ### ####',
   },
   {
     value: 'WS',
@@ -2175,18 +2044,6 @@ export const COUNTRIES: Country[] = [
     mask: '#####',
   },
   {
-    value: 'TT',
-    isoCode: 'TT',
-    label: {
-      de: 'Trinidad und Tobago',
-      en: 'Trinidad and Tobago',
-    },
-    dialCode: '+1',
-    numericCode: 780,
-    flag: '🇹🇹',
-    mask: '### ### ####',
-  },
-  {
     value: 'TN',
     isoCode: 'TN',
     label: {
@@ -2329,18 +2186,6 @@ export const COUNTRIES: Country[] = [
     numericCode: 548,
     flag: '🇻🇺',
     mask: '#######',
-  },
-  {
-    value: 'VA',
-    isoCode: 'VA',
-    label: {
-      de: 'Vatikanstadt',
-      en: 'Vatican City',
-    },
-    dialCode: '+39',
-    numericCode: 379,
-    flag: '🇻🇦',
-    mask: '06 698 #####',
   },
   {
     value: 'VE',
