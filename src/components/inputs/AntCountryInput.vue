@@ -82,6 +82,10 @@ const selectMenuRef = ref<InstanceType<typeof AntSelectMenu> | null>(null);
 const searchInputRef = ref<HTMLInputElement | null>(null);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 
+const countryList = COUNTRIES.map(country => `${country.label.en}: ${country.numericCode}`);
+
+console.log(countryList);
+
 const filteredOptions = computed(() => {
   const query = searchQuery.value?.trim().toLowerCase();
   const currentLocale = (props.locale || Locale.en).toLowerCase();
