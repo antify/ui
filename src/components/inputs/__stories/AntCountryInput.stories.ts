@@ -50,6 +50,11 @@ const meta: Meta<typeof AntCountryInput> = {
       },
       options: Object.values(CountryValueKey),
     },
+    countries: {
+      table: {
+        disable: true,
+      },
+    },
   },
 };
 
@@ -84,11 +89,8 @@ export const Docs: Story = {
   render: MainRender,
   args: {
     modelValue: null,
-    label: 'Country Selector',
-    countries: COUNTRIES,
     searchable: true,
-    searchPlaceholder: 'Search for a country...',
-    description: 'Select a country to see the dial code and flag integration.',
+    countries: COUNTRIES,
   },
 };
 

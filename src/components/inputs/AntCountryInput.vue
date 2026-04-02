@@ -50,6 +50,7 @@ const props = withDefaults(defineProps<{
   showDialCodeInMenu?: boolean;
   showIsoCode?: boolean;
   locale?: Locale;
+  sortable?: boolean;
 }>(), {
   size: Size.md,
   state: InputState.base,
@@ -65,6 +66,7 @@ const props = withDefaults(defineProps<{
   showIsoCode: false,
   countries: () => COUNTRIES,
   locale: Locale.en,
+  sortable: true,
 });
 
 const emit = defineEmits([
@@ -81,10 +83,12 @@ const searchInputRef = ref<HTMLInputElement | null>(null);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const filteredOptions = computed(() => {
   const query = searchQuery.value?.trim().toLowerCase();
-  const currentLocale = props.locale || Locale.en;
+  const currentLocale = (props.locale || Locale.en).toLowerCase();
 
   const filtered = !props.searchable || !query
-    ? props.countries
+    ? [
+      ...props.countries,
+    ]
     : props.countries.filter(country => {
       const labelText = country.label[currentLocale].toLowerCase() || '';
       const isoCode = country.isoCode.toLowerCase();
@@ -95,12 +99,14 @@ const filteredOptions = computed(() => {
         dialCode.includes(query);
     });
 
-  filtered.sort((a, b) => {
-    const labelA = a.label[currentLocale] || a.label[Locale.en];
-    const labelB = b.label[currentLocale] || b.label[Locale.en];
+  if (props.sortable && currentLocale !== Locale.en) {
+    filtered.sort((a, b) => {
+      const labelA = a.label[currentLocale] || a.label[Locale.en];
+      const labelB = b.label[currentLocale] || b.label[Locale.en];
 
-    return labelA.localeCompare(labelB, currentLocale);
-  });
+      return labelA.localeCompare(labelB, currentLocale);
+    });
+  }
 
   return filtered.map(country => ({
     ...country,
@@ -177,7 +183,7 @@ const selectedCountry = computed(() => {
 
   return {
     ...country,
-    label: country.label[currentLocale],
+    label: country.label[currentLocale] || country.label[Locale.en],
     value: country[props.optionValueKey] as string | number,
   };
 });

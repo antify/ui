@@ -55,7 +55,11 @@ const meta: Meta<typeof AntPhoneNumberInput> = {
       },
       options: Object.values(CountryValueKey),
     },
-
+    countries: {
+      table: {
+        disable: true,
+      },
+    },
   },
 };
 
