@@ -14,101 +14,6 @@ export enum Locale {
 }
 
 export const COUNTRIES: Country[] = [
-
-  // Another World
-
-  {
-    value: 'CG',
-    isoCode: 'CG',
-    label: {
-      de: 'Republik Kongo',
-      en: 'Congo',
-    },
-    dialCode: '+242',
-    numericCode: 178,
-    flag: '🇨🇬',
-    mask: '## #### ###',
-  },
-  {
-    value: 'CI',
-    isoCode: 'CI',
-    label: {
-      de: 'Elfenbeinküste',
-      en: "Côte d'Ivoire",
-    },
-    dialCode: '+225',
-    numericCode: 384,
-    flag: '🇨🇮',
-    mask: '## ## ## ## ##',
-  },
-
-  {
-    value: 'FM',
-    isoCode: 'FM',
-    label: {
-      de: 'Mikronesien',
-      en: 'Micronesia',
-    },
-    dialCode: '+691',
-    numericCode: 583,
-    flag: '🇫🇲',
-    mask: '### ####',
-  },
-
-  {
-    value: 'KP',
-    isoCode: 'KP',
-    label: {
-      de: 'Nordkorea',
-      en: 'North Korea',
-    },
-    dialCode: '+850',
-    numericCode: 408,
-    flag: '🇰🇵',
-    mask: '### #### ####',
-  },
-  {
-    value: 'KR',
-    isoCode: 'KR',
-    label: {
-      de: 'Südkorea',
-      en: 'South Korea',
-    },
-    dialCode: '+82',
-    numericCode: 410,
-    flag: '🇰🇷',
-    mask: '## #### ####',
-  },
-
-  {
-    value: 'SS',
-    isoCode: 'SS',
-    label: {
-      de: 'Südsudan',
-      en: 'South Sudan',
-    },
-    dialCode: '+211',
-    numericCode: 728,
-    flag: '🇸🇸',
-    mask: '#########',
-  },
-
-  {
-    value: 'SZ',
-    isoCode: 'SZ',
-    label: {
-      de: 'Eswatini',
-      en: 'Eswatini',
-    },
-    dialCode: '+268',
-    numericCode: 748,
-    flag: '🇸🇿',
-    mask: '#### ####',
-  },
-
-];
-
-const sortEnCountries: Country[] = [
   {
     value: 'AF',
     isoCode: 'AF',
@@ -170,6 +75,18 @@ const sortEnCountries: Country[] = [
     mask: '### ### ###',
   },
   {
+    value: 'AQ',
+    isoCode: 'AQ',
+    label: {
+      de: 'Antarktis',
+      en: 'Antarctica',
+    },
+    dialCode: '+672',
+    numericCode: 10,
+    flag: '🇦🇶',
+    mask: '####',
+  },
+  {
     value: 'AG',
     isoCode: 'AG',
     label: {
@@ -204,6 +121,18 @@ const sortEnCountries: Country[] = [
     numericCode: 51,
     flag: '🇦🇲',
     mask: '## ######',
+  },
+  {
+    value: 'AW',
+    isoCode: 'AW',
+    label: {
+      de: 'Aruba',
+      en: 'Aruba',
+    },
+    dialCode: '+297',
+    numericCode: 533,
+    flag: '🇦🇼',
+    mask: '### ####',
   },
   {
     value: 'AU',
@@ -878,6 +807,18 @@ const sortEnCountries: Country[] = [
     mask: '### #######',
   },
   {
+    value: 'GL',
+    isoCode: 'GL',
+    label: {
+      de: 'Grönland',
+      en: 'Greenland',
+    },
+    dialCode: '+299',
+    numericCode: 304,
+    flag: '🇬🇱',
+    mask: '## ## ##',
+  },
+  {
     value: 'GD',
     isoCode: 'GD',
     label: {
@@ -959,6 +900,18 @@ const sortEnCountries: Country[] = [
     dialCode: '+504',
     numericCode: 340,
     flag: '🇭🇳',
+    mask: '#### ####',
+  },
+  {
+    value: 'HK',
+    isoCode: 'HK',
+    label: {
+      de: 'Hongkong',
+      en: 'Hong Kong',
+    },
+    dialCode: '+852',
+    numericCode: 344,
+    flag: '🇭🇰',
     mask: '#### ####',
   },
   {
@@ -1298,6 +1251,18 @@ const sortEnCountries: Country[] = [
     mask: '## ## ### ##',
   },
   {
+    value: 'MO',
+    isoCode: 'MO',
+    label: {
+      de: 'Macau',
+      en: 'Macao',
+    },
+    dialCode: '+853',
+    numericCode: 446,
+    flag: '🇲🇴',
+    mask: '#### ####',
+  },
+  {
     value: 'MW',
     isoCode: 'MW',
     label: {
@@ -1368,6 +1333,18 @@ const sortEnCountries: Country[] = [
     numericCode: 584,
     flag: '🇲🇭',
     mask: '### ####',
+  },
+  {
+    value: 'MQ',
+    isoCode: 'MQ',
+    label: {
+      de: 'Martinique',
+      en: 'Martinique',
+    },
+    dialCode: '+596',
+    numericCode: 474,
+    flag: '🇲🇶',
+    mask: '### ## ## ##',
   },
   {
     value: 'MR',
@@ -1596,6 +1573,18 @@ const sortEnCountries: Country[] = [
     numericCode: 47,
     flag: '🇳🇴',
     mask: '### ## ###',
+  },
+  {
+    value: 'KP',
+    isoCode: 'KP',
+    label: {
+      de: 'Nordkorea',
+      en: 'North Korea',
+    },
+    dialCode: '+850',
+    numericCode: 408,
+    flag: '🇰🇵',
+    mask: '### #### ####',
   },
   {
     value: 'OM',
@@ -1982,6 +1971,18 @@ const sortEnCountries: Country[] = [
     mask: '## ### ####',
   },
   {
+    value: 'KR',
+    isoCode: 'KR',
+    label: {
+      de: 'Südkorea',
+      en: 'South Korea',
+    },
+    dialCode: '+82',
+    numericCode: 410,
+    flag: '🇰🇷',
+    mask: '## #### ####',
+  },
+  {
     value: 'ES',
     isoCode: 'ES',
     label: {
@@ -2030,6 +2031,18 @@ const sortEnCountries: Country[] = [
     mask: '### ####',
   },
   {
+    value: 'SZ',
+    isoCode: 'SZ',
+    label: {
+      de: 'Eswatini',
+      en: 'Swaziland',
+    },
+    dialCode: '+268',
+    numericCode: 748,
+    flag: '🇸🇿',
+    mask: '#### ####',
+  },
+  {
     value: 'SE',
     isoCode: 'SE',
     label: {
@@ -2064,6 +2077,18 @@ const sortEnCountries: Country[] = [
     numericCode: 760,
     flag: '🇸🇾',
     mask: '## ### ####',
+  },
+  {
+    value: 'TW',
+    isoCode: 'TW',
+    label: {
+      de: 'Taiwan',
+      en: 'Taiwan',
+    },
+    dialCode: '+886',
+    numericCode: 158,
+    flag: '🇹🇼',
+    mask: '### ### ###',
   },
   {
     value: 'TJ',
@@ -2124,6 +2149,18 @@ const sortEnCountries: Country[] = [
     numericCode: 768,
     flag: '🇹🇬',
     mask: '## ## ## ##',
+  },
+  {
+    value: 'TK',
+    isoCode: 'TK',
+    label: {
+      de: 'Tokelau',
+      en: 'Tokelau',
+    },
+    dialCode: '+690',
+    numericCode: 772,
+    flag: '🇹🇰',
+    mask: '####',
   },
   {
     value: 'TO',
@@ -2234,6 +2271,18 @@ const sortEnCountries: Country[] = [
     mask: '## ### ####',
   },
   {
+    value: 'GB',
+    isoCode: 'GB',
+    label: {
+      de: 'Vereinigtes Königreich',
+      en: 'United Kingdom',
+    },
+    dialCode: '+44',
+    numericCode: 826,
+    flag: '🇬🇧',
+    mask: '#### ######',
+  },
+  {
     value: 'US',
     isoCode: 'US',
     label: {
@@ -2329,7 +2378,6 @@ const sortEnCountries: Country[] = [
     flag: '🇾🇪',
     mask: '# ### ###',
   },
-
   {
     value: 'ZM',
     isoCode: 'ZM',
