@@ -23,7 +23,6 @@ export enum Locale {
  * ensure the 'findCountryByPhone' logic in components handles these overlaps.
  * 4. Phone masks need to be validated for each region to ensure correct formatting.
  * 5. Kazakhstan was removed because he had the same dialCode of number as Russia
- * 6. Most of the countries have +1 in dialCode check it in future
  */
 
 export const COUNTRIES: Country[] = [
@@ -380,7 +379,7 @@ export const COUNTRIES: Country[] = [
     isoCode: 'CV',
     label: {
       de: 'Kap Verde',
-      en: 'Cape Verde',
+      en: 'Cabo Verde',
     },
     dialCode: '+238',
     numericCode: 132,
@@ -524,7 +523,7 @@ export const COUNTRIES: Country[] = [
     isoCode: 'CZ',
     label: {
       de: 'Tschechien',
-      en: 'Czech Republic',
+      en: 'Czechia',
     },
     dialCode: '+420',
     numericCode: 203,
