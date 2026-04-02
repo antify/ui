@@ -80,7 +80,7 @@ const selectMenuRef = ref<InstanceType<typeof AntSelectMenu> | null>(null);
 const searchInputRef = ref<HTMLInputElement | null>(null);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const localizedCountries = computed(() => {
-  const currentLocale = (props.locale || Locale.en).toLowerCase();
+  const currentLocale = (props.locale || Locale.en);
 
   return props.countries.map(country => ({
     ...country,
@@ -310,7 +310,7 @@ async function toggleMenu(e: MouseEvent) {
             <div class="ml-auto flex items-center gap-2">
               <span
                 v-if="showIsoCode"
-                class="text-md font-mono uppercase text-for-white-bg-font"
+                class="text-md uppercase text-for-white-bg-font"
               >
                 {{ (option as any).isoCode }}
               </span>

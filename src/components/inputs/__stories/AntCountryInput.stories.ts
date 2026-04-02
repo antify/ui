@@ -38,11 +38,10 @@ const meta: Meta<typeof AntCountryInput> = {
       description: 'Where is this fields position in a group',
     },
     locale: {
-      control: 'inline-radio',
-      options: [
-        'en',
-        'de',
-      ],
+      control: {
+        type: 'select',
+      },
+      options: Object.values(Locale),
       description: 'Language for country labels',
     },
     optionValueKey: {
