@@ -3,7 +3,7 @@ import {
 } from 'vue';
 import AntRadioGroup from '../AntRadioGroup.vue';
 import {
-  InputState, Size,
+  InputState, Size, LayoutVariant,
 } from '../../../enums';
 import {
   type Meta, type StoryObj,
@@ -72,6 +72,12 @@ const meta: Meta<typeof AntRadioGroup> = {
       },
       options: Object.values(Size),
     },
+    layoutVariant: {
+      control: {
+        type: 'select',
+      },
+      options: Object.values(LayoutVariant),
+    },
   },
 };
 
@@ -116,12 +122,28 @@ export const Docs: Story = {
       };
     },
     template: `
-      <AntRadioGroup v-bind="args" v-model="value"/>
-      <span class="text-xs text-gray-500">Reactive value: {{ value }}</span>
+        <AntRadioGroup v-bind="args" v-model="value"/>
+        <span class="text-xs text-gray-500">Reactive value: {{ value }}</span>
     `,
   }),
   args: {
     radioButtons: simpleButtons,
+  },
+};
+
+export const BlockVariant: Story = {
+  render: Docs.render,
+  args: {
+    radioButtons: simpleButtons,
+    layoutVariant: LayoutVariant.block,
+  },
+};
+
+export const TabVariant: Story = {
+  render: Docs.render,
+  args: {
+    radioButtons: simpleButtons,
+    layoutVariant: LayoutVariant.tab,
   },
 };
 

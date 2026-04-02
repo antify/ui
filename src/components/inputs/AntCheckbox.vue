@@ -119,6 +119,20 @@ const itemSize = computed(() => {
     return IconSize.sm;
   }
 });
+const gapSize = computed(() => {
+  switch (props.size) {
+    case Size.lg:
+      return 'gap-2.5';
+    case Size.md:
+      return 'gap-2';
+    case Size.sm:
+      return 'gap-1.5';
+    case Size.xs:
+      return 'gap-1.5';
+    default:
+      return 'gap-1';
+  }
+});
 const iconColor = computed(() => {
   switch (props.state) {
     case InputState.base:
@@ -188,7 +202,10 @@ onMounted(() => {
     :expanded="false"
     :messages="messages"
   >
-    <div class="flex gap-1.5">
+    <div
+      class="flex items-center"
+      :class="gapSize"
+    >
       <div
         class="relative flex"
         :class="{
