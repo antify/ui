@@ -6,13 +6,13 @@ import {
   faChevronDown, faChevronUp,
 } from '@fortawesome/free-solid-svg-icons';
 import {
-  Size, InputState, Grouped, Locale,
+  Size, InputState, Grouped,
 } from '../../enums';
 import {
   IconSize,
 } from '../__types';
 import {
-  COUNTRIES,
+  COUNTRIES, CountryValueKey, Locale,
 } from '../../constants/countries';
 import type {
   Country,
@@ -46,7 +46,7 @@ const props = withDefaults(defineProps<{
    * Useful when you need to bind the select to dialCode, numericCode or ISO value.
    * @default 'value'
    */
-  optionValueKey?: keyof Country;
+  optionValueKey?: CountryValueKey;
   showDialCodeInMenu?: boolean;
   showIsoCode?: boolean;
   locale?: Locale;
@@ -60,7 +60,7 @@ const props = withDefaults(defineProps<{
   showFlags: true,
   isGrouped: false,
   emptyStateMessage: 'No countries found',
-  optionValueKey: 'value',
+  optionValueKey: CountryValueKey.value,
   showDialCodeInMenu: false,
   showIsoCode: false,
   countries: () => COUNTRIES,
@@ -89,13 +89,19 @@ const localizedCountries = computed(() => {
 });
 const filteredOptions = computed(() => {
   const options = localizedCountries.value;
-  const query = searchQuery.value?.toLowerCase();
+  const query = searchQuery.value?.trim().toLowerCase();
 
   const filtered = !props.searchable || !query
     ? options
-    : options.filter(country => country.label.toLowerCase().includes(query) ||
-      country.value.toLowerCase().includes(query) ||
-      country.dialCode.includes(query));
+    : options.filter(country => {
+      const label = country.label.toLowerCase();
+      const isoCode = country.value.toLowerCase();
+      const dialCode = country.dialCode.toLowerCase();
+
+      return label.includes(query) ||
+        isoCode.includes(query) ||
+        dialCode.includes(query);
+    });
 
   return filtered.map(country => ({
     ...country,

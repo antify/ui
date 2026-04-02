@@ -9,7 +9,7 @@ import {
   ref,
 } from 'vue';
 import {
-  COUNTRIES,
+  COUNTRIES, CountryValueKey, Locale,
 } from '../../../constants/countries';
 
 const meta: Meta<typeof AntPhoneNumberInput> = {
@@ -38,27 +38,24 @@ const meta: Meta<typeof AntPhoneNumberInput> = {
     onValidate: {
       action: 'validate',
     },
-    clearCountryOnClear: {
-      control: 'boolean',
-      description: 'Determines if the country selection should be cleared when the phone number input is cleared.',
-      table: {
-        defaultValue: {
-          summary: 'true',
-        },
-      },
-    },
     nullable: {
       control: 'boolean',
       description: 'Shows the clear icon in the input field.',
     },
     locale: {
-      control: 'inline-radio',
-      options: [
-        'en',
-        'de',
-      ],
+      control: {
+        type: 'select',
+      },
+      options: Object.values(Locale),
       description: 'Language for country names translation',
     },
+    countryValueKey: {
+      control: {
+        type: 'select',
+      },
+      options: Object.values(CountryValueKey),
+    },
+
   },
 };
 
@@ -190,7 +187,6 @@ export const Default: Story = {
             v-bind="args"
             v-model="phone4"
             v-model:country-value="country4"
-            :clear-country-on-clear="false"
             :nullable="true"
             country-value-key="value"
           />
@@ -249,7 +245,7 @@ export const Default: Story = {
     size: Size.md,
     state: InputState.base,
     nullable: true,
-    locale: 'de',
+    locale: Locale.de,
   },
 };
 

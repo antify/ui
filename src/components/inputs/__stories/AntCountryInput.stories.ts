@@ -10,7 +10,7 @@ import {
   InputState, Size, Grouped,
 } from '../../../enums';
 import {
-  COUNTRIES,
+  COUNTRIES, CountryValueKey, Locale,
 } from '../../../constants/countries';
 
 const meta: Meta<typeof AntCountryInput> = {
@@ -44,6 +44,12 @@ const meta: Meta<typeof AntCountryInput> = {
         'de',
       ],
       description: 'Language for country labels',
+    },
+    optionValueKey: {
+      control: {
+        type: 'select',
+      },
+      options: Object.values(CountryValueKey),
     },
   },
 };
@@ -93,7 +99,7 @@ export const ValueKeyNumericCode: Story = {
     ...Docs.args,
     label: 'Value as Numeric Code',
     description: 'Using the numericCode field from the data as the model value.',
-    optionValueKey: 'numericCode',
+    optionValueKey: CountryValueKey.numericCode,
     countries: COUNTRIES,
   },
 };
@@ -114,7 +120,7 @@ export const DefaultByNumericCode: Story = {
     ...Docs.args,
     label: 'Default by Numeric Code',
     description: 'Using numericCode: 33 (France) as the default value.',
-    optionValueKey: 'numericCode',
+    optionValueKey: CountryValueKey.numericCode,
     modelValue: 33,
   },
 };
@@ -151,7 +157,7 @@ export const Localization: Story = {
   args: {
     ...Docs.args,
     label: 'Localized Selector',
-    locale: 'de',
+    locale: Locale.de,
     searchPlaceholder: 'Land suchen...',
     description: 'The labels and search logic adapt based on the provided locale.',
   },

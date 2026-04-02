@@ -9,13 +9,13 @@ import AntField from '../forms/AntField.vue';
 import AntCountryInput from './AntCountryInput.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
 import {
-  Size, InputState, Grouped, Locale,
+  Size, InputState, Grouped,
 } from '../../enums';
 import {
   BaseInputType,
 } from './Elements/__types';
 import {
-  COUNTRIES,
+  COUNTRIES, CountryValueKey, Locale,
 } from '../../constants/countries';
 import type {
   Country,
@@ -52,13 +52,12 @@ const props = withDefaults(defineProps<{
   searchPlaceholder?: string;
   searchable?: boolean;
   countryMaxHeight?: string;
-  countryValueKey?: keyof Country;
+  countryValueKey?: CountryValueKey;
   countryErrorMessage?: string;
 
   //AntBaseInput Props
   placeholder?: string;
   nullable?: boolean;
-  clearCountryOnClear?: boolean;
   locale?: Locale;
 }>(), {
   size: Size.md,
@@ -67,7 +66,7 @@ const props = withDefaults(defineProps<{
   searchPlaceholder: 'Search country...',
   countryPlaceholder: 'Select country',
   placeholder: 'Enter phone number',
-  countryValueKey: 'dialCode',
+  countryValueKey: CountryValueKey.dialCode,
   countryErrorMessage: 'Please select a country code or start with "+"',
   messages: () => [],
   nullable: true,
