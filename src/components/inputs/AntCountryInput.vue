@@ -79,38 +79,34 @@ const focusedItem = ref<string | number | null>(null);
 const selectMenuRef = ref<InstanceType<typeof AntSelectMenu> | null>(null);
 const searchInputRef = ref<HTMLInputElement | null>(null);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
-const localizedCountries = computed(() => {
-  const currentLocale = (props.locale || Locale.en);
-
-  return props.countries.map(country => ({
-    ...country,
-    label: country.label[currentLocale] || country.label['en'] || Object.values(country.label)[0],
-  }));
-});
 const filteredOptions = computed(() => {
-  const options = localizedCountries.value;
   const query = searchQuery.value?.trim().toLowerCase();
+  const currentLocale = props.locale || Locale.en;
 
   const filtered = !props.searchable || !query
-    ? options
-    : options.filter(country => {
-      const label = country.label.toLowerCase();
-      const isoCode = country.value.toLowerCase();
-      const dialCode = country.dialCode.toLowerCase();
+    ? props.countries
+    : props.countries.filter(country => {
+      const labelText = country.label[currentLocale].toLowerCase() || '';
+      const isoCode = country.isoCode.toLowerCase();
+      const dialCode = country.dialCode;
 
-      return label.includes(query) ||
+      return labelText.includes(query) ||
         isoCode.includes(query) ||
         dialCode.includes(query);
     });
 
+  filtered.sort((a, b) => {
+    const labelA = a.label[currentLocale] || a.label[Locale.en];
+    const labelB = b.label[currentLocale] || b.label[Locale.en];
+
+    return labelA.localeCompare(labelB, currentLocale);
+  });
+
   return filtered.map(country => ({
     ...country,
-    isoCode: country.value,
+    label: country.label[currentLocale] || country.label[Locale.en],
     value: country[props.optionValueKey] as string | number,
   }));
-});
-const selectedCountry = computed(() => {
-  return localizedCountries.value.find(country => String(country[props.optionValueKey]) === String(props.modelValue)) || null;
 });
 const rootComponent = computed(() => (props.isGrouped ? 'div' : AntField));
 const inputClasses = computed(() => {
@@ -166,6 +162,25 @@ const arrowClasses = computed(() => {
 
   return variants[props.state];
 });
+const selectedCountry = computed(() => {
+  if (props.modelValue === null || props.modelValue === undefined) {
+    return null;
+  }
+
+  const country = props.countries.find((c) => String(c[props.optionValueKey]) === String(props.modelValue));
+
+  if (!country) {
+    return null;
+  }
+
+  const currentLocale = props.locale || Locale.en;
+
+  return {
+    ...country,
+    label: country.label[currentLocale],
+    value: country[props.optionValueKey] as string | number,
+  };
+});
 const skeletonGrouped = computed(() => props.grouped || Grouped.none);
 const iconSize = computed(() => (props.size === Size.lg || props.size === Size.md || props.size === Size.sm ? IconSize.sm : IconSize.xs));
 const fieldProps = computed(() => {
@@ -183,7 +198,7 @@ const fieldProps = computed(() => {
 });
 
 function onSelect(val: string | number | null) {
-  const country = localizedCountries.value.find(country => String(country[props.optionValueKey]) === String(val));
+  const country = filteredOptions.value.find(c => String(c[props.optionValueKey]) === String(val));
 
   emit('update:modelValue', val);
   emit('select', country || null);
@@ -214,6 +229,12 @@ async function toggleMenu(e: MouseEvent) {
     inputRef.value?.focus();
   }
 }
+
+function closeMenu() {
+  isOpen.value = false;
+  searchQuery.value = null;
+}
+
 </script>
 
 <template>
@@ -234,12 +255,13 @@ async function toggleMenu(e: MouseEvent) {
         :max-height="maxHeight"
         :size="size"
         @select-element="onSelect"
-        @click-outside="searchQuery = null"
+        @click-outside="closeMenu"
       >
         <template #contentBefore>
           <div
             v-if="searchable"
             class="p-2 border-b border-base-300 bg-white"
+            @keydown.esc.stop="closeMenu"
           >
             <AntSearch
               v-model:input-ref="searchInputRef"
