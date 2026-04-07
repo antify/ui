@@ -38,6 +38,9 @@ const meta: Meta<typeof AntPhoneNumberInput> = {
     onValidate: {
       action: 'validate',
     },
+    onBlur: {
+      action: 'blur',
+    },
     nullable: {
       control: 'boolean',
       description: 'Shows the clear icon in the input field.',

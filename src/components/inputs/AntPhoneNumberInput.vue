@@ -24,16 +24,15 @@ import {
   ref, nextTick,
 } from 'vue';
 
-const phoneInputNativeRef = ref<HTMLInputElement | null>(null);
-
 defineOptions({
   inheritAttrs: false,
 });
 
 const props = withDefaults(defineProps<{
   modelValue: string | null;
-  countryValue: string | number | null;
+  countryValue?: string | number | null;
   countries?: Country[];
+  inputRef?: null | HTMLInputElement;
 
   //Common Props
   size?: Size;
@@ -53,7 +52,6 @@ const props = withDefaults(defineProps<{
   searchable?: boolean;
   countryMaxHeight?: string;
   countryValueKey?: CountryValueKey;
-  countryErrorMessage?: string;
   countrySortable?: boolean;
 
   //AntBaseInput Props
@@ -61,6 +59,7 @@ const props = withDefaults(defineProps<{
   nullable?: boolean;
   locale?: Locale;
 }>(), {
+  inputRef: null,
   size: Size.md,
   state: InputState.base,
   searchable: true,
@@ -68,7 +67,6 @@ const props = withDefaults(defineProps<{
   countryPlaceholder: 'Select country',
   placeholder: 'Enter phone number',
   countryValueKey: CountryValueKey.dialCode,
-  countryErrorMessage: 'Please select a country code or start with "+"',
   countrySortable: true,
   messages: () => [],
   nullable: true,
@@ -79,13 +77,26 @@ const props = withDefaults(defineProps<{
 const emit = defineEmits([
   'update:modelValue',
   'update:countryValue',
+  'update:inputRef',
   'select-country',
   'validate',
   'blur',
 ]);
 
-const _countryValue = useVModel(props, 'countryValue', emit);
 const _phoneNumber = useVModel(props, 'modelValue', emit);
+const _inputRef = useVModel(props, 'inputRef', emit);
+const internalCountryValue = ref<string | number | null>(null);
+
+const _countryValue = computed({
+  get: () => {
+    return props.countryValue !== undefined ? props.countryValue : internalCountryValue.value;
+  },
+  set: (val) => {
+    emit('update:countryValue', val);
+
+    internalCountryValue.value = val;
+  },
+});
 
 const updateFullValue = (countryId: string | number | null, rawPhone: string | null) => {
   if (!rawPhone) {
@@ -104,26 +115,8 @@ const updateFullValue = (countryId: string | number | null, rawPhone: string | n
   }
 };
 
-const showCountryError = computed(() => {
-  const val = props.modelValue || '';
-
-  return props.countryValue == null && val.length > 0 && !val.startsWith('+');
-});
-
-const allMessages = computed(() => {
-  const msgs = [
-    ...(props.messages || []),
-  ];
-
-  if (showCountryError.value) {
-    msgs.push(props.countryErrorMessage);
-  }
-
-  return msgs;
-});
-
 const currentCountry = computed(() => {
-  return props.countries.find(c => String(c[props.countryValueKey]) === String(props.countryValue));
+  return props.countries.find(c => String(c[props.countryValueKey]) === String(_countryValue.value));
 });
 
 const sortedCountriesByDialCode = computed(() => {
@@ -213,7 +206,7 @@ function onCountrySelect(country: Country) {
   emit('select-country', country);
 
   nextTick(() => {
-    phoneInputNativeRef.value?.focus();
+    _inputRef.value?.focus();
   });
 }
 
@@ -232,13 +225,13 @@ function onKeyPress(event: KeyboardEvent) {
     return;
   }
 
-  if (props.countryValue && charStr === '+') {
+  if (_countryValue.value && charStr === '+') {
     event.preventDefault();
 
     return;
   }
 
-  if (!props.countryValue && charStr === '+' && currentRawValue.length > 0) {
+  if (!_countryValue.value && charStr === '+' && currentRawValue.length > 0) {
     event.preventDefault();
   }
 
@@ -301,8 +294,8 @@ watch(() => props.modelValue, (newVal) => {
 <template>
   <AntField
     :label="label"
-    :messages="allMessages"
-    :state="showCountryError ? InputState.danger : state"
+    :messages="messages"
+    :state="state"
     :size="size"
     :skeleton="skeleton"
     :description="description"
@@ -317,7 +310,7 @@ watch(() => props.modelValue, (newVal) => {
         :countries="countries"
         :size="size"
         :locale="locale"
-        :state="showCountryError ? InputState.danger : state"
+        :state="state"
         :disabled="disabled"
         :readonly="readonly"
         :skeleton="skeleton"
@@ -336,10 +329,10 @@ watch(() => props.modelValue, (newVal) => {
 
       <AntBaseInput
         v-model="formattedNumber"
-        v-model:input-ref="phoneInputNativeRef"
+        v-model:input-ref="_inputRef"
         :nullable="nullable"
         :type="BaseInputType.text"
-        :state="showCountryError ? InputState.danger : state"
+        :state="state"
         :size="size"
         :skeleton="skeleton"
         v-bind="$attrs"
