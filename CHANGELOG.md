@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.2.0 (2026-04-07)
+
+
+### Features
+
+* reorganize exports in index.ts to streamline module structure ([070001c](https://github.com/antify/ui/commit/070001c186ca4219ee090850c03c4ecf236f8190))
+
 ### 4.1.38 (2026-04-07)
 
 ### 4.1.37 (2026-04-01)
