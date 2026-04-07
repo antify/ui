@@ -26,6 +26,8 @@ import AntPasswordInput from './inputs/AntPasswordInput.vue';
 import AntRadio from './inputs/AntRadio.vue';
 import AntRadioGroup from './inputs/AntRadioGroup.vue';
 import AntRangeSlider from './inputs/AntRangeSlider.vue';
+import AntCountryInput from './inputs/AntCountryInput.vue';
+import AntPhoneNumberInput from './inputs/AntPhoneNumberInput.vue';
 
 // import AntRichTextEditor from './inputs/AntRichTextEditor.vue';
 import AntSearch from './inputs/AntSearch.vue';
@@ -97,6 +99,8 @@ export {
   AntRadio,
   AntRadioGroup,
   AntRangeSlider,
+  AntCountryInput,
+  AntPhoneNumberInput,
   // AntRichTextEditor,
   AntSearch,
   AntSelect,
