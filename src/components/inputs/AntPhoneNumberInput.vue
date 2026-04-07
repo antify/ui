@@ -284,6 +284,18 @@ watch(_countryValue, (newCountryId, oldCountryId) => {
 
   updateFullValue(newCountryId, body);
 });
+
+watch(() => props.modelValue, (newVal) => {
+  if (newVal && newVal.startsWith('+') && !_countryValue.value) {
+    const country = findCountryByPhone(newVal);
+
+    if (country) {
+      _countryValue.value = country[props.countryValueKey] as string | number;
+    }
+  }
+}, {
+  immediate: true,
+});
 </script>
 
 <template>
