@@ -84,6 +84,7 @@ const emit = defineEmits([
 ]);
 
 const _phoneNumber = useVModel(props, 'modelValue', emit);
+const internalInputRef = ref<HTMLInputElement | null>(null);
 const _inputRef = useVModel(props, 'inputRef', emit);
 const internalCountryValue = ref<string | number | null>(null);
 
@@ -206,7 +207,7 @@ function onCountrySelect(country: Country) {
   emit('select-country', country);
 
   nextTick(() => {
-    _inputRef.value?.focus();
+    internalInputRef.value?.focus();
   });
 }
 
@@ -262,6 +263,11 @@ function onPaste(event: ClipboardEvent) {
   }
 }
 
+function onBlur(e: FocusEvent) {
+  emit('blur', e);
+  emit('validate', _phoneNumber.value);
+}
+
 watch(_countryValue, (newCountryId, oldCountryId) => {
   if (newCountryId === oldCountryId) {
     return;
@@ -288,6 +294,10 @@ watch(() => props.modelValue, (newVal) => {
   }
 }, {
   immediate: true,
+});
+
+watch(internalInputRef, (el) => {
+  _inputRef.value = el;
 });
 </script>
 
@@ -329,7 +339,7 @@ watch(() => props.modelValue, (newVal) => {
 
       <AntBaseInput
         v-model="formattedNumber"
-        v-model:input-ref="_inputRef"
+        v-model:input-ref="internalInputRef"
         :nullable="nullable"
         :type="BaseInputType.text"
         :state="state"
@@ -342,8 +352,7 @@ watch(() => props.modelValue, (newVal) => {
         :grouped="Grouped.right"
         wrapper-class="flex-grow"
         class="-ml-px"
-        @validate="val => $emit('validate', val)"
-        @blur="e => $emit('blur', e)"
+        @blur="onBlur"
         @keydown="onKeyPress"
         @paste="onPaste"
       />
