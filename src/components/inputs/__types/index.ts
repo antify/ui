@@ -1,4 +1,5 @@
 export * from './AntCheckbox.types';
+export * from './AntCountryInput.types';
 export * from './AntDateInput.types';
 export * from './AntRadio.types';
 export * from './AntSelect.types';

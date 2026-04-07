@@ -30,6 +30,7 @@ const emit = defineEmits([
   'update:modelValue',
   'update:focused',
   'selectElement',
+  'clickOutside',
 ]);
 const props = withDefaults(defineProps<{
   modelValue: string | string[] | number | number[] | null;
@@ -76,6 +77,7 @@ onClickOutside(floating, () => {
   }
 
   emit('update:open', false);
+  emit('clickOutside');
 });
 
 const _modelValue = useVModel(props, 'modelValue', emit);
