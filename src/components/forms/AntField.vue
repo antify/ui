@@ -73,7 +73,7 @@ const descriptionClasses = computed(() => ({
 
 <template>
   <div
-    class="flex flex-col items-start"
+    class="flex flex-col items-start AntField"
     :class="fieldClasses"
     :data-e2e-state="_state"
     :data-e2e-skeleton="skeleton"

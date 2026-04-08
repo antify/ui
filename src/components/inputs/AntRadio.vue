@@ -170,7 +170,7 @@ onMounted(() => {
     data-e2e="radio"
   >
     <div
-      class="flex items-center"
+      class="flex"
       :class="gapSize"
     >
       <div
@@ -183,6 +183,7 @@ onMounted(() => {
         <AntSkeleton
           :visible="skeleton"
           rounded-full
+          @click.prevent
         >
           <div class="absolute flex items-center justify-center w-full h-full">
             <Transition name="fade-radio">

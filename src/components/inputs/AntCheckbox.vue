@@ -65,6 +65,7 @@ const props =
   });
 const _modelValue = useVModel(props, 'modelValue', emit);
 const delayedValue = ref(_modelValue.value);
+const inputRef = ref<HTMLInputElement | null>(null);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const inputClasses = computed(() => {
   const focusColorVariant: Record<InputState, string> = {
@@ -106,7 +107,7 @@ const inputClasses = computed(() => {
   };
 });
 const contentClasses = computed(() => ({
-  'text-for-white-bg-font': true,
+  'text-for-white-bg-font w-fit': true,
   'cursor-pointer': !hasInputState.value,
   'cursor-not-allowed opacity-50': props.disabled,
   'text-sm': props.size === Size.lg || props.size === Size.md || props.size === Size.sm,
@@ -181,6 +182,12 @@ function onBlur(e: FocusEvent) {
   emit('blur', e);
 }
 
+const onClickContent = () => {
+  if (inputRef.value && !props.disabled && !props.readonly) {
+    inputRef.value.focus();
+  }
+};
+
 onMounted(() => {
   handleEnumValidation(props.size, Size, 'size');
   handleEnumValidation(props.state, InputState, 'state');
@@ -201,9 +208,10 @@ onMounted(() => {
     :size="size"
     :expanded="false"
     :messages="messages"
+    @mousedown.prevent="onClickContent"
   >
     <div
-      class="flex items-center"
+      class="flex"
       :class="gapSize"
     >
       <div
@@ -216,8 +224,10 @@ onMounted(() => {
         <AntSkeleton
           :visible="skeleton"
           rounded
+          @click.prevent
         >
           <input
+            ref="inputRef"
             v-model="_modelValue"
             :class="inputClasses"
             type="checkbox"
@@ -240,7 +250,10 @@ onMounted(() => {
         </AntSkeleton>
       </div>
 
-      <span :class="contentClasses">
+      <span
+        :class="contentClasses"
+        @mousedown.prevent="onClickContent"
+      >
         <AntSkeleton
           :visible="skeleton"
           rounded

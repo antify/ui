@@ -87,7 +87,7 @@ const tabContainerClasses = computed(() => ({
   'cursor-not-allowed': props.disabled,
 }));
 const tabItemClasses = computed(() => ({
-  'flex justify-center w-full transition-colors': true,
+  'flex justify-center grow transition-colors': true,
   'text-sm': props.size === Size.lg || props.size === Size.md || props.size === Size.sm,
   'text-xs': props.size === Size.xs || props.size === Size.xs2,
   'p-2.5': props.size === Size.lg,
@@ -161,11 +161,16 @@ const onClickBlockItem = (radio: AntRadioTypes, index: number) => {
   }
 
   _modelValue.value = radio.value;
+
   setTimeout(() => {
     const radioComponent = radioRef.value[index];
+
     if (radioComponent && radioComponent.$el) {
       const input = radioComponent.$el.querySelector('input[type="radio"]');
-      if (input) input.focus();
+
+      if (input) {
+        input.focus();
+      }
     }
   });
 };
@@ -200,7 +205,6 @@ onMounted(() => {
     :skeleton="skeleton"
     :messages="messages"
     :size="fieldSize"
-    class="cursor-pointer"
     label-for="noop"
     data-e2e="radio-group"
   >
@@ -276,16 +280,6 @@ onMounted(() => {
         >
           {{ radio.label }}
         </AntSkeleton>
-        <!--        <AntRadio-->
-        <!--          v-model="_modelValue"-->
-        <!--          :value="radio"-->
-        <!--          :skeleton="skeleton"-->
-        <!--          :disabled="disabled || radio.disabled"-->
-        <!--          :readonly="readonly || radio.readonly"-->
-        <!--          :state="radio.state || state"-->
-        <!--          :size="size"-->
-        <!--          @blur="onBlurRadio"-->
-        <!--        />-->
       </div>
     </div>
   </AntField>
