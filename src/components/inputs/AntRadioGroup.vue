@@ -164,7 +164,6 @@ const onClickBlockItem = (radio: AntRadioTypes, index: number) => {
 
   setTimeout(() => {
     const radioComponent = radioRef.value[index];
-    console.log(radioComponent.$el);
 
     if (radioComponent && radioComponent.$el) {
       const input = radioComponent.$el.querySelector('input[type="radio"]');
