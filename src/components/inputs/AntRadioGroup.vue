@@ -52,7 +52,7 @@ const props = withDefaults(defineProps<{
   messages: () => [],
 });
 const _modelValue = useVModel(props, 'modelValue', emit);
-const radioRef = ref([]);
+const radioRef = ref<Array<InstanceType<typeof AntRadio>>>([]);
 const containerClasses = computed(() => ({
   'flex justify-start': true,
   'flex-row': props.direction === Direction.row,
@@ -164,6 +164,7 @@ const onClickBlockItem = (radio: AntRadioTypes, index: number) => {
 
   setTimeout(() => {
     const radioComponent = radioRef.value[index];
+    console.log(radioComponent.$el);
 
     if (radioComponent && radioComponent.$el) {
       const input = radioComponent.$el.querySelector('input[type="radio"]');
@@ -229,6 +230,7 @@ onMounted(() => {
 
     <div
       v-if="layoutVariant === LayoutVariant.block"
+      ref="containerRef"
       :class="blockContainerClasses"
     >
       <div

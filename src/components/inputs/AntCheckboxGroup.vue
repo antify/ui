@@ -124,7 +124,7 @@ const getTabItemColorClasses = (checkbox: AntCheckboxType, index: number) => {
   };
 };
 const containerRef = ref<null | HTMLElement>(null);
-const checkboxRef = ref([]);
+const checkboxRef = ref<Array<InstanceType<typeof AntCheckbox>>>([]);
 
 watch(() => props.modelValue, (val) => {
   if ([
@@ -246,6 +246,7 @@ onMounted(() => {
 
     <div
       v-if="layoutVariant === LayoutVariant.block"
+      ref="containerRef"
       :class="blockContainerClasses"
     >
       <div
