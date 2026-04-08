@@ -107,13 +107,6 @@ const gapSize = computed(() => {
       return 'gap-1';
   }
 });
-const valueSize = computed(() => {
-  if (props.size === Size.xs || props.size === Size.xs2) {
-    return 'h-4';
-  } else {
-    return 'h-5';
-  }
-});
 const innerRadioClass = computed(() => (
   {
     'bg-primary-500': props.state === InputState.base,
@@ -177,50 +170,51 @@ onMounted(() => {
     data-e2e="radio"
   >
     <div
-      class="flex items-center"
+      class="flex"
       :class="gapSize"
     >
-      <div class="relative full-height flex items-center">
-        <div class="absolute flex items-center justify-center w-full h-full">
-          <Transition name="fade-radio">
-            <div
-              v-if="isActive"
-              class="rounded-full transition-all"
-              :class="innerRadioClass"
-            />
-          </Transition>
-        </div>
-
-        <input
-          v-model="_modelValue"
-          :value="value.value"
-          :class="inputClasses"
-          type="radio"
-          :aria-checked="isActive"
-          :disabled="disabled || readonly"
-          @blur="onBlur"
-        >
-
+      <div
+        class="relative flex"
+        :class="{
+          'h-5 w-5': size === Size.lg || size === Size.md || size === Size.sm,
+          'h-4 w-4': size === Size.xs || size === Size.xs2,
+        }"
+      >
         <AntSkeleton
           :visible="skeleton"
-          absolute
           rounded-full
-        />
+          @click.prevent
+        >
+          <div class="absolute flex items-center justify-center w-full h-full">
+            <Transition name="fade-radio">
+              <div
+                v-if="isActive"
+                class="rounded-full transition-all"
+                :class="innerRadioClass"
+              />
+            </Transition>
+          </div>
+
+          <input
+            v-model="_modelValue"
+            :value="value.value"
+            :class="inputClasses"
+            type="radio"
+            :aria-checked="isActive"
+            :disabled="disabled || readonly"
+            @blur="onBlur"
+          >
+        </AntSkeleton>
       </div>
 
-      <div
-        class="flex items-center"
-        :class="valueSize"
+      <AntSkeleton
+        :visible="skeleton"
+        rounded
       >
         <span :class="valueClass">
-          <AntSkeleton
-            :visible="skeleton"
-            rounded
-          >
-            {{ value.label }}
-          </AntSkeleton>
+          {{ value.label }}
         </span>
-      </div>
+      </AntSkeleton>
     </div>
   </AntField>
 </template>

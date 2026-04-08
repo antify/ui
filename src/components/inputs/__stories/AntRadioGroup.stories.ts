@@ -3,7 +3,7 @@ import {
 } from 'vue';
 import AntRadioGroup from '../AntRadioGroup.vue';
 import {
-  InputState, Size,
+  InputState, Size, LayoutVariant,
 } from '../../../enums';
 import {
   type Meta, type StoryObj,
@@ -72,6 +72,12 @@ const meta: Meta<typeof AntRadioGroup> = {
       },
       options: Object.values(Size),
     },
+    layoutVariant: {
+      control: {
+        type: 'select',
+      },
+      options: Object.values(LayoutVariant),
+    },
   },
 };
 
@@ -116,12 +122,28 @@ export const Docs: Story = {
       };
     },
     template: `
-      <AntRadioGroup v-bind="args" v-model="value"/>
-      <span class="text-xs text-gray-500">Reactive value: {{ value }}</span>
+        <AntRadioGroup v-bind="args" v-model="value"/>
+        <span class="text-xs text-gray-500">Reactive value: {{ value }}</span>
     `,
   }),
   args: {
     radioButtons: simpleButtons,
+  },
+};
+
+export const BlockVariant: Story = {
+  render: Docs.render,
+  args: {
+    radioButtons: simpleButtons,
+    layoutVariant: LayoutVariant.block,
+  },
+};
+
+export const TabVariant: Story = {
+  render: Docs.render,
+  args: {
+    radioButtons: simpleButtons,
+    layoutVariant: LayoutVariant.tab,
   },
 };
 
@@ -145,6 +167,7 @@ export const summary: Story = {
         value,
         InputState,
         Size,
+        LayoutVariant,
       };
     },
     template: `
@@ -192,6 +215,100 @@ export const summary: Story = {
           />
         </AntFormGroup>
 
+        <AntFormGroup direction="row">
+          <AntRadioGroup
+            v-bind="args"
+            v-model="value"
+            :state="InputState.base"
+            :layout-variant="LayoutVariant.block"
+            label="Label"
+            description="Lorem ipsum dolor sit amet"
+          />
+          <AntRadioGroup
+            v-bind="args"
+            v-model="value"
+            :state="InputState.info"
+            :layout-variant="LayoutVariant.block"
+            label="Label"
+            description="Lorem ipsum dolor sit amet"
+            :messages="['Message']"
+          />
+          <AntRadioGroup
+            v-bind="args"
+            v-model="value"
+            :state="InputState.success"
+            :layout-variant="LayoutVariant.block"
+            label="Label"
+            description="Lorem ipsum dolor sit amet"
+            :messages="['Message']"
+          />
+          <AntRadioGroup
+            v-bind="args"
+            v-model="value"
+            :state="InputState.warning"
+            :layout-variant="LayoutVariant.block"
+            label="Label"
+            description="Lorem ipsum dolor sit amet"
+            :messages="['Message']"
+          />
+          <AntRadioGroup
+            v-bind="args"
+            v-model="value"
+            :state="InputState.danger"
+            :layout-variant="LayoutVariant.block"
+            label="Label"
+            description="Lorem ipsum dolor sit amet"
+            :messages="['Message']"
+          />
+        </AntFormGroup>
+
+        <AntFormGroup direction="row">
+          <AntRadioGroup
+            v-bind="args"
+            v-model="value"
+            :state="InputState.base"
+            :layout-variant="LayoutVariant.tab"
+            label="Label"
+            description="Lorem ipsum dolor sit amet"
+          />
+          <AntRadioGroup
+            v-bind="args"
+            v-model="value"
+            :state="InputState.info"
+            :layout-variant="LayoutVariant.tab"
+            label="Label"
+            description="Lorem ipsum dolor sit amet"
+            :messages="['Message']"
+          />
+          <AntRadioGroup
+            v-bind="args"
+            v-model="value"
+            :state="InputState.success"
+            :layout-variant="LayoutVariant.tab"
+            label="Label"
+            description="Lorem ipsum dolor sit amet"
+            :messages="['Message']"
+          />
+          <AntRadioGroup
+            v-bind="args"
+            v-model="value"
+            :state="InputState.warning"
+            :layout-variant="LayoutVariant.tab"
+            label="Label"
+            description="Lorem ipsum dolor sit amet"
+            :messages="['Message']"
+          />
+          <AntRadioGroup
+            v-bind="args"
+            v-model="value"
+            :state="InputState.danger"
+            :layout-variant="LayoutVariant.tab"
+            label="Label"
+            description="Lorem ipsum dolor sit amet"
+            :messages="['Message']"
+          />
+        </AntFormGroup>
+
         <AntFormGroupLabel>Size</AntFormGroupLabel>
         <AntFormGroup direction="row">
           <AntRadioGroup v-bind="args" v-model="value" :size="Size.lg" label="Label"
@@ -207,40 +324,136 @@ export const summary: Story = {
         </AntFormGroup>
 
         <AntFormGroup direction="row">
-          <AntFormGroup>
-            <AntFormGroupLabel>Disabled</AntFormGroupLabel>
-            <AntFormGroup direction="row">
+          <AntRadioGroup v-bind="args" v-model="value" :size="Size.lg" label="Label" :layout-variant="LayoutVariant.block"
+                         description="Lorem ipsum dolor sit amet"/>
+          <AntRadioGroup v-bind="args" v-model="value" :size="Size.md" label="Label" :layout-variant="LayoutVariant.block"
+                         description="Lorem ipsum dolor sit amet"/>
+          <AntRadioGroup v-bind="args" v-model="value" :size="Size.sm" label="Label" :layout-variant="LayoutVariant.block"
+                         description="Lorem ipsum dolor sit amet"/>
+          <AntRadioGroup v-bind="args" v-model="value" :size="Size.xs" label="Label" :layout-variant="LayoutVariant.block"
+                         description="Lorem ipsum dolor sit amet"/>
+          <AntRadioGroup v-bind="args" v-model="value" :size="Size.xs2" label="Label" :layout-variant="LayoutVariant.block"
+                         description="Lorem ipsum dolor sit amet"/>
+        </AntFormGroup>
+
+        <AntFormGroup direction="row">
+          <AntRadioGroup v-bind="args" v-model="value" :size="Size.lg" label="Label" :layout-variant="LayoutVariant.tab"
+                         description="Lorem ipsum dolor sit amet"/>
+          <AntRadioGroup v-bind="args" v-model="value" :size="Size.md" label="Label" :layout-variant="LayoutVariant.tab"
+                         description="Lorem ipsum dolor sit amet"/>
+          <AntRadioGroup v-bind="args" v-model="value" :size="Size.sm" label="Label" :layout-variant="LayoutVariant.tab"
+                         description="Lorem ipsum dolor sit amet"/>
+          <AntRadioGroup v-bind="args" v-model="value" :size="Size.xs" label="Label" :layout-variant="LayoutVariant.tab"
+                         description="Lorem ipsum dolor sit amet"/>
+          <AntRadioGroup v-bind="args" v-model="value" :size="Size.xs2" label="Label" :layout-variant="LayoutVariant.tab"
+                         description="Lorem ipsum dolor sit amet"/>
+        </AntFormGroup>
+
+        <AntFormGroup>
+          <AntFormGroupLabel>Disabled</AntFormGroupLabel>
+          <AntFormGroup direction="row">
+            <div>
               <AntRadioGroup v-bind="args" v-model="value" label="Label" description="Lorem ipsum dolor sit amet"
                              disabled/>
-            </AntFormGroup>
+            </div>
+            <div>
+              <AntRadioGroup v-bind="args" v-model="value" label="Label" description="Lorem ipsum dolor sit amet" :layout-variant="LayoutVariant.block"
+                             disabled/>
+            </div>
+            <div>
+              <AntRadioGroup v-bind="args" v-model="value" label="Label" description="Lorem ipsum dolor sit amet" :layout-variant="LayoutVariant.tab"
+                             disabled/>
+            </div>
           </AntFormGroup>
+        </AntFormGroup>
 
-          <AntFormGroup>
-            <AntFormGroupLabel>Readonly</AntFormGroupLabel>
-            <AntFormGroup direction="row">
+        <AntFormGroup>
+          <AntFormGroupLabel>Readonly</AntFormGroupLabel>
+          <AntFormGroup direction="row">
+            <div>
               <AntRadioGroup v-bind="args" v-model="value" label="Label" description="Lorem ipsum dolor sit amet"
                              :readonly="true"/>
-            </AntFormGroup>
+            </div>
+            <div>
+              <AntRadioGroup v-bind="args" v-model="value" label="Label" description="Lorem ipsum dolor sit amet" :layout-variant="LayoutVariant.block"
+                             :readonly="true"/>
+            </div>
+            <div>
+              <AntRadioGroup v-bind="args" v-model="value" label="Label" description="Lorem ipsum dolor sit amet" :layout-variant="LayoutVariant.tab"
+                             :readonly="true"/>
+            </div>
           </AntFormGroup>
+        </AntFormGroup>
 
-          <AntFormGroup>
-            <AntFormGroupLabel>Skeleton</AntFormGroupLabel>
-            <AntRadioGroup v-bind="args" v-model="value" label="Label" description="Lorem ipsum dolor sit amet"
-                           :skeleton="true"/>
+        <AntFormGroup>
+          <AntFormGroupLabel>Skeleton</AntFormGroupLabel>
+          <AntFormGroup direction="row">
+            <div>
+              <AntRadioGroup v-bind="args" v-model="value" label="Label" description="Lorem ipsum dolor sit amet"
+                             :skeleton="true"/>
+            </div>
+            <div>
+              <AntRadioGroup v-bind="args" v-model="value" label="Label" description="Lorem ipsum dolor sit amet" :layout-variant="LayoutVariant.block"
+                             :skeleton="true"/>
+            </div>
+            <div>
+              <AntRadioGroup v-bind="args" v-model="value" label="Label" description="Lorem ipsum dolor sit amet" :layout-variant="LayoutVariant.tab"
+                             :skeleton="true"/>
+            </div>
           </AntFormGroup>
         </AntFormGroup>
 
         <AntFormGroupLabel>Plain</AntFormGroupLabel>
-        <AntRadioGroup v-bind="args" v-model="value"/>
+        <AntFormGroup direction="row">
+          <div>
+            <AntRadioGroup v-bind="args" v-model="value"/>
+          </div>
+          <div>
+            <AntRadioGroup v-bind="args" v-model="value" :layout-variant="LayoutVariant.block"/>
+          </div>
+          <div>
+            <AntRadioGroup v-bind="args" v-model="value" :layout-variant="LayoutVariant.tab"/>
+          </div>
+        </AntFormGroup>
 
         <AntFormGroupLabel>With label</AntFormGroupLabel>
-        <AntRadioGroup v-bind="args" v-model="value" label="Label"/>
+        <AntFormGroup direction="row">
+          <div>
+            <AntRadioGroup v-bind="args" v-model="value" label="Label"/>
+          </div>
+          <div>
+            <AntRadioGroup v-bind="args" v-model="value" label="Label" :layout-variant="LayoutVariant.block"/>
+          </div>
+          <div>
+            <AntRadioGroup v-bind="args" v-model="value" label="Label" :layout-variant="LayoutVariant.tab"/>
+          </div>
+        </AntFormGroup>
 
         <AntFormGroupLabel>With description</AntFormGroupLabel>
-        <AntRadioGroup v-bind="args" v-model="value" description="Lorem ipsum dolor sit amet"/>
+        <AntFormGroup direction="row">
+          <div>
+            <AntRadioGroup v-bind="args" v-model="value" description="Lorem ipsum dolor sit amet"/>
+          </div>
+          <div>
+            <AntRadioGroup v-bind="args" v-model="value" description="Lorem ipsum dolor sit amet" :layout-variant="LayoutVariant.block"/>
+          </div>
+          <div>
+            <AntRadioGroup v-bind="args" v-model="value" description="Lorem ipsum dolor sit amet" :layout-variant="LayoutVariant.tab"/>
+          </div>
+        </AntFormGroup>
 
         <AntFormGroupLabel>With label + description</AntFormGroupLabel>
-        <AntRadioGroup v-bind="args" v-model="value" label="Label" description="Lorem ipsum dolor sit amet"/>
+          <AntFormGroup direction="row">
+            <div>
+              <AntRadioGroup v-bind="args" v-model="value" label="Label" description="Lorem ipsum dolor sit amet"/>
+            </div>
+            <div>
+              <AntRadioGroup v-bind="args" v-model="value" label="Label" description="Lorem ipsum dolor sit amet" :layout-variant="LayoutVariant.block"/>
+            </div>
+            <div>
+              <AntRadioGroup v-bind="args" v-model="value" label="Label" description="Lorem ipsum dolor sit amet" :layout-variant="LayoutVariant.tab"/>
+            </div>
+          </AntFormGroup>
       </AntFormGroup>
     `,
   }),
