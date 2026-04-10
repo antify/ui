@@ -60,6 +60,7 @@ const props = withDefaults(defineProps<{
   inputRef?: HTMLInputElement | null;
   selectAllOnFocus?: boolean;
   autocomplete?: 'on' | 'off' | string;
+  onlyInteger?: boolean;
 }>(), {
   state: InputState.base,
   disabled: false,
@@ -73,6 +74,7 @@ const props = withDefaults(defineProps<{
   inputRef: null,
   selectAllOnFocus: false,
   autocomplete: 'off',
+  onlyInteger: false,
 });
 const emit = defineEmits([
   'update:modelValue',
@@ -114,8 +116,14 @@ const _modelValue = computed({
       return;
     }
 
-    const num = Number(val);
+    let num = Number(val);
+
     if (!isNaN(num)) {
+      if (props.onlyInteger) {
+
+        num = Math.trunc(num);
+      }
+
       emit('update:modelValue', num);
     }
   },
@@ -146,10 +154,13 @@ function getPrecision() {
 }
 
 function subtract() {
-  const dp = getPrecision();
-
+  const dp = props.onlyInteger ? 0 : getPrecision();
   const current = props.modelValue !== null ? new Big(props.modelValue) : new Big(props.max || 0);
   let result = current.sub(props.steps);
+
+  if (props.onlyInteger) {
+    result = result.round(0, Big.roundDown);
+  }
 
   if (props.min !== undefined && result.lt(props.min)) {
     result = new Big(props.min);
@@ -159,10 +170,13 @@ function subtract() {
 }
 
 function add() {
-  const dp = getPrecision();
-
+  const dp = props.onlyInteger ? 0 : getPrecision();
   const current = props.modelValue !== null ? new Big(props.modelValue) : new Big(props.min || 0);
   let result = current.add(props.steps);
+
+  if (props.onlyInteger) {
+    result = result.round(0, Big.roundDown);
+  }
 
   if (props.max !== undefined && result.gt(props.max)) {
     result = new Big(props.max);
@@ -242,6 +256,14 @@ function onKeyDown(e: KeyboardEvent) {
     return;
   }
 
+  if (props.onlyInteger) {
+    if (e.key === '.' || e.key === ',') {
+      e.preventDefault();
+
+      return;
+    }
+  }
+
   const allowedKeys = [
     'Backspace',
     'Delete',
@@ -260,10 +282,13 @@ function onKeyDown(e: KeyboardEvent) {
     return;
   }
 
-  if (!/^[0-9.-]$/.test(e.key)) {
-    e.preventDefault();
+  const canBeNegative = props.min === undefined || props.min < 0;
+  const regex = props.onlyInteger
+    ? (canBeNegative ? /^[0-9-]$/ : /^[0-9]$/)
+    : (canBeNegative ? /^[0-9.-]$/ : /^[0-9.]$/);
 
-    return;
+  if (!regex.test(e.key)) {
+    e.preventDefault();
   }
 }
 
