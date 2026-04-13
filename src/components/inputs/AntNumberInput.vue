@@ -88,13 +88,6 @@ const id = useId();
 const _inputRef = useVModel(props, 'inputRef', emit);
 const isFocused = ref(false);
 
-const constraints = computed(() => ({
-  min: props.min,
-  max: props.max,
-  onlyInteger: props.onlyInteger,
-  steps: props.steps,
-}));
-
 const effectiveMin = computed(() => {
   if (props.min === undefined) return undefined;
 
@@ -119,7 +112,7 @@ const formatAndEmit = (val: number | null) => {
   if (props.onlyInteger) {
     processedValue = processedValue.round(0, Big.roundHalfUp);
   } else {
-    const dp = getPrecision();
+    const dp = getPrecision(val);
     processedValue = new Big(processedValue.toFixed(dp));
   }
 
@@ -162,18 +155,20 @@ const normalizeValue = () => {
   }
 };
 
-watch([
-  () => props.modelValue,
-  () => props.onlyInteger,
-], normalizeValue, {
-  immediate: true,
-});
-
-watch(constraints, () => {
-  normalizeValue();
-}, {
-  immediate: true,
-});
+watch(
+  [
+    () => props.modelValue,
+    () => props.onlyInteger,
+    () => props.min,
+    () => props.max,
+  ],
+  () => {
+    normalizeValue();
+  },
+  {
+    immediate: true,
+  },
+);
 
 const _modelValue = computed({
   get: () => {
@@ -235,8 +230,10 @@ function onInputFocus(e: FocusEvent) {
   emit('focus', e);
 }
 
-function getPrecision() {
-  const modelDecimalPlaces = getDecimalPlaces(props.modelValue || 0);
+function getPrecision(currentValue?: number | null) {
+  const valToAnalyze = currentValue !== undefined ? currentValue : props.modelValue;
+
+  const modelDecimalPlaces = getDecimalPlaces(valToAnalyze || 0);
   const stepDecimalPlaces = getDecimalPlaces(props.steps);
 
   return Math.max(modelDecimalPlaces, stepDecimalPlaces);
@@ -352,7 +349,8 @@ function onKeyDown(e: KeyboardEvent) {
     return;
   }
 
-  const canBeNegative = props.min === undefined || props.min < 0;
+  const currentMin = effectiveMin.value;
+  const canBeNegative = currentMin === undefined || currentMin < 0;
   const regex = props.onlyInteger
     ? (canBeNegative ? /^[0-9-]$/ : /^[0-9]$/)
     : (canBeNegative ? /^[0-9.-]$/ : /^[0-9.]$/);
