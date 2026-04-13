@@ -129,6 +129,14 @@ const _modelValue = computed({
   },
 });
 
+const effectiveSteps = computed(() => {
+  if (props.onlyInteger) {
+    return Math.max(1, Math.floor(props.steps));
+  }
+
+  return props.steps;
+});
+
 function onInputFocus(e: FocusEvent) {
   isFocused.value = true;
 
@@ -156,7 +164,7 @@ function getPrecision() {
 function subtract() {
   const dp = props.onlyInteger ? 0 : getPrecision();
   const current = props.modelValue !== null ? new Big(props.modelValue) : new Big(props.max || 0);
-  let result = current.sub(props.steps);
+  let result = current.sub(effectiveSteps.value);
 
   if (props.onlyInteger) {
     result = result.round(0, Big.roundDown);
@@ -172,7 +180,7 @@ function subtract() {
 function add() {
   const dp = props.onlyInteger ? 0 : getPrecision();
   const current = props.modelValue !== null ? new Big(props.modelValue) : new Big(props.min || 0);
-  let result = current.add(props.steps);
+  let result = current.add(effectiveSteps.value);
 
   if (props.onlyInteger) {
     result = result.round(0, Big.roundDown);
@@ -339,7 +347,7 @@ onMounted(() => {
         :state="state"
         :size="size"
         :skeleton="skeleton"
-        :step="steps"
+        :step="effectiveSteps"
         :min="min"
         :max="max"
         :disabled="disabled"
