@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-  computed, onMounted, ref, useId,
+  computed, onMounted, ref, useId, watch,
 } from 'vue';
 import AntButton from '../AntButton.vue';
 import AntField from '../forms/AntField.vue';
@@ -88,6 +88,18 @@ const id = useId();
 const _inputRef = useVModel(props, 'inputRef', emit);
 const isFocused = ref(false);
 
+const effectiveMin = computed(() => {
+  if (props.min === undefined) return undefined;
+
+  return props.onlyInteger ? Math.ceil(props.min) : props.min;
+});
+
+const effectiveMax = computed(() => {
+  if (props.max === undefined) return undefined;
+
+  return props.onlyInteger ? Math.floor(props.max) : props.max;
+});
+
 const formatAndEmit = (val: number | null) => {
   if (val === null || isNaN(val)) {
     emit('update:modelValue', null);
@@ -104,18 +116,12 @@ const formatAndEmit = (val: number | null) => {
     processedValue = new Big(processedValue.toFixed(dp));
   }
 
-  if (props.min !== undefined) {
-    const effectiveMin = props.onlyInteger ? Math.ceil(props.min) : props.min;
-    if (processedValue.lt(effectiveMin)) {
-      processedValue = new Big(effectiveMin);
-    }
+  if (effectiveMin.value !== undefined && processedValue.lt(effectiveMin.value)) {
+    processedValue = new Big(effectiveMin.value);
   }
 
-  if (props.max !== undefined) {
-    const effectiveMax = props.onlyInteger ? Math.floor(props.max) : props.max;
-    if (processedValue.gt(effectiveMax)) {
-      processedValue = new Big(effectiveMax);
-    }
+  if (effectiveMax.value !== undefined && processedValue.gt(effectiveMax.value)) {
+    processedValue = new Big(effectiveMax.value);
   }
 
   const result = Number(processedValue.toString());
@@ -124,9 +130,41 @@ const formatAndEmit = (val: number | null) => {
   return result;
 };
 
+const normalizeValue = () => {
+  if (props.modelValue === null || props.modelValue === undefined) return;
+
+  let val = new Big(props.modelValue);
+  let changed = false;
+
+  if (props.onlyInteger && !val.mod(1).eq(0)) {
+    val = val.round(0, Big.roundHalfUp);
+    changed = true;
+  }
+
+  if (effectiveMin.value !== undefined && val.lt(effectiveMin.value)) {
+    val = new Big(effectiveMin.value);
+    changed = true;
+  }
+  if (effectiveMax.value !== undefined && val.gt(effectiveMax.value)) {
+    val = new Big(effectiveMax.value);
+    changed = true;
+  }
+
+  if (changed) {
+    emit('update:modelValue', Number(val.toString()));
+  }
+};
+
+watch([
+  () => props.modelValue,
+  () => props.onlyInteger,
+], normalizeValue, {
+  immediate: true,
+});
+
 const _modelValue = computed({
   get: () => {
-    if (props.modelValue === null || props.modelValue === undefined || props.modelValue === '') {
+    if (props.modelValue === null || props.modelValue === undefined) {
       return null;
     }
 
@@ -137,7 +175,7 @@ const _modelValue = computed({
     const bigValue = new Big(props.modelValue);
 
     if (props.onlyInteger) {
-      return bigValue.round(0, Big.roundHalfUp).toString();
+      return bigValue.toFixed(0);
     }
 
     const dp = getPrecision();
@@ -222,7 +260,9 @@ const isPrevButtonDisabled = computed(() => {
     return false;
   }
 
-  return props.min !== undefined ? Number(props.modelValue) <= props.min : false;
+  return effectiveMin.value !== undefined
+    ? Number(props.modelValue) <= effectiveMin.value
+    : false;
 });
 
 const isNextButtonDisabled = computed(() => {
@@ -234,7 +274,9 @@ const isNextButtonDisabled = computed(() => {
     return false;
   }
 
-  return props.max !== undefined ? Number(props.modelValue) >= props.max : false;
+  return effectiveMax.value !== undefined
+    ? Number(props.modelValue) >= effectiveMax.value
+    : false;
 });
 
 function onButtonBlur(e: FocusEvent) {
@@ -246,7 +288,10 @@ function onButtonBlur(e: FocusEvent) {
     _inputRef.value.value = validatedValue.toString();
   }
 
-  emit('validate', validatedValue);
+  if (validatedValue !== null) {
+    emit('validate', validatedValue);
+  }
+
   emit('blur', e);
 }
 

@@ -304,7 +304,7 @@ export const IntegerValidation: Story = {
           <ul class="list-disc ml-5 text-sm space-y-1">
             <li>Set <b>steps</b> to <code>0.5</code> in Controls.</li>
             <li>Click <b>+</b> on both inputs.</li>
-            <li>The left one will show <b>10.5</b>, the right one (if fixed) should show <b>11</b> (or stay 10 if steps < 1).</li>
+            <li>The left one will show <b>10.5</b>, the right one (should show 11) should show <b>11</b> (or stay 10 if steps < 1).</li>
             <li>Try to type a dot <code>.</code> in the right input — it should be blocked.</li>
           </ul>
         </div>
