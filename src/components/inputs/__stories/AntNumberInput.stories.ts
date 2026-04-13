@@ -83,6 +83,18 @@ const meta: Meta<typeof AntNumberInput> = {
         },
       },
     },
+    onlyInteger: {
+      control: {
+        type: 'boolean',
+      },
+      description: 'Forces the input to handle only whole numbers. Rounds fractional steps and inputs.',
+      table: {
+        category: 'Validation',
+        defaultValue: {
+          summary: 'false',
+        },
+      },
+    },
   },
 };
 
@@ -238,6 +250,111 @@ export const WithIndicators: Story = {
     ...Docs.args,
     indicators: true,
   },
+};
+
+export const IntegerValidation: Story = {
+  render: (args) => ({
+    components: {
+      AntNumberInput,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
+    setup() {
+      const val1 = ref(10);
+      const val2 = ref(10);
+
+      return {
+        args,
+        val1,
+        val2,
+      };
+    },
+    template: `
+      <AntFormGroup>
+        <div class="grid grid-cols-2 gap-8">
+          <AntFormGroup>
+            <AntFormGroupLabel class="text-blue-600">Standard Mode (onlyInteger: false)</AntFormGroupLabel>
+            <AntNumberInput
+              v-bind="args"
+              v-model="val1"
+              :onlyInteger="false"
+              label="Allows decimals"
+              description="With step 0.5 this will result in 10.5"
+              indicators
+            />
+            <div class="mt-2 text-sm text-gray-500">Value: {{ val1 }}</div>
+          </AntFormGroup>
+
+          <AntFormGroup>
+            <AntFormGroupLabel class="text-orange-600">Integer Mode (onlyInteger: true)</AntFormGroupLabel>
+            <AntNumberInput
+              v-bind="args"
+              v-model="val2"
+              :onlyInteger="true"
+              label="Integers Only"
+              description="Prevents '.' or ',' and rounds step results"
+              indicators
+            />
+            <div class="mt-2 text-sm text-gray-500">Value: {{ val2 }}</div>
+          </AntFormGroup>
+        </div>
+
+        <div class="mt-8 p-4 bg-gray-50 rounded border border-dashed border-gray-300">
+          <h4 class="font-bold mb-2">How to test:</h4>
+          <ul class="list-disc ml-5 text-sm space-y-1">
+            <li>Set <b>steps</b> to <code>0.5</code> in Controls.</li>
+            <li>Click <b>+</b> on both inputs.</li>
+            <li>The left one will show <b>10.5</b> (standard float behavior).</li>
+            <li>The right one will show <b>11</b> (because 0.5 is rounded, and the minimum integer step is 1).</li>
+            <li>Try to type a dot <code>.</code> in the right input — it should be blocked.</li>
+          </ul>
+        </div>
+      </AntFormGroup>
+    `,
+  }),
+  args: {
+    steps: 0.5,
+  },
+};
+
+export const InitialValueValidation: Story = {
+  render: (args) => ({
+    components: {
+      AntNumberInput,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
+    setup() {
+      const val = ref(10.75);
+
+      return {
+        args,
+        val,
+      };
+    },
+    template: `
+      <AntFormGroup class="w-96">
+        <AntFormGroupLabel>Parent provided 10.75 while onlyInteger is TRUE</AntFormGroupLabel>
+
+        <AntNumberInput
+          v-bind="args"
+          v-model="val"
+          :onlyInteger="true"
+          label="Integer normalization test"
+          description="Value is normalized immediately on mount due to strict validation"
+          indicators
+        />
+
+        <div class="mt-4 p-3 bg-blue-50 rounded border border-blue-200 text-sm">
+          <strong>Current v-model value:</strong> {{ val }}
+          <br/>
+          <span class="text-xs text-blue-700">
+            (The component is "strict": it rounded 10.75 to 11 automatically upon initialization.)
+          </span>
+        </div>
+      </AntFormGroup>
+    `,
+  }),
 };
 
 export const Summary: Story = {

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-  computed, onMounted, ref, useId,
+  computed, onMounted, ref, useId, watch,
 } from 'vue';
 import AntButton from '../AntButton.vue';
 import AntField from '../forms/AntField.vue';
@@ -60,6 +60,7 @@ const props = withDefaults(defineProps<{
   inputRef?: HTMLInputElement | null;
   selectAllOnFocus?: boolean;
   autocomplete?: 'on' | 'off' | string;
+  onlyInteger?: boolean;
 }>(), {
   state: InputState.base,
   disabled: false,
@@ -73,6 +74,7 @@ const props = withDefaults(defineProps<{
   inputRef: null,
   selectAllOnFocus: false,
   autocomplete: 'off',
+  onlyInteger: false,
 });
 const emit = defineEmits([
   'update:modelValue',
@@ -86,9 +88,91 @@ const id = useId();
 const _inputRef = useVModel(props, 'inputRef', emit);
 const isFocused = ref(false);
 
+const effectiveMin = computed(() => {
+  if (props.min === undefined) return undefined;
+
+  return props.onlyInteger ? Math.ceil(props.min) : props.min;
+});
+
+const effectiveMax = computed(() => {
+  if (props.max === undefined) return undefined;
+
+  return props.onlyInteger ? Math.floor(props.max) : props.max;
+});
+
+const formatAndEmit = (val: number | null) => {
+  if (val === null || isNaN(val)) {
+    emit('update:modelValue', null);
+
+    return null;
+  }
+
+  let processedValue = new Big(val);
+
+  if (props.onlyInteger) {
+    processedValue = processedValue.round(0, Big.roundHalfUp);
+  } else {
+    const dp = getPrecision(val);
+    processedValue = new Big(processedValue.toFixed(dp));
+  }
+
+  if (effectiveMin.value !== undefined && processedValue.lt(effectiveMin.value)) {
+    processedValue = new Big(effectiveMin.value);
+  }
+
+  if (effectiveMax.value !== undefined && processedValue.gt(effectiveMax.value)) {
+    processedValue = new Big(effectiveMax.value);
+  }
+
+  const result = Number(processedValue.toString());
+  emit('update:modelValue', result);
+
+  return result;
+};
+
+const normalizeValue = () => {
+  if (props.modelValue === null || props.modelValue === undefined) return;
+
+  let val = new Big(props.modelValue);
+  let changed = false;
+
+  if (props.onlyInteger && !val.mod(1).eq(0)) {
+    val = val.round(0, Big.roundHalfUp);
+    changed = true;
+  }
+
+  if (effectiveMin.value !== undefined && val.lt(effectiveMin.value)) {
+    val = new Big(effectiveMin.value);
+    changed = true;
+  }
+  if (effectiveMax.value !== undefined && val.gt(effectiveMax.value)) {
+    val = new Big(effectiveMax.value);
+    changed = true;
+  }
+
+  if (changed) {
+    emit('update:modelValue', Number(val.toString()));
+  }
+};
+
+watch(
+  [
+    () => props.modelValue,
+    () => props.onlyInteger,
+    () => props.min,
+    () => props.max,
+  ],
+  () => {
+    normalizeValue();
+  },
+  {
+    immediate: true,
+  },
+);
+
 const _modelValue = computed({
   get: () => {
-    if (props.modelValue === null || props.modelValue === undefined || props.modelValue === '') {
+    if (props.modelValue === null || props.modelValue === undefined) {
       return null;
     }
 
@@ -97,10 +181,9 @@ const _modelValue = computed({
     }
 
     const bigValue = new Big(props.modelValue);
-    const isInteger = bigValue.mod(1).eq(0);
 
-    if (isInteger) {
-      return props.modelValue.toString();
+    if (props.onlyInteger) {
+      return bigValue.toFixed(0);
     }
 
     const dp = getPrecision();
@@ -114,11 +197,20 @@ const _modelValue = computed({
       return;
     }
 
-    const num = Number(val);
+    let num = Number(val);
+
     if (!isNaN(num)) {
-      emit('update:modelValue', num);
+      formatAndEmit(num);
     }
   },
+});
+
+const effectiveSteps = computed(() => {
+  if (props.onlyInteger) {
+    return Number(new Big(props.steps).round(0, Big.roundHalfUp).toString()) || 1;
+  }
+
+  return props.steps;
 });
 
 function onInputFocus(e: FocusEvent) {
@@ -138,37 +230,35 @@ function onInputFocus(e: FocusEvent) {
   emit('focus', e);
 }
 
-function getPrecision() {
-  const modelDecimalPlaces = getDecimalPlaces(props.modelValue || 0);
+function getPrecision(currentValue?: number | null) {
+  const valToAnalyze = currentValue !== undefined ? currentValue : props.modelValue;
+
+  const modelDecimalPlaces = getDecimalPlaces(valToAnalyze || 0);
   const stepDecimalPlaces = getDecimalPlaces(props.steps);
 
   return Math.max(modelDecimalPlaces, stepDecimalPlaces);
 }
 
 function subtract() {
-  const dp = getPrecision();
+  let current = props.modelValue !== null ? new Big(props.modelValue) : new Big(props.max || 0);
 
-  const current = props.modelValue !== null ? new Big(props.modelValue) : new Big(props.max || 0);
-  let result = current.sub(props.steps);
-
-  if (props.min !== undefined && result.lt(props.min)) {
-    result = new Big(props.min);
+  if (props.onlyInteger) {
+    current = current.round(0, Big.roundHalfUp);
   }
 
-  emit('update:modelValue', Number(result.toFixed(dp)));
+  const result = current.sub(effectiveSteps.value);
+  formatAndEmit(Number(result.toString()));
 }
 
 function add() {
-  const dp = getPrecision();
+  let current = props.modelValue !== null ? new Big(props.modelValue) : new Big(props.min || 0);
 
-  const current = props.modelValue !== null ? new Big(props.modelValue) : new Big(props.min || 0);
-  let result = current.add(props.steps);
-
-  if (props.max !== undefined && result.gt(props.max)) {
-    result = new Big(props.max);
+  if (props.onlyInteger) {
+    current = current.round(0, Big.roundHalfUp);
   }
 
-  emit('update:modelValue', Number(result.toFixed(dp)));
+  const result = current.add(effectiveSteps.value);
+  formatAndEmit(Number(result.toString()));
 }
 
 const isPrevButtonDisabled = computed(() => {
@@ -180,7 +270,9 @@ const isPrevButtonDisabled = computed(() => {
     return false;
   }
 
-  return props.min !== undefined ? Number(props.modelValue) <= props.min : false;
+  return effectiveMin.value !== undefined
+    ? Number(props.modelValue) <= effectiveMin.value
+    : false;
 });
 
 const isNextButtonDisabled = computed(() => {
@@ -192,33 +284,22 @@ const isNextButtonDisabled = computed(() => {
     return false;
   }
 
-  return props.max !== undefined ? Number(props.modelValue) >= props.max : false;
+  return effectiveMax.value !== undefined
+    ? Number(props.modelValue) >= effectiveMax.value
+    : false;
 });
 
 function onButtonBlur(e: FocusEvent) {
   isFocused.value = false;
 
-  if (props.modelValue !== null) {
-    let finalValue = props.modelValue;
-    const dp = getPrecision();
+  const validatedValue = formatAndEmit(props.modelValue);
 
-    if (props.max !== undefined && finalValue > props.max) {
-      finalValue = props.max;
-    }
+  if (_inputRef.value && validatedValue !== null) {
+    _inputRef.value.value = validatedValue.toString();
+  }
 
-    if (props.min !== undefined && finalValue < props.min) {
-      finalValue = props.min;
-    }
-
-    const roundedValue = Number(new Big(finalValue).toFixed(dp));
-
-    emit('update:modelValue', roundedValue);
-
-    if (_inputRef.value) {
-      _inputRef.value.value = roundedValue.toString();
-    }
-
-    emit('validate', roundedValue);
+  if (validatedValue !== null) {
+    emit('validate', validatedValue);
   }
 
   emit('blur', e);
@@ -242,6 +323,14 @@ function onKeyDown(e: KeyboardEvent) {
     return;
   }
 
+  if (props.onlyInteger) {
+    if (e.key === '.' || e.key === ',') {
+      e.preventDefault();
+
+      return;
+    }
+  }
+
   const allowedKeys = [
     'Backspace',
     'Delete',
@@ -260,10 +349,14 @@ function onKeyDown(e: KeyboardEvent) {
     return;
   }
 
-  if (!/^[0-9.-]$/.test(e.key)) {
-    e.preventDefault();
+  const currentMin = effectiveMin.value;
+  const canBeNegative = currentMin === undefined || currentMin < 0;
+  const regex = props.onlyInteger
+    ? (canBeNegative ? /^[0-9-]$/ : /^[0-9]$/)
+    : (canBeNegative ? /^[0-9.-]$/ : /^[0-9.]$/);
 
-    return;
+  if (!regex.test(e.key)) {
+    e.preventDefault();
   }
 }
 
@@ -314,9 +407,9 @@ onMounted(() => {
         :state="state"
         :size="size"
         :skeleton="skeleton"
-        :step="steps"
-        :min="min"
-        :max="max"
+        :step="effectiveSteps"
+        :min="onlyInteger ? effectiveMin : min"
+        :max="onlyInteger ? effectiveMax : max"
         :disabled="disabled"
         :readonly="readonly"
         :placeholder="placeholder || label"
