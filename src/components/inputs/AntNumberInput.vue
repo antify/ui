@@ -92,23 +92,30 @@ const formatAndEmit = (val: number | null) => {
   if (val === null || isNaN(val)) {
     emit('update:modelValue', null);
 
-    return;
+    return null;
   }
 
   let processedValue = new Big(val);
-
-  if (props.min !== undefined && processedValue.lt(props.min)) {
-    processedValue = new Big(props.min);
-  }
-  if (props.max !== undefined && processedValue.gt(props.max)) {
-    processedValue = new Big(props.max);
-  }
 
   if (props.onlyInteger) {
     processedValue = processedValue.round(0, Big.roundHalfUp);
   } else {
     const dp = getPrecision();
     processedValue = new Big(processedValue.toFixed(dp));
+  }
+
+  if (props.min !== undefined) {
+    const effectiveMin = props.onlyInteger ? Math.ceil(props.min) : props.min;
+    if (processedValue.lt(effectiveMin)) {
+      processedValue = new Big(effectiveMin);
+    }
+  }
+
+  if (props.max !== undefined) {
+    const effectiveMax = props.onlyInteger ? Math.floor(props.max) : props.max;
+    if (processedValue.gt(effectiveMax)) {
+      processedValue = new Big(effectiveMax);
+    }
   }
 
   const result = Number(processedValue.toString());
@@ -128,7 +135,12 @@ const _modelValue = computed({
     }
 
     const bigValue = new Big(props.modelValue);
-    const dp = props.onlyInteger ? 0 : getPrecision();
+
+    if (props.onlyInteger) {
+      return bigValue.round(0, Big.roundHalfUp).toString();
+    }
+
+    const dp = getPrecision();
 
     return bigValue.toFixed(dp);
   },
@@ -149,7 +161,7 @@ const _modelValue = computed({
 
 const effectiveSteps = computed(() => {
   if (props.onlyInteger) {
-    return Math.max(1, Math.floor(props.steps));
+    return Number(new Big(props.steps).round(0, Big.roundHalfUp).toString()) || 1;
   }
 
   return props.steps;
@@ -180,23 +192,24 @@ function getPrecision() {
 }
 
 function subtract() {
-  const current = props.modelValue !== null ? new Big(props.modelValue) : new Big(props.max || 0);
+  let current = props.modelValue !== null ? new Big(props.modelValue) : new Big(props.max || 0);
+
+  if (props.onlyInteger) {
+    current = current.round(0, Big.roundHalfUp);
+  }
+
   const result = current.sub(effectiveSteps.value);
   formatAndEmit(Number(result.toString()));
 }
 
 function add() {
-  const current = props.modelValue !== null ? new Big(props.modelValue) : new Big(props.min || 0);
-  let result = current.add(effectiveSteps.value);
+  let current = props.modelValue !== null ? new Big(props.modelValue) : new Big(props.min || 0);
 
   if (props.onlyInteger) {
-    result = result.round(0, Big.roundDown);
+    current = current.round(0, Big.roundHalfUp);
   }
 
-  if (props.max !== undefined && result.gt(props.max)) {
-    result = new Big(props.max);
-  }
-
+  const result = current.add(effectiveSteps.value);
   formatAndEmit(Number(result.toString()));
 }
 
@@ -227,14 +240,13 @@ const isNextButtonDisabled = computed(() => {
 function onButtonBlur(e: FocusEvent) {
   isFocused.value = false;
 
-  if (props.modelValue !== null) {
-    const validatedValue = formatAndEmit(props.modelValue);
+  const validatedValue = formatAndEmit(props.modelValue);
 
-    if (_inputRef.value && validatedValue !== undefined) {
-      _inputRef.value.value = validatedValue.toString();
-    }
-    emit('validate', validatedValue);
+  if (_inputRef.value && validatedValue !== null) {
+    _inputRef.value.value = validatedValue.toString();
   }
+
+  emit('validate', validatedValue);
   emit('blur', e);
 }
 
