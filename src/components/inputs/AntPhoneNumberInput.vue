@@ -265,7 +265,6 @@ function onPaste(event: ClipboardEvent) {
 
 function onBlur(e: FocusEvent) {
   emit('blur', e);
-  emit('validate', _phoneNumber.value);
 }
 
 watch(_countryValue, (newCountryId, oldCountryId) => {
@@ -355,6 +354,7 @@ watch(internalInputRef, (el) => {
         @blur="onBlur"
         @keydown="onKeyPress"
         @paste="onPaste"
+        @validate="$emit('validate', _phoneNumber)"
       />
     </div>
   </AntField>
