@@ -88,6 +88,13 @@ const id = useId();
 const _inputRef = useVModel(props, 'inputRef', emit);
 const isFocused = ref(false);
 
+const constraints = computed(() => ({
+  min: props.min,
+  max: props.max,
+  onlyInteger: props.onlyInteger,
+  steps: props.steps,
+}));
+
 const effectiveMin = computed(() => {
   if (props.min === undefined) return undefined;
 
@@ -159,6 +166,12 @@ watch([
   () => props.modelValue,
   () => props.onlyInteger,
 ], normalizeValue, {
+  immediate: true,
+});
+
+watch(constraints, () => {
+  normalizeValue();
+}, {
   immediate: true,
 });
 
@@ -397,8 +410,8 @@ onMounted(() => {
         :size="size"
         :skeleton="skeleton"
         :step="effectiveSteps"
-        :min="min"
-        :max="max"
+        :min="onlyInteger ? effectiveMin : min"
+        :max="onlyInteger ? effectiveMax : max"
         :disabled="disabled"
         :readonly="readonly"
         :placeholder="placeholder || label"

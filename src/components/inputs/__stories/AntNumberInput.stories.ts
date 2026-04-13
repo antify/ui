@@ -304,7 +304,8 @@ export const IntegerValidation: Story = {
           <ul class="list-disc ml-5 text-sm space-y-1">
             <li>Set <b>steps</b> to <code>0.5</code> in Controls.</li>
             <li>Click <b>+</b> on both inputs.</li>
-            <li>The left one will show <b>10.5</b>, the right one (should show 11) should show <b>11</b> (or stay 10 if steps < 1).</li>
+            <li>The left one will show <b>10.5</b> (standard float behavior).</li>
+            <li>The right one will show <b>11</b> (because 0.5 is rounded, and the minimum integer step is 1).</li>
             <li>Try to type a dot <code>.</code> in the right input — it should be blocked.</li>
           </ul>
         </div>
@@ -340,15 +341,15 @@ export const InitialValueValidation: Story = {
           v-model="val"
           :onlyInteger="true"
           label="Integer normalization test"
-          description="Value will be normalized on first interaction or blur"
+          description="Value is normalized immediately on mount due to strict validation"
           indicators
         />
 
-        <div class="mt-4 p-3 bg-amber-50 rounded border border-amber-200 text-sm">
+        <div class="mt-4 p-3 bg-blue-50 rounded border border-blue-200 text-sm">
           <strong>Current v-model value:</strong> {{ val }}
           <br/>
-          <span class="text-xs text-amber-700">
-            (If the component is "reliable", it should round 10.75 to 11 when you click +/- or blur the field)
+          <span class="text-xs text-blue-700">
+            (The component is "strict": it rounded 10.75 to 11 automatically upon initialization.)
           </span>
         </div>
       </AntFormGroup>
