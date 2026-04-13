@@ -88,6 +88,35 @@ const id = useId();
 const _inputRef = useVModel(props, 'inputRef', emit);
 const isFocused = ref(false);
 
+const formatAndEmit = (val: number | null) => {
+  if (val === null || isNaN(val)) {
+    emit('update:modelValue', null);
+
+    return;
+  }
+
+  let processedValue = new Big(val);
+
+  if (props.min !== undefined && processedValue.lt(props.min)) {
+    processedValue = new Big(props.min);
+  }
+  if (props.max !== undefined && processedValue.gt(props.max)) {
+    processedValue = new Big(props.max);
+  }
+
+  if (props.onlyInteger) {
+    processedValue = processedValue.round(0, Big.roundHalfUp);
+  } else {
+    const dp = getPrecision();
+    processedValue = new Big(processedValue.toFixed(dp));
+  }
+
+  const result = Number(processedValue.toString());
+  emit('update:modelValue', result);
+
+  return result;
+};
+
 const _modelValue = computed({
   get: () => {
     if (props.modelValue === null || props.modelValue === undefined || props.modelValue === '') {
@@ -99,13 +128,7 @@ const _modelValue = computed({
     }
 
     const bigValue = new Big(props.modelValue);
-    const isInteger = bigValue.mod(1).eq(0);
-
-    if (isInteger) {
-      return props.modelValue.toString();
-    }
-
-    const dp = getPrecision();
+    const dp = props.onlyInteger ? 0 : getPrecision();
 
     return bigValue.toFixed(dp);
   },
@@ -119,12 +142,7 @@ const _modelValue = computed({
     let num = Number(val);
 
     if (!isNaN(num)) {
-      if (props.onlyInteger) {
-
-        num = Math.trunc(num);
-      }
-
-      emit('update:modelValue', num);
+      formatAndEmit(num);
     }
   },
 });
@@ -162,23 +180,12 @@ function getPrecision() {
 }
 
 function subtract() {
-  const dp = props.onlyInteger ? 0 : getPrecision();
   const current = props.modelValue !== null ? new Big(props.modelValue) : new Big(props.max || 0);
-  let result = current.sub(effectiveSteps.value);
-
-  if (props.onlyInteger) {
-    result = result.round(0, Big.roundDown);
-  }
-
-  if (props.min !== undefined && result.lt(props.min)) {
-    result = new Big(props.min);
-  }
-
-  emit('update:modelValue', Number(result.toFixed(dp)));
+  const result = current.sub(effectiveSteps.value);
+  formatAndEmit(Number(result.toString()));
 }
 
 function add() {
-  const dp = props.onlyInteger ? 0 : getPrecision();
   const current = props.modelValue !== null ? new Big(props.modelValue) : new Big(props.min || 0);
   let result = current.add(effectiveSteps.value);
 
@@ -190,7 +197,7 @@ function add() {
     result = new Big(props.max);
   }
 
-  emit('update:modelValue', Number(result.toFixed(dp)));
+  formatAndEmit(Number(result.toString()));
 }
 
 const isPrevButtonDisabled = computed(() => {
@@ -221,28 +228,13 @@ function onButtonBlur(e: FocusEvent) {
   isFocused.value = false;
 
   if (props.modelValue !== null) {
-    let finalValue = props.modelValue;
-    const dp = getPrecision();
+    const validatedValue = formatAndEmit(props.modelValue);
 
-    if (props.max !== undefined && finalValue > props.max) {
-      finalValue = props.max;
+    if (_inputRef.value && validatedValue !== undefined) {
+      _inputRef.value.value = validatedValue.toString();
     }
-
-    if (props.min !== undefined && finalValue < props.min) {
-      finalValue = props.min;
-    }
-
-    const roundedValue = Number(new Big(finalValue).toFixed(dp));
-
-    emit('update:modelValue', roundedValue);
-
-    if (_inputRef.value) {
-      _inputRef.value.value = roundedValue.toString();
-    }
-
-    emit('validate', roundedValue);
+    emit('validate', validatedValue);
   }
-
   emit('blur', e);
 }
 

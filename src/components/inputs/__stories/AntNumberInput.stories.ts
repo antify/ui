@@ -83,6 +83,18 @@ const meta: Meta<typeof AntNumberInput> = {
         },
       },
     },
+    onlyInteger: {
+      control: {
+        type: 'boolean',
+      },
+      description: 'Forces the input to handle only whole numbers. Rounds fractional steps and inputs.',
+      table: {
+        category: 'Validation',
+        defaultValue: {
+          summary: 'false',
+        },
+      },
+    },
   },
 };
 
@@ -302,6 +314,46 @@ export const IntegerValidation: Story = {
   args: {
     steps: 0.5,
   },
+};
+
+export const InitialValueValidation: Story = {
+  render: (args) => ({
+    components: {
+      AntNumberInput,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
+    setup() {
+      const val = ref(10.75);
+
+      return {
+        args,
+        val,
+      };
+    },
+    template: `
+      <AntFormGroup class="w-96">
+        <AntFormGroupLabel>Parent provided 10.75 while onlyInteger is TRUE</AntFormGroupLabel>
+
+        <AntNumberInput
+          v-bind="args"
+          v-model="val"
+          :onlyInteger="true"
+          label="Integer normalization test"
+          description="Value will be normalized on first interaction or blur"
+          indicators
+        />
+
+        <div class="mt-4 p-3 bg-amber-50 rounded border border-amber-200 text-sm">
+          <strong>Current v-model value:</strong> {{ val }}
+          <br/>
+          <span class="text-xs text-amber-700">
+            (If the component is "reliable", it should round 10.75 to 11 when you click +/- or blur the field)
+          </span>
+        </div>
+      </AntFormGroup>
+    `,
+  }),
 };
 
 export const Summary: Story = {
