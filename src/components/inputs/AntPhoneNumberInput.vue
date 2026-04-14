@@ -136,7 +136,11 @@ const findCountryByPhone = (phone: string): Country | undefined => {
 
 const formattedNumber = computed({
   get: () => {
-    const fullVal = props.modelValue || '';
+    if (!props.modelValue) {
+      return null;
+    }
+
+    const fullVal = props.modelValue;
     const country = currentCountry.value;
 
     if (country && fullVal.startsWith(country.dialCode)) {

@@ -70,6 +70,45 @@ export default meta;
 
 type Story = StoryObj<typeof AntPhoneNumberInput>;
 
+export const Docs: Story = {
+  render: (args) => ({
+    components: {
+      AntPhoneNumberInput,
+    },
+    setup() {
+      const phoneDefault = ref(null);
+      const countryDefault = ref(null);
+
+      return {
+        args,
+        phoneDefault,
+        countryDefault,
+      };
+    },
+    template: `
+      <AntPhoneNumberInput
+        v-bind="args"
+        v-model="phoneDefault"
+        :locale="args.locale"
+        country-value-key="value"
+        v-model:country-value="countryDefault"
+        placeholder="Initialized with DE"
+      />
+    `,
+  }),
+  args: {
+    label: 'Phone Number',
+    description: 'Enter your mobile phone number',
+    placeholder: 'Enter digits',
+    countryPlaceholder: 'Select your country',
+    countries: COUNTRIES,
+    size: Size.md,
+    state: InputState.base,
+    nullable: true,
+    locale: Locale.de,
+  },
+};
+
 export const Default: Story = {
   render: (args) => ({
     components: {
@@ -133,6 +172,7 @@ export const Default: Story = {
             country-value-key="value"
             v-model:country-value="countryDefault"
             placeholder="Initialized with DE"
+            @validate="console.log"
           />
           <div class="mt-2 text-md text-for-white-bg-font">
             Data: {{ countryDefault || 'null' }} | {{ phoneDefault || 'null' }}
