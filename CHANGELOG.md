@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 4.2.4 (2026-04-14)
+
+
+### Bug Fixes
+
+* add missing whitespace and clean up formatting in AntNumberInput ([c9559b5](https://github.com/antify/ui/commit/c9559b57a97f03c8ed08dcb592261ae8ed9fa745))
+
 ### 4.2.3 (2026-04-13)
 
 ### 4.2.2 (2026-04-08)
