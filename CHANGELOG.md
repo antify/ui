@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 4.3.0 (2026-04-14)
+
+
+### Features
+
+* add documentation story for AntPhoneNumberInput and improve null handling in modelValue ([7a369cd](https://github.com/antify/ui/commit/7a369cd2e22ce0583b54a6450d2c6ae5a00ca483))
+
 ### 4.2.5 (2026-04-14)
 
 
