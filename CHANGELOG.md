@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 4.2.5 (2026-04-14)
+
+
+### Bug Fixes
+
+* clean up formatting and improve consistency in multiple components ([9e6e107](https://github.com/antify/ui/commit/9e6e10754f7c1e114f36b825486926df45af4f4e))
+
 ### 4.2.4 (2026-04-14)
 
 
