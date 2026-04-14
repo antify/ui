@@ -115,6 +115,7 @@ const _modelValue = computed({
     }
 
     const num = Number(val);
+
     if (!isNaN(num)) {
       emit('update:modelValue', num);
     }
@@ -135,6 +136,7 @@ function onInputFocus(e: FocusEvent) {
       el.type = originalType;
     }, 0);
   }
+
   emit('focus', e);
 }
 
@@ -147,7 +149,6 @@ function getPrecision() {
 
 function subtract() {
   const dp = getPrecision();
-
   const current = props.modelValue !== null ? new Big(props.modelValue) : new Big(props.max || 0);
   let result = current.sub(props.steps);
 
