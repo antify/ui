@@ -50,7 +50,8 @@ function onClose(index: number) {
 </script>
 
 <template>
-  <div class="w-full h-full flex flex-col bg-base-300 gap-px"
+  <div
+    class="w-full h-full flex flex-col bg-base-300 gap-px"
     data-e2e="accordion"
   >
     <slot>

@@ -19,7 +19,8 @@ const containerClasses = computed(() => ({
 </script>
 
 <template>
-  <div :class="containerClasses"
+  <div
+    :class="containerClasses"
     data-e2e="navbar"
   >
     <AntNavbarItem

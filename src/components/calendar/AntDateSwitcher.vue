@@ -84,15 +84,16 @@ function onClickNext() {
 </script>
 
 <template>
-  <div class="flex"
+  <div
+    class="flex"
     data-e2e="date-switcher"
   >
     <AntButton
       :icon-left="faChevronLeft"
       :grouped="Grouped.left"
       :skeleton="skeleton"
-      @click="onClickPrevious"
       data-e2e="left-arrow-button"
+      @click="onClickPrevious"
     />
     <AntDropdown
       v-model:show-dropdown="showMonthDropdown"
@@ -103,8 +104,8 @@ function onClickNext() {
         :grouped="Grouped.center"
         :skeleton="skeleton"
         expanded
-        @click="showMonthDropdown = !showMonthDropdown"
         data-e2e="month-dropdown-button"
+        @click="showMonthDropdown = !showMonthDropdown"
       >
         {{ options[month] }}
       </AntButton>
@@ -128,8 +129,8 @@ function onClickNext() {
         :grouped="Grouped.center"
         :skeleton="skeleton"
         expanded
-        @click="showYearDropdown = !showYearDropdown"
         data-e2e="year-dropdown-button"
+        @click="showYearDropdown = !showYearDropdown"
       >
         {{ year }}
       </AntButton>
@@ -151,8 +152,8 @@ function onClickNext() {
         :icon-left="faChevronRight"
         :grouped="Grouped.right"
         :skeleton="skeleton"
-        @click="onClickNext"
         data-e2e="right-arrow-button"
+        @click="onClickNext"
       />
     </div>
   </div>

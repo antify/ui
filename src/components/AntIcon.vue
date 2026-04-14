@@ -55,7 +55,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <span :class="containerClasses"
+  <span
+    :class="containerClasses"
     data-e2e="icon"
   >
     <AntSkeleton

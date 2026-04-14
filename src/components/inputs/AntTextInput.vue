@@ -104,8 +104,8 @@ onMounted(() => {
         :placeholder="placeholder !== undefined ? placeholder : label"
         :show-icon="true"
         v-bind="$attrs"
-        @validate="val => $emit('validate', val)"
         :grouped="_nullable ? Grouped.left : Grouped.none"
+        @validate="val => $emit('validate', val)"
       />
       <AntButton
         v-if="_nullable"
@@ -115,7 +115,8 @@ onMounted(() => {
         :state="state as unknown as State"
         :skeleton="skeleton"
         :size="size"
-        @click="_value = null" data-e2e="clear-button"
+        data-e2e="clear-button"
+        @click="_value = null"
       />
     </div>
   </AntField>

@@ -179,9 +179,9 @@ onMounted(() => {
         :skeleton="skeleton"
         :readonly="readonly"
         :disabled="disabled"
+        data-e2e="left-arrow-button"
         @click="prevOption"
         @blur="onBlur"
-        data-e2e="left-arrow-button"
       />
 
       <AntSkeleton
@@ -206,9 +206,9 @@ onMounted(() => {
         :skeleton="skeleton"
         :readonly="readonly"
         :disabled="disabled"
+        data-e2e="right-arrow-button"
         @click="nextOption"
         @blur="onBlur"
-        data-e2e="right-arrow-button"
       />
     </div>
   </AntField>

@@ -16,9 +16,7 @@ const props = defineProps<{
   navbarItem: NavbarItemTypes;
 }>();
 
-const shouldRenderTooltip = computed(() =>
-  props.navbarItem.disabled && !!props.navbarItem.tooltipMessage
-);
+const shouldRenderTooltip = computed(() => props.navbarItem.disabled && !!props.navbarItem.tooltipMessage);
 
 const itemClasses = computed(() => ({
   'w-full text-sm p-1.5 rounded-md flex items-center flex-nowrap gap-1 transition-colors': true,
@@ -53,8 +51,8 @@ function itemClick(): void {
       :to="navbarItem.to && !navbarItem.disabled ? navbarItem.to : undefined"
       v-bind="$attrs"
       :class="itemClasses"
-      @click.stop="itemClick"
       data-e2e="navbar-item"
+      @click.stop="itemClick"
     >
       <AntIcon
         v-if="navbarItem.icon"
@@ -74,7 +72,10 @@ function itemClick(): void {
       </div>
     </component>
 
-    <template #content v-if="shouldRenderTooltip">
+    <template
+      v-if="shouldRenderTooltip"
+      #content
+    >
       <div>{{ navbarItem.tooltipMessage }}</div>
     </template>
   </component>
