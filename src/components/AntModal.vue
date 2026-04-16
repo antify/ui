@@ -25,6 +25,19 @@ const props = withDefaults(defineProps<{
 });
 const openModal = ref(false);
 const openBackground = ref(false);
+const isMouseDownOnBackground = ref(false);
+
+function handleMouseDown(e: MouseEvent) {
+  isMouseDownOnBackground.value = e.target === e.currentTarget;
+}
+
+function handleMouseUp(e: MouseEvent) {
+  if (isMouseDownOnBackground.value && e.target === e.currentTarget) {
+    closeModal();
+  }
+
+  isMouseDownOnBackground.value = false;
+}
 
 function onKeydown(e: KeyboardEvent) {
   if (e.key === 'Escape') {
@@ -65,13 +78,15 @@ onMounted(() => {
       class="absolute inset-0 flex items-center justify-center z-[80] cursor-pointer overflow-hidden"
       :class="{'bg-black/50 backdrop-blur-xs': !fullscreen}"
       data-e2e="modal"
-      @click.self="closeModal"
+      @mousedown="handleMouseDown"
+      @mouseup="handleMouseUp"
     >
       <Transition :name="!fullscreen ? 'bounce' : 'bounce-slow'">
         <div
           v-if="openModal"
           class="flex flex-col gap-px bg-base-300 overflow-hidden cursor-auto"
           :class="{'w-full h-full': fullscreen, 'border border-base-300 rounded-md shadow-md': !fullscreen}"
+          @mousedown.stop
         >
           <div
             class="bg-white p-2 flex items-center justify-between gap-2"
