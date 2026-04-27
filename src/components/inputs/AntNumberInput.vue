@@ -228,7 +228,7 @@ const onInputBlur = (e: FocusEvent) => {
 
 function onIndicatorBlur(e: FocusEvent) {
   checkValue();
-  emit('validate', _modelValue.value);
+  emit('validate', props.modelValue);
   emit('blur', e);
 }
 
@@ -330,7 +330,7 @@ onMounted(() => {
         :placeholder="placeholder || label"
         :show-icon="false"
         v-bind="$attrs"
-        @validate="emit('validate')"
+        @validate="emit('validate', modelValue)"
         @focus="onInputFocus"
         @blur="onInputBlur"
         @keydown="onKeyDown"
