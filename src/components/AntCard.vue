@@ -7,6 +7,10 @@ import {
 } from '../enums/Size.enum';
 import AntSkeleton from './AntSkeleton.vue';
 
+defineOptions({
+  inheritAttrs: false,
+});
+
 const props = withDefaults(defineProps<{
   size?: Size;
   padding?: boolean;
