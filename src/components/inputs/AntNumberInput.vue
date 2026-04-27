@@ -196,9 +196,7 @@ const isNextButtonDisabled = computed(() => {
   return props.max !== undefined ? Number(props.modelValue) >= props.max : false;
 });
 
-function onButtonBlur(e: FocusEvent) {
-  isFocused.value = false;
-
+const checkValue = () => {
   if (props.modelValue !== null) {
     let finalValue = props.modelValue;
     const dp = getPrecision();
@@ -218,10 +216,19 @@ function onButtonBlur(e: FocusEvent) {
     if (_inputRef.value) {
       _inputRef.value.value = roundedValue.toString();
     }
-
-    emit('validate', roundedValue);
   }
+};
 
+const onInputBlur = (e: FocusEvent) => {
+  isFocused.value = false;
+
+  checkValue();
+  emit('blur', e);
+};
+
+function onIndicatorBlur(e: FocusEvent) {
+  checkValue();
+  emit('validate', _modelValue.value);
   emit('blur', e);
 }
 
@@ -301,7 +308,7 @@ onMounted(() => {
         :readonly="readonly"
         data-e2e="decrement-button"
         @click="subtract"
-        @blur="onButtonBlur"
+        @blur="onIndicatorBlur"
       />
 
       <AntBaseInput
@@ -323,8 +330,9 @@ onMounted(() => {
         :placeholder="placeholder || label"
         :show-icon="false"
         v-bind="$attrs"
+        @validate="emit('validate')"
         @focus="onInputFocus"
-        @blur="onButtonBlur"
+        @blur="onInputBlur"
         @keydown="onKeyDown"
       />
 
@@ -339,7 +347,7 @@ onMounted(() => {
         :readonly="readonly"
         data-e2e="increment-button"
         @click="add"
-        @blur="onButtonBlur"
+        @blur="onIndicatorBlur"
       />
     </div>
   </AntField>
