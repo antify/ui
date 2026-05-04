@@ -9,8 +9,14 @@ import AntField from '../forms/AntField.vue';
 import AntCountryInput from './AntCountryInput.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
 import {
-  Size, InputState, Grouped, CountryValueKey, Locale,
+  Size, InputState, Grouped,
 } from '../../enums';
+import {
+  Locale,
+} from '../../enums/Locale.enum';
+import {
+  CountryValueKey,
+} from '../../enums/Country.enum';
 import {
   BaseInputType,
 } from './Elements/__types';
