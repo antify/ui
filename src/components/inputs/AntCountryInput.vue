@@ -6,13 +6,13 @@ import {
   faChevronDown, faChevronUp,
 } from '@fortawesome/free-solid-svg-icons';
 import {
-  Size, InputState, Grouped,
+  Size, InputState, Grouped, CountryValueKey, Locale,
 } from '../../enums';
 import {
   IconSize,
 } from '../__types';
 import {
-  COUNTRIES, CountryValueKey, Locale,
+  COUNTRIES,
 } from '../../constants/countries';
 import type {
   Country,

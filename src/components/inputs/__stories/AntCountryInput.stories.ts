@@ -7,10 +7,10 @@ import {
   ref,
 } from 'vue';
 import {
-  InputState, Size, Grouped,
+  InputState, Size, Grouped, CountryValueKey, Locale,
 } from '../../../enums';
 import {
-  COUNTRIES, CountryValueKey, Locale,
+  COUNTRIES,
 } from '../../../constants/countries';
 
 const meta: Meta<typeof AntCountryInput> = {

@@ -9,13 +9,13 @@ import AntField from '../forms/AntField.vue';
 import AntCountryInput from './AntCountryInput.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
 import {
-  Size, InputState, Grouped,
+  Size, InputState, Grouped, CountryValueKey, Locale,
 } from '../../enums';
 import {
   BaseInputType,
 } from './Elements/__types';
 import {
-  COUNTRIES, CountryValueKey, Locale,
+  COUNTRIES,
 } from '../../constants/countries';
 import type {
   Country,
@@ -23,6 +23,53 @@ import type {
 import {
   ref, nextTick,
 } from 'vue';
+
+const PLACEHOLDERS = {
+  mobileNumber: {
+    [Locale.de]: 'Handynummer',
+    [Locale.en]: 'Mobile number',
+    [Locale.ar]: 'رقم الهاتف المحمول',
+    [Locale.cs]: 'Číslo mobilního telefonu',
+    [Locale.es]: 'Número de teléfono móvil',
+    [Locale.fr]: 'Numéro de portable',
+    [Locale.it]: 'Numero di cellulare',
+    [Locale.ru]: 'Номер мобильного телефона',
+    [Locale.uk]: 'Номер мобільного телефону',
+  },
+  phoneNumber: {
+    [Locale.de]: 'Telefonnummer',
+    [Locale.en]: 'Phone number',
+    [Locale.ar]: 'رقم الهاتف',
+    [Locale.cs]: 'Telefonní číslo',
+    [Locale.es]: 'Número de teléfono',
+    [Locale.fr]: 'Numéro de téléphone',
+    [Locale.it]: 'Numero di telefono',
+    [Locale.ru]: 'Номер телефона',
+    [Locale.uk]: 'Номер телефону',
+  },
+  country: {
+    [Locale.de]: 'Land wählen',
+    [Locale.en]: 'Select country',
+    [Locale.ar]: 'اختر الدولة',
+    [Locale.cs]: 'Vyberte zemi',
+    [Locale.es]: 'Seleccionar país',
+    [Locale.fr]: 'Sélectionner le pays',
+    [Locale.it]: 'Seleziona paese',
+    [Locale.ru]: 'Выберите страну',
+    [Locale.uk]: 'Виберіть країну',
+  },
+  search: {
+    [Locale.de]: 'Suchen',
+    [Locale.en]: 'Search',
+    [Locale.ar]: 'بحث',
+    [Locale.cs]: 'Hledat',
+    [Locale.es]: 'Buscar',
+    [Locale.fr]: 'Rechercher',
+    [Locale.it]: 'Cerca',
+    [Locale.ru]: 'Поиск',
+    [Locale.uk]: 'Пошук',
+  },
+};
 
 defineOptions({
   inheritAttrs: false,
@@ -54,6 +101,8 @@ const props = withDefaults(defineProps<{
   countryValueKey?: CountryValueKey;
   countrySortable?: boolean;
 
+  isMobile?: boolean;
+
   //AntBaseInput Props
   placeholder?: string;
   nullable?: boolean;
@@ -63,15 +112,16 @@ const props = withDefaults(defineProps<{
   size: Size.md,
   state: InputState.base,
   searchable: true,
-  searchPlaceholder: 'Search country...',
+  searchPlaceholder: 'Search',
   countryPlaceholder: 'Select country',
-  placeholder: 'Enter phone number',
+  placeholder: 'Phone number',
   countryValueKey: CountryValueKey.dialCode,
   countrySortable: true,
   messages: () => [],
   nullable: true,
   countries: () => COUNTRIES,
   locale: Locale.en,
+  isMobile: true,
 });
 
 const emit = defineEmits([
@@ -97,6 +147,32 @@ const _countryValue = computed({
 
     internalCountryValue.value = val;
   },
+});
+
+const finalPlaceholder = computed(() => {
+  if (props.placeholder && props.placeholder !== 'Phone number') {
+    return props.placeholder;
+  }
+
+  const key = props.isMobile ? 'mobileNumber' : 'phoneNumber';
+
+  return PLACEHOLDERS[key][props.locale] || PLACEHOLDERS[key][Locale.en];
+});
+
+const finalCountryPlaceholder = computed(() => {
+  if (props.countryPlaceholder && props.countryPlaceholder !== 'Select country') {
+    return props.countryPlaceholder;
+  }
+
+  return PLACEHOLDERS.country[props.locale] || PLACEHOLDERS.country[Locale.en];
+});
+
+const finalSearchPlaceholder = computed(() => {
+  if (props.searchPlaceholder && props.searchPlaceholder !== 'Search') {
+    return props.searchPlaceholder;
+  }
+
+  return PLACEHOLDERS.search[props.locale] || PLACEHOLDERS.search[Locale.en];
 });
 
 const updateFullValue = (countryId: string | number | null, rawPhone: string | null) => {
@@ -328,8 +404,8 @@ watch(internalInputRef, (el) => {
         :readonly="readonly"
         :skeleton="skeleton"
         :searchable="searchable"
-        :placeholder="countryPlaceholder"
-        :search-placeholder="searchPlaceholder"
+        :placeholder="finalCountryPlaceholder"
+        :search-placeholder="finalSearchPlaceholder"
         :max-height="countryMaxHeight"
         :is-grouped="true"
         :grouped="Grouped.left"
@@ -351,7 +427,7 @@ watch(internalInputRef, (el) => {
         v-bind="$attrs"
         :disabled="disabled"
         :readonly="readonly"
-        :placeholder="placeholder"
+        :placeholder="finalPlaceholder"
         :grouped="Grouped.right"
         wrapper-class="flex-grow"
         class="-ml-px"
