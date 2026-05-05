@@ -118,9 +118,9 @@ const props = withDefaults(defineProps<{
   size: Size.md,
   state: InputState.base,
   searchable: true,
-  searchPlaceholder: 'Search',
-  countryPlaceholder: 'Select country',
-  placeholder: 'Phone number',
+  searchPlaceholder: undefined,
+  countryPlaceholder: undefined,
+  placeholder: undefined,
   countryValueKey: CountryValueKey.dialCode,
   countrySortable: true,
   messages: () => [],
@@ -156,7 +156,7 @@ const _countryValue = computed({
 });
 
 const finalPlaceholder = computed(() => {
-  if (props.placeholder && props.placeholder !== 'Phone number') {
+  if (props.placeholder !== undefined && props.placeholder !== null) {
     return props.placeholder;
   }
 
@@ -166,7 +166,7 @@ const finalPlaceholder = computed(() => {
 });
 
 const finalCountryPlaceholder = computed(() => {
-  if (props.countryPlaceholder && props.countryPlaceholder !== 'Select country') {
+  if (props.countryPlaceholder !== undefined && props.countryPlaceholder !== null) {
     return props.countryPlaceholder;
   }
 
@@ -174,7 +174,7 @@ const finalCountryPlaceholder = computed(() => {
 });
 
 const finalSearchPlaceholder = computed(() => {
-  if (props.searchPlaceholder && props.searchPlaceholder !== 'Search') {
+  if (props.searchPlaceholder !== undefined && props.searchPlaceholder !== null) {
     return props.searchPlaceholder;
   }
 
