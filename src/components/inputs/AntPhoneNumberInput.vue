@@ -61,7 +61,7 @@ const props = withDefaults(defineProps<{
   countrySortable?: boolean;
 
   //AntBaseInput Props
-  placeholder: string;
+  placeholder?: string;
   nullable?: boolean;
   locale?: Locale;
 }>(), {
