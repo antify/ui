@@ -12,10 +12,16 @@ import {
   Size, InputState, Grouped,
 } from '../../enums';
 import {
+  Locale,
+} from '../../enums/Locale.enum';
+import {
+  CountryValueKey,
+} from '../../enums/Country.enum';
+import {
   BaseInputType,
 } from './Elements/__types';
 import {
-  COUNTRIES, CountryValueKey, Locale,
+  COUNTRIES,
 } from '../../constants/countries';
 import type {
   Country,
@@ -63,9 +69,9 @@ const props = withDefaults(defineProps<{
   size: Size.md,
   state: InputState.base,
   searchable: true,
-  searchPlaceholder: 'Search country...',
+  searchPlaceholder: 'Search country',
   countryPlaceholder: 'Select country',
-  placeholder: 'Enter phone number',
+  placeholder: 'Enter number',
   countryValueKey: CountryValueKey.dialCode,
   countrySortable: true,
   messages: () => [],

@@ -3,13 +3,13 @@ import type {
 } from '@storybook/vue3';
 import AntPhoneNumberInput from '../AntPhoneNumberInput.vue';
 import {
-  Size, InputState,
+  Size, InputState, CountryValueKey, Locale,
 } from '../../../enums';
 import {
   ref,
 } from 'vue';
 import {
-  COUNTRIES, CountryValueKey, Locale,
+  COUNTRIES,
 } from '../../../constants/countries';
 
 const meta: Meta<typeof AntPhoneNumberInput> = {
