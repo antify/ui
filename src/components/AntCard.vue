@@ -41,7 +41,7 @@ const cardClass = computed(() => ({
   >
     <div
       :class="cardClass"
-      class="bg-white border border-base-300 rounded-md relative overflow-hidden"
+      class="bg-white border border-base-300 rounded-md relative"
       data-e2e="card"
       v-bind="$attrs"
     >
