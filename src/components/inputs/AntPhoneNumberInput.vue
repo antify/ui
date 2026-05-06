@@ -30,53 +30,6 @@ import {
   ref, nextTick,
 } from 'vue';
 
-const PLACEHOLDERS = {
-  mobileNumber: {
-    [Locale.de]: 'Handynummer',
-    [Locale.en]: 'Mobile number',
-    [Locale.ar]: 'رقم الهاتف المحمول',
-    [Locale.cs]: 'Číslo mobilního telefonu',
-    [Locale.es]: 'Número de teléfono móvil',
-    [Locale.fr]: 'Numéro de portable',
-    [Locale.it]: 'Numero di cellulare',
-    [Locale.ru]: 'Номер мобильного телефона',
-    [Locale.uk]: 'Номер мобільного телефону',
-  },
-  phoneNumber: {
-    [Locale.de]: 'Telefonnummer',
-    [Locale.en]: 'Phone number',
-    [Locale.ar]: 'رقم الهاتف',
-    [Locale.cs]: 'Telefonní číslo',
-    [Locale.es]: 'Número de teléfono',
-    [Locale.fr]: 'Numéro de téléphone',
-    [Locale.it]: 'Numero di telefono',
-    [Locale.ru]: 'Номер телефона',
-    [Locale.uk]: 'Номер телефону',
-  },
-  country: {
-    [Locale.de]: 'Land wählen',
-    [Locale.en]: 'Select country',
-    [Locale.ar]: 'اختر الدولة',
-    [Locale.cs]: 'Vyberte zemi',
-    [Locale.es]: 'Seleccionar país',
-    [Locale.fr]: 'Sélectionner le pays',
-    [Locale.it]: 'Seleziona paese',
-    [Locale.ru]: 'Выберите страну',
-    [Locale.uk]: 'Виберіть країну',
-  },
-  search: {
-    [Locale.de]: 'Suchen',
-    [Locale.en]: 'Search',
-    [Locale.ar]: 'بحث',
-    [Locale.cs]: 'Hledat',
-    [Locale.es]: 'Buscar',
-    [Locale.fr]: 'Rechercher',
-    [Locale.it]: 'Cerca',
-    [Locale.ru]: 'Поиск',
-    [Locale.uk]: 'Пошук',
-  },
-};
-
 defineOptions({
   inheritAttrs: false,
 });
@@ -107,10 +60,8 @@ const props = withDefaults(defineProps<{
   countryValueKey?: CountryValueKey;
   countrySortable?: boolean;
 
-  isMobile?: boolean;
-
   //AntBaseInput Props
-  placeholder?: string;
+  placeholder: string;
   nullable?: boolean;
   locale?: Locale;
 }>(), {
@@ -118,16 +69,15 @@ const props = withDefaults(defineProps<{
   size: Size.md,
   state: InputState.base,
   searchable: true,
-  searchPlaceholder: undefined,
-  countryPlaceholder: undefined,
-  placeholder: undefined,
+  searchPlaceholder: 'Search country',
+  countryPlaceholder: 'Select country',
+  placeholder: 'Enter number',
   countryValueKey: CountryValueKey.dialCode,
   countrySortable: true,
   messages: () => [],
   nullable: true,
   countries: () => COUNTRIES,
   locale: Locale.en,
-  isMobile: true,
 });
 
 const emit = defineEmits([
@@ -153,32 +103,6 @@ const _countryValue = computed({
 
     internalCountryValue.value = val;
   },
-});
-
-const finalPlaceholder = computed(() => {
-  if (props.placeholder !== undefined && props.placeholder !== null) {
-    return props.placeholder;
-  }
-
-  const key = props.isMobile ? 'mobileNumber' : 'phoneNumber';
-
-  return PLACEHOLDERS[key][props.locale] || PLACEHOLDERS[key][Locale.en];
-});
-
-const finalCountryPlaceholder = computed(() => {
-  if (props.countryPlaceholder !== undefined && props.countryPlaceholder !== null) {
-    return props.countryPlaceholder;
-  }
-
-  return PLACEHOLDERS.country[props.locale] || PLACEHOLDERS.country[Locale.en];
-});
-
-const finalSearchPlaceholder = computed(() => {
-  if (props.searchPlaceholder !== undefined && props.searchPlaceholder !== null) {
-    return props.searchPlaceholder;
-  }
-
-  return PLACEHOLDERS.search[props.locale] || PLACEHOLDERS.search[Locale.en];
 });
 
 const updateFullValue = (countryId: string | number | null, rawPhone: string | null) => {
@@ -410,8 +334,8 @@ watch(internalInputRef, (el) => {
         :readonly="readonly"
         :skeleton="skeleton"
         :searchable="searchable"
-        :placeholder="finalCountryPlaceholder"
-        :search-placeholder="finalSearchPlaceholder"
+        :placeholder="countryPlaceholder"
+        :search-placeholder="searchPlaceholder"
         :max-height="countryMaxHeight"
         :is-grouped="true"
         :grouped="Grouped.left"
@@ -433,7 +357,7 @@ watch(internalInputRef, (el) => {
         v-bind="$attrs"
         :disabled="disabled"
         :readonly="readonly"
-        :placeholder="finalPlaceholder"
+        :placeholder="placeholder"
         :grouped="Grouped.right"
         wrapper-class="flex-grow"
         class="-ml-px"
