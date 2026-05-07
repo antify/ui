@@ -63,7 +63,7 @@ const props = withDefaults(defineProps<{
   autoCloseAfterSelection?: boolean;
   createCallback?: (item: string) => Promise<SelectOption>;
   inputRef?: HTMLInputElement | null;
-  maxHeight?: string;
+  dropDownMaxHeight?: string;
 }>(), {
   size: AntTagInputSize.md,
   state: InputState.base,
@@ -79,7 +79,7 @@ const props = withDefaults(defineProps<{
   autoCloseAfterSelection: false,
   placeholder: 'Add new tag',
   inputRef: null,
-  maxHeight: '350px',
+  dropDownMaxHeight: '350px',
 });
 
 const _modelValue: Ref<(string | number)[] | null> = useVModel(props, 'modelValue', emit);
@@ -348,7 +348,7 @@ onMounted(() => {
           :input-ref="_inputRef"
           :size="size as unknown as Size"
           :state="state"
-          :max-height="maxHeight"
+          :max-height="dropDownMaxHeight"
           :focus-on-open="false"
           :close-on-select-item="false"
           @select-element="addTagFromOptions"
