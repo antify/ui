@@ -40,6 +40,15 @@ const props = withDefaults(defineProps<{
   skeleton?: boolean;
   messages?: string[];
   nullable?: boolean;
+  placeholder?: string;
+  monthLabels?: string[];
+  tabLabels?: {
+    day: string;
+    month: string;
+    year: string;
+  };
+  invalidDateMessage?: string;
+  leapYearMessage?: string;
 }>(), {
   state: InputState.base,
   size: Size.md,
@@ -48,6 +57,28 @@ const props = withDefaults(defineProps<{
   skeleton: false,
   messages: () => [],
   nullable: false,
+  placeholder: 'Select date',
+  monthLabels: () => [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ],
+  tabLabels: () => ({
+    day: 'Day',
+    month: 'Month',
+    year: 'Year',
+  }),
+  invalidDateMessage: 'Selected date is not valid. Please select a new day.',
+  leapYearMessage: 'Not a leap year. Please select a valid day for February.',
 });
 
 const emit = defineEmits([
@@ -96,51 +127,51 @@ const yearsList = computed(() => {
 const monthsList = computed(() => [
   {
     value: 1,
-    label: 'Jan',
+    label: props.monthLabels?.[0],
   },
   {
     value: 2,
-    label: 'Feb',
+    label: props.monthLabels?.[1],
   },
   {
     value: 3,
-    label: 'Mar',
+    label: props.monthLabels?.[2],
   },
   {
     value: 4,
-    label: 'Apr',
+    label: props.monthLabels?.[3],
   },
   {
     value: 5,
-    label: 'May',
+    label: props.monthLabels?.[4],
   },
   {
     value: 6,
-    label: 'Jun',
+    label: props.monthLabels?.[5],
   },
   {
     value: 7,
-    label: 'Jul',
+    label: props.monthLabels?.[6],
   },
   {
     value: 8,
-    label: 'Aug',
+    label: props.monthLabels?.[7],
   },
   {
     value: 9,
-    label: 'Sep',
+    label: props.monthLabels?.[8],
   },
   {
     value: 10,
-    label: 'Oct',
+    label: props.monthLabels?.[9],
   },
   {
     value: 11,
-    label: 'Nov',
+    label: props.monthLabels?.[10],
   },
   {
     value: 12,
-    label: 'Dec',
+    label: props.monthLabels?.[11],
   },
 ]);
 
@@ -243,7 +274,7 @@ function onSelectMonth(m: number) {
   if (selectedDay.value && selectedDay.value > maxDays) {
     selectedDay.value = null;
     const monthName = monthsList.value.find(item => item.value === m)?.label || 'this month';
-    warningMessage.value = `Selected date is not valid for ${monthName}. Please select a new day.`;
+    warningMessage.value = `${props.invalidDateMessage} (${monthName})`;
     currentView.value = 'day';
 
     return;
@@ -266,7 +297,7 @@ function onSelectYear(y: number) {
 
   if (selectedDay.value && selectedDay.value > maxDays) {
     selectedDay.value = null;
-    warningMessage.value = `${y} is not a leap year. Please select a valid day for February.`;
+    warningMessage.value = `${y} - ${props.leapYearMessage}`;
     currentView.value = 'day';
 
     return;
@@ -286,7 +317,7 @@ const displayValue = computed(() => {
     return `${String(selectedDay.value).padStart(2, '0')}.${String(selectedMonth.value).padStart(2, '0')}.${selectedYear.value}`;
   }
 
-  return 'Select date';
+  return props.placeholder;
 });
 </script>
 
@@ -341,7 +372,7 @@ const displayValue = computed(() => {
                   :filled="currentView === 'day'"
                   @click="currentView = 'day'"
                 >
-                  Day
+                  {{ tabLabels?.day || 'Day' }}
                 </AntButton>
 
                 <AntButton
@@ -351,7 +382,7 @@ const displayValue = computed(() => {
                   :filled="currentView === 'month'"
                   @click="currentView = 'month'"
                 >
-                  Month
+                  {{ tabLabels?.month || 'Month' }}
                 </AntButton>
 
                 <AntButton
@@ -361,7 +392,7 @@ const displayValue = computed(() => {
                   :filled="currentView === 'year'"
                   @click="currentView = 'year'"
                 >
-                  Year
+                  {{ tabLabels?.year || 'Year' }}
                 </AntButton>
               </div>
 
