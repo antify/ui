@@ -210,9 +210,10 @@ function toggleMenu() {
     return;
   }
 
-  isOpen.value = !isOpen.value;
-
   if (isOpen.value) {
+    closeMenu();
+  } else {
+    isOpen.value = true;
     warningMessage.value = null;
 
     if (!selectedDay.value) {
@@ -239,6 +240,21 @@ function closeMenu() {
 
     const formattedDate = `${selectedYear.value}-${String(selectedMonth.value).padStart(2, '0')}-${String(selectedDay.value).padStart(2, '0')}`;
     emit('update:modelValue', formattedDate);
+  } else {
+    if (props.modelValue) {
+      const [
+        year,
+        month,
+        day,
+      ] = props.modelValue.split('-');
+      selectedYear.value = parseInt(year, 10);
+      selectedMonth.value = parseInt(month, 10);
+      selectedDay.value = parseInt(day, 10);
+    } else {
+      selectedYear.value = null;
+      selectedMonth.value = null;
+      selectedDay.value = null;
+    }
   }
 
   emit('validate', props.modelValue);
