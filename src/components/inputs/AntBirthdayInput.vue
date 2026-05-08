@@ -113,6 +113,7 @@ onClickOutside(floating, (e) => {
   if (reference.value?.contains(e.target as Node)) {
     return;
   }
+
   closeMenu();
 });
 
@@ -176,9 +177,9 @@ const monthsList = computed(() => [
 ]);
 
 const daysList = computed(() => {
-  const y = selectedYear.value || 2024;
-  const m = selectedMonth.value || 1;
-  const daysInMonth = new Date(y, m, 0).getDate();
+  const year = selectedYear.value || new Date().getFullYear();
+  const month = selectedMonth.value || 1;
+  const daysInMonth = new Date(year, month, 0).getDate();
 
   return Array.from({
     length: daysInMonth,
@@ -188,13 +189,13 @@ const daysList = computed(() => {
 watch(() => props.modelValue, (val) => {
   if (val) {
     const [
-      y,
-      m,
-      d,
+      year,
+      month,
+      day,
     ] = val.split('-');
-    selectedYear.value = parseInt(y, 10);
-    selectedMonth.value = parseInt(m, 10);
-    selectedDay.value = parseInt(d, 10);
+    selectedYear.value = parseInt(year, 10);
+    selectedMonth.value = parseInt(month, 10);
+    selectedDay.value = parseInt(day, 10);
   } else {
     selectedYear.value = null;
     selectedMonth.value = null;
@@ -205,7 +206,10 @@ watch(() => props.modelValue, (val) => {
 });
 
 function toggleMenu() {
-  if (props.disabled || props.readonly || props.skeleton) return;
+  if (props.disabled || props.readonly || props.skeleton) {
+    return;
+  }
+
   isOpen.value = !isOpen.value;
 
   if (isOpen.value) {
@@ -256,24 +260,28 @@ function tryEmitAndClose() {
   }
 }
 
-function onSelectDay(d: number) {
-  selectedDay.value = d;
+function onSelectDay(day: number) {
+  selectedDay.value = day;
   warningMessage.value = null;
 
-  if (!selectedMonth.value) currentView.value = 'month';
-  else if (!selectedYear.value) currentView.value = 'year';
-  else tryEmitAndClose();
+  if (!selectedMonth.value) {
+    currentView.value = 'month';
+  } else if (!selectedYear.value) {
+    currentView.value = 'year';
+  } else {
+    tryEmitAndClose();
+  }
 }
 
-function onSelectMonth(m: number) {
-  selectedMonth.value = m;
+function onSelectMonth(month: number) {
+  selectedMonth.value = month;
 
-  const y = selectedYear.value || 2024;
-  const maxDays = new Date(y, m, 0).getDate();
+  const year = selectedYear.value || new Date().getFullYear();
+  const maxDays = new Date(year, month, 0).getDate();
 
   if (selectedDay.value && selectedDay.value > maxDays) {
     selectedDay.value = null;
-    const monthName = monthsList.value.find(item => item.value === m)?.label || 'this month';
+    const monthName = monthsList.value.find(item => item.value === month)?.label || 'this month';
     warningMessage.value = `${props.invalidDateMessage} (${monthName})`;
     currentView.value = 'day';
 
@@ -289,15 +297,15 @@ function onSelectMonth(m: number) {
   }
 }
 
-function onSelectYear(y: number) {
-  selectedYear.value = y;
+function onSelectYear(year: number) {
+  selectedYear.value = year;
 
-  const m = selectedMonth.value || 1;
-  const maxDays = new Date(y, m, 0).getDate();
+  const month = selectedMonth.value || 1;
+  const maxDays = new Date(year, month, 0).getDate();
 
   if (selectedDay.value && selectedDay.value > maxDays) {
     selectedDay.value = null;
-    warningMessage.value = `${y} - ${props.leapYearMessage}`;
+    warningMessage.value = `${year} - ${props.leapYearMessage}`;
     currentView.value = 'day';
 
     return;
