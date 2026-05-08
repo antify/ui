@@ -47,8 +47,11 @@ const props = withDefaults(defineProps<{
     month: string;
     year: string;
   };
-  invalidDateMessage?: string;
-  leapYearMessage?: string;
+  tooltipNotLeapYear?: string;
+  tooltipInvalidMonth?: string;
+  tooltipInvalidDay?: string;
+  tooltipSelectDayFirst?: string;
+  tooltipSelectMonthFirst?: string;
 }>(), {
   state: InputState.base,
   size: Size.md,
@@ -77,8 +80,11 @@ const props = withDefaults(defineProps<{
     month: 'Month',
     year: 'Year',
   }),
-  invalidDateMessage: 'Selected date is not valid. Please select a new day.',
-  leapYearMessage: 'Not a leap year. Please select a valid day for February.',
+  tooltipNotLeapYear: 'Not a leap year',
+  tooltipInvalidMonth: 'Day not available in this month',
+  tooltipInvalidDay: 'Not available in selected month',
+  tooltipSelectDayFirst: 'Please select a day first',
+  tooltipSelectMonthFirst: 'Please select a month first',
 });
 
 const emit = defineEmits([
@@ -91,7 +97,6 @@ const selectedMonth = ref<number | null>(null);
 const selectedYear = ref<number | null>(null);
 const isOpen = ref(false);
 const currentView = ref<'day' | 'month' | 'year'>('day');
-const warningMessage = ref<string | null>(null);
 const reference = ref<HTMLElement | null>(null);
 const floating = ref<HTMLElement | null>(null);
 const {
@@ -117,73 +122,136 @@ onClickOutside(floating, (e) => {
   closeMenu();
 });
 
+const isLeapYear = (year: number) => {
+  return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+};
+
 const yearsList = computed(() => {
   const currentYear = new Date().getFullYear();
 
   return Array.from({
     length: 120,
-  }, (_, i) => currentYear - i);
+  }, (_, i) => {
+    const year = currentYear - i;
+    let disabled = false;
+    let tooltip: string | null = null;
+
+    if (selectedDay.value === 29 && selectedMonth.value === 2) {
+      disabled = !isLeapYear(year);
+
+      if (disabled) {
+        tooltip = props.tooltipNotLeapYear;
+      }
+    }
+
+    return {
+      value: year,
+      disabled,
+      tooltip,
+    };
+  });
 });
 
-const monthsList = computed(() => [
-  {
-    value: 1,
-    label: props.monthLabels?.[0],
-  },
-  {
-    value: 2,
-    label: props.monthLabels?.[1],
-  },
-  {
-    value: 3,
-    label: props.monthLabels?.[2],
-  },
-  {
-    value: 4,
-    label: props.monthLabels?.[3],
-  },
-  {
-    value: 5,
-    label: props.monthLabels?.[4],
-  },
-  {
-    value: 6,
-    label: props.monthLabels?.[5],
-  },
-  {
-    value: 7,
-    label: props.monthLabels?.[6],
-  },
-  {
-    value: 8,
-    label: props.monthLabels?.[7],
-  },
-  {
-    value: 9,
-    label: props.monthLabels?.[8],
-  },
-  {
-    value: 10,
-    label: props.monthLabels?.[9],
-  },
-  {
-    value: 11,
-    label: props.monthLabels?.[10],
-  },
-  {
-    value: 12,
-    label: props.monthLabels?.[11],
-  },
-]);
+const monthsList = computed(() => {
+  return [
+    {
+      value: 1,
+      label: props.monthLabels?.[0],
+    },
+    {
+      value: 2,
+      label: props.monthLabels?.[1],
+    },
+    {
+      value: 3,
+      label: props.monthLabels?.[2],
+    },
+    {
+      value: 4,
+      label: props.monthLabels?.[3],
+    },
+    {
+      value: 5,
+      label: props.monthLabels?.[4],
+    },
+    {
+      value: 6,
+      label: props.monthLabels?.[5],
+    },
+    {
+      value: 7,
+      label: props.monthLabels?.[6],
+    },
+    {
+      value: 8,
+      label: props.monthLabels?.[7],
+    },
+    {
+      value: 9,
+      label: props.monthLabels?.[8],
+    },
+    {
+      value: 10,
+      label: props.monthLabels?.[9],
+    },
+    {
+      value: 11,
+      label: props.monthLabels?.[10],
+    },
+    {
+      value: 12,
+      label: props.monthLabels?.[11],
+    },
+  ].map(month => {
+    let disabled = false;
+    let tooltip: string | null = null;
+
+    if (selectedDay.value === 31) {
+      disabled = [
+        2,
+        4,
+        6,
+        9,
+        11,
+      ].includes(month.value);
+    } else if (selectedDay.value === 30) {
+      disabled = month.value === 2;
+    }
+
+    if (disabled) {
+      tooltip = props.tooltipInvalidMonth;
+    }
+
+    return {
+      ...month,
+      disabled,
+      tooltip,
+    };
+  });
+});
 
 const daysList = computed(() => {
-  const year = selectedYear.value || new Date().getFullYear();
-  const month = selectedMonth.value || 1;
-  const daysInMonth = new Date(year, month, 0).getDate();
+  let maxValidDay = 31;
+
+  if (selectedYear.value && selectedMonth.value) {
+    maxValidDay = new Date(selectedYear.value, selectedMonth.value, 0).getDate();
+  } else if (selectedMonth.value) {
+    maxValidDay = selectedMonth.value === 2 ? 29 : new Date(2024, selectedMonth.value, 0).getDate();
+  }
 
   return Array.from({
-    length: daysInMonth,
-  }, (_, i) => i + 1);
+    length: 31,
+  }, (_, i) => {
+    const day = i + 1;
+    const disabled = day > maxValidDay;
+    const tooltip = disabled ? props.tooltipInvalidDay : null;
+
+    return {
+      value: day,
+      disabled,
+      tooltip,
+    };
+  });
 });
 
 watch(() => props.modelValue, (val) => {
@@ -214,47 +282,29 @@ function toggleMenu() {
     closeMenu();
   } else {
     isOpen.value = true;
-    warningMessage.value = null;
-
-    if (!selectedDay.value) {
-      currentView.value = 'day';
-    } else if (!selectedMonth.value) {
-      currentView.value = 'month';
-    } else if (!selectedYear.value) {
-      currentView.value = 'year';
-    } else {
-      currentView.value = 'day';
-    }
+    selectedDay.value = null;
+    selectedMonth.value = null;
+    selectedYear.value = null;
+    currentView.value = 'day';
   }
 }
 
 function closeMenu() {
   isOpen.value = false;
 
-  if (selectedYear.value && selectedMonth.value && selectedDay.value) {
-    const maxDays = new Date(selectedYear.value, selectedMonth.value, 0).getDate();
-
-    if (selectedDay.value > maxDays) {
-      selectedDay.value = maxDays;
-    }
-
-    const formattedDate = `${selectedYear.value}-${String(selectedMonth.value).padStart(2, '0')}-${String(selectedDay.value).padStart(2, '0')}`;
-    emit('update:modelValue', formattedDate);
+  if (props.modelValue) {
+    const [
+      year,
+      month,
+      day,
+    ] = props.modelValue.split('-');
+    selectedYear.value = parseInt(year, 10);
+    selectedMonth.value = parseInt(month, 10);
+    selectedDay.value = parseInt(day, 10);
   } else {
-    if (props.modelValue) {
-      const [
-        year,
-        month,
-        day,
-      ] = props.modelValue.split('-');
-      selectedYear.value = parseInt(year, 10);
-      selectedMonth.value = parseInt(month, 10);
-      selectedDay.value = parseInt(day, 10);
-    } else {
-      selectedYear.value = null;
-      selectedMonth.value = null;
-      selectedDay.value = null;
-    }
+    selectedYear.value = null;
+    selectedMonth.value = null;
+    selectedDay.value = null;
   }
 
   emit('validate', props.modelValue);
@@ -272,13 +322,33 @@ function tryEmitAndClose() {
   if (selectedYear.value && selectedMonth.value && selectedDay.value) {
     const formattedDate = `${selectedYear.value}-${String(selectedMonth.value).padStart(2, '0')}-${String(selectedDay.value).padStart(2, '0')}`;
     emit('update:modelValue', formattedDate);
-    closeMenu();
+    emit('validate', formattedDate);
+    isOpen.value = false;
   }
 }
 
 function onSelectDay(day: number) {
   selectedDay.value = day;
-  warningMessage.value = null;
+
+  if (selectedMonth.value) {
+    if (day === 31 && [
+      2,
+      4,
+      6,
+      9,
+      11,
+    ].includes(selectedMonth.value)) {
+      selectedMonth.value = null;
+      selectedYear.value = null;
+    } else if (day === 30 && selectedMonth.value === 2) {
+      selectedMonth.value = null;
+      selectedYear.value = null;
+    }
+  }
+
+  if (day === 29 && selectedMonth.value === 2 && selectedYear.value && !isLeapYear(selectedYear.value)) {
+    selectedYear.value = null;
+  }
 
   if (!selectedMonth.value) {
     currentView.value = 'month';
@@ -292,22 +362,12 @@ function onSelectDay(day: number) {
 function onSelectMonth(month: number) {
   selectedMonth.value = month;
 
-  const year = selectedYear.value || new Date().getFullYear();
-  const maxDays = new Date(year, month, 0).getDate();
-
-  if (selectedDay.value && selectedDay.value > maxDays) {
-    selectedDay.value = null;
-    const monthName = monthsList.value.find(item => item.value === month)?.label || 'this month';
-    warningMessage.value = `${props.invalidDateMessage} (${monthName})`;
-    currentView.value = 'day';
-
-    return;
+  if (selectedDay.value === 29 && month === 2 && selectedYear.value && !isLeapYear(selectedYear.value)) {
+    selectedYear.value = null;
   }
 
   if (!selectedYear.value) {
     currentView.value = 'year';
-  } else if (!selectedDay.value) {
-    currentView.value = 'day';
   } else {
     tryEmitAndClose();
   }
@@ -315,30 +375,23 @@ function onSelectMonth(month: number) {
 
 function onSelectYear(year: number) {
   selectedYear.value = year;
-
-  const month = selectedMonth.value || 1;
-  const maxDays = new Date(year, month, 0).getDate();
-
-  if (selectedDay.value && selectedDay.value > maxDays) {
-    selectedDay.value = null;
-    warningMessage.value = `${year} - ${props.leapYearMessage}`;
-    currentView.value = 'day';
-
-    return;
-  }
-
-  if (!selectedMonth.value) {
-    currentView.value = 'month';
-  } else if (!selectedDay.value) {
-    currentView.value = 'day';
-  } else {
-    tryEmitAndClose();
-  }
+  tryEmitAndClose();
 }
 
 const displayValue = computed(() => {
   if (selectedDay.value && selectedMonth.value && selectedYear.value) {
     return `${String(selectedDay.value).padStart(2, '0')}.${String(selectedMonth.value).padStart(2, '0')}.${selectedYear.value}`;
+  }
+
+  if (props.modelValue) {
+    const [
+      year,
+      month,
+      day,
+    ] = props.modelValue.split('-');
+    if (year && month && day) {
+      return `${day}.${month}.${year}`;
+    }
   }
 
   return props.placeholder;
@@ -404,9 +457,16 @@ const displayValue = computed(() => {
                   :grouped="Grouped.center"
                   :state="currentView === 'month' ? State.primary : State.base"
                   :filled="currentView === 'month'"
+                  :disabled="!selectedDay"
                   @click="currentView = 'month'"
                 >
                   {{ tabLabels?.month || 'Month' }}
+                  <template
+                    v-if="!selectedDay"
+                    #tooltip-content
+                  >
+                    {{ tooltipSelectDayFirst }}
+                  </template>
                 </AntButton>
 
                 <AntButton
@@ -414,17 +474,17 @@ const displayValue = computed(() => {
                   :grouped="Grouped.right"
                   :state="currentView === 'year' ? State.primary : State.base"
                   :filled="currentView === 'year'"
+                  :disabled="!selectedMonth"
                   @click="currentView = 'year'"
                 >
                   {{ tabLabels?.year || 'Year' }}
+                  <template
+                    v-if="!selectedMonth"
+                    #tooltip-content
+                  >
+                    {{ tooltipSelectMonthFirst }}
+                  </template>
                 </AntButton>
-              </div>
-
-              <div
-                v-if="warningMessage && currentView === 'day'"
-                class="mb-2 p-2 text-xs text-danger-700 bg-danger-100 border border-danger-200 rounded"
-              >
-                {{ warningMessage }}
               </div>
 
               <div class="overflow-y-auto pr-1 custom-scrollbar max-h-[240px]">
@@ -434,13 +494,20 @@ const displayValue = computed(() => {
                 >
                   <AntButton
                     v-for="day in daysList"
-                    :key="day"
+                    :key="day.value"
                     :expanded="true"
-                    :state="selectedDay === day ? State.primary : State.base"
-                    :filled="selectedDay === day"
-                    @click="onSelectDay(day)"
+                    :state="selectedDay === day.value ? State.primary : State.base"
+                    :filled="selectedDay === day.value"
+                    :disabled="day.disabled"
+                    @click="onSelectDay(day.value)"
                   >
-                    {{ day }}
+                    {{ day.value }}
+                    <template
+                      v-if="day.tooltip"
+                      #tooltip-content
+                    >
+                      {{ day.tooltip }}
+                    </template>
                   </AntButton>
                 </div>
 
@@ -454,9 +521,16 @@ const displayValue = computed(() => {
                     :expanded="true"
                     :state="selectedMonth === month.value ? State.primary : State.base"
                     :filled="selectedMonth === month.value"
+                    :disabled="month.disabled"
                     @click="onSelectMonth(month.value)"
                   >
                     {{ month.label }}
+                    <template
+                      v-if="month.tooltip"
+                      #tooltip-content
+                    >
+                      {{ month.tooltip }}
+                    </template>
                   </AntButton>
                 </div>
 
@@ -466,13 +540,20 @@ const displayValue = computed(() => {
                 >
                   <AntButton
                     v-for="year in yearsList"
-                    :key="year"
+                    :key="year.value"
                     :expanded="true"
-                    :state="selectedYear === year ? State.primary : State.base"
-                    :filled="selectedYear === year"
-                    @click="onSelectYear(year)"
+                    :state="selectedYear === year.value ? State.primary : State.base"
+                    :filled="selectedYear === year.value"
+                    :disabled="year.disabled"
+                    @click="onSelectYear(year.value)"
                   >
-                    {{ year }}
+                    {{ year.value }}
+                    <template
+                      v-if="year.tooltip"
+                      #tooltip-content
+                    >
+                      {{ year.tooltip }}
+                    </template>
                   </AntButton>
                 </div>
               </div>
@@ -495,9 +576,3 @@ const displayValue = computed(() => {
     </div>
   </AntField>
 </template>
-
-<style scoped>
-.custom-scrollbar::-webkit-scrollbar { width: 4px; }
-.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
-</style>
