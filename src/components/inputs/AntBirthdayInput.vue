@@ -9,7 +9,6 @@ import {
   onClickOutside,
 } from '@vueuse/core';
 import {
-  faCalendar,
   faChevronDown,
   faChevronUp,
   faMultiply,
@@ -334,7 +333,7 @@ const displayValue = computed(() => {
             :style="floatingStyles"
           >
             <div class="p-3 flex flex-col">
-              <div class="flex w-full mb-3">
+              <div class="flex w-full mb-3 -space-x-px">
                 <AntButton
                   :expanded="true"
                   :grouped="Grouped.left"
@@ -379,14 +378,14 @@ const displayValue = computed(() => {
                   class="grid grid-cols-7 gap-1 h-max"
                 >
                   <AntButton
-                    v-for="d in daysList"
-                    :key="d"
+                    v-for="day in daysList"
+                    :key="day"
                     :expanded="true"
-                    :state="selectedDay === d ? State.primary : State.base"
-                    :filled="selectedDay === d"
-                    @click="onSelectDay(d)"
+                    :state="selectedDay === day ? State.primary : State.base"
+                    :filled="selectedDay === day"
+                    @click="onSelectDay(day)"
                   >
-                    {{ d }}
+                    {{ day }}
                   </AntButton>
                 </div>
 
@@ -395,14 +394,14 @@ const displayValue = computed(() => {
                   class="grid grid-cols-3 gap-1 h-max"
                 >
                   <AntButton
-                    v-for="m in monthsList"
-                    :key="m.value"
+                    v-for="month in monthsList"
+                    :key="month.value"
                     :expanded="true"
-                    :state="selectedMonth === m.value ? State.primary : State.base"
-                    :filled="selectedMonth === m.value"
-                    @click="onSelectMonth(m.value)"
+                    :state="selectedMonth === month.value ? State.primary : State.base"
+                    :filled="selectedMonth === month.value"
+                    @click="onSelectMonth(month.value)"
                   >
-                    {{ m.label }}
+                    {{ month.label }}
                   </AntButton>
                 </div>
 
@@ -411,14 +410,14 @@ const displayValue = computed(() => {
                   class="grid grid-cols-3 gap-1 h-max"
                 >
                   <AntButton
-                    v-for="y in yearsList"
-                    :key="y"
+                    v-for="year in yearsList"
+                    :key="year"
                     :expanded="true"
-                    :state="selectedYear === y ? State.primary : State.base"
-                    :filled="selectedYear === y"
-                    @click="onSelectYear(y)"
+                    :state="selectedYear === year ? State.primary : State.base"
+                    :filled="selectedYear === year"
+                    @click="onSelectYear(year)"
                   >
-                    {{ y }}
+                    {{ year }}
                   </AntButton>
                 </div>
               </div>
@@ -435,7 +434,7 @@ const displayValue = computed(() => {
         :grouped="Grouped.right"
         :state="(state as unknown as State)"
         :skeleton="skeleton"
-        :size="(size as unknown as any)"
+        :size="(size as unknown as ButtonSize)"
         @click="clearValue"
       />
     </div>
