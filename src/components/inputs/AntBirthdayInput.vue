@@ -9,8 +9,6 @@ import {
   onClickOutside,
 } from '@vueuse/core';
 import {
-  faChevronDown,
-  faChevronUp,
   faMultiply,
 } from '@fortawesome/free-solid-svg-icons';
 import AntField from '../forms/AntField.vue';
@@ -420,7 +418,6 @@ const displayValue = computed(() => {
           :skeleton="skeleton"
           :disabled="disabled"
           :readonly="readonly"
-          :icon-right="isOpen ? faChevronUp : faChevronDown"
           :grouped="(nullable && modelValue) ? Grouped.left : Grouped.none"
           class="text-left font-normal"
           @click="toggleMenu"
