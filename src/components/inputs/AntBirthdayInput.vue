@@ -503,7 +503,7 @@ watch(() => props.modelValue, syncFromProps, {
                 </AntButton>
               </div>
 
-              <div class="overflow-y-auto pr-1 custom-scrollbar max-h-[240px]">
+              <div class="overflow-y-auto pr-1 max-h-[240px]">
                 <div
                   v-if="currentView === 'day'"
                   class="grid grid-cols-7 gap-1 h-max"
@@ -580,9 +580,3 @@ watch(() => props.modelValue, syncFromProps, {
     </div>
   </AntField>
 </template>
-
-<style scoped>
-.custom-scrollbar::-webkit-scrollbar { width: 4px; }
-.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
-</style>
