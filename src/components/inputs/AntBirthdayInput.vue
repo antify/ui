@@ -78,11 +78,11 @@ const props = withDefaults(defineProps<{
     month: 'Month',
     year: 'Year',
   }),
-  tooltipNotLeapYear: 'Not a leap year',
-  tooltipInvalidMonth: 'Day not available in this month',
-  tooltipInvalidDay: 'Not available in selected month',
-  tooltipSelectDayFirst: 'Please select a day first',
-  tooltipSelectMonthFirst: 'Please select a month first',
+  tooltipNotLeapYear: 'The 29th of February is only available during leap years. The year you are trying to select is not a leap year.',
+  tooltipInvalidMonth: 'You have selected a day (like the 30th or 31st) that does not exist in this month. Please select a different month.',
+  tooltipInvalidDay: 'This specific day is not available because the month you have selected has fewer days.',
+  tooltipSelectDayFirst: 'To ensure a valid date is formed, please begin by selecting the day before moving on to the month.',
+  tooltipSelectMonthFirst: 'You must select a month first. This helps us ensure the final date you select is completely valid.',
 });
 
 const emit = defineEmits([
@@ -273,6 +273,21 @@ watch(() => props.modelValue, (val) => {
   immediate: true,
 });
 
+function onTabClick(view: 'day' | 'month' | 'year') {
+  if (view === 'day' && currentView.value !== 'day') {
+    selectedDay.value = null;
+    selectedMonth.value = null;
+    selectedYear.value = null;
+  }
+
+  else if (view === 'month' && currentView.value !== 'month') {
+    selectedMonth.value = null;
+    selectedYear.value = null;
+  }
+
+  currentView.value = view;
+}
+
 function toggleMenu() {
   if (props.disabled || props.readonly || props.skeleton) {
     return;
@@ -447,7 +462,7 @@ const displayValue = computed(() => {
                   :grouped="Grouped.left"
                   :state="currentView === 'day' ? State.primary : State.base"
                   :filled="currentView === 'day'"
-                  @click="currentView = 'day'"
+                  @click="onTabClick('day')"
                 >
                   {{ tabLabels?.day || 'Day' }}
                 </AntButton>
@@ -458,7 +473,7 @@ const displayValue = computed(() => {
                   :state="currentView === 'month' ? State.primary : State.base"
                   :filled="currentView === 'month'"
                   :disabled="!selectedDay"
-                  @click="currentView = 'month'"
+                  @click="onTabClick('month')"
                 >
                   {{ tabLabels?.month || 'Month' }}
                   <template
@@ -475,7 +490,7 @@ const displayValue = computed(() => {
                   :state="currentView === 'year' ? State.primary : State.base"
                   :filled="currentView === 'year'"
                   :disabled="!selectedMonth"
-                  @click="currentView = 'year'"
+                  @click="onTabClick('year')"
                 >
                   {{ tabLabels?.year || 'Year' }}
                   <template
@@ -496,8 +511,6 @@ const displayValue = computed(() => {
                     v-for="day in daysList"
                     :key="day.value"
                     :expanded="true"
-                    :state="selectedDay === day.value ? State.primary : State.base"
-                    :filled="selectedDay === day.value"
                     :disabled="day.disabled"
                     @click="onSelectDay(day.value)"
                   >
@@ -519,8 +532,6 @@ const displayValue = computed(() => {
                     v-for="month in monthsList"
                     :key="month.value"
                     :expanded="true"
-                    :state="selectedMonth === month.value ? State.primary : State.base"
-                    :filled="selectedMonth === month.value"
                     :disabled="month.disabled"
                     @click="onSelectMonth(month.value)"
                   >
@@ -542,8 +553,6 @@ const displayValue = computed(() => {
                     v-for="year in yearsList"
                     :key="year.value"
                     :expanded="true"
-                    :state="selectedYear === year.value ? State.primary : State.base"
-                    :filled="selectedYear === year.value"
                     :disabled="year.disabled"
                     @click="onSelectYear(year.value)"
                   >
