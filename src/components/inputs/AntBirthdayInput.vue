@@ -231,16 +231,16 @@ const displayValue = computed(() => {
     return `${String(selectedDay.value).padStart(2, '0')}.${String(selectedMonth.value).padStart(2, '0')}.${selectedYear.value}`;
   }
 
-  if (props.modelValue) {
-    const [
-      year,
-      month,
-      day,
-    ] = props.modelValue.split('-');
-    if (year && month && day) {
-      return `${day}.${month}.${year}`;
-    }
-  }
+  // if (props.modelValue) {
+  //   const [
+  //     year,
+  //     month,
+  //     day,
+  //   ] = props.modelValue.split('-');
+  //   if (year && month && day) {
+  //     return `${day}.${month}.${year}`;
+  //   }
+  // }
 
   return props.placeholder;
 });
@@ -269,6 +269,9 @@ function syncFromProps(val: string | null) {
       console.warn(`[DateComponent Warning]: Invalid date format provided ("${val}"). Expected format is YYYY-MM-DD.`);
       clearInternalState();
 
+      emit('update:modelValue', null);
+      emit('validate', null);
+
       return;
     }
 
@@ -284,6 +287,9 @@ function syncFromProps(val: string | null) {
     if (!isValidDate(year, month, day)) {
       console.warn(`[DateComponent Warning]: Physically impossible date provided ("${val}").`);
       clearInternalState();
+
+      emit('update:modelValue', null);
+      emit('validate', null);
 
       return;
     }

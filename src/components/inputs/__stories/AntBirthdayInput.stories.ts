@@ -73,6 +73,77 @@ export const Docs: Story = {
   },
 };
 
+export const InvalidValues: Story = {
+  parameters: {
+    chromatic: {
+      disableSnapshot: false,
+    },
+  },
+  render: (args) => ({
+    components: {
+      AntBirthdayInput,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
+    setup() {
+      return {
+        args,
+        Direction,
+      };
+    },
+    template: `
+      <AntFormGroup>
+        <AntFormGroupLabel>
+          Invalid Format (e.g. 01994-002-0023)
+        </AntFormGroupLabel>
+        <AntFormGroup :direction="Direction.row">
+          <AntBirthdayInput
+            v-bind="args"
+            model-value="01994-002-0023"
+            description="Falls back to placeholder due to strict format validation"
+          />
+        </AntFormGroup>
+
+        <AntFormGroupLabel>
+          Impossible Date (e.g. 2023-02-29)
+        </AntFormGroupLabel>
+        <AntFormGroup :direction="Direction.row">
+          <AntBirthdayInput
+            v-bind="args"
+            model-value="2023-02-29"
+            description="2023 is not a leap year"
+          />
+        </AntFormGroup>
+
+        <AntFormGroupLabel>
+          Impossible Date (e.g. 2023-04-31)
+        </AntFormGroupLabel>
+        <AntFormGroup :direction="Direction.row">
+          <AntBirthdayInput
+            v-bind="args"
+            model-value="2023-04-31"
+            description="April only has 30 days"
+          />
+        </AntFormGroup>
+
+        <AntFormGroupLabel>
+          Random String (e.g. "not-a-date")
+        </AntFormGroupLabel>
+        <AntFormGroup :direction="Direction.row">
+          <AntBirthdayInput
+            v-bind="args"
+            model-value="not-a-date"
+            description="Fails RegEx test"
+          />
+        </AntFormGroup>
+      </AntFormGroup>
+    `,
+  }),
+  args: {
+    label: 'Date of Birth',
+  },
+};
+
 export const Skeleton: Story = {
   parameters: {
     chromatic: {
