@@ -252,6 +252,8 @@ const daysList = computed(() => {
   });
 });
 
+const isPlaceholder = computed(() => displayValue.value === props.placeholder);
+
 watch(() => props.modelValue, (val) => {
   if (val) {
     const [
@@ -420,11 +422,12 @@ const displayValue = computed(() => {
           :readonly="readonly"
           :grouped="(nullable && modelValue) ? Grouped.left : Grouped.none"
           class="text-left font-normal"
+          v-bind="$attrs"
           @click="toggleMenu"
         >
           <span
             class="flex-grow truncate"
-            :class="{'text-base-500': !modelValue, 'text-black': modelValue}"
+            :class="{'text-base-500': isPlaceholder, 'text-black': !isPlaceholder}"
           >
             {{ displayValue }}
           </span>
