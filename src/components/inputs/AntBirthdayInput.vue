@@ -47,7 +47,6 @@ const props = withDefaults(defineProps<{
   };
   tooltipNotLeapYear?: string;
   tooltipInvalidMonth?: string;
-  tooltipInvalidDay?: string;
   tooltipSelectDayFirst?: string;
   tooltipSelectMonthFirst?: string;
 }>(), {
@@ -80,7 +79,6 @@ const props = withDefaults(defineProps<{
   }),
   tooltipNotLeapYear: 'The 29th of February is only available during leap years. The year you are trying to select is not a leap year.',
   tooltipInvalidMonth: 'You have selected a day (like the 30th or 31st) that does not exist in this month. Please select a different month.',
-  tooltipInvalidDay: 'This specific day is not available because the month you have selected has fewer days.',
   tooltipSelectDayFirst: 'To ensure a valid date is formed, please begin by selecting the day before moving on to the month.',
   tooltipSelectMonthFirst: 'You must select a month first. This helps us ensure the final date you select is completely valid.',
 });
@@ -112,14 +110,6 @@ const {
   ],
 });
 
-onClickOutside(floating, (e) => {
-  if (reference.value?.contains(e.target as Node)) {
-    return;
-  }
-
-  closeMenu();
-});
-
 const isLeapYear = (year: number) => {
   return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
 };
@@ -149,7 +139,6 @@ const yearsList = computed(() => {
     };
   });
 });
-
 const monthsList = computed(() => {
   return [
     {
@@ -227,57 +216,89 @@ const monthsList = computed(() => {
     };
   });
 });
-
 const daysList = computed(() => {
-  let maxValidDay = 31;
-
-  if (selectedYear.value && selectedMonth.value) {
-    maxValidDay = new Date(selectedYear.value, selectedMonth.value, 0).getDate();
-  } else if (selectedMonth.value) {
-    maxValidDay = selectedMonth.value === 2 ? 29 : new Date(2024, selectedMonth.value, 0).getDate();
-  }
-
   return Array.from({
     length: 31,
-  }, (_, i) => {
-    const day = i + 1;
-    const disabled = day > maxValidDay;
-    const tooltip = disabled ? props.tooltipInvalidDay : null;
-
-    return {
-      value: day,
-      disabled,
-      tooltip,
-    };
-  });
+  }, (_, i) => ({
+    value: i + 1,
+    disabled: false,
+    tooltip: null,
+  }));
 });
-
 const isPlaceholder = computed(() => displayValue.value === props.placeholder);
+const displayValue = computed(() => {
+  if (selectedDay.value && selectedMonth.value && selectedYear.value) {
+    return `${String(selectedDay.value).padStart(2, '0')}.${String(selectedMonth.value).padStart(2, '0')}.${selectedYear.value}`;
+  }
 
-watch(() => props.modelValue, (val) => {
-  if (val) {
+  if (props.modelValue) {
     const [
       year,
       month,
       day,
-    ] = val.split('-');
-    selectedYear.value = parseInt(year, 10);
-    selectedMonth.value = parseInt(month, 10);
-    selectedDay.value = parseInt(day, 10);
-  } else {
-    selectedYear.value = null;
-    selectedMonth.value = null;
-    selectedDay.value = null;
+    ] = props.modelValue.split('-');
+    if (year && month && day) {
+      return `${day}.${month}.${year}`;
+    }
   }
-}, {
-  immediate: true,
+
+  return props.placeholder;
 });
+
+const isValidDate = (year: number, month: number, day: number) => {
+  const date = new Date(year, month - 1, day);
+
+  return (
+    date.getFullYear() === year &&
+    date.getMonth() === month - 1 &&
+    date.getDate() === day
+  );
+};
+
+function clearInternalState() {
+  selectedYear.value = null;
+  selectedMonth.value = null;
+  selectedDay.value = null;
+}
+
+function syncFromProps(val: string | null) {
+  if (val) {
+    const dateFormatRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+    if (!dateFormatRegex.test(val)) {
+      console.warn(`[DateComponent Warning]: Invalid date format provided ("${val}"). Expected format is YYYY-MM-DD.`);
+      clearInternalState();
+
+      return;
+    }
+
+    const [
+      yearStr,
+      monthStr,
+      dayStr,
+    ] = val.split('-');
+    const year = parseInt(yearStr, 10);
+    const month = parseInt(monthStr, 10);
+    const day = parseInt(dayStr, 10);
+
+    if (!isValidDate(year, month, day)) {
+      console.warn(`[DateComponent Warning]: Physically impossible date provided ("${val}").`);
+      clearInternalState();
+
+      return;
+    }
+
+    selectedYear.value = year;
+    selectedMonth.value = month;
+    selectedDay.value = day;
+  } else {
+    clearInternalState();
+  }
+}
 
 function onTabClick(view: 'day' | 'month' | 'year') {
   if (view === 'day' && currentView.value !== 'day') {
-    selectedDay.value = null;
-    selectedMonth.value = null;
-    selectedYear.value = null;
+    clearInternalState();
   }
 
   else if (view === 'month' && currentView.value !== 'month') {
@@ -297,38 +318,19 @@ function toggleMenu() {
     closeMenu();
   } else {
     isOpen.value = true;
-    selectedDay.value = null;
-    selectedMonth.value = null;
-    selectedYear.value = null;
+    clearInternalState();
     currentView.value = 'day';
   }
 }
 
 function closeMenu() {
   isOpen.value = false;
-
-  if (props.modelValue) {
-    const [
-      year,
-      month,
-      day,
-    ] = props.modelValue.split('-');
-    selectedYear.value = parseInt(year, 10);
-    selectedMonth.value = parseInt(month, 10);
-    selectedDay.value = parseInt(day, 10);
-  } else {
-    selectedYear.value = null;
-    selectedMonth.value = null;
-    selectedDay.value = null;
-  }
-
+  syncFromProps(props.modelValue);
   emit('validate', props.modelValue);
 }
 
 function clearValue() {
-  selectedYear.value = null;
-  selectedMonth.value = null;
-  selectedDay.value = null;
+  clearInternalState();
   emit('update:modelValue', null);
   emit('validate', null);
 }
@@ -393,23 +395,16 @@ function onSelectYear(year: number) {
   tryEmitAndClose();
 }
 
-const displayValue = computed(() => {
-  if (selectedDay.value && selectedMonth.value && selectedYear.value) {
-    return `${String(selectedDay.value).padStart(2, '0')}.${String(selectedMonth.value).padStart(2, '0')}.${selectedYear.value}`;
+onClickOutside(floating, (e) => {
+  if (reference.value?.contains(e.target as Node)) {
+    return;
   }
 
-  if (props.modelValue) {
-    const [
-      year,
-      month,
-      day,
-    ] = props.modelValue.split('-');
-    if (year && month && day) {
-      return `${day}.${month}.${year}`;
-    }
-  }
+  closeMenu();
+});
 
-  return props.placeholder;
+watch(() => props.modelValue, syncFromProps, {
+  immediate: true,
 });
 </script>
 
@@ -515,12 +510,6 @@ const displayValue = computed(() => {
                     @click="onSelectDay(day.value)"
                   >
                     {{ day.value }}
-                    <template
-                      v-if="day.tooltip"
-                      #tooltip-content
-                    >
-                      {{ day.tooltip }}
-                    </template>
                   </AntButton>
                 </div>
 
