@@ -580,3 +580,9 @@ watch(() => props.modelValue, syncFromProps, {
     </div>
   </AntField>
 </template>
+
+<style scoped>
+  .ant-birthday-input {
+    display: contents;
+  }
+</style>
