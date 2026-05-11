@@ -413,14 +413,14 @@ watch([
                 v-if="isOpen"
                 :icon="faChevronUp"
                 :size="iconSize"
-                :class="arrowClasses"
+                :class="[arrowClasses, 'pointer-events-none']"
               />
 
               <AntIcon
                 v-else
                 :icon="faChevronDown"
                 :size="iconSize"
-                :class="arrowClasses"
+                :class="[arrowClasses, 'pointer-events-none']"
               />
             </div>
           </AntSkeleton>
