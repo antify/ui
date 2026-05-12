@@ -64,7 +64,8 @@
     "@vueuse/components": "^10.11.1",
     "@vueuse/core": "^10.11.1",
     "@vueuse/router": "^10.11.1",
-    "big.js": "^6.2.2"
+    "big.js": "^6.2.2",
+    "flagpack": "^1.0.5"
   },
   "devDependencies": {
     "@antify/validate": "^1.14.0",

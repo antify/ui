@@ -15,7 +15,7 @@ import {
   CountryValueKey,
 } from '../../enums/Country.enum';
 import {
-  IconSize,
+  IconSize, FlagSize,
 } from '../__types';
 import {
   COUNTRIES,
@@ -28,6 +28,7 @@ import AntSelectMenu from './Elements/AntSelectMenu.vue';
 import AntSearch from './AntSearch.vue';
 import AntIcon from '../AntIcon.vue';
 import AntSkeleton from '../AntSkeleton.vue';
+import AntFlag from '../AntFlag.vue';
 
 const props = withDefaults(defineProps<{
   modelValue: string | number | null;
@@ -45,6 +46,7 @@ const props = withDefaults(defineProps<{
   searchable?: boolean;
   grouped?: Grouped;
   showFlags?: boolean;
+  roundFlags?: boolean;
   isGrouped?: boolean;
   emptyStateMessage?: string;
   /**
@@ -65,6 +67,7 @@ const props = withDefaults(defineProps<{
   searchable: true,
   grouped: Grouped.none,
   showFlags: true,
+  roundFlags: false,
   isGrouped: false,
   emptyStateMessage: 'No countries found',
   optionValueKey: CountryValueKey.value,
@@ -301,10 +304,14 @@ function closeMenu() {
           >
             <div class="flex items-center gap-2 overflow-hidden">
               <template v-if="selectedCountry">
-                <span
+                <AntFlag
                   v-if="showFlags"
-                  class="text-lg leading-none"
-                >{{ selectedCountry.flag }}</span>
+                  :iso-code="selectedCountry.isoCode"
+                  :size="(iconSize as unknown as FlagSize)"
+                  :skeleton="skeleton"
+                  :round="roundFlags"
+                  class="mr-1"
+                />
 
                 <span class="truncate font-medium">{{ selectedCountry.dialCode }}</span>
 
@@ -332,10 +339,12 @@ function closeMenu() {
         </AntSkeleton>
 
         <template #contentLeft="option">
-          <span
+          <AntFlag
             v-if="showFlags"
-            class="text-lg"
-          >{{ (option as any).flag }}</span>
+            :iso-code="(option as any).isoCode"
+            :round="roundFlags"
+            :size="FlagSize.sm"
+          />
         </template>
 
         <template #contentRight="option">

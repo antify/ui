@@ -2,6 +2,7 @@ import {
   type Preview, setup,
 } from '@storybook/vue3';
 import './assets/storybook.css';
+import 'flagpack/dist/flagpack.css';
 import {
   FontAwesomeIcon,
 } from '@fortawesome/vue-fontawesome';
