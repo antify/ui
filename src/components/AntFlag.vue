@@ -25,13 +25,13 @@ const props = withDefaults(defineProps<{
 });
 
 const containerClasses = computed(() => ({
-  'inline-flex items-center justify-center relative flex-shrink-0 overflow-hidden': true,
-  'w-3 h-2.5': props.size === FlagSize.xs2,
-  'w-4 h-3': props.size === FlagSize.xs,
-  'w-5 h-4': props.size === FlagSize.sm,
-  'w-7 h-5': props.size === FlagSize.md,
-  'w-9 h-6.5': props.size === FlagSize.lg,
-  'w-12 h-9': props.size === FlagSize.xl3,
+  'inline-flex items-center justify-center relative flex-shrink-0 overflow-hidden aspect-[4/3]': true,
+  'w-3': props.size === FlagSize.xs2,
+  'w-4': props.size === FlagSize.xs,
+  'w-5': props.size === FlagSize.sm,
+  'w-7': props.size === FlagSize.md,
+  'w-9': props.size === FlagSize.lg,
+  'w-12': props.size === FlagSize.xl3,
   'rounded-full': props.round,
   'rounded-sm': !props.round,
 }));
@@ -60,6 +60,7 @@ onMounted(() => {
     <AntSkeleton
       :visible="skeleton"
       :rounded="round"
+      absolute
     >
       <span
         v-if="isoCode"
