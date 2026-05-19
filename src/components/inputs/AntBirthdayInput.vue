@@ -226,9 +226,18 @@ const daysList = computed(() => {
   }));
 });
 const isPlaceholder = computed(() => displayValue.value === props.placeholder);
+
 const displayValue = computed(() => {
-  if (selectedDay.value && selectedMonth.value && selectedYear.value) {
-    return `${String(selectedDay.value).padStart(2, '0')}.${String(selectedMonth.value).padStart(2, '0')}.${selectedYear.value}`;
+  if (props.modelValue) {
+    const [
+      yearStr,
+      monthStr,
+      dayStr,
+    ] = props.modelValue.split('-');
+
+    if (yearStr && monthStr && dayStr) {
+      return `${dayStr}.${monthStr}.${yearStr}`;
+    }
   }
 
   return props.placeholder;
