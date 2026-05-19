@@ -231,17 +231,6 @@ const displayValue = computed(() => {
     return `${String(selectedDay.value).padStart(2, '0')}.${String(selectedMonth.value).padStart(2, '0')}.${selectedYear.value}`;
   }
 
-  // if (props.modelValue) {
-  //   const [
-  //     year,
-  //     month,
-  //     day,
-  //   ] = props.modelValue.split('-');
-  //   if (year && month && day) {
-  //     return `${day}.${month}.${year}`;
-  //   }
-  // }
-
   return props.placeholder;
 });
 
