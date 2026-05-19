@@ -229,14 +229,21 @@ const isPlaceholder = computed(() => displayValue.value === props.placeholder);
 
 const displayValue = computed(() => {
   if (props.modelValue) {
-    const [
-      yearStr,
-      monthStr,
-      dayStr,
-    ] = props.modelValue.split('-');
+    const dateFormatRegex = /^\d{4}-\d{2}-\d{2}$/;
 
-    if (yearStr && monthStr && dayStr) {
-      return `${dayStr}.${monthStr}.${yearStr}`;
+    if (dateFormatRegex.test(props.modelValue)) {
+      const [
+        yearStr,
+        monthStr,
+        dayStr,
+      ] = props.modelValue.split('-');
+      const year = parseInt(yearStr, 10);
+      const month = parseInt(monthStr, 10);
+      const day = parseInt(dayStr, 10);
+
+      if (isValidDate(year, month, day)) {
+        return `${dayStr}.${monthStr}.${yearStr}`;
+      }
     }
   }
 
