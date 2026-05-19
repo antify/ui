@@ -21,6 +21,7 @@ import AntCheckbox from './inputs/AntCheckbox.vue';
 import AntMultiSelect from './inputs/AntMultiSelect.vue';
 import AntCheckboxGroup from './inputs/AntCheckboxGroup.vue';
 import AntDateInput from './inputs/AntDateInput.vue';
+import AntBirthdayInput from './inputs/AntBirthdayInput.vue';
 import AntNumberInput from './inputs/AntNumberInput.vue';
 import AntPasswordInput from './inputs/AntPasswordInput.vue';
 import AntRadio from './inputs/AntRadio.vue';
@@ -94,6 +95,7 @@ export {
   AntCheckbox,
   AntCheckboxGroup,
   AntDateInput,
+  AntBirthdayInput,
   AntNumberInput,
   AntPasswordInput,
   AntRadio,
