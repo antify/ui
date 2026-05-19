@@ -2,7 +2,7 @@
 // TODO:: remove ts ignore
 // @ts-nocheck
 import {
-  computed, ref, watch,
+  computed, ref, watch, onUnmounted,
 } from 'vue';
 import AntButton from './AntButton.vue';
 import AntIcon from './AntIcon.vue';
@@ -61,13 +61,13 @@ const iconColor = computed(() => {
   return variants[props.state];
 });
 
-watch(() => props.open, (val) => {
-  function onKeydown(e: KeyboardEvent) {
-    if (e.key === 'Escape') {
-      emit('update:open', false);
-    }
+function onKeydown(e: KeyboardEvent) {
+  if (e.key === 'Escape') {
+    closeDialog();
   }
+}
 
+watch(() => props.open, (val) => {
   if (val) {
     openBackground.value = true;
     setTimeout(() => openDialog.value = true, 100);
@@ -88,6 +88,10 @@ function confirmDialog() {
   emit('update:open', false);
   emit('confirm');
 }
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', onKeydown);
+});
 </script>
 
 <template>
