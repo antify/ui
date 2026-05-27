@@ -1,5 +1,4 @@
 @import 'tailwindcss';
-@import 'flagpack/dist/flagpack.css';
 
 @theme inline {
   --color-base-50: var(--color-slate-50);

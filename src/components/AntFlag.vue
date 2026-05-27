@@ -9,6 +9,7 @@ import {
   FlagSize,
 } from './__types/AntFlag.types';
 import AntSkeleton from './AntSkeleton.vue';
+import 'flagpack/dist/flagpack.css';
 
 const props = withDefaults(defineProps<{
   /**
