@@ -1,5 +1,6 @@
 export * from './AntAccordion.types';
 export * from './AntIcon.types';
+export * from './AntFlag.types';
 export * from './AntKeycap.types';
 export * from './AntListGroupItem.types';
 export * from './AntSpinner.types';

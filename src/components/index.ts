@@ -66,6 +66,7 @@ import AntContent from './AntContent.vue';
 import AntDatePicker from './calendar/AntDatePicker.vue';
 import AntDropdown from './AntDropdown.vue';
 import AntIcon from './AntIcon.vue';
+import AntFlag from './AntFlag.vue';
 import AntKeycap from './AntKeycap.vue';
 import AntListGroup from './AntListGroup.vue';
 import AntListGroupItem from './AntListGroupItem.vue';
@@ -126,6 +127,7 @@ export {
   AntContent,
   AntDropdown,
   AntIcon,
+  AntFlag,
   AntKeycap,
   AntListGroup,
   AntListGroupItem,

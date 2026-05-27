@@ -50,6 +50,9 @@ importers:
       big.js:
         specifier: ^6.2.2
         version: 6.2.2
+      flagpack:
+        specifier: ^1.0.5
+        version: 1.0.5
       tailwindcss:
         specifier: 4.0.7
         version: 4.0.7
@@ -2590,6 +2593,9 @@ packages:
     resolution: {integrity: sha512-78/PXT1wlLLDgTzDs7sjq9hzz0vXD+zn+7wypEe4fXQxCmdmqfGsEPQxmiCSQI3ajFV91bVSsvNtrJRiW6nGng==}
     engines: {node: '>=10'}
 
+  flagpack@1.0.5:
+    resolution: {integrity: sha512-jrb3OEoVXPBXjmhwZq6C9DTH6Axarh+rfnT3kA5T4xQ2FD9MogwCasqNJnMvhHHkaEVryXwQf1MQvqVv8UsK3g==}
+
   flat-cache@4.0.1:
     resolution: {integrity: sha512-f7ccFPK3SXFHpx15UIGyRJ/FJQctuKZ0zVuN3frBo4HnK3cay9VEW0R6yPYFHC0AgqhukPzKjq22t5DmAyqGyw==}
     engines: {node: '>=16'}
@@ -4386,6 +4392,9 @@ packages:
   vue-component-type-helpers@2.2.8:
     resolution: {integrity: sha512-4bjIsC284coDO9om4HPA62M7wfsTvcmZyzdfR0aUlFXqq4tXxM1APyXpNVxPC8QazKw9OhmZNHBVDA6ODaZsrA==}
 
+  vue-component-type-helpers@3.2.8:
+    resolution: {integrity: sha512-9689efAXhN/EV86plgkL/XFiJSXhGtWPG6JDboZ+QnjlUWUUQrQ0ILKQtw4iQsuwIwu5k6Aw+JnehDe7161e7A==}
+
   vue-demi@0.14.10:
     resolution: {integrity: sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==}
     engines: {node: '>=12'}
@@ -5487,7 +5496,7 @@ snapshots:
       ts-dedent: 2.2.0
       type-fest: 2.19.0
       vue: 3.5.13(typescript@5.5.4)
-      vue-component-type-helpers: 2.2.8
+      vue-component-type-helpers: 3.2.8
 
   '@stylistic/eslint-plugin@3.1.0(eslint@9.19.0(jiti@2.4.2))(typescript@5.5.4)':
     dependencies:
@@ -7012,6 +7021,8 @@ snapshots:
     dependencies:
       locate-path: 6.0.0
       path-exists: 4.0.0
+
+  flagpack@1.0.5: {}
 
   flat-cache@4.0.1:
     dependencies:
@@ -8821,6 +8832,8 @@ snapshots:
       typescript: 5.8.2
 
   vue-component-type-helpers@2.2.8: {}
+
+  vue-component-type-helpers@3.2.8: {}
 
   vue-demi@0.14.10(vue@3.5.13(typescript@5.5.4)):
     dependencies:

@@ -30,7 +30,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+93',
     numericCode: 4,
-    flag: '🇦🇫',
     mask: '## #######',
   },
   {
@@ -49,7 +48,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+355',
     numericCode: 8,
-    flag: '🇦🇱',
     mask: '### ### ###',
   },
   {
@@ -68,7 +66,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+213',
     numericCode: 12,
-    flag: '🇩🇿',
     mask: '## ### ## ##',
   },
   {
@@ -87,7 +84,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+376',
     numericCode: 20,
-    flag: '🇦🇩',
     mask: '### ###',
   },
   {
@@ -106,27 +102,7 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+244',
     numericCode: 24,
-    flag: '🇦🇴',
     mask: '### ### ###',
-  },
-  {
-    value: 'AQ',
-    isoCode: 'AQ',
-    label: {
-      de: 'Antarktis',
-      en: 'Antarctica',
-      ar: 'القارة القطبية الجنوبية',
-      cs: 'Antarktida',
-      es: 'Antártida',
-      fr: 'Antarctique',
-      it: 'Antartide',
-      ru: 'Антарктида',
-      uk: 'Антарктида',
-    },
-    dialCode: '+672',
-    numericCode: 10,
-    flag: '🇦🇶',
-    mask: '####',
   },
   {
     value: 'AR',
@@ -144,7 +120,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+54',
     numericCode: 32,
-    flag: '🇦🇷',
     mask: '### ### ####',
   },
   {
@@ -163,7 +138,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+374',
     numericCode: 51,
-    flag: '🇦🇲',
     mask: '## ######',
   },
   {
@@ -182,7 +156,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+297',
     numericCode: 533,
-    flag: '🇦🇼',
     mask: '### ####',
   },
   {
@@ -201,7 +174,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+61',
     numericCode: 36,
-    flag: '🇦🇺',
     mask: '### ### ###',
   },
   {
@@ -220,7 +192,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+43',
     numericCode: 40,
-    flag: '🇦🇹',
     mask: '### #######',
   },
   {
@@ -239,7 +210,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+994',
     numericCode: 31,
-    flag: '🇦🇿',
     mask: '## ### ## ##',
   },
   {
@@ -258,7 +228,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+973',
     numericCode: 48,
-    flag: '🇧🇭',
     mask: '#### ####',
   },
   {
@@ -277,7 +246,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+880',
     numericCode: 50,
-    flag: '🇧🇩',
     mask: '#### ######',
   },
   {
@@ -296,7 +264,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+375',
     numericCode: 112,
-    flag: '🇧🇾',
     mask: '## ### ## ##',
   },
   {
@@ -315,7 +282,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+32',
     numericCode: 56,
-    flag: '🇧🇪',
     mask: '### ## ## ##',
   },
   {
@@ -334,7 +300,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+501',
     numericCode: 84,
-    flag: '🇧🇿',
     mask: '### ####',
   },
   {
@@ -353,7 +318,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+229',
     numericCode: 204,
-    flag: '🇧🇯',
     mask: '## ## ## ##',
   },
   {
@@ -372,7 +336,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+975',
     numericCode: 64,
-    flag: '🇧🇹',
     mask: '## ### ###',
   },
   {
@@ -391,7 +354,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+591',
     numericCode: 68,
-    flag: '🇧🇴',
     mask: '#### ####',
   },
   {
@@ -410,7 +372,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+387',
     numericCode: 70,
-    flag: '🇧🇦',
     mask: '## ######',
   },
   {
@@ -429,7 +390,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+267',
     numericCode: 72,
-    flag: '🇧🇼',
     mask: '## ### ###',
   },
   {
@@ -448,7 +408,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+55',
     numericCode: 76,
-    flag: '🇧🇷',
     mask: '## ##### ####',
   },
   {
@@ -467,7 +426,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+673',
     numericCode: 96,
-    flag: '🇧🇳',
     mask: '### ####',
   },
   {
@@ -486,7 +444,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+359',
     numericCode: 100,
-    flag: '🇧🇬',
     mask: '### ### ###',
   },
   {
@@ -505,7 +462,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+226',
     numericCode: 854,
-    flag: '🇧🇫',
     mask: '## ## ## ##',
   },
   {
@@ -524,7 +480,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+257',
     numericCode: 108,
-    flag: '🇧🇮',
     mask: '## ## ## ##',
   },
   {
@@ -543,7 +498,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+855',
     numericCode: 116,
-    flag: '🇰🇭',
     mask: '## ### ###',
   },
   {
@@ -562,7 +516,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+237',
     numericCode: 120,
-    flag: '🇨🇲',
     mask: '#### ####',
   },
   {
@@ -581,7 +534,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+238',
     numericCode: 132,
-    flag: '🇨🇻',
     mask: '### ## ##',
   },
   {
@@ -600,7 +552,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+236',
     numericCode: 140,
-    flag: '🇨🇫',
     mask: '## ## ## ##',
   },
   {
@@ -619,7 +570,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+235',
     numericCode: 148,
-    flag: '🇹🇩',
     mask: '## ## ## ##',
   },
   {
@@ -638,7 +588,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+56',
     numericCode: 152,
-    flag: '🇨🇱',
     mask: '# #### ####',
   },
   {
@@ -657,7 +606,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+86',
     numericCode: 156,
-    flag: '🇨🇳',
     mask: '### #### ####',
   },
   {
@@ -676,7 +624,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+57',
     numericCode: 170,
-    flag: '🇨🇴',
     mask: '### ### ####',
   },
   {
@@ -695,7 +642,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+269',
     numericCode: 174,
-    flag: '🇰🇲',
     mask: '### ## ##',
   },
   {
@@ -714,7 +660,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+243',
     numericCode: 180,
-    flag: '🇨🇩',
     mask: '### ### ###',
   },
   {
@@ -733,7 +678,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+506',
     numericCode: 188,
-    flag: '🇨🇷',
     mask: '#### ####',
   },
   {
@@ -752,7 +696,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+385',
     numericCode: 191,
-    flag: '🇭🇷',
     mask: '## #### ###',
   },
   {
@@ -771,7 +714,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+53',
     numericCode: 192,
-    flag: '🇨🇺',
     mask: '# #######',
   },
   {
@@ -790,7 +732,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+357',
     numericCode: 196,
-    flag: '🇨🇾',
     mask: '## ######',
   },
   {
@@ -809,7 +750,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+420',
     numericCode: 203,
-    flag: '🇨🇿',
     mask: '### ### ###',
   },
   {
@@ -828,7 +768,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+45',
     numericCode: 208,
-    flag: '🇩🇰',
     mask: '## ## ## ##',
   },
   {
@@ -847,7 +786,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+253',
     numericCode: 262,
-    flag: '🇩🇯',
     mask: '## ## ## ##',
   },
   {
@@ -866,7 +804,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+593',
     numericCode: 218,
-    flag: '🇪🇨',
     mask: '## ### ####',
   },
   {
@@ -885,7 +822,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+20',
     numericCode: 818,
-    flag: '🇪🇬',
     mask: '### #### ####',
   },
   {
@@ -904,7 +840,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+503',
     numericCode: 222,
-    flag: '🇸🇻',
     mask: '#### ####',
   },
   {
@@ -923,7 +858,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+240',
     numericCode: 226,
-    flag: '🇬🇶',
     mask: '## ### ####',
   },
   {
@@ -942,7 +876,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+291',
     numericCode: 232,
-    flag: '🇪🇷',
     mask: '# ######',
   },
   {
@@ -961,7 +894,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+372',
     numericCode: 233,
-    flag: '🇪🇪',
     mask: '#### ####',
   },
   {
@@ -980,7 +912,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+251',
     numericCode: 231,
-    flag: '🇪🇹',
     mask: '## ### ####',
   },
   {
@@ -999,7 +930,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+679',
     numericCode: 242,
-    flag: '🇫🇯',
     mask: '### ####',
   },
   {
@@ -1018,7 +948,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+358',
     numericCode: 246,
-    flag: '🇫🇮',
     mask: '## ### ## ##',
   },
   {
@@ -1037,7 +966,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+33',
     numericCode: 250,
-    flag: '🇫🇷',
     mask: '# ## ## ## ##',
   },
   {
@@ -1056,7 +984,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+241',
     numericCode: 266,
-    flag: '🇬🇦',
     mask: '# ## ## ##',
   },
   {
@@ -1075,7 +1002,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+220',
     numericCode: 270,
-    flag: '🇬🇲',
     mask: '### ####',
   },
   {
@@ -1094,7 +1020,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+995',
     numericCode: 268,
-    flag: '🇬🇪',
     mask: '### ### ###',
   },
   {
@@ -1113,7 +1038,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+49',
     numericCode: 276,
-    flag: '🇩🇪',
     mask: '### #######',
   },
   {
@@ -1132,7 +1056,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+233',
     numericCode: 288,
-    flag: '🇬🇭',
     mask: '## ### ####',
   },
   {
@@ -1151,7 +1074,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+30',
     numericCode: 300,
-    flag: '🇬🇷',
     mask: '### #######',
   },
   {
@@ -1170,7 +1092,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+299',
     numericCode: 304,
-    flag: '🇬🇱',
     mask: '## ## ##',
   },
   {
@@ -1189,7 +1110,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+502',
     numericCode: 320,
-    flag: '🇬🇹',
     mask: '#### ####',
   },
   {
@@ -1208,7 +1128,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+224',
     numericCode: 324,
-    flag: '🇬🇳',
     mask: '### ## ## ##',
   },
   {
@@ -1227,7 +1146,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+245',
     numericCode: 624,
-    flag: '🇬🇼',
     mask: '# ######',
   },
   {
@@ -1246,7 +1164,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+592',
     numericCode: 328,
-    flag: '🇬🇾',
     mask: '### ####',
   },
   {
@@ -1265,7 +1182,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+509',
     numericCode: 332,
-    flag: '🇭🇹',
     mask: '#### ####',
   },
   {
@@ -1284,7 +1200,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+504',
     numericCode: 340,
-    flag: '🇭🇳',
     mask: '#### ####',
   },
   {
@@ -1303,7 +1218,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+852',
     numericCode: 344,
-    flag: '🇭🇰',
     mask: '#### ####',
   },
   {
@@ -1322,7 +1236,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+36',
     numericCode: 348,
-    flag: '🇭🇺',
     mask: '## ### ####',
   },
   {
@@ -1341,7 +1254,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+91',
     numericCode: 356,
-    flag: '🇮🇳',
     mask: '##### #####',
   },
   {
@@ -1360,7 +1272,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+62',
     numericCode: 360,
-    flag: '🇮🇩',
     mask: '### #### ####',
   },
   {
@@ -1379,7 +1290,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+98',
     numericCode: 364,
-    flag: '🇮🇷',
     mask: '### ### ####',
   },
   {
@@ -1398,7 +1308,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+964',
     numericCode: 368,
-    flag: '🇮🇶',
     mask: '### ### ####',
   },
   {
@@ -1417,7 +1326,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+353',
     numericCode: 372,
-    flag: '🇮🇪',
     mask: '## #######',
   },
   {
@@ -1436,7 +1344,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+972',
     numericCode: 376,
-    flag: '🇮🇱',
     mask: '## ### ####',
   },
   {
@@ -1455,7 +1362,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+39',
     numericCode: 380,
-    flag: '🇮🇹',
     mask: '### #######',
   },
   {
@@ -1474,7 +1380,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+81',
     numericCode: 392,
-    flag: '🇯🇵',
     mask: '## #### ####',
   },
   {
@@ -1493,7 +1398,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+962',
     numericCode: 400,
-    flag: '🇯🇴',
     mask: '# #### ####',
   },
   {
@@ -1512,7 +1416,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+254',
     numericCode: 404,
-    flag: '🇰🇪',
     mask: '### ### ###',
   },
   {
@@ -1531,7 +1434,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+686',
     numericCode: 296,
-    flag: '🇰🇮',
     mask: '## ### ###',
   },
   {
@@ -1550,7 +1452,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+965',
     numericCode: 414,
-    flag: '🇰🇼',
     mask: '#### ####',
   },
   {
@@ -1569,7 +1470,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+996',
     numericCode: 417,
-    flag: '🇰🇬',
     mask: '### ### ###',
   },
   {
@@ -1588,7 +1488,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+371',
     numericCode: 428,
-    flag: '🇱🇻',
     mask: '#### ####',
   },
   {
@@ -1607,7 +1506,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+961',
     numericCode: 422,
-    flag: '🇱🇧',
     mask: '## ### ###',
   },
   {
@@ -1626,7 +1524,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+266',
     numericCode: 426,
-    flag: '🇱🇸',
     mask: '#### ####',
   },
   {
@@ -1645,7 +1542,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+231',
     numericCode: 430,
-    flag: '🇱🇷',
     mask: '## ### ###',
   },
   {
@@ -1664,7 +1560,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+218',
     numericCode: 434,
-    flag: '🇱🇾',
     mask: '## #######',
   },
   {
@@ -1683,7 +1578,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+423',
     numericCode: 438,
-    flag: '🇱🇮',
     mask: '### ####',
   },
   {
@@ -1702,7 +1596,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+370',
     numericCode: 440,
-    flag: '🇱🇹',
     mask: '### ## ###',
   },
   {
@@ -1721,7 +1614,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+352',
     numericCode: 442,
-    flag: '🇱🇺',
     mask: '### ### ###',
   },
   {
@@ -1740,7 +1632,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+261',
     numericCode: 450,
-    flag: '🇲🇬',
     mask: '## ## ### ##',
   },
   {
@@ -1759,7 +1650,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+853',
     numericCode: 446,
-    flag: '🇲🇴',
     mask: '#### ####',
   },
   {
@@ -1778,7 +1668,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+60',
     numericCode: 458,
-    flag: '🇲🇾',
     mask: '## ### ####',
   },
   {
@@ -1797,7 +1686,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+960',
     numericCode: 462,
-    flag: '🇲🇻',
     mask: '### ####',
   },
   {
@@ -1816,7 +1704,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+223',
     numericCode: 466,
-    flag: '🇲🇱',
     mask: '## ## ## ##',
   },
   {
@@ -1835,7 +1722,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+356',
     numericCode: 470,
-    flag: '🇲🇹',
     mask: '#### ####',
   },
   {
@@ -1854,7 +1740,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+692',
     numericCode: 584,
-    flag: '🇲🇭',
     mask: '### ####',
   },
   {
@@ -1873,7 +1758,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+596',
     numericCode: 474,
-    flag: '🇲🇶',
     mask: '### ## ## ##',
   },
   {
@@ -1892,7 +1776,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+222',
     numericCode: 478,
-    flag: '🇲🇷',
     mask: '## ## ## ##',
   },
   {
@@ -1911,7 +1794,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+230',
     numericCode: 480,
-    flag: '🇲🇺',
     mask: '#### ####',
   },
   {
@@ -1930,7 +1812,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+52',
     numericCode: 484,
-    flag: '🇲🇽',
     mask: '## #### ####',
   },
   {
@@ -1949,7 +1830,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+373',
     numericCode: 498,
-    flag: '🇲🇩',
     mask: '#### ####',
   },
   {
@@ -1968,7 +1848,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+377',
     numericCode: 492,
-    flag: '🇲🇨',
     mask: '## ## ## ##',
   },
   {
@@ -1987,7 +1866,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+976',
     numericCode: 496,
-    flag: '🇲🇳',
     mask: '#### ####',
   },
   {
@@ -2006,7 +1884,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+382',
     numericCode: 499,
-    flag: '🇲🇪',
     mask: '## #######',
   },
   {
@@ -2025,7 +1902,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+212',
     numericCode: 504,
-    flag: '🇲🇦',
     mask: '## #######',
   },
   {
@@ -2044,7 +1920,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+258',
     numericCode: 508,
-    flag: '🇲🇿',
     mask: '## ### ####',
   },
   {
@@ -2063,7 +1938,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+95',
     numericCode: 104,
-    flag: '🇲🇲',
     mask: '# ### ###',
   },
   {
@@ -2082,7 +1956,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+264',
     numericCode: 516,
-    flag: '🇳🇦',
     mask: '## ### ####',
   },
   {
@@ -2101,7 +1974,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+674',
     numericCode: 520,
-    flag: '🇳🇷',
     mask: '### ####',
   },
   {
@@ -2120,7 +1992,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+977',
     numericCode: 524,
-    flag: '🇳🇵',
     mask: '##########',
   },
   {
@@ -2139,7 +2010,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+31',
     numericCode: 528,
-    flag: '🇳🇱',
     mask: '## ########',
   },
   {
@@ -2158,7 +2028,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+64',
     numericCode: 554,
-    flag: '🇳🇿',
     mask: '### ### ####',
   },
   {
@@ -2177,7 +2046,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+505',
     numericCode: 558,
-    flag: '🇳🇮',
     mask: '#### ####',
   },
   {
@@ -2196,7 +2064,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+227',
     numericCode: 562,
-    flag: '🇳🇪',
     mask: '## ## ## ##',
   },
   {
@@ -2215,7 +2082,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+234',
     numericCode: 566,
-    flag: '🇳🇬',
     mask: '### ### ####',
   },
   {
@@ -2234,7 +2100,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+47',
     numericCode: 578,
-    flag: '🇳🇴',
     mask: '### ## ###',
   },
   {
@@ -2253,7 +2118,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+850',
     numericCode: 408,
-    flag: '🇰🇵',
     mask: '### #### ####',
   },
   {
@@ -2272,7 +2136,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+968',
     numericCode: 512,
-    flag: '🇴🇲',
     mask: '#### ####',
   },
   {
@@ -2291,7 +2154,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+92',
     numericCode: 586,
-    flag: '🇵🇰',
     mask: '### #######',
   },
   {
@@ -2310,7 +2172,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+680',
     numericCode: 585,
-    flag: '🇵🇼',
     mask: '### ####',
   },
   {
@@ -2329,7 +2190,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+970',
     numericCode: 275,
-    flag: '🇵🇸',
     mask: '### ### ###',
   },
   {
@@ -2348,7 +2208,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+507',
     numericCode: 591,
-    flag: '🇵🇦',
     mask: '#### ####',
   },
   {
@@ -2367,7 +2226,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+675',
     numericCode: 598,
-    flag: '🇵🇬',
     mask: '#### ####',
   },
   {
@@ -2386,7 +2244,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+595',
     numericCode: 600,
-    flag: '🇵🇾',
     mask: '### ### ###',
   },
   {
@@ -2405,7 +2262,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+51',
     numericCode: 604,
-    flag: '🇵🇪',
     mask: '### ### ###',
   },
   {
@@ -2424,7 +2280,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+63',
     numericCode: 608,
-    flag: '🇵🇭',
     mask: '#### #######',
   },
   {
@@ -2443,7 +2298,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+48',
     numericCode: 616,
-    flag: '🇵🇱',
     mask: '### ### ###',
   },
   {
@@ -2462,7 +2316,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+351',
     numericCode: 620,
-    flag: '🇵🇹',
     mask: '### ### ###',
   },
   {
@@ -2481,7 +2334,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+974',
     numericCode: 634,
-    flag: '🇶🇦',
     mask: '#### ####',
   },
   {
@@ -2500,7 +2352,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+40',
     numericCode: 642,
-    flag: '🇷🇴',
     mask: '### ### ###',
   },
   {
@@ -2519,7 +2370,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+7',
     numericCode: 643,
-    flag: '🇷🇺',
     mask: '### ### ## ##',
   },
   {
@@ -2538,7 +2388,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+250',
     numericCode: 646,
-    flag: '🇷🇼',
     mask: '### ### ###',
   },
   {
@@ -2557,7 +2406,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+685',
     numericCode: 882,
-    flag: '🇼🇸',
     mask: '#######',
   },
   {
@@ -2576,7 +2424,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+378',
     numericCode: 674,
-    flag: '🇸🇲',
     mask: '##########',
   },
   {
@@ -2595,7 +2442,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+239',
     numericCode: 678,
-    flag: '🇸🇹',
     mask: '#######',
   },
   {
@@ -2614,7 +2460,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+966',
     numericCode: 682,
-    flag: '🇸🇦',
     mask: '## ### ####',
   },
   {
@@ -2633,7 +2478,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+221',
     numericCode: 686,
-    flag: '🇸🇳',
     mask: '## ### ####',
   },
   {
@@ -2652,7 +2496,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+381',
     numericCode: 688,
-    flag: '🇷🇸',
     mask: '## #######',
   },
   {
@@ -2671,7 +2514,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+248',
     numericCode: 690,
-    flag: '🇸🇨',
     mask: '# ######',
   },
   {
@@ -2690,7 +2532,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+232',
     numericCode: 694,
-    flag: '🇸🇱',
     mask: '## ######',
   },
   {
@@ -2709,7 +2550,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+65',
     numericCode: 702,
-    flag: '🇸🇬',
     mask: '#### ####',
   },
   {
@@ -2728,7 +2568,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+421',
     numericCode: 703,
-    flag: '🇸🇰',
     mask: '### ### ###',
   },
   {
@@ -2747,7 +2586,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+386',
     numericCode: 705,
-    flag: '🇸🇮',
     mask: '## ### ####',
   },
   {
@@ -2766,7 +2604,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+677',
     numericCode: 90,
-    flag: '🇸🇧',
     mask: '### ####',
   },
   {
@@ -2785,7 +2622,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+252',
     numericCode: 706,
-    flag: '🇸🇴',
     mask: '# #######',
   },
   {
@@ -2804,7 +2640,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+27',
     numericCode: 710,
-    flag: '🇿🇦',
     mask: '## ### ####',
   },
   {
@@ -2823,7 +2658,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+82',
     numericCode: 410,
-    flag: '🇰🇷',
     mask: '## #### ####',
   },
   {
@@ -2842,7 +2676,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+34',
     numericCode: 724,
-    flag: '🇪🇸',
     mask: '### ### ###',
   },
   {
@@ -2861,7 +2694,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+94',
     numericCode: 144,
-    flag: '🇱🇰',
     mask: '## ### ####',
   },
   {
@@ -2880,7 +2712,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+249',
     numericCode: 729,
-    flag: '🇸🇩',
     mask: '## ### ####',
   },
   {
@@ -2899,7 +2730,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+597',
     numericCode: 740,
-    flag: '🇸🇷',
     mask: '### ####',
   },
   {
@@ -2918,7 +2748,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+268',
     numericCode: 748,
-    flag: '🇸🇿',
     mask: '#### ####',
   },
   {
@@ -2937,7 +2766,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+46',
     numericCode: 752,
-    flag: '🇸🇪',
     mask: '## ### ## ##',
   },
   {
@@ -2956,7 +2784,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+41',
     numericCode: 756,
-    flag: '🇨🇭',
     mask: '## ### ## ##',
   },
   {
@@ -2975,7 +2802,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+963',
     numericCode: 760,
-    flag: '🇸🇾',
     mask: '## ### ####',
   },
   {
@@ -2994,7 +2820,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+886',
     numericCode: 158,
-    flag: '🇹🇼',
     mask: '### ### ###',
   },
   {
@@ -3013,7 +2838,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+992',
     numericCode: 762,
-    flag: '🇹🇯',
     mask: '#########',
   },
   {
@@ -3032,7 +2856,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+255',
     numericCode: 834,
-    flag: '🇹🇿',
     mask: '### ### ###',
   },
   {
@@ -3051,7 +2874,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+66',
     numericCode: 764,
-    flag: '🇹🇭',
     mask: '## #### ####',
   },
   {
@@ -3070,7 +2892,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+670',
     numericCode: 626,
-    flag: '🇹🇱',
     mask: '#### ####',
   },
   {
@@ -3089,7 +2910,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+228',
     numericCode: 768,
-    flag: '🇹🇬',
     mask: '## ## ## ##',
   },
   {
@@ -3108,7 +2928,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+690',
     numericCode: 772,
-    flag: '🇹🇰',
     mask: '####',
   },
   {
@@ -3127,7 +2946,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+676',
     numericCode: 776,
-    flag: '🇹🇴',
     mask: '#####',
   },
   {
@@ -3146,7 +2964,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+216',
     numericCode: 788,
-    flag: '🇹🇳',
     mask: '## ### ###',
   },
   {
@@ -3165,7 +2982,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+90',
     numericCode: 792,
-    flag: '🇹🇷',
     mask: '### ### ## ##',
   },
   {
@@ -3184,7 +3000,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+993',
     numericCode: 795,
-    flag: '🇹🇲',
     mask: '# #######',
   },
   {
@@ -3203,7 +3018,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+688',
     numericCode: 798,
-    flag: '🇹🇻',
     mask: '#### #',
   },
   {
@@ -3222,7 +3036,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+256',
     numericCode: 800,
-    flag: '🇺🇬',
     mask: '### ### ###',
   },
   {
@@ -3241,7 +3054,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+380',
     numericCode: 804,
-    flag: '🇺🇦',
     mask: '## ### ## ##',
   },
   {
@@ -3260,7 +3072,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+971',
     numericCode: 784,
-    flag: '🇦🇪',
     mask: '## ### ####',
   },
   {
@@ -3279,7 +3090,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+44',
     numericCode: 826,
-    flag: '🇬🇧',
     mask: '#### ######',
   },
   {
@@ -3298,7 +3108,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+1',
     numericCode: 840,
-    flag: '🇺🇸',
     mask: '### ### ####',
   },
   {
@@ -3317,7 +3126,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+598',
     numericCode: 858,
-    flag: '🇺🇾',
     mask: '# ### ###',
   },
   {
@@ -3336,7 +3144,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+998',
     numericCode: 860,
-    flag: '🇺🇿',
     mask: '## ### ## ##',
   },
   {
@@ -3355,7 +3162,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+678',
     numericCode: 548,
-    flag: '🇻🇺',
     mask: '#######',
   },
   {
@@ -3374,7 +3180,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+58',
     numericCode: 862,
-    flag: '🇻🇪',
     mask: '### #######',
   },
   {
@@ -3393,7 +3198,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+84',
     numericCode: 704,
-    flag: '🇻🇳',
     mask: '## #### ####',
   },
   {
@@ -3412,7 +3216,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+967',
     numericCode: 887,
-    flag: '🇾🇪',
     mask: '# ### ###',
   },
   {
@@ -3431,7 +3234,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+260',
     numericCode: 894,
-    flag: '🇿🇲',
     mask: '## ### ####',
   },
   {
@@ -3450,7 +3252,6 @@ export const COUNTRIES: Country[] = [
     },
     dialCode: '+263',
     numericCode: 716,
-    flag: '🇿🇼',
     mask: '# ######',
   },
 ];
