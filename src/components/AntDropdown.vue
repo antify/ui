@@ -60,13 +60,15 @@ onKeyStroke('Escape', (e: KeyboardEvent) => {
   }
 });
 
-onClickOutside(reference, () => {
-  if (props.closeOnClickOutside) {
-    emit('update:showDropdown', false);
+onClickOutside(floating, () => {
+  if (!props.closeOnClickOutside) {
+    return;
   }
+
+  emit('update:showDropdown', false);
 }, {
   ignore: [
-    floating,
+    reference,
   ],
 });
 </script>
