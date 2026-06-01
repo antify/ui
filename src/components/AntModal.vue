@@ -3,6 +3,7 @@ import {
   ref,
   useSlots,
   onMounted,
+  onBeforeUnmount,
 } from 'vue';
 import {
   faXmark,
@@ -26,6 +27,7 @@ const props = withDefaults(defineProps<{
 const openModal = ref(false);
 const openBackground = ref(false);
 const isMouseDownOnBackground = ref(false);
+const shouldEmitClose = ref(false);
 
 function handleMouseDown(e: MouseEvent) {
   isMouseDownOnBackground.value = e.target === e.currentTarget;
@@ -46,18 +48,26 @@ function onKeydown(e: KeyboardEvent) {
 }
 
 function closeModal() {
+  if (!openBackground.value) {
+    return;
+  }
+
+  shouldEmitClose.value = true;
   openModal.value = false;
 
-  setTimeout(() => openBackground.value = false, props.fullscreen ? 0 : 100);
+  setTimeout(() => {
+    openBackground.value = false;
+  }, props.fullscreen ? 0 : 100);
   document.removeEventListener('keydown', onKeydown);
+}
 
-  setTimeout(
-    () => {
-      emit('close');
-    },
-    //  Wait finishing the close animation
-    400,
-  );
+function handleAfterFadeLeave() {
+  if (!shouldEmitClose.value) {
+    return;
+  }
+
+  shouldEmitClose.value = false;
+  emit('close');
 }
 
 defineExpose({
@@ -69,14 +79,24 @@ onMounted(() => {
   setTimeout(() => openModal.value = true, props.fullscreen ? 0 : 100);
   document.addEventListener('keydown', onKeydown);
 });
+
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', onKeydown);
+});
 </script>
 
 <template>
-  <Transition name="fade">
+  <Transition
+    name="fade"
+    @after-leave="handleAfterFadeLeave"
+  >
     <div
       v-if="openBackground"
       class="absolute inset-0 flex items-center justify-center z-[80] cursor-pointer overflow-hidden"
-      :class="{'bg-black/50 backdrop-blur-xs': !fullscreen}"
+      :class="{
+        'bg-black/50 backdrop-blur-xs': !fullscreen,
+        'pointer-events-none': !openModal,
+      }"
       data-e2e="modal"
       @mousedown="handleMouseDown"
       @mouseup="handleMouseUp"
