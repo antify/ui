@@ -350,6 +350,9 @@ The `src/types.ts` file re-exports from:
 | Locale | `Locale` from `Locale.enum.ts` | `:locale="Locale.en"` |
 | Country key | `CountryValueKey` from `Country.enum.ts` | `:country-value-key="CountryValueKey.dialCode"` |
 
+> ⚠️ **CRITICAL TS SYNTAX GUARDRAIL FOR AI AGENTS:**
+> The `Size` enum contains the key `2xs`. Because it starts with a number, you **CANNOT** reference it via dot-notation (`Size.2xs` is a syntax error). You **MUST** strictly use bracket notation: **`Size['2xs']`**. Never hallucinate keys like `xs2` or `2xs` with dot notation.
+
 ### 3. TypeScript Requirements
 
 - **Clean compilation**: The code must pass `pnpm run typecheck` with **zero warnings**.
@@ -371,7 +374,8 @@ Run `pnpm run lint:fix` to auto-correct all formatting issues.
 
 ### 5. File Organization Rules for AI Agents
 
-- **For NEW components**: Prefer **flat co-location** (Pattern B) — place `.types.ts` and `.stories.ts` files **next to** the `.vue` file in the same directory.
+- **For NEW simple/atomic components**: Define the `Props` TypeScript interface directly inside the `.vue` file using type-based `<script setup lang="ts">`. Do **NOT** create a separate `.types.ts` file unless explicitly requested or if the component possesses complex inner/shared nested interfaces.
+- **For NEW complex components**: Use **flat co-location** (Pattern B) — place `.types.ts` and `.stories.ts` files **next to** the `.vue` file in the same directory.
 - **For EXISTING components**: Follow the existing pattern of the domain directory. If the domain uses `__types/` and `__stories/`, add files there. If it uses flat co-location (like `AntColorInput/`), use that pattern.
 - **Never create** new `__types/` or `__stories/` directories for brand-new components — use flat co-location.
 - **Always update** the relevant `__types/index.ts` barrel file when adding a new `.types.ts` file to a `__types/` directory.
@@ -387,13 +391,13 @@ Task Execution: [Component Name]
 Progress Tracking:
 - [ ] 1. Identify target domain directory under `src/components/` (root, calendar, forms, inputs, layouts, navbar, table, tabs, transitions)
 - [ ] 2. Create the `.vue` file with type-based props using `defineProps<{ ... }>()`
-- [ ] 3. Create the `.types.ts` file with all TypeScript interfaces/types (co-located or in `__types/` per domain convention)
+- [ ] 3. Create the `.types.ts` file with all TypeScript interfaces/types ONLY if it's a complex component (otherwise embed types inside `.vue`)
 - [ ] 4. Create the `.stories.ts` file for Storybook (co-located or in `__stories/` per domain convention)
-- [ ] 5. Map all visual modifier props to `src/enums/` definitions (Size, State, Position, Direction, etc.) — NO raw string literals
+- [ ] 5. Map all visual modifier props to `src/enums/` definitions (Size, State, Position, Direction, etc.) — NO raw string literals. Use Size['2xs'] for the numeric key.
 - [ ] 6. Register the component export in the local directory's `index.ts` (if applicable, e.g., `inputs/Elements/index.ts`)
 - [ ] 7. Add the type export to the relevant `__types/index.ts` barrel file (if using `__types/` pattern)
 - [ ] 8. Re-export the component in `src/components/index.ts`
-- [ ] 9. Ensure the type is re-exported through `src/types.ts` (if it's a new type file)
+- [ ] 9. Ensure the type is re-exported through `src/types.ts` (only if a standalone `.types.ts` file was created)
 - [ ] 10. Execute `pnpm run lint:fix` to clean syntax formatting
 - [ ] 11. Confirm successful compilation via `pnpm run typecheck`
 ```
@@ -404,11 +408,13 @@ Progress Tracking:
 
 Before declaring a task finished, verify:
 
-- [ ] Types and Storybook configs exist and are placed correctly (co-located or in `__types/`/`__stories/` per domain convention).
-- [ ] No raw string literals are used where global enums exist.
+- [ ] Stories exist and are placed correctly (co-located or in `__stories/` per domain convention).
+- [ ] Types exist (embedded in `.vue` or standalone `.types.ts` depending on component complexity).
+- [ ] No raw string literals are used where global enums exist. Bracket notation `Size['2xs']` is verified.
 - [ ] The component is registered in `src/components/index.ts` (import + export).
-- [ ] New type files are re-exported through the appropriate `__types/index.ts` barrel and `src/types.ts`.
+- [ ] New standalone type files (if any) are re-exported through the appropriate `__types/index.ts` barrel and `src/types.ts`.
 - [ ] `pnpm run lint:fix` has been executed with zero remaining errors.
 - [ ] `pnpm run typecheck` passes with zero warnings.
 - [ ] Private/internal components do NOT have the `Ant` prefix and are NOT exported in `src/components/index.ts`.
 - [ ] The `src/index.ts` entry point already re-exports `./components`, `./types`, `./composables`, `./handler`, `./utils`, and `./constants` — no additional changes needed unless a new top-level export category is created.
+```

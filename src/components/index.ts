@@ -58,6 +58,7 @@ import AntTabs from './tabs/AntTabs.vue';
 // Transitions
 import AntTransitionCollapseHeight from './transitions/AntTransitionCollapseHeight.vue';
 
+import AntBadge from './AntBadge.vue';
 import AntAccordion from './AntAccordion.vue';
 import AntAccordionItem from './AntAccordionItem.vue';
 import AntAlert from './AntAlert.vue';
@@ -123,6 +124,7 @@ export {
   AntAccordion,
   AntAccordionItem,
   AntAlert,
+  AntBadge,
   AntCard,
   AntContent,
   AntDropdown,
