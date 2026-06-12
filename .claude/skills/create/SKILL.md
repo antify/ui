@@ -57,6 +57,14 @@ Create a comprehensive Storybook 8 story file:
 - Use `options: Object.values(EnumName)` for enum options.
 - Define a `Docs` story with a `render` function returning a component setup template.
 - Reuse `Docs.render` for variant stories with spread args (`Primary`, `Disabled`, `Skeleton`).
+- **Mandatory `FigmaExport` story**: Every component MUST include a dedicated `FigmaExport` story designed for flawless HTML-to-Figma exporting. It must follow these explicit rules:
+  - **No Global Args**: Must NOT inherit or use shared `meta.args`. All prop variations must be statically hardcoded inside the template.
+  - **Flat Layout Matrix**: Use a flat HTML grid structure with Tailwind CSS (`flex`, `flex-col`, `gap-4`, `items-center`) to prevent Figma plugins from breaking variants into messy nested sub-frames.
+  - **Required Permutations**: Must visually render separate matrices for:
+    1. **All States × Main Visual Types** — a row/column grid showing every `State` variant for each primary visual mode (e.g., filled vs. outlined, or solid vs. ghost).
+    2. **All Sizes Lineup** — every `Size` enum value rendered in a horizontal row.
+    3. **Functional States** — `disabled`, `spinner`, `skeleton`, `readonly` (if applicable) side by side.
+    4. **Content Layouts** — text-only, icon-only, icon+text, long-text variants.
 
 ### 5. Wire the Export Chain
 Ensure the new component is fully discoverable by updating the following files:
@@ -340,6 +348,94 @@ export const Skeleton: Story = {
     skeleton: true,
   },
 };
+
+// ---------------------------------------------------------------------------
+// Figma Export — HTML-to-Figma flat matrix of all component permutations.
+// This story is intentionally isolated from meta.args so that every prop
+// is statically hardcoded in the template. This guarantees Figma plugins
+// receive a clean, predictable, flat-layout grid of all visual variants.
+// ---------------------------------------------------------------------------
+export const FigmaExport: Story = {
+  parameters: {
+    chromatic: {
+      disableSnapshot: false,
+    },
+  },
+  render: () => ({
+    components: {
+      [ComponentName],
+    },
+    setup() {
+      const stateValues = Object.values(State);
+      const sizeValues = Object.values(Size);
+
+      return {
+        stateValues,
+        sizeValues,
+        State,
+        Size,
+      };
+    },
+    template: `
+      <div class="flex flex-col gap-6 p-4">
+        <!-- States × Visual Mode Matrix -->
+        <div class="flex flex-col gap-1">
+          <div class="text-xs font-bold text-base-500 uppercase tracking-wider mb-1">
+            States (Default Size)
+          </div>
+          <div class="flex flex-wrap gap-2 items-center">
+            <[ComponentName]
+              v-for="s in stateValues"
+              :key="'state-' + s"
+              :state="s"
+              size="md"
+            >State {{ s }}</[ComponentName]>
+          </div>
+        </div>
+
+        <!-- Sizes Lineup -->
+        <div class="flex flex-col gap-1">
+          <div class="text-xs font-bold text-base-500 uppercase tracking-wider mb-1">
+            Sizes
+          </div>
+          <div class="flex flex-wrap gap-2 items-center">
+            <[ComponentName]
+              v-for="sz in sizeValues"
+              :key="'size-' + sz"
+              state="base"
+              :size="sz"
+            >Size {{ sz }}</[ComponentName]>
+          </div>
+        </div>
+
+        <!-- Functional States -->
+        <div class="flex flex-col gap-1">
+          <div class="text-xs font-bold text-base-500 uppercase tracking-wider mb-1">
+            Functional States
+          </div>
+          <div class="flex flex-wrap gap-2 items-center">
+            <[ComponentName] state="base" size="md">Active</[ComponentName]>
+            <[ComponentName] state="base" size="md" disabled>Disabled</[ComponentName]>
+            <[ComponentName] state="base" size="md" skeleton>Skeleton</[ComponentName]>
+            <[ComponentName] state="base" size="md" readonly>Readonly</[ComponentName]>
+          </div>
+        </div>
+
+        <!-- Content Layouts -->
+        <div class="flex flex-col gap-1">
+          <div class="text-xs font-bold text-base-500 uppercase tracking-wider mb-1">
+            Content Layouts
+          </div>
+          <div class="flex flex-wrap gap-2 items-center">
+            <[ComponentName] state="primary" size="md">Short</[ComponentName]>
+            <[ComponentName] state="primary" size="md">Medium Label</[ComponentName]>
+            <[ComponentName] state="primary" size="md">Extra long content text that wraps</[ComponentName]>
+          </div>
+        </div>
+      </div>
+    `,
+  }),
+};
 ```
 
 ---
@@ -355,6 +451,7 @@ export const Skeleton: Story = {
 - **hasInputState**: Always include the `hasInputState` computed and use it for `:tabindex`, focus ring suppression, and cursor behavior.
 - **data-e2e**: Include `:data-e2e` and `:data-e2e-state` attributes on the root interactive element.
 - **Section Comment Bars**: Use `// ---` separator bars to visually isolate sections (State helpers, CSS generators, Event handlers, Runtime validation).
+- **Figma Matrix Isolation**: The `FigmaExport` story must be completely independent of `meta.args` or shared args. All prop variations must be statically hardcoded in the template to guarantee a clean, predictable, flat-layout grid of all component permutations for Figma plugins.
 - **Zero Errors**: Must compilation-check perfectly (`pnpm run typecheck`) and follow ESLint formatting rules (`pnpm run lint:fix`).
 
 ## Handoff
