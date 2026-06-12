@@ -267,6 +267,62 @@ export const WithTooltip: Story = {
   },
 };
 
+export const FigmaExport: Story = {
+  parameters: {
+    // Отключаем лишние элементы интерфейса Сторибука для чистого импорта
+    chromatic: {
+      disableSnapshot: false,
+    },
+    options: {
+      showPanel: false,
+    },
+  },
+  render: () => ({
+    components: {
+      AntButton,
+    },
+    setup() {
+      // Регистрируем все иконки и перечисления, которые нужны для матрицы
+      return {
+        states: Object.values(State),
+        sizes: Object.values(ButtonSize),
+      };
+    },
+    template: `
+      <div class="p-8 flex flex-col gap-12 bg-gray-50">
+        <div class="flex flex-col gap-4">
+          <h2 class="text-xl font-bold">Matrix: States & Types</h2>
+          <div v-for="state in states" :key="state" class="flex gap-4 items-center">
+            <span class="w-24 text-sm font-mono text-gray-500">{{ state }}</span>
+            <AntButton :state="state" :filled="true">Filled</AntButton>
+            <AntButton :state="state" :filled="false" :outlined="true">Outlined</AntButton>
+            <AntButton :state="state" :filled="true" :outlined="false">No Border</AntButton>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          <h2 class="text-xl font-bold">Matrix: Sizes</h2>
+          <div class="flex gap-4 items-end">
+            <div v-for="size in sizes" :key="size" class="flex flex-col items-center gap-2">
+              <AntButton state="primary" :size="size" :filled="true">Button {{ size }}</AntButton>
+              <span class="text-xs font-mono text-gray-400">{{ size }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          <h2 class="text-xl font-bold">Matrix: Functional States</h2>
+          <div class="flex gap-4">
+            <AntButton state="primary" :filled="true" disabled>Disabled</AntButton>
+            <AntButton state="primary" :filled="true" spinner>Loading</AntButton>
+            <AntButton state="primary" :filled="true" skeleton>Skeleton</AntButton>
+          </div>
+        </div>
+      </div>
+    `,
+  }),
+};
+
 export const Summary: Story = {
   parameters: {
     chromatic: {
