@@ -106,3 +106,79 @@ export const Skeleton: Story = {
     skeleton: true,
   },
 };
+
+export const FigmaExport: Story = {
+  parameters: {
+    chromatic: {
+      disableSnapshot: false,
+    },
+    options: {
+      showPanel: false, // Очищаем интерфейс для удобного скриншота/импорта
+    },
+  },
+  render: () => ({
+    components: {
+      AntAlert,
+    },
+    setup() {
+      return {
+        states: Object.values(InputState),
+      };
+    },
+    template: `
+      <div class="p-8 flex flex-col gap-12 bg-slate-100 min-h-screen font-sans text-slate-800">
+
+        <div class="flex flex-col gap-4">
+          <h2 class="text-xl font-bold border-b pb-2 border-slate-200">Matrix: States & Layout Density</h2>
+
+          <div v-for="state in states" :key="state" class="flex flex-col gap-3 p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
+            <span class="text-sm font-mono text-slate-400 font-bold uppercase">{{ state }}</span>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="flex flex-col gap-1">
+                <span class="text-xs text-slate-400 font-mono">With Title & Body</span>
+                <AntAlert :state="state" title="Notification Header">
+                  Detailed notification text block explaining the current system event or status.
+                </AntAlert>
+              </div>
+
+              <div class="flex flex-col gap-1">
+                <span class="text-xs text-slate-400 font-mono">Text Only (Compact)</span>
+                <AntAlert :state="state">
+                  Short single-line status text.
+                </AntAlert>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          <h2 class="text-xl font-bold border-b pb-2 border-slate-200">Matrix: Functional Options</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <div class="flex flex-col gap-2 p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
+              <span class="text-xs font-mono text-slate-400 font-bold">Skeleton Loader</span>
+              <AntAlert state="base" :skeleton="true">Loading context...</AntAlert>
+            </div>
+
+            <div class="flex flex-col gap-2 p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
+              <span class="text-xs font-mono text-slate-400 font-bold">With Context Help</span>
+              <AntAlert state="info" title="Need Help?" questionMarkText="This text appears inside the helper popover.">
+                Hover the question icon.
+                </AntAlert>
+            </div>
+
+            <div class="flex flex-col gap-2 p-4 bg-white rounded-xl border border-slate-200 shadow-sm">
+              <span class="text-xs font-mono text-slate-400 font-bold">Clean Strip (No Icons/Dismiss)</span>
+              <AntAlert state="danger" :icon="false" :dismissBtn="false">
+                Strict embedded warning layout without active controls.
+              </AntAlert>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    `,
+  }),
+};
