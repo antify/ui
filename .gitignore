@@ -28,3 +28,8 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# claude code personal settings
+.claude/settings.local.json
+.claude/settings.json
+

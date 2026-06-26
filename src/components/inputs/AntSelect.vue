@@ -17,7 +17,7 @@ import {
   type SelectOption,
 } from './__types/AntSelect.types';
 import {
-  computed, onMounted, ref, watch,
+  computed, onMounted, ref, watch, useSlots,
 } from 'vue';
 import {
   Size,
@@ -96,6 +96,9 @@ const _modelValue = computed({
     emit('update:modelValue', val);
   },
 });
+
+const slots = useSlots();
+const hasAddonRight = computed(() => !!slots.addonRight);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 
 const lastValidLabel = ref<string | null>(null);
@@ -137,7 +140,7 @@ const inputClasses = computed(() => {
     'rounded-tl-none rounded-bl-none rounded-tr-md rounded-br-md': props.grouped === Grouped.right,
     'rounded-none': props.grouped === Grouped.center,
     'rounded-md': props.grouped === Grouped.none,
-    'rounded-tr-none rounded-br-none': props.nullable && _modelValue.value !== null,
+    'rounded-tr-none rounded-br-none': (props.nullable && _modelValue.value !== null) || hasAddonRight.value,
     // Disabled
     'opacity-50 cursor-not-allowed': props.disabled,
     // Option deleted
@@ -172,7 +175,9 @@ const arrowClasses = computed(() => {
   };
 });
 const skeletonGrouped = computed(() => {
-  if (!props.nullable || (props.nullable && _modelValue.value === null)) {
+  const isCutOnRight = (props.nullable && _modelValue.value !== null) || hasAddonRight.value;
+
+  if (!isCutOnRight) {
     return props.grouped;
   }
 
@@ -188,6 +193,18 @@ const iconSize = computed(() => {
   }
 
   return IconSize.xs;
+});
+const clearButtonGrouped = computed(() => {
+  if (hasAddonRight.value) {
+    return Grouped.center;
+  }
+
+  return [
+    Grouped.left,
+    Grouped.center,
+  ].some(item => item === props.grouped)
+    ? Grouped.center
+    : Grouped.right;
 });
 const _inputRef = defineModel('inputRef', {
   default: null,
@@ -430,12 +447,14 @@ watch([
         data-e2e="clear-button"
         :icon-left="faMultiply"
         :state="state as unknown as State"
-        :grouped="[Grouped.left, Grouped.center].some(item => item === grouped) ? Grouped.center : Grouped.right"
+        :grouped="clearButtonGrouped"
         :size="size"
         :skeleton="skeleton"
         :disabled="disabled"
         @click="onClickRemoveButton"
       />
+
+      <slot name="addonRight" />
     </div>
   </AntField>
 </template>

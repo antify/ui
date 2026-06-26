@@ -6,6 +6,7 @@ import AntIcon from '../../AntIcon.vue';
 import AntDropdown from '../Elements/AntSelectMenu.vue';
 import {
   faCake,
+  faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   computed, onMounted, ref, type Ref, watch,
@@ -734,6 +735,70 @@ export const AdvancedCustomDropdown: Story = {
     label: 'Placeholder',
     description: 'Sticky groups, Tags and Search inside base AntSelect',
     modelValue: null,
+  },
+};
+
+export const WithAddonRight: Story = {
+  name: 'Slot: Addon Right (Base)',
+  render: (args) => ({
+    components: {
+      AntSelect,
+      AntButton,
+    },
+    setup() {
+      const modelValue = ref(args.modelValue ?? null);
+
+      return {
+        args,
+        modelValue,
+        faPlus,
+        GroupedEnum,
+      };
+    },
+    template: `
+      <div class="p-10 max-w-[450px]">
+        <AntSelect v-bind="args" v-model="modelValue">
+          <template #addonRight>
+            <AntButton
+              data-e2e="story-addon-button"
+              :icon-left="faPlus"
+              :size="args.size"
+              :state="args.state"
+              :skeleton="args.skeleton"
+              :disabled="args.disabled"
+              :grouped="GroupedEnum.right"
+            />
+          </template>
+        </AntSelect>
+      </div>
+    `,
+  }),
+  args: {
+    ...Docs.args,
+    label: 'Addon Right',
+    description: 'Select component with an external button integrated directly into the input frame.',
+  },
+};
+
+export const WithAddonRightAndNullable: Story = {
+  name: 'Slot: Addon Right + Nullable (Edge Case)',
+  render: WithAddonRight.render,
+  args: {
+    ...Docs.args,
+    label: 'Addon Right + Nullable',
+    description: 'Verifies border-radius alignment when both the clear button and a custom right addon are active simultaneously.',
+    modelValue: '1',
+    nullable: true,
+  },
+};
+
+export const WithAddonRightSkeleton: Story = {
+  name: 'Slot: Addon Right (Skeleton State)',
+  render: WithAddonRight.render,
+  args: {
+    ...WithAddonRightAndNullable.args,
+    label: 'Skeleton State',
+    skeleton: true,
   },
 };
 
