@@ -17,7 +17,7 @@ import {
   type SelectOption,
 } from './__types/AntSelect.types';
 import {
-  computed, onMounted, ref, watch, useSlots, Comment, Text,
+  computed, onMounted, ref, watch, useSlots, Comment, Text, Fragment,
 } from 'vue';
 import {
   Size,
@@ -98,15 +98,36 @@ const _modelValue = computed({
 });
 
 const slots = useSlots();
+
+const hasSlotContent = (nodes: any[] | undefined): boolean => {
+  if (!nodes) {
+    return false;
+  }
+
+  return nodes.some(node => {
+    if (node.type === Comment) {
+      return false;
+    }
+
+    if (node.type === Text) {
+      return (node.children as string).trim() !== '';
+    }
+
+    if (node.type === Fragment) {
+      return hasSlotContent(node.children as any[]);
+    }
+
+    return true;
+  });
+};
+
 const hasAddonRight = computed(() => {
   if (!slots.addonRight) return false;
 
-  return slots.addonRight().some(node => node.type !== Comment && (node.type !== Text || (node.children as string).trim() !== ''));
+  return hasSlotContent(slots.addonRight());
 });
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
-
 const lastValidLabel = ref<string | null>(null);
-
 const valueLabel = computed(() => {
   const found = props.options.find(option => option.value === _modelValue.value);
 
