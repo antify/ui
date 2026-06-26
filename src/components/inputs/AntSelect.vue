@@ -17,7 +17,7 @@ import {
   type SelectOption,
 } from './__types/AntSelect.types';
 import {
-  computed, onMounted, ref, watch, useSlots,
+  computed, onMounted, ref, watch, useSlots, Comment, Text,
 } from 'vue';
 import {
   Size,
@@ -98,7 +98,11 @@ const _modelValue = computed({
 });
 
 const slots = useSlots();
-const hasAddonRight = computed(() => !!slots.addonRight);
+const hasAddonRight = computed(() => {
+  if (!slots.addonRight) return false;
+
+  return slots.addonRight().some(node => node.type !== Comment && (node.type !== Text || (node.children as string).trim() !== ''));
+});
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 
 const lastValidLabel = ref<string | null>(null);
