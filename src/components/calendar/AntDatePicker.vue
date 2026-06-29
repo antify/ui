@@ -249,12 +249,12 @@ onMounted(() => {
                   '!bg-primary-500 !text-primary-500-font hover:bg-primary-300 hover:text-primary-300-font': day.date === format(modelValue, 'yyyy-MM-dd'),
                 }"
                 :style="{
-                  backgroundColor: day.isSpecialDay ? `var(--color-${day.specialDayColor})` : 'none',
+                  backgroundColor: day.isSpecialDay ? `var(--color-${day.specialDayColor})` : '',
                   color: day.isSpecialDay
                     ? getColorNumber(day.specialDayColor) < 500
                       ? 'var(--color-for-white-bg-font)'
                       : '#fff'
-                    : 'none'
+                    : ''
                 }"
                 @click="() => $emit('update:modelValue', new Date(day.date).getTime())"
               >
