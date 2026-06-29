@@ -122,7 +122,9 @@ const hasSlotContent = (nodes: any[] | undefined): boolean => {
 };
 
 const hasAddonRight = computed(() => {
-  if (!slots.addonRight) return false;
+  if (!slots.addonRight) {
+    return false;
+  }
 
   return hasSlotContent(slots.addonRight());
 });
