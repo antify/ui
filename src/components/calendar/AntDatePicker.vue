@@ -63,11 +63,11 @@ const currentMonthIndex = ref(new Date(props.modelValue).getMonth());
 const currentYear = ref(new Date(props.modelValue).getFullYear());
 const matrix = computed(() => {
   /**
-  * The picker always starts with Monday.
-  * So if the first day of the current month is for example a wednesday,
-  * the first two days (Monday and Tuesday) should be from the previous month.
-  * Also, the last days of the matrix should be filled with the next month's days.
-  */
+   * The picker always starts with Monday.
+   * So if the first day of the current month is for example a wednesday,
+   * the first two days (Monday and Tuesday) should be from the previous month.
+   * Also, the last days of the matrix should be filled with the next month's days.
+   */
   const firstDateOfMonth = new Date(currentYear.value, currentMonthIndex.value, 1);
   const _matrix = [];
 
@@ -89,6 +89,8 @@ const matrix = computed(() => {
       const date = format(currentDate, 'yyyy-MM-dd');
       const isCurrentMonth = getMonth(currentDate) === currentMonthIndex.value;
 
+      const specialDay = props.specialDays.find(sd => sd.date === date);
+
       weekDays.push({
         date,
         label: format(currentDate, 'd'),
@@ -96,8 +98,9 @@ const matrix = computed(() => {
         isCurrentMonth,
         isWeekend: weekdayIndex === 5 || weekdayIndex === 6,
         isToday: date === format(Date.now(), 'yyyy-MM-dd') && isCurrentMonth,
-        isSpecialDay: !!props.specialDays.find(sd => sd.date === date),
-        specialDayColor: props.specialDays.find(sd => sd.date === date)?.color,
+        isSpecialDay: !!specialDay,
+        specialDayColor: specialDay?.color,
+        specialDayName: specialDay?.name,
       });
 
       currentDate = addDays(currentDate, 1);
@@ -247,6 +250,7 @@ onMounted(() => {
                   'bg-primary-100': day.isWeekend,
                   'hover:bg-base-200 hover:text-base-200-font': day.date !== format(modelValue, 'yyyy-MM-dd'),
                   '!bg-primary-500 !text-primary-500-font hover:bg-primary-300 hover:text-primary-300-font': day.date === format(modelValue, 'yyyy-MM-dd'),
+                  'opacity-70': !day.isCurrentMonth && day.isSpecialDay,
                 }"
                 :style="{
                   backgroundColor: day.isSpecialDay ? `var(--color-${day.specialDayColor})` : '',
@@ -262,10 +266,10 @@ onMounted(() => {
               </div>
 
               <template
-                v-if="day.isSpecialDay && specialDays.find(specialDay => specialDay.date === day.date)?.name"
+                v-if="day.isSpecialDay && day.specialDayName"
                 #content
               >
-                {{ specialDays.find(specialDay => specialDay.date === day.date)?.name }}
+                {{ day.specialDayName }}
               </template>
             </AntTooltip>
           </AntSkeleton>
