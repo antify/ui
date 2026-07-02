@@ -244,13 +244,12 @@ onMounted(() => {
               <div
                 class="rounded-md flex items-center justify-center p-2 font-semibold cursor-pointer transition-colors w-full h-full"
                 :class="{
-                  'text-base-400': !day.isCurrentMonth,
-                  'text-for-white-bg-font': day.isCurrentMonth,
+                  'text-for-white-bg-font': true,
                   'outline outline-primary-500': day.isToday,
                   'bg-primary-100': day.isWeekend,
                   'hover:bg-base-200 hover:text-base-200-font': day.date !== format(modelValue, 'yyyy-MM-dd'),
                   '!bg-primary-500 !text-primary-500-font hover:bg-primary-300 hover:text-primary-300-font': day.date === format(modelValue, 'yyyy-MM-dd'),
-                  'opacity-70': !day.isCurrentMonth && day.isSpecialDay,
+                  'opacity-70': !day.isCurrentMonth,
                 }"
                 :style="{
                   backgroundColor: day.isSpecialDay ? `var(--color-${day.specialDayColor})` : '',
