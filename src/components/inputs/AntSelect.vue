@@ -17,7 +17,7 @@ import {
   type SelectOption,
 } from './__types/AntSelect.types';
 import {
-  computed, onMounted, ref, watch,
+  computed, onMounted, ref, watch, nextTick,
 } from 'vue';
 import {
   Size,
@@ -33,9 +33,6 @@ import {
   faChevronDown, faChevronUp, faMultiply,
 } from '@fortawesome/free-solid-svg-icons';
 import AntSkeleton from '../AntSkeleton.vue';
-import {
-  vOnClickOutside,
-} from '@vueuse/components';
 import AntButton from '../AntButton.vue';
 import {
   State, InputState,
@@ -217,11 +214,6 @@ watch(() => props.skeleton, (val) => {
     emit('validate', props.modelValue);
   }
 });
-watch(_modelValue, () => {
-  if (props.messages.length > 0) {
-    emit('validate', props.modelValue);
-  }
-});
 
 function onBlur(e: FocusEvent) {
   if (isOpen.value) {
@@ -232,21 +224,17 @@ function onBlur(e: FocusEvent) {
   emit('blur', e);
 }
 
-function onClickOutside(e) {
-  if (!isOpen.value) {
-    return;
-  }
-
-  const menuElement = dropDownRef.value?.floating;
-
-  if (menuElement && menuElement.contains(e.target as Node)) {
-    return;
-  }
-
-  isOpen.value = false;
-
+async function onMenuClickOutside() {
+  await nextTick();
   emit('validate', props.modelValue);
-  _inputRef.value?.focus();
+}
+
+async function onKeydown(e: KeyboardEvent) {
+  if (e.key === 'Tab' && isOpen.value) {
+    isOpen.value = false;
+    await nextTick();
+    emit('validate', props.modelValue);
+  }
 }
 
 function onClickSelectInput(e: MouseEvent) {
@@ -268,7 +256,8 @@ function onClickRemoveButton() {
   _modelValue.value = null;
 }
 
-function onElementSelect(value: string | number | null) {
+async function onElementSelect(value: string | number | null) {
+  await nextTick();
   emit('validate', value);
 
   _inputRef.value?.focus();
@@ -285,6 +274,13 @@ watch([
   }
 }, {
   immediate: true,
+});
+
+watch(_modelValue, async () => {
+  if (props.messages.length > 0) {
+    await nextTick();
+    emit('validate', props.modelValue);
+  }
 });
 </script>
 
@@ -306,7 +302,6 @@ watch([
       class="h-fit flex flex-row w-full"
     >
       <div
-        v-on-click-outside="onClickOutside"
         class="relative w-full"
         :class="{'cursor-pointer': !skeleton && !readonly}"
       >
@@ -328,6 +323,7 @@ watch([
           :close-on-enter="true"
           :max-height="maxHeight"
           @select-element="onElementSelect"
+          @click-outside="onMenuClickOutside"
         >
           <template #contentBefore>
             <slot name="selectMenuContentBefore" />
@@ -366,6 +362,7 @@ watch([
               @mousedown="onClickSelectInput"
               @click="() => _inputRef?.focus()"
               @blur="onBlur"
+              @keydown="onKeydown"
             >
               <div
                 v-if="_modelValue === null && placeholder !== undefined"
