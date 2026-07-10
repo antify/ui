@@ -163,7 +163,7 @@ watch(() => props.modelValue, (val) => {
         :skeleton="skeleton"
         :size="size"
         data-e2e="clear-button"
-        @click="_modelValue = null"
+        @click="emit('update:modelValue', null);"
       />
     </div>
   </AntField>
