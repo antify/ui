@@ -58,27 +58,33 @@ const props = withDefaults(defineProps<{
   nullable: false,
   inputRef: null,
 });
+
 const emit = defineEmits([
   'update:modelValue',
   'update:inputRef',
   'validate',
 ]);
+
 const _modelValue = ref<string | null>(props.modelValue);
 const _inputRef = defineModel<HTMLInputElement | null>('inputRef', {
   default: null,
 });
+
 const iconColor = computed(() => {
   switch (props.state) {
-    case InputState.info:
+    case InputState.info: {
       return 'text-info-700';
-    case InputState.success:
+    }
+    case InputState.success: {
       return 'text-success-700';
-    case InputState.warning:
+    }
+    case InputState.warning: {
       return 'text-warning-700';
-    case InputState.danger:
+    }
+    case InputState.danger: {
       return 'text-danger-700';
-    default:
-      return 'text-for-white-bg-font';
+    }
+    default: return 'text-for-white-bg-font';
   }
 });
 const iconSize = computed(() => props.size === Size.xs || props.size === Size.xs2 ? IconSize.xs : IconSize.sm);
@@ -94,20 +100,26 @@ function onClickCalendar() {
   if (props.disabled || props.readonly) {
     return;
   }
-
   _inputRef.value?.showPicker();
 }
 
 const onBlur = () => {
-  if (!_modelValue.value) {
-    _modelValue.value = null;
+  const newValue = _modelValue.value || null;
 
-    emit('update:modelValue', null);
-
+  if (newValue === props.modelValue) {
     return;
   }
 
-  emit('update:modelValue', _modelValue.value);
+  emit('update:modelValue', newValue);
+};
+
+const onClear = () => {
+  _modelValue.value = null;
+  emit('update:modelValue', null);
+
+  nextTick(() => {
+    emit('validate', null);
+  });
 };
 
 watch(() => props.modelValue, (val) => {
@@ -163,7 +175,7 @@ watch(() => props.modelValue, (val) => {
         :skeleton="skeleton"
         :size="size"
         data-e2e="clear-button"
-        @click="emit('update:modelValue', null);"
+        @click="onClear"
       />
     </div>
   </AntField>
