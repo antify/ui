@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-  computed, nextTick, onMounted, ref, watch,
+  computed, nextTick, onMounted,
 } from 'vue';
 import AntField from '../forms/AntField.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
@@ -58,27 +58,51 @@ const props = withDefaults(defineProps<{
   nullable: false,
   inputRef: null,
 });
+
 const emit = defineEmits([
   'update:modelValue',
   'update:inputRef',
   'validate',
 ]);
-const _modelValue = ref<string | null>(props.modelValue);
+
 const _inputRef = defineModel<HTMLInputElement | null>('inputRef', {
   default: null,
 });
+
+const _modelValue = computed({
+  get: () => props.modelValue,
+  set: (val) => {
+    const newValue = val || null;
+
+    emit('update:modelValue', newValue);
+
+    if (
+      props.state === InputState.danger ||
+      props.state === InputState.warning ||
+      props.state === InputState.info
+    ) {
+      nextTick(() => {
+        emit('validate', newValue);
+      });
+    }
+  },
+});
+
 const iconColor = computed(() => {
   switch (props.state) {
-    case InputState.info:
+    case InputState.info: {
       return 'text-info-700';
-    case InputState.success:
+    }
+    case InputState.success: {
       return 'text-success-700';
-    case InputState.warning:
+    }
+    case InputState.warning: {
       return 'text-warning-700';
-    case InputState.danger:
+    }
+    case InputState.danger: {
       return 'text-danger-700';
-    default:
-      return 'text-for-white-bg-font';
+    }
+    default: return 'text-for-white-bg-font';
   }
 });
 const iconSize = computed(() => props.size === Size.xs || props.size === Size.xs2 ? IconSize.xs : IconSize.sm);
@@ -99,20 +123,16 @@ function onClickCalendar() {
 }
 
 const onBlur = () => {
-  if (!_modelValue.value) {
-    _modelValue.value = null;
-
-    emit('update:modelValue', null);
-
-    return;
-  }
-
-  emit('update:modelValue', _modelValue.value);
+  emit('validate', _modelValue.value);
 };
 
-watch(() => props.modelValue, (val) => {
-  _modelValue.value = val;
-});
+const onClear = () => {
+  _modelValue.value = null;
+
+  nextTick(() => {
+    emit('validate', null);
+  });
+};
 </script>
 
 <template>
@@ -141,7 +161,6 @@ watch(() => props.modelValue, (val) => {
         :grouped="_nullable ? Grouped.left : Grouped.none"
         v-bind="$attrs"
         @blur="onBlur"
-        @validate="val => nextTick(() => $emit('validate', val))"
       >
         <template #icon-right>
           <AntIcon
@@ -163,7 +182,7 @@ watch(() => props.modelValue, (val) => {
         :skeleton="skeleton"
         :size="size"
         data-e2e="clear-button"
-        @click="emit('update:modelValue', null);"
+        @click="onClear"
       />
     </div>
   </AntField>
