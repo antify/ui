@@ -161,6 +161,7 @@ const onClear = () => {
         :grouped="_nullable ? Grouped.left : Grouped.none"
         v-bind="$attrs"
         @blur="onBlur"
+        @validate="val => $emit('validate', val)"
       >
         <template #icon-right>
           <AntIcon
