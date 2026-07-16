@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {
-  computed, nextTick, onMounted, ref, watch,
+  computed, nextTick, onMounted,
 } from 'vue';
 import AntField from '../forms/AntField.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
@@ -65,9 +65,26 @@ const emit = defineEmits([
   'validate',
 ]);
 
-const _modelValue = ref<string | null>(props.modelValue);
 const _inputRef = defineModel<HTMLInputElement | null>('inputRef', {
   default: null,
+});
+
+const _modelValue = computed({
+  get: () => props.modelValue,
+  set: (val) => {
+    const newValue = val || null;
+    emit('update:modelValue', newValue);
+
+    if (
+      props.state === InputState.danger ||
+      props.state === InputState.warning ||
+      props.state === InputState.info
+    ) {
+      nextTick(() => {
+        emit('validate', newValue);
+      });
+    }
+  },
 });
 
 const iconColor = computed(() => {
@@ -100,31 +117,21 @@ function onClickCalendar() {
   if (props.disabled || props.readonly) {
     return;
   }
+
   _inputRef.value?.showPicker();
 }
 
 const onBlur = () => {
-  const newValue = _modelValue.value || null;
-
-  if (newValue === props.modelValue) {
-    return;
-  }
-
-  emit('update:modelValue', newValue);
+  emit('validate', _modelValue.value);
 };
 
 const onClear = () => {
   _modelValue.value = null;
-  emit('update:modelValue', null);
 
   nextTick(() => {
     emit('validate', null);
   });
 };
-
-watch(() => props.modelValue, (val) => {
-  _modelValue.value = val;
-});
 </script>
 
 <template>
@@ -153,7 +160,6 @@ watch(() => props.modelValue, (val) => {
         :grouped="_nullable ? Grouped.left : Grouped.none"
         v-bind="$attrs"
         @blur="onBlur"
-        @validate="val => nextTick(() => $emit('validate', val))"
       >
         <template #icon-right>
           <AntIcon
