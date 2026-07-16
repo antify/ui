@@ -73,6 +73,7 @@ const _modelValue = computed({
   get: () => props.modelValue,
   set: (val) => {
     const newValue = val || null;
+
     emit('update:modelValue', newValue);
 
     if (
