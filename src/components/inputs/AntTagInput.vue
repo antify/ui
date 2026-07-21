@@ -25,9 +25,6 @@ import {
 import AntSelectMenu from './Elements/AntSelectMenu.vue';
 import AntSkeleton from '../AntSkeleton.vue';
 import {
-  vOnClickOutside,
-} from '@vueuse/components';
-import {
   AntTagInputSize,
 } from './__types/AntTagInput.types';
 import type {
@@ -146,7 +143,6 @@ const skeletonGrouped = computed(() => {
   if (!props.nullable || (props.nullable && _modelValue.value === null)) {
     return props.grouped;
   }
-
   if (props.grouped === Grouped.right || props.grouped === Grouped.center) {
     return Grouped.center;
   } else {
@@ -224,7 +220,6 @@ function addTagFromOptions(item: string | number) {
   }
 
   const option = props.options?.find(option => option.value === item);
-
   if (option) {
     addTag(item);
 
@@ -314,106 +309,103 @@ onMounted(() => {
       :messages="messages"
       data-e2e="tag-input"
     >
-      <AntSkeleton
-        :visible="skeleton"
-        rounded
-        :grouped="skeletonGrouped"
-        class="w-full"
+      <AntSelectMenu
+        v-model:open="_open"
+        v-model:focused="focusedDropDownItem"
+        :model-value="null"
+        :auto-select-first-on-open="!allowCreate"
+        :options="filteredOptions"
+        :input-ref="_inputRef"
+        :size="size as unknown as Size"
+        :state="state"
+        :max-height="dropDownMaxHeight"
+        :focus-on-open="false"
+        :close-on-select-item="false"
+        @select-element="addTagFromOptions"
+        @click-outside="onClickOutside"
       >
-        <div
-          v-on-click-outside="onClickOutside"
-          :class="[inputContainerClasses, { 'cursor-pointer': hideInput && !disabled && !readonly }]"
-          class="w-full flex items-center"
-          @click="handleContainerClick"
+        <template #contentBefore>
+          <slot name="contentBefore" />
+        </template>
+
+        <template #empty>
+          <slot name="empty">
+            <span v-if="allowCreate">No tag found, create now</span>
+          </slot>
+        </template>
+
+        <AntSkeleton
+          :visible="skeleton"
+          rounded
+          :grouped="skeletonGrouped"
+          class="w-full"
         >
           <div
-            class="flex flex-wrap gap-2.5 items-center"
+            :class="[inputContainerClasses, { 'cursor-pointer': hideInput && !disabled && !readonly }]"
+            class="w-full flex items-center"
+            @click="handleContainerClick"
           >
-            <AntTag
-              v-for="(tag, index) in _modelValue"
-              :key="`tag-input-tag-${index}`"
-              :size="AntTagSize.xs3"
-              :state="state as unknown as TagState"
-              :dismiss="!readonly"
-              @close="removeTag(tag)"
-            >
-              <span :class="{ 'line-through': (allOptions || options).find((option: SelectOption) => option.value === tag)?.isDeleted }">
-                {{ (allOptions || options).find((option: SelectOption) => option.value === tag)?.label }}
+            <div class="flex flex-wrap gap-2.5 items-center">
+              <AntTag
+                v-for="(tag, index) in _modelValue"
+                :key="`tag-input-tag-${index}`"
+                :size="AntTagSize.xs3"
+                :state="state as unknown as TagState"
+                :dismiss="!readonly"
+                @close="removeTag(tag)"
+              >
+                <span :class="{ 'line-through': (allOptions || options).find((option: SelectOption) => option.value === tag)?.isDeleted }">
+                  {{ (allOptions || options).find((option: SelectOption) => option.value === tag)?.label }}
+                </span>
+              </AntTag>
+
+              <span
+                v-if="hideInput && (!_modelValue || _modelValue.length === 0) && placeholder"
+                :class="placeholderClasses"
+              >
+                {{ placeholder }}
               </span>
-            </AntTag>
+            </div>
 
-            <span
-              v-if="hideInput && (!_modelValue || _modelValue.length === 0) && placeholder"
-              :class="placeholderClasses"
+            <div
+              v-if="!hideInput"
+              class="flex items-center w-32 shrink grow"
             >
-              {{ placeholder }}
-            </span>
-          </div>
+              <AntIcon
+                :icon="icon"
+                :size="size === AntTagInputSize.sm ? IconSize.xs : IconSize.sm"
+              />
 
-          <div
-            v-if="!hideInput"
-            class="flex items-center w-32 shrink grow"
-          >
-            <AntIcon
-              :icon="icon"
-              :size="size === AntTagInputSize.sm ? IconSize.xs : IconSize.sm"
-            />
+              <input
+                ref="_inputRef"
+                v-model="tagInput"
+                type="text"
+                :placeholder="placeholder"
+                :class="inputClasses"
+                :disabled="disabled"
+                :readonly="readonly"
+                @click.stop="changeFocus"
+                @focus="changeFocus"
+                @keydown.delete="removeLastTag"
+                @keydown.enter.prevent="checkCreateTag(tagInput)"
+                @keydown.esc.prevent="closeDropdown"
+                @blur="onBlur"
+              >
+            </div>
 
-            <input
-              ref="_inputRef"
-              v-model="tagInput"
-              type="text"
-              :placeholder="placeholder"
-              :class="inputClasses"
-              :disabled="disabled"
-              :readonly="readonly"
-              @click.stop="changeFocus"
-              @focus="changeFocus"
-              @keydown.delete="removeLastTag"
-              @keydown.enter.prevent="checkCreateTag(tagInput)"
-              @keydown.esc.prevent="closeDropdown"
-              @blur="onBlur"
+            <div
+              v-else
+              class="flex items-center shrink-0 ml-auto mr-2"
             >
+              <AntIcon
+                :icon="icon"
+                :size="IconSize.sm"
+                class="text-base-400 pointer-events-none"
+              />
+            </div>
           </div>
-
-          <div
-            v-else
-            class="flex items-center shrink-0 ml-auto mr-2"
-          >
-            <AntIcon
-              :icon="icon"
-              :size="IconSize.sm"
-              class="text-base-400 pointer-events-none"
-            />
-          </div>
-        </div>
-
-        <AntSelectMenu
-          v-if="!disabled && !readonly"
-          v-model:open="_open"
-          v-model:focused="focusedDropDownItem"
-          :model-value="null"
-          :auto-select-first-on-open="!allowCreate"
-          :options="filteredOptions"
-          :input-ref="_inputRef"
-          :size="size as unknown as Size"
-          :state="state"
-          :max-height="dropDownMaxHeight"
-          :focus-on-open="false"
-          :close-on-select-item="false"
-          @select-element="addTagFromOptions"
-        >
-          <template #contentBefore>
-            <slot name="contentBefore" />
-          </template>
-
-          <template #empty>
-            <slot name="empty">
-              <span v-if="allowCreate">No tag found, create now</span>
-            </slot>
-          </template>
-        </AntSelectMenu>
-      </AntSkeleton>
+        </AntSkeleton>
+      </AntSelectMenu>
     </AntField>
   </div>
 </template>
