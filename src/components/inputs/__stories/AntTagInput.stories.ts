@@ -3,10 +3,7 @@ import type {
   Meta, StoryObj,
 } from '@storybook/vue3';
 import {
-  type Ref,
-} from 'vue';
-import {
-  ref,
+  type Ref, ref, computed,
 } from 'vue';
 import {
   InputState,
@@ -19,6 +16,11 @@ import {
 } from '../__types/AntTagInput.types';
 import AntFormGroup from '../../forms/AntFormGroup.vue';
 import AntFormGroupLabel from '../../forms/AntFormGroupLabel.vue';
+import AntSearch from '../AntSearch.vue';
+import AntButton from '../../AntButton.vue';
+import {
+  State, Grouped as GroupedEnum,
+} from '../../../enums';
 
 const meta: Meta<typeof AntTagInput> = {
   title: 'Inputs/Tag Input',
@@ -163,6 +165,128 @@ export const AllowCreate: Story = {
         });
       });
     },
+  },
+};
+
+export const CustomSearchAndFilters: Story = {
+  render: (args) => ({
+    components: {
+      AntTagInput,
+      AntSearch,
+      AntButton,
+    },
+    setup() {
+      const value: Ref<string[]> = ref([]);
+      const searchTerm = ref('');
+      const filterValue = ref('all');
+
+      const allOptions: SelectOption[] = [
+        {
+          label: 'Dr. Smith (Zahnarzt)',
+          value: 'doc_1',
+        },
+        {
+          label: 'Anna (ZMP)',
+          value: 'zmp_1',
+        },
+        {
+          label: 'Dr. Jones (Zahnarzt)',
+          value: 'doc_2',
+        },
+        {
+          label: 'Maria (ZMP)',
+          value: 'zmp_2',
+        },
+      ];
+
+      const filteredOptions = computed(() => {
+        return allOptions.filter(opt => {
+          const matchesSearch = opt.label.toLowerCase().includes(searchTerm.value.toLowerCase());
+
+          let matchesFilter = true;
+          if (filterValue.value === 'practitioner') {
+            matchesFilter = opt.label.includes('Zahnarzt');
+          } else if (filterValue.value === 'pzrPractitioner') {
+            matchesFilter = opt.label.includes('ZMP');
+          }
+
+          return matchesSearch && matchesFilter;
+        });
+      });
+
+      function setFilter(type: string) {
+        filterValue.value = type;
+      }
+
+      return {
+        args,
+        value,
+        searchTerm,
+        filterValue,
+        allOptions,
+        filteredOptions,
+        setFilter,
+        State,
+        GroupedEnum,
+      };
+    },
+    template: `
+      <div>
+        <AntTagInput
+          v-model="value"
+          v-bind="args"
+          :options="filteredOptions"
+          :all-options="allOptions"
+          hide-input
+          placeholder="Mitarbeiter hinzufügen"
+        >
+          <template #contentBefore>
+            <div class="flex p-2 border-b border-base-300 bg-white gap-2" @click.stop>
+              <AntSearch v-model="searchTerm" placeholder="Suche..." />
+
+              <div class="flex">
+                <AntButton
+                  :state="filterValue === 'all' ? State.primary : State.base"
+                  :filled="filterValue === 'all'"
+                  :grouped="GroupedEnum.left"
+                  @click="setFilter('all')"
+                >
+                  Alle
+                </AntButton>
+
+                <AntButton
+                  :state="filterValue === 'practitioner' ? State.primary : State.base"
+                  :filled="filterValue === 'practitioner'"
+                  :grouped="GroupedEnum.center"
+                  @click="setFilter('practitioner')"
+                >
+                  Zahnarzt
+                </AntButton>
+
+                <AntButton
+                  :state="filterValue === 'pzrPractitioner' ? State.primary : State.base"
+                  :filled="filterValue === 'pzrPractitioner'"
+                  :grouped="GroupedEnum.right"
+                  @click="setFilter('pzrPractitioner')"
+                >
+                  ZMP
+                </AntButton>
+              </div>
+            </div>
+          </template>
+
+          <template #empty>
+            <div class="p-3 text-sm text-base-500">
+              Es konnten keine Mitarbeiter gefunden werden
+            </div>
+          </template>
+        </AntTagInput>
+      </div>
+    `,
+  }),
+  args: {
+    label: 'Custom UI Implementation',
+    description: 'Demonstrates hide-input behavior alongside #contentBefore slot.',
   },
 };
 

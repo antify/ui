@@ -37,6 +37,7 @@ import type {
 const emit = defineEmits([
   'update:modelValue',
   'update:inputRef',
+  'update:open',
   'blur',
   'validate',
 ]);
@@ -64,6 +65,9 @@ const props = withDefaults(defineProps<{
   createCallback?: (item: string) => Promise<SelectOption>;
   inputRef?: HTMLInputElement | null;
   dropDownMaxHeight?: string;
+  open?: boolean;
+  hideInput?: boolean;
+  allOptions?: SelectOption[];
 }>(), {
   size: AntTagInputSize.md,
   state: InputState.base,
@@ -80,11 +84,16 @@ const props = withDefaults(defineProps<{
   placeholder: 'Add new tag',
   inputRef: null,
   dropDownMaxHeight: '350px',
+  open: false,
+  hideInput: false,
 });
 
 const _modelValue: Ref<(string | number)[] | null> = useVModel(props, 'modelValue', emit);
 const _skeleton = useVModel(props, 'skeleton', emit);
-const dropDownOpen = ref(false);
+const _open = useVModel(props, 'open', emit, {
+  passive: true,
+  defaultValue: false,
+});
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const focusedDropDownItem: Ref<string | number | null> = ref(null);
 const tagInput = ref('');
@@ -148,7 +157,9 @@ const filteredOptions = computed(() => {
   const searchTerm = tagInput.value.toLowerCase();
 
   return props.options.filter(option => {
-    if (option.isDeleted) return false;
+    if (option.isDeleted) {
+      return false;
+    }
 
     if (!props.allowDuplicates && _modelValue.value?.includes(option.value)) {
       return false;
@@ -158,11 +169,39 @@ const filteredOptions = computed(() => {
   });
 });
 
+const placeholderClasses = computed(() => {
+  const variants: Record<InputState, string> = {
+    [InputState.base]: 'text-base-500',
+    [InputState.danger]: 'text-danger-700',
+    [InputState.info]: 'text-info-700',
+    [InputState.success]: 'text-success-700',
+    [InputState.warning]: 'text-warning-700',
+  };
+
+  return {
+    'truncate select-none pointer-events-none': true,
+    [variants[props.state]]: true,
+  };
+});
+
 function onClickOutside() {
-  if (!dropDownOpen.value) {
+  if (!_open.value) {
     return;
   }
-  // dropDownOpen.value = false;
+
+  _open.value = false;
+}
+
+function handleContainerClick() {
+  if (props.disabled || props.readonly) {
+    return;
+  }
+
+  if (props.hideInput) {
+    _open.value = !_open.value;
+  } else {
+    _inputRef.value?.focus();
+  }
 }
 
 async function checkCreateTag(item: string): Promise<void> {
@@ -190,7 +229,7 @@ function addTagFromOptions(item: string | number) {
     addTag(item);
 
     if (props.autoCloseAfterSelection) {
-      dropDownOpen.value = false;
+      _open.value = false;
     }
   }
 }
@@ -210,7 +249,6 @@ function addTag(tagValue: string | number): void {
       tagValue,
     ];
   }
-
   tagInput.value = '';
 }
 
@@ -227,11 +265,11 @@ function removeTag(tag: string | number) {
 }
 
 function changeFocus() {
-  dropDownOpen.value = true;
+  _open.value = true;
 }
 
 function closeDropdown() {
-  dropDownOpen.value = false;
+  _open.value = false;
 }
 
 function onBlur(e: FocusEvent) {
@@ -239,14 +277,12 @@ function onBlur(e: FocusEvent) {
   emit('blur', e);
 }
 
-/**
- * Validate default value if given after delayed data fetching.
- */
 watch(() => props.skeleton, (val) => {
   if (!val && props.modelValue !== null) {
     emit('validate', props.modelValue);
   }
 });
+
 watch(_modelValue, (val) => {
   if ([
     InputState.danger,
@@ -260,9 +296,6 @@ watch(_modelValue, (val) => {
 });
 
 onMounted(() => {
-  /**
-   * Validate default value without delayed data fetching.
-   */
   if (!props.skeleton && props.modelValue !== null) {
     emit('validate', props.modelValue);
   }
@@ -289,8 +322,9 @@ onMounted(() => {
       >
         <div
           v-on-click-outside="onClickOutside"
-          :class="inputContainerClasses"
+          :class="[inputContainerClasses, { 'cursor-pointer': hideInput && !disabled && !readonly }]"
           class="w-full flex items-center"
+          @click="handleContainerClick"
         >
           <div
             class="flex flex-wrap gap-2.5 items-center"
@@ -303,18 +337,23 @@ onMounted(() => {
               :dismiss="!readonly"
               @close="removeTag(tag)"
             >
-              <span
-                :class="{
-                  'line-through': options.find((option: SelectOption) => option.value === tag)?.isDeleted
-                }"
-              >
-                {{ options.find((option: SelectOption) => option.value === tag)?.label }}
+              <span :class="{ 'line-through': (allOptions || options).find((option: SelectOption) => option.value === tag)?.isDeleted }">
+                {{ (allOptions || options).find((option: SelectOption) => option.value === tag)?.label }}
               </span>
             </AntTag>
+
+            <span
+              v-if="hideInput && (!_modelValue || _modelValue.length === 0) && placeholder"
+              :class="placeholderClasses"
+            >
+              {{ placeholder }}
+            </span>
           </div>
 
-          <!-- Input -->
-          <div class="flex items-center w-32 shrink grow">
+          <div
+            v-if="!hideInput"
+            class="flex items-center w-32 shrink grow"
+          >
             <AntIcon
               :icon="icon"
               :size="size === AntTagInputSize.sm ? IconSize.xs : IconSize.sm"
@@ -328,7 +367,7 @@ onMounted(() => {
               :class="inputClasses"
               :disabled="disabled"
               :readonly="readonly"
-              @click="changeFocus"
+              @click.stop="changeFocus"
               @focus="changeFocus"
               @keydown.delete="removeLastTag"
               @keydown.enter.prevent="checkCreateTag(tagInput)"
@@ -336,12 +375,23 @@ onMounted(() => {
               @blur="onBlur"
             >
           </div>
+
+          <div
+            v-else
+            class="flex items-center shrink-0 ml-auto mr-2"
+          >
+            <AntIcon
+              :icon="icon"
+              :size="IconSize.sm"
+              class="text-base-400 pointer-events-none"
+            />
+          </div>
         </div>
 
         <AntSelectMenu
           v-if="!disabled && !readonly"
+          v-model:open="_open"
           v-model:focused="focusedDropDownItem"
-          v-model:open="dropDownOpen"
           :model-value="null"
           :auto-select-first-on-open="!allowCreate"
           :options="filteredOptions"
@@ -353,10 +403,14 @@ onMounted(() => {
           :close-on-select-item="false"
           @select-element="addTagFromOptions"
         >
+          <template #contentBefore>
+            <slot name="contentBefore" />
+          </template>
+
           <template #empty>
-            <span v-if="allowCreate">
-              No tag found, create now
-            </span>
+            <slot name="empty">
+              <span v-if="allowCreate">No tag found, create now</span>
+            </slot>
           </template>
         </AntSelectMenu>
       </AntSkeleton>
