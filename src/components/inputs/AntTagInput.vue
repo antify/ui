@@ -361,7 +361,7 @@ onMounted(() => {
                 class="w-full flex items-center"
                 @click="handleContainerClick"
               >
-                <div class="flex flex-wrap gap-2.5 items-center">
+                <div class="flex flex-wrap gap-2 items-center">
                   <AntTag
                     v-for="(tag, index) in _modelValue"
                     :key="`tag-input-tag-${index}`"
@@ -396,7 +396,7 @@ onMounted(() => {
                     ref="_inputRef"
                     v-model="tagInput"
                     type="text"
-                    :placeholder="placeholder"
+                    :placeholder="(!_modelValue || _modelValue.length === 0) ? placeholder : ''"
                     :class="inputClasses"
                     :disabled="disabled"
                     :readonly="readonly"
