@@ -358,10 +358,10 @@ onMounted(() => {
             >
               <div
                 :class="[inputContainerClasses, { 'cursor-pointer': hideInput && !disabled && !readonly }]"
-                class="w-full flex items-center"
+                class="w-full"
                 @click="handleContainerClick"
               >
-                <div class="flex flex-wrap gap-2 items-center">
+                <div class="flex flex-wrap gap-2 items-center w-full">
                   <AntTag
                     v-for="(tag, index) in _modelValue"
                     :key="`tag-input-tag-${index}`"
@@ -381,43 +381,33 @@ onMounted(() => {
                   >
                     {{ placeholder }}
                   </span>
-                </div>
 
-                <div
-                  v-if="!hideInput"
-                  class="flex items-center w-32 shrink grow"
-                >
-                  <AntIcon
-                    :icon="icon"
-                    :size="size === AntTagInputSize.sm ? IconSize.xs : IconSize.sm"
-                  />
-
-                  <input
-                    ref="_inputRef"
-                    v-model="tagInput"
-                    type="text"
-                    :placeholder="(!_modelValue || _modelValue.length === 0) ? placeholder : ''"
-                    :class="inputClasses"
-                    :disabled="disabled"
-                    :readonly="readonly"
-                    @click.stop="changeFocus"
-                    @focus="changeFocus"
-                    @keydown.delete="removeLastTag"
-                    @keydown.enter.prevent="checkCreateTag(tagInput)"
-                    @keydown.esc.prevent="closeDropdown"
-                    @blur="onBlur"
+                  <div
+                    v-if="!hideInput"
+                    class="flex items-center shrink grow min-w-[60px]"
                   >
-                </div>
+                    <AntIcon
+                      :icon="icon"
+                      :size="size === AntTagInputSize.sm ? IconSize.xs : IconSize.sm"
+                      class="shrink-0"
+                    />
 
-                <div
-                  v-else
-                  class="flex items-center shrink-0 ml-auto mr-2"
-                >
-                  <AntIcon
-                    :icon="icon"
-                    :size="IconSize.sm"
-                    class="text-base-400 pointer-events-none"
-                  />
+                    <input
+                      ref="_inputRef"
+                      v-model="tagInput"
+                      type="text"
+                      :placeholder="(!_modelValue || _modelValue.length === 0) ? placeholder : ''"
+                      :class="inputClasses"
+                      :disabled="disabled"
+                      :readonly="readonly"
+                      @click.stop="changeFocus"
+                      @focus="changeFocus"
+                      @keydown.delete="removeLastTag"
+                      @keydown.enter.prevent="checkCreateTag(tagInput)"
+                      @keydown.esc.prevent="closeDropdown"
+                      @blur="onBlur"
+                    >
+                  </div>
                 </div>
               </div>
             </AntSkeleton>

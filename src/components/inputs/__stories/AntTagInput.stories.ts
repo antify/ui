@@ -90,6 +90,34 @@ const options: SelectOption[] = [
     value: '2',
   },
   {
+    label: 'Tag1',
+    value: '3',
+  },
+  {
+    label: 'Cat',
+    value: '4',
+  },
+  {
+    label: 'Tag',
+    value: '5',
+  },
+  {
+    label: 'Cat',
+    value: '6',
+  },
+  {
+    label: 'Tag',
+    value: '7',
+  },
+  {
+    label: 'Cat',
+    value: '8',
+  },
+  {
+    label: 'Tag',
+    value: '1',
+  },
+  {
     label: 'Dog',
     value: '3',
     isDeleted: true,
