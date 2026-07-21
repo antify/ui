@@ -137,7 +137,7 @@ const inputClasses = computed(() => {
   };
 
   return {
-    'outline-0 bg-transparent w-full': true,
+    'outline-0 bg-transparent w-full min-w-0': true,
     'opacity-50 cursor-not-allowed': props.disabled,
     [variants[props.state]]: true,
   };
@@ -253,7 +253,7 @@ function addTag(tagValue: string | number): void {
 
 function removeLastTag() {
   if (tagInput.value === '' && Array.isArray(_modelValue.value) && _modelValue.value.length > 0) {
-    _modelValue.value = _modelValue.value.filter((element) => element !== _modelValue.value?.pop());
+    _modelValue.value = _modelValue.value.slice(0, -1);
   }
 }
 
@@ -384,11 +384,12 @@ onMounted(() => {
 
                   <div
                     v-if="!hideInput"
-                    class="flex items-center shrink grow min-w-[120px]"
+                    class="flex-1 flex items-center min-w-[60px] gap-1.5"
                   >
                     <AntIcon
                       :icon="icon"
                       :size="size === AntTagInputSize.sm ? IconSize.xs : IconSize.sm"
+                      class="shrink-0"
                     />
 
                     <input
