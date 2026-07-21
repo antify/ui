@@ -6,19 +6,20 @@ import type {
   SelectOption,
 } from './__types';
 import {
-  Grouped, InputState, Size,
+  Grouped, InputState, Size, State,
 } from '../../enums';
 import {
   useVModel,
 } from '@vueuse/core';
 import {
-  faChevronRight, type IconDefinition,
+  faChevronRight, faMultiply, type IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   computed, onMounted, type Ref, ref, watch,
 } from 'vue';
 import AntTag from '../AntTag.vue';
 import AntIcon from '../AntIcon.vue';
+import AntButton from '../AntButton.vue';
 import {
   AntTagSize, IconSize,
 } from '../__types';
@@ -95,6 +96,7 @@ const hasInputState = computed(() => props.skeleton || props.readonly || props.d
 const focusedDropDownItem: Ref<string | number | null> = ref(null);
 const tagInput = ref('');
 const _inputRef = useVModel(props, 'inputRef', emit);
+const _isNullableActive = computed(() => props.nullable && Array.isArray(_modelValue.value) && _modelValue.value.length > 0);
 const inputContainerClasses = computed(() => {
   const variants: Record<InputState, string> = {
     [InputState.base]: 'outline-base-300 focus-within:outline-base-300 focus-within:ring-primary-200 bg-white',
@@ -121,6 +123,7 @@ const inputContainerClasses = computed(() => {
     'rounded-none': props.grouped === Grouped.center,
     'rounded-tl-none rounded-bl-none rounded-tr-md rounded-br-md': props.grouped === Grouped.right,
     'rounded-md': props.grouped === Grouped.none,
+    'rounded-tr-none rounded-br-none': _isNullableActive.value,
     invisible: props.skeleton,
   };
 });
@@ -140,7 +143,7 @@ const inputClasses = computed(() => {
   };
 });
 const skeletonGrouped = computed(() => {
-  if (!props.nullable || (props.nullable && _modelValue.value === null)) {
+  if (!_isNullableActive.value) {
     return props.grouped;
   }
 
@@ -260,6 +263,14 @@ function removeTag(tag: string | number) {
   }
 }
 
+function onClickRemoveButton() {
+  if (!props.disabled && !props.readonly) {
+    _modelValue.value = null;
+
+    emit('validate', _modelValue.value);
+  }
+}
+
 function changeFocus() {
   _open.value = true;
 }
@@ -310,103 +321,119 @@ onMounted(() => {
       :messages="messages"
       data-e2e="tag-input"
     >
-      <AntSelectMenu
-        v-model:open="_open"
-        v-model:focused="focusedDropDownItem"
-        :model-value="null"
-        :auto-select-first-on-open="!allowCreate"
-        :options="filteredOptions"
-        :input-ref="_inputRef"
-        :size="size as unknown as Size"
-        :state="state"
-        :max-height="dropDownMaxHeight"
-        :focus-on-open="false"
-        :close-on-select-item="false"
-        @select-element="addTagFromOptions"
-        @click-outside="onClickOutside"
-      >
-        <template #contentBefore>
-          <slot name="contentBefore" />
-        </template>
-
-        <template #empty>
-          <slot name="empty">
-            <span v-if="allowCreate">No tag found, create now</span>
-          </slot>
-        </template>
-
-        <AntSkeleton
-          :visible="skeleton"
-          rounded
-          :grouped="skeletonGrouped"
-          class="w-full"
-        >
-          <div
-            :class="[inputContainerClasses, { 'cursor-pointer': hideInput && !disabled && !readonly }]"
-            class="w-full flex items-center"
-            @click="handleContainerClick"
+      <div class="h-fit flex flex-row w-full">
+        <div class="relative w-full">
+          <AntSelectMenu
+            v-model:open="_open"
+            v-model:focused="focusedDropDownItem"
+            :model-value="null"
+            :auto-select-first-on-open="!allowCreate"
+            :options="filteredOptions"
+            :input-ref="_inputRef"
+            :size="size as unknown as Size"
+            :state="state"
+            :max-height="dropDownMaxHeight"
+            :focus-on-open="false"
+            :close-on-select-item="false"
+            @select-element="addTagFromOptions"
+            @click-outside="onClickOutside"
           >
-            <div class="flex flex-wrap gap-2.5 items-center">
-              <AntTag
-                v-for="(tag, index) in _modelValue"
-                :key="`tag-input-tag-${index}`"
-                :size="AntTagSize.xs3"
-                :state="state as unknown as TagState"
-                :dismiss="!readonly"
-                @close="removeTag(tag)"
-              >
-                <span :class="{ 'line-through': (allOptions || options).find((option: SelectOption) => option.value === tag)?.isDeleted }">
-                  {{ (allOptions || options).find((option: SelectOption) => option.value === tag)?.label }}
-                </span>
-              </AntTag>
+            <template #contentBefore>
+              <slot name="contentBefore" />
+            </template>
 
-              <span
-                v-if="hideInput && (!_modelValue || _modelValue.length === 0) && placeholder"
-                :class="placeholderClasses"
-              >
-                {{ placeholder }}
-              </span>
-            </div>
+            <template #empty>
+              <slot name="empty">
+                <span v-if="allowCreate">No tag found, create now</span>
+              </slot>
+            </template>
 
-            <div
-              v-if="!hideInput"
-              class="flex items-center w-32 shrink grow"
+            <AntSkeleton
+              :visible="skeleton"
+              rounded
+              :grouped="skeletonGrouped"
+              class="w-full"
             >
-              <AntIcon
-                :icon="icon"
-                :size="size === AntTagInputSize.sm ? IconSize.xs : IconSize.sm"
-              />
-
-              <input
-                ref="_inputRef"
-                v-model="tagInput"
-                type="text"
-                :placeholder="placeholder"
-                :class="inputClasses"
-                :disabled="disabled"
-                :readonly="readonly"
-                @click.stop="changeFocus"
-                @focus="changeFocus"
-                @keydown.delete="removeLastTag"
-                @keydown.enter.prevent="checkCreateTag(tagInput)"
-                @keydown.esc.prevent="closeDropdown"
-                @blur="onBlur"
+              <div
+                :class="[inputContainerClasses, { 'cursor-pointer': hideInput && !disabled && !readonly }]"
+                class="w-full flex items-center"
+                @click="handleContainerClick"
               >
-            </div>
+                <div class="flex flex-wrap gap-2.5 items-center">
+                  <AntTag
+                    v-for="(tag, index) in _modelValue"
+                    :key="`tag-input-tag-${index}`"
+                    :size="AntTagSize.xs3"
+                    :state="state as unknown as TagState"
+                    :dismiss="!readonly"
+                    @close="removeTag(tag)"
+                  >
+                    <span :class="{ 'line-through': (allOptions || options).find((option: SelectOption) => option.value === tag)?.isDeleted }">
+                      {{ (allOptions || options).find((option: SelectOption) => option.value === tag)?.label }}
+                    </span>
+                  </AntTag>
 
-            <div
-              v-else
-              class="flex items-center shrink-0 ml-auto mr-2"
-            >
-              <AntIcon
-                :icon="icon"
-                :size="IconSize.sm"
-                class="text-base-400 pointer-events-none"
-              />
-            </div>
-          </div>
-        </AntSkeleton>
-      </AntSelectMenu>
+                  <span
+                    v-if="hideInput && (!_modelValue || _modelValue.length === 0) && placeholder"
+                    :class="placeholderClasses"
+                  >
+                    {{ placeholder }}
+                  </span>
+                </div>
+
+                <div
+                  v-if="!hideInput"
+                  class="flex items-center w-32 shrink grow"
+                >
+                  <AntIcon
+                    :icon="icon"
+                    :size="size === AntTagInputSize.sm ? IconSize.xs : IconSize.sm"
+                  />
+
+                  <input
+                    ref="_inputRef"
+                    v-model="tagInput"
+                    type="text"
+                    :placeholder="placeholder"
+                    :class="inputClasses"
+                    :disabled="disabled"
+                    :readonly="readonly"
+                    @click.stop="changeFocus"
+                    @focus="changeFocus"
+                    @keydown.delete="removeLastTag"
+                    @keydown.enter.prevent="checkCreateTag(tagInput)"
+                    @keydown.esc.prevent="closeDropdown"
+                    @blur="onBlur"
+                  >
+                </div>
+
+                <div
+                  v-else
+                  class="flex items-center shrink-0 ml-auto mr-2"
+                >
+                  <AntIcon
+                    :icon="icon"
+                    :size="IconSize.sm"
+                    class="text-base-400 pointer-events-none"
+                  />
+                </div>
+              </div>
+            </AntSkeleton>
+          </AntSelectMenu>
+        </div>
+
+        <AntButton
+          v-if="_isNullableActive"
+          data-e2e="clear-button"
+          :icon-left="faMultiply"
+          :state="state as unknown as State"
+          :grouped="[Grouped.left, Grouped.center].some(item => item === grouped) ? Grouped.center : Grouped.right"
+          :size="size as any"
+          :skeleton="skeleton"
+          :disabled="disabled"
+          @click="onClickRemoveButton"
+        />
+      </div>
     </AntField>
   </div>
 </template>

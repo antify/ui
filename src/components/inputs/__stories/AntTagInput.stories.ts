@@ -168,6 +168,36 @@ export const AllowCreate: Story = {
   },
 };
 
+export const Nullable: Story = {
+  render: (args) => ({
+    components: {
+      AntTagInput,
+    },
+    setup() {
+      const value: Ref<string[]> = ref([
+        '1',
+        '2',
+      ]);
+
+      return {
+        args,
+        value,
+      };
+    },
+    template: `
+      <div style="width: 360px">
+        <AntTagInput v-model="value" v-bind="args"/>
+      </div>
+    `,
+  }),
+  args: {
+    options,
+    nullable: true,
+    label: 'Nullable Tag Input',
+    description: 'Displays a clear button when items are selected.',
+  },
+};
+
 export const CustomSearchAndFilters: Story = {
   render: (args) => ({
     components: {
