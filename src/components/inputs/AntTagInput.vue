@@ -384,12 +384,11 @@ onMounted(() => {
 
                   <div
                     v-if="!hideInput"
-                    class="flex items-center shrink grow min-w-[60px]"
+                    class="flex items-center shrink grow min-w-[120px]"
                   >
                     <AntIcon
                       :icon="icon"
                       :size="size === AntTagInputSize.sm ? IconSize.xs : IconSize.sm"
-                      class="shrink-0"
                     />
 
                     <input
