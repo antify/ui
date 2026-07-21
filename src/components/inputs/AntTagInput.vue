@@ -107,7 +107,7 @@ const inputContainerClasses = computed(() => {
   };
 
   return {
-    'flex items-center flex-wrap': true,
+    'flex items-center': true,
     'transition-colors relative border-none outline w-full focus-within:z-10': true,
     'outline-offset-[-1px] outline-1 focus-within:outline-offset-[-1px] focus-within:outline-1': true,
     'opacity-50 cursor-not-allowed': props.disabled,
