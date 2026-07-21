@@ -143,6 +143,7 @@ const skeletonGrouped = computed(() => {
   if (!props.nullable || (props.nullable && _modelValue.value === null)) {
     return props.grouped;
   }
+
   if (props.grouped === Grouped.right || props.grouped === Grouped.center) {
     return Grouped.center;
   } else {
