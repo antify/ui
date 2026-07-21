@@ -97,6 +97,24 @@ const focusedDropDownItem: Ref<string | number | null> = ref(null);
 const tagInput = ref('');
 const _inputRef = useVModel(props, 'inputRef', emit);
 const _isNullableActive = computed(() => props.nullable && Array.isArray(_modelValue.value) && _modelValue.value.length > 0);
+const inputStyle = computed(() => {
+  const hasTags = Array.isArray(_modelValue.value) && _modelValue.value.length > 0;
+  const text = tagInput.value || (hasTags ? props.placeholder : '');
+
+  if (!text) {
+    return {
+      width: 'auto',
+    };
+  }
+
+  const charLength = Math.max(text.length + 2, 6);
+
+  return {
+    width: `${charLength}ch`,
+    minWidth: '60px',
+  };
+});
+
 const inputContainerClasses = computed(() => {
   const variants: Record<InputState, string> = {
     [InputState.base]: 'outline-base-300 focus-within:outline-base-300 focus-within:ring-primary-200 bg-white',
@@ -108,7 +126,7 @@ const inputContainerClasses = computed(() => {
 
   return {
     'flex items-center': true,
-    'transition-colors relative border-none outline w-full focus-within:z-10': true,
+    'transition-colors relative border-none outline w-fit min-w-[230px] max-w-full focus-within:z-10': true,
     'outline-offset-[-1px] outline-1 focus-within:outline-offset-[-1px] focus-within:outline-1': true,
     'opacity-50 cursor-not-allowed': props.disabled,
     [variants[props.state]]: true,
@@ -137,7 +155,7 @@ const inputClasses = computed(() => {
   };
 
   return {
-    'outline-0 bg-transparent w-full min-w-0': true,
+    'outline-0 bg-transparent min-w-0': true,
     'opacity-50 cursor-not-allowed': props.disabled,
     [variants[props.state]]: true,
   };
@@ -323,8 +341,8 @@ onMounted(() => {
       data-e2e="tag-input"
       @click-label="handleContainerClick"
     >
-      <div class="h-fit flex flex-row w-full">
-        <div class="relative w-full">
+      <div class="h-fit flex flex-row w-fit max-w-full">
+        <div class="relative w-fit max-w-full">
           <AntSelectMenu
             v-model:open="_open"
             v-model:focused="focusedDropDownItem"
@@ -354,14 +372,13 @@ onMounted(() => {
               :visible="skeleton"
               rounded
               :grouped="skeletonGrouped"
-              class="w-full"
+              class="w-fit max-w-full"
             >
               <div
                 :class="[inputContainerClasses, { 'cursor-pointer': hideInput && !disabled && !readonly }]"
-                class="w-full"
                 @click="handleContainerClick"
               >
-                <div class="flex flex-wrap gap-2 items-center w-full">
+                <div class="flex flex-wrap gap-2 items-center w-fit max-w-full">
                   <AntTag
                     v-for="(tag, index) in _modelValue"
                     :key="`tag-input-tag-${index}`"
@@ -384,7 +401,7 @@ onMounted(() => {
 
                   <div
                     v-if="!hideInput"
-                    class="flex-1 flex items-center min-w-[60px] gap-1.5"
+                    class="flex items-center min-w-[40px] gap-1.5 shrink-0"
                   >
                     <AntIcon
                       :icon="icon"
@@ -396,8 +413,9 @@ onMounted(() => {
                       ref="_inputRef"
                       v-model="tagInput"
                       type="text"
-                      :placeholder="(!_modelValue || _modelValue.length === 0) ? placeholder : ''"
+                      :placeholder="placeholder"
                       :class="inputClasses"
+                      :style="inputStyle"
                       :disabled="disabled"
                       :readonly="readonly"
                       @click.stop="changeFocus"
