@@ -319,7 +319,9 @@ onMounted(() => {
       :state="state"
       :expanded="expanded"
       :messages="messages"
+      label-for="noop"
       data-e2e="tag-input"
+      @click-label="handleContainerClick"
     >
       <div class="h-fit flex flex-row w-full">
         <div class="relative w-full">
