@@ -202,7 +202,7 @@ export const Nullable: Story = {
       AntTagInput,
     },
     setup() {
-      const value: Ref<string[]> = ref([
+      const value = ref<string[] | null>([
         '1',
         '2',
       ]);
