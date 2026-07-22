@@ -301,10 +301,6 @@ function closeDropdown() {
 }
 
 function onBlur(e: FocusEvent) {
-  if (_open.value) {
-    return;
-  }
-
   emit('validate', props.modelValue);
   emit('blur', e);
 }

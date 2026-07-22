@@ -314,6 +314,7 @@ defineExpose({
               :key="`option-${index}`"
               data-e2e="select-menu-item"
               :class="getOptionClasses(option, index)"
+              @mousedown.prevent
               @click="(e) => onClickDropDownItem(e, option)"
               @mouseover="() => focusedDropDownItem = !option.isGroupLabel && option.value !== undefined ? option.value : null"
             >
@@ -350,6 +351,7 @@ defineExpose({
                 'flex items-center justify-center p-2 pt-2 bg-white font-medium italic text-center': $slots.contentBefore
               }
             ]"
+            @mousedown.prevent
           >
             <slot name="empty">
               Keine Einträge vorhanden
