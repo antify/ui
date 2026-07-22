@@ -486,6 +486,7 @@ onMounted(() => {
           :size="size as any"
           :skeleton="skeleton"
           :disabled="disabled"
+          @mousedown.prevent
           @click="onClickRemoveButton"
         />
       </div>
