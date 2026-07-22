@@ -39,6 +39,7 @@ const emit = defineEmits([
   'blur',
   'validate',
 ]);
+
 const props = withDefaults(defineProps<{
   modelValue: (string | number)[] | null;
   options: SelectOption[];
@@ -169,7 +170,6 @@ const filteredOptions = computed(() => {
     return option.label.toLowerCase().includes(searchTerm);
   });
 });
-
 const placeholderClasses = computed(() => {
   const variants: Record<InputState, string> = {
     [InputState.base]: 'text-base-500',
@@ -216,7 +216,6 @@ async function checkCreateTag(item: string): Promise<void> {
     const newOption: SelectOption = await props.createCallback(item);
 
     addTag(newOption.value);
-
     nextTick(() => {
       internalInputRef.value?.focus();
     });
@@ -285,7 +284,6 @@ function onClickRemoveButton() {
     tagInput.value = '';
 
     emit('validate', _modelValue.value);
-
     nextTick(() => {
       internalInputRef.value?.focus();
     });
@@ -330,7 +328,6 @@ watch(() => props.skeleton, (val) => {
     emit('validate', props.modelValue);
   }
 });
-
 watch(_modelValue, (val) => {
   if ([
     InputState.danger,
@@ -342,13 +339,11 @@ watch(_modelValue, (val) => {
 }, {
   deep: true,
 });
-
 watch(internalInputRef, (el) => {
   _inputRef.value = el;
 }, {
   immediate: true,
 });
-
 watch(filteredOptions, (newOptions) => {
   if (newOptions.length > 0) {
     const exists = newOptions.some(opt => opt.value === focusedDropDownItem.value);
