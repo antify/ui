@@ -98,7 +98,6 @@ const tagInput = ref('');
 const internalInputRef = ref<HTMLInputElement | null>(null);
 const _inputRef = useVModel(props, 'inputRef', emit);
 const _isNullableActive = computed(() => props.nullable && Array.isArray(_modelValue.value) && _modelValue.value.length > 0);
-
 const inputContainerClasses = computed(() => {
   const variants: Record<InputState, string> = {
     [InputState.base]: 'outline-base-300 focus-within:outline-base-300 focus-within:ring-primary-200 bg-white',
