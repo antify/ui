@@ -202,6 +202,7 @@ function handleContainerClick() {
   if (props.hideInput) {
     _open.value = !_open.value;
   } else {
+    _open.value = true;
     internalInputRef.value?.focus();
   }
 }
@@ -282,6 +283,7 @@ function removeTag(tag: string | number) {
 function onClickRemoveButton() {
   if (!props.disabled && !props.readonly) {
     _modelValue.value = null;
+    tagInput.value = '';
 
     emit('validate', _modelValue.value);
 
@@ -306,6 +308,26 @@ function onBlur(e: FocusEvent) {
 
   emit('validate', props.modelValue);
   emit('blur', e);
+}
+
+function handleEnter() {
+  if (!_open.value) {
+    _open.value = true;
+
+    return;
+  }
+
+  if (props.allowCreate && !focusedDropDownItem.value) {
+    checkCreateTag(tagInput.value);
+  } else if (focusedDropDownItem.value !== null && focusedDropDownItem.value !== undefined) {
+    addTagFromOptions(focusedDropDownItem.value);
+  }
+}
+
+function onKeyDownInput(e: KeyboardEvent) {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+    e.stopImmediatePropagation();
+  }
 }
 
 watch(() => props.skeleton, (val) => {
@@ -447,8 +469,9 @@ onMounted(() => {
                       :readonly="readonly"
                       @click.stop="changeFocus"
                       @focus="changeFocus"
+                      @keydown="onKeyDownInput"
                       @keydown.delete="removeLastTag"
-                      @keydown.enter.prevent="checkCreateTag(tagInput)"
+                      @keydown.enter.stop.prevent="handleEnter"
                       @keydown.esc.prevent="closeDropdown"
                       @blur="onBlur"
                     >
