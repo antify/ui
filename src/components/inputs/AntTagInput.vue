@@ -15,7 +15,7 @@ import {
   faChevronRight, faMultiply, type IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 import {
-  computed, onMounted, type Ref, ref, watch,
+  computed, onMounted, nextTick, type Ref, ref, watch,
 } from 'vue';
 import AntTag from '../AntTag.vue';
 import AntIcon from '../AntIcon.vue';
@@ -95,6 +95,7 @@ const _open = useVModel(props, 'open', emit, {
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const focusedDropDownItem: Ref<string | number | null> = ref(null);
 const tagInput = ref('');
+const internalInputRef = ref<HTMLInputElement | null>(null);
 const _inputRef = useVModel(props, 'inputRef', emit);
 const _isNullableActive = computed(() => props.nullable && Array.isArray(_modelValue.value) && _modelValue.value.length > 0);
 
@@ -201,13 +202,13 @@ function handleContainerClick() {
   if (props.hideInput) {
     _open.value = !_open.value;
   } else {
-    _inputRef.value?.focus();
+    internalInputRef.value?.focus();
   }
 }
 
 async function checkCreateTag(item: string): Promise<void> {
   if (props.allowCreate && focusedDropDownItem.value) {
-    // If allowCreate is active but a item is focused inside the dropdown do nothing here.
+    // If allowCreate is active but an item is focused inside the dropdown do nothing here.
     return;
   }
 
@@ -215,6 +216,10 @@ async function checkCreateTag(item: string): Promise<void> {
     const newOption: SelectOption = await props.createCallback(item);
 
     addTag(newOption.value);
+
+    nextTick(() => {
+      internalInputRef.value?.focus();
+    });
   }
 }
 
@@ -225,12 +230,17 @@ function addTagFromOptions(item: string | number) {
   }
 
   const option = props.options?.find(option => option.value === item);
+
   if (option) {
     addTag(item);
 
     if (props.autoCloseAfterSelection) {
       _open.value = false;
     }
+
+    nextTick(() => {
+      internalInputRef.value?.focus();
+    });
   }
 }
 
@@ -249,6 +259,7 @@ function addTag(tagValue: string | number): void {
       tagValue,
     ];
   }
+
   tagInput.value = '';
 }
 
@@ -261,6 +272,10 @@ function removeLastTag() {
 function removeTag(tag: string | number) {
   if (_modelValue.value && !props.disabled && !props.skeleton && !props.readonly) {
     _modelValue.value = _modelValue.value.filter((element) => element !== tag);
+
+    nextTick(() => {
+      internalInputRef.value?.focus();
+    });
   }
 }
 
@@ -269,6 +284,10 @@ function onClickRemoveButton() {
     _modelValue.value = null;
 
     emit('validate', _modelValue.value);
+
+    nextTick(() => {
+      internalInputRef.value?.focus();
+    });
   }
 }
 
@@ -281,6 +300,10 @@ function closeDropdown() {
 }
 
 function onBlur(e: FocusEvent) {
+  if (_open.value) {
+    return;
+  }
+
   emit('validate', props.modelValue);
   emit('blur', e);
 }
@@ -301,6 +324,26 @@ watch(_modelValue, (val) => {
   }
 }, {
   deep: true,
+});
+
+watch(internalInputRef, (el) => {
+  _inputRef.value = el;
+}, {
+  immediate: true,
+});
+
+watch(filteredOptions, (newOptions) => {
+  if (newOptions.length > 0) {
+    const exists = newOptions.some(opt => opt.value === focusedDropDownItem.value);
+
+    if (!exists) {
+      focusedDropDownItem.value = !props.allowCreate ? (newOptions[0]?.value ?? null) : null;
+    }
+  } else {
+    focusedDropDownItem.value = null;
+  }
+}, {
+  immediate: true,
 });
 
 onMounted(() => {
@@ -332,7 +375,7 @@ onMounted(() => {
             :model-value="null"
             :auto-select-first-on-open="!allowCreate"
             :options="filteredOptions"
-            :input-ref="_inputRef"
+            :input-ref="internalInputRef"
             :size="size as unknown as Size"
             :state="state"
             :max-height="dropDownMaxHeight"
@@ -369,6 +412,7 @@ onMounted(() => {
                     :size="AntTagSize.xs3"
                     :state="state as unknown as TagState"
                     :dismiss="!readonly"
+                    @mousedown.prevent
                     @close="removeTag(tag)"
                   >
                     <span :class="{ 'line-through': (allOptions || options).find((option: SelectOption) => option.value === tag)?.isDeleted }">
@@ -394,7 +438,7 @@ onMounted(() => {
                     />
 
                     <input
-                      ref="_inputRef"
+                      ref="internalInputRef"
                       v-model="tagInput"
                       type="text"
                       :placeholder="placeholder"
