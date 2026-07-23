@@ -78,6 +78,10 @@ onClickOutside(floating, () => {
 
   emit('update:open', false);
   emit('clickOutside');
+}, {
+  ignore: [
+    reference,
+  ],
 });
 
 const _modelValue = useVModel(props, 'modelValue', emit);
@@ -316,6 +320,7 @@ defineExpose({
               :class="getOptionClasses(option, index)"
               @mousedown.prevent
               @click="(e) => onClickDropDownItem(e, option)"
+              @mousedown.prevent
               @mouseover="() => focusedDropDownItem = !option.isGroupLabel && option.value !== undefined ? option.value : null"
             >
               <div class="flex items-center justify-between w-full">
