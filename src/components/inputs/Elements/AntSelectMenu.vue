@@ -78,6 +78,10 @@ onClickOutside(floating, () => {
 
   emit('update:open', false);
   emit('clickOutside');
+}, {
+  ignore: [
+    reference,
+  ],
 });
 
 const _modelValue = useVModel(props, 'modelValue', emit);

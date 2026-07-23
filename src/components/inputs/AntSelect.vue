@@ -17,7 +17,7 @@ import {
   type SelectOption,
 } from './__types/AntSelect.types';
 import {
-  computed, onMounted, ref, watch, nextTick,
+  computed, nextTick, onMounted, ref, watch,
 } from 'vue';
 import {
   Size,
@@ -35,7 +35,7 @@ import {
 import AntSkeleton from '../AntSkeleton.vue';
 import AntButton from '../AntButton.vue';
 import {
-  State, InputState,
+  InputState, State,
 } from '../../enums';
 import {
   IconSize,
@@ -229,14 +229,6 @@ async function onMenuClickOutside() {
   emit('validate', props.modelValue);
 }
 
-async function onKeydown(e: KeyboardEvent) {
-  if (e.key === 'Tab' && isOpen.value) {
-    isOpen.value = false;
-    await nextTick();
-    emit('validate', props.modelValue);
-  }
-}
-
 function onClickSelectInput(e: MouseEvent) {
   e.preventDefault();
 
@@ -244,9 +236,7 @@ function onClickSelectInput(e: MouseEvent) {
     return;
   }
 
-  if (isOpen.value) {
-    _inputRef.value?.focus();
-  }
+  _inputRef.value?.focus();
 
   isOpen.value = !isOpen.value;
 }
@@ -256,10 +246,7 @@ function onClickRemoveButton() {
   _modelValue.value = null;
 }
 
-async function onElementSelect(value: string | number | null) {
-  await nextTick();
-  emit('validate', value);
-
+async function onElementSelect() {
   _inputRef.value?.focus();
 }
 
@@ -277,7 +264,11 @@ watch([
 });
 
 watch(_modelValue, async () => {
-  if (props.messages.length > 0) {
+  if ([
+    InputState.danger,
+    InputState.warning,
+    InputState.info,
+  ].includes(props.state)) {
     await nextTick();
     emit('validate', props.modelValue);
   }
@@ -296,7 +287,7 @@ watch(_modelValue, async () => {
     :expanded="expanded"
     :messages="messages"
     label-for="noop"
-    @click-label="() => _inputRef?.focus()"
+    @click-label="_inputRef?.focus()"
   >
     <div
       class="h-fit flex flex-row w-full"
@@ -360,9 +351,7 @@ watch(_modelValue, async () => {
               :tabindex="disabled || readonly ? -1 : 0"
               v-bind="$attrs"
               @mousedown="onClickSelectInput"
-              @click="() => _inputRef?.focus()"
               @blur="onBlur"
-              @keydown="onKeydown"
             >
               <div
                 v-if="_modelValue === null && placeholder !== undefined"
