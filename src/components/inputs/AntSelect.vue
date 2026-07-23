@@ -246,10 +246,6 @@ function onClickRemoveButton() {
   _modelValue.value = null;
 }
 
-async function onElementSelect() {
-  _inputRef.value?.focus();
-}
-
 watch([
   () => props.options,
   () => _modelValue.value,
@@ -313,7 +309,6 @@ watch(_modelValue, async () => {
           :state="state"
           :close-on-enter="true"
           :max-height="maxHeight"
-          @select-element="onElementSelect"
           @click-outside="onMenuClickOutside"
         >
           <template #contentBefore>

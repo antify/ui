@@ -319,6 +319,7 @@ defineExpose({
               data-e2e="select-menu-item"
               :class="getOptionClasses(option, index)"
               @click="(e) => onClickDropDownItem(e, option)"
+              @mousedown.prevent
               @mouseover="() => focusedDropDownItem = !option.isGroupLabel && option.value !== undefined ? option.value : null"
             >
               <div class="flex items-center justify-between w-full">
