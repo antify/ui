@@ -67,6 +67,7 @@ const props = withDefaults(defineProps<{
   open?: boolean;
   hideInput?: boolean;
   allOptions?: SelectOption[];
+  maxTagsHeight?: string;
 }>(), {
   size: AntTagInputSize.md,
   state: InputState.base,
@@ -85,6 +86,7 @@ const props = withDefaults(defineProps<{
   dropDownMaxHeight: '350px',
   open: false,
   hideInput: false,
+  maxTagsHeight: undefined,
 });
 
 const _modelValue: Ref<(string | number)[] | null> = useVModel(props, 'modelValue', emit);
@@ -417,7 +419,11 @@ onMounted(() => {
                 class="w-full"
                 @click="handleContainerClick"
               >
-                <div class="flex flex-wrap gap-2 items-center w-full">
+                <div
+                  class="flex flex-wrap gap-2 items-center w-full"
+                  :class="{ 'overflow-y-auto': !!maxTagsHeight }"
+                  :style="maxTagsHeight ? { maxHeight: maxTagsHeight } : {}"
+                >
                   <AntTag
                     v-for="(tag, index) in _modelValue"
                     :key="`tag-input-tag-${index}`"
