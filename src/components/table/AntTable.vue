@@ -152,6 +152,33 @@ function openRowsByDefault() {
   }
 }
 
+function getHeaderStickyClasses(header: TableHeader) {
+  const isLeft = header.fixed === 'left' || header.fixed === true;
+  const isRight = header.fixed === 'right';
+
+  if (!isLeft && !isRight) return {};
+
+  return {
+    'sticky z-30': true,
+    'left-0 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]': isLeft,
+    'right-0 shadow-[-2px_0_5px_-2px_rgba(0,0,0,0.1)]': isRight,
+    [props.headerColor]: true,
+  };
+}
+
+function getCellStickyClasses(header: TableHeader) {
+  const isLeft = header.fixed === 'left' || header.fixed === true;
+  const isRight = header.fixed === 'right';
+
+  if (!isLeft && !isRight) return {};
+
+  return {
+    'sticky z-10 bg-inherit': true,
+    'left-0 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]': isLeft,
+    'right-0 shadow-[-2px_0_5px_-2px_rgba(0,0,0,0.1)]': isRight,
+  };
+}
+
 watch(() => props.showLightVersion, (val) => {
   setTimeout(() => _showLightVersion.value = val, val ? 200 : 400);
 });
@@ -205,6 +232,7 @@ onMounted(() => {
                 :key="`table-header-${header.identifier}-${index}`"
                 :header="header"
                 :size="size"
+                :class="getHeaderStickyClasses(header)"
                 @sort="sortTable"
               >
                 <template #headerContent>
@@ -249,6 +277,7 @@ onMounted(() => {
                   :element="elem"
                   :align="header.align"
                   :size="size"
+                  :class="getCellStickyClasses(header)"
                   @click="rowClick(elem)"
                 >
                   <template #beforeCellContent="props">
