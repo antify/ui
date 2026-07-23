@@ -318,7 +318,6 @@ defineExpose({
               :key="`option-${index}`"
               data-e2e="select-menu-item"
               :class="getOptionClasses(option, index)"
-              @mousedown.prevent
               @click="(e) => onClickDropDownItem(e, option)"
               @mousedown.prevent
               @mouseover="() => focusedDropDownItem = !option.isGroupLabel && option.value !== undefined ? option.value : null"
