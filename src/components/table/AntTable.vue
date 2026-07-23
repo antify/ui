@@ -156,7 +156,9 @@ function getHeaderStickyClasses(header: TableHeader) {
   const isLeft = header.fixed === 'left' || header.fixed === true;
   const isRight = header.fixed === 'right';
 
-  if (!isLeft && !isRight) return {};
+  if (!isLeft && !isRight) {
+    return {};
+  }
 
   return {
     'sticky z-30': true,
@@ -170,7 +172,9 @@ function getCellStickyClasses(header: TableHeader) {
   const isLeft = header.fixed === 'left' || header.fixed === true;
   const isRight = header.fixed === 'right';
 
-  if (!isLeft && !isRight) return {};
+  if (!isLeft && !isRight) {
+    return {};
+  }
 
   return {
     'sticky z-10 bg-inherit': true,
