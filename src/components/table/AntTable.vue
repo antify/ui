@@ -156,12 +156,10 @@ function getHeaderStickyClasses(header: TableHeader) {
   const isLeft = header.fixed === 'left' || header.fixed === true;
   const isRight = header.fixed === 'right';
 
-  if (!isLeft && !isRight) {
-    return {};
-  }
-
   return {
-    'sticky z-30': true,
+    'sticky top-0': true,
+    'z-30': isLeft || isRight,
+    'z-20': !isLeft && !isRight,
     'left-0 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]': isLeft,
     'right-0 shadow-[-2px_0_5px_-2px_rgba(0,0,0,0.1)]': isRight,
     [props.headerColor]: true,
@@ -224,7 +222,6 @@ onMounted(() => {
         :class="{'h-full': data.length === 0 && !_loading}"
       >
         <thead
-          class="sticky top-0 z-10"
           :class="headerColor"
         >
           <tr>
