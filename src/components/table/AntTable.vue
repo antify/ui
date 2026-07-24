@@ -375,7 +375,6 @@ onMounted(() => {
       :visible="_skeleton"
       :headers="_headers"
       :size="size"
-      :bordered="bordered"
       :get-row-classes="getRowClasses"
       :header-color="headerColor"
       :show-light-version="_showLightVersion"
