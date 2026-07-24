@@ -33,6 +33,13 @@ export type TableHeader = {
    * Emit if the column should be shown on light table version.
    */
   lightVersion?: boolean;
+  /**
+   * Fixes/pins the column position during horizontal scrolling.
+   * - 'left' or true: Pins column to the left side (`true` acts as a shorthand for 'left').
+   * - 'right': Pins column to the right side.
+   * - false or undefined: Standard scrollable column (unfixed).
+   */
+  fixed?: 'left' | 'right' | boolean;
 };
 
 export enum AntTableSize {

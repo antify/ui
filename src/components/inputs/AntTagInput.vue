@@ -6,27 +6,25 @@ import type {
   SelectOption,
 } from './__types';
 import {
-  Grouped, InputState, Size,
+  Grouped, InputState, Size, State,
 } from '../../enums';
 import {
   useVModel,
 } from '@vueuse/core';
 import {
-  faChevronRight, type IconDefinition,
+  faChevronRight, faMultiply, type IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 import {
-  computed, onMounted, type Ref, ref, watch,
+  computed, onMounted, nextTick, type Ref, ref, watch,
 } from 'vue';
 import AntTag from '../AntTag.vue';
 import AntIcon from '../AntIcon.vue';
+import AntButton from '../AntButton.vue';
 import {
   AntTagSize, IconSize,
 } from '../__types';
 import AntSelectMenu from './Elements/AntSelectMenu.vue';
 import AntSkeleton from '../AntSkeleton.vue';
-import {
-  vOnClickOutside,
-} from '@vueuse/components';
 import {
   AntTagInputSize,
 } from './__types/AntTagInput.types';
@@ -37,9 +35,11 @@ import type {
 const emit = defineEmits([
   'update:modelValue',
   'update:inputRef',
+  'update:open',
   'blur',
   'validate',
 ]);
+
 const props = withDefaults(defineProps<{
   modelValue: (string | number)[] | null;
   options: SelectOption[];
@@ -64,6 +64,10 @@ const props = withDefaults(defineProps<{
   createCallback?: (item: string) => Promise<SelectOption>;
   inputRef?: HTMLInputElement | null;
   dropDownMaxHeight?: string;
+  open?: boolean;
+  hideInput?: boolean;
+  allOptions?: SelectOption[];
+  maxTagsHeight?: string;
 }>(), {
   size: AntTagInputSize.md,
   state: InputState.base,
@@ -80,15 +84,23 @@ const props = withDefaults(defineProps<{
   placeholder: 'Add new tag',
   inputRef: null,
   dropDownMaxHeight: '350px',
+  open: false,
+  hideInput: false,
+  maxTagsHeight: undefined,
 });
 
 const _modelValue: Ref<(string | number)[] | null> = useVModel(props, 'modelValue', emit);
 const _skeleton = useVModel(props, 'skeleton', emit);
-const dropDownOpen = ref(false);
+const _open = useVModel(props, 'open', emit, {
+  passive: true,
+  defaultValue: false,
+});
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const focusedDropDownItem: Ref<string | number | null> = ref(null);
 const tagInput = ref('');
+const internalInputRef = ref<HTMLInputElement | null>(null);
 const _inputRef = useVModel(props, 'inputRef', emit);
+const _isNullableActive = computed(() => props.nullable && Array.isArray(_modelValue.value) && _modelValue.value.length > 0);
 const inputContainerClasses = computed(() => {
   const variants: Record<InputState, string> = {
     [InputState.base]: 'outline-base-300 focus-within:outline-base-300 focus-within:ring-primary-200 bg-white',
@@ -99,7 +111,7 @@ const inputContainerClasses = computed(() => {
   };
 
   return {
-    'flex items-center flex-wrap': true,
+    'flex items-center': true,
     'transition-colors relative border-none outline w-full focus-within:z-10': true,
     'outline-offset-[-1px] outline-1 focus-within:outline-offset-[-1px] focus-within:outline-1': true,
     'opacity-50 cursor-not-allowed': props.disabled,
@@ -115,6 +127,7 @@ const inputContainerClasses = computed(() => {
     'rounded-none': props.grouped === Grouped.center,
     'rounded-tl-none rounded-bl-none rounded-tr-md rounded-br-md': props.grouped === Grouped.right,
     'rounded-md': props.grouped === Grouped.none,
+    'rounded-tr-none rounded-br-none': _isNullableActive.value,
     invisible: props.skeleton,
   };
 });
@@ -128,13 +141,13 @@ const inputClasses = computed(() => {
   };
 
   return {
-    'outline-0 bg-transparent w-full': true,
+    'outline-0 bg-transparent w-full min-w-0': true,
     'opacity-50 cursor-not-allowed': props.disabled,
     [variants[props.state]]: true,
   };
 });
 const skeletonGrouped = computed(() => {
-  if (!props.nullable || (props.nullable && _modelValue.value === null)) {
+  if (!_isNullableActive.value) {
     return props.grouped;
   }
 
@@ -148,7 +161,9 @@ const filteredOptions = computed(() => {
   const searchTerm = tagInput.value.toLowerCase();
 
   return props.options.filter(option => {
-    if (option.isDeleted) return false;
+    if (option.isDeleted) {
+      return false;
+    }
 
     if (!props.allowDuplicates && _modelValue.value?.includes(option.value)) {
       return false;
@@ -157,17 +172,45 @@ const filteredOptions = computed(() => {
     return option.label.toLowerCase().includes(searchTerm);
   });
 });
+const placeholderClasses = computed(() => {
+  const variants: Record<InputState, string> = {
+    [InputState.base]: 'text-base-500',
+    [InputState.danger]: 'text-danger-700',
+    [InputState.info]: 'text-info-700',
+    [InputState.success]: 'text-success-700',
+    [InputState.warning]: 'text-warning-700',
+  };
+
+  return {
+    'truncate select-none pointer-events-none': true,
+    [variants[props.state]]: true,
+  };
+});
 
 function onClickOutside() {
-  if (!dropDownOpen.value) {
+  if (!_open.value) {
     return;
   }
-  // dropDownOpen.value = false;
+
+  _open.value = false;
+}
+
+function handleContainerClick() {
+  if (props.disabled || props.readonly) {
+    return;
+  }
+
+  if (props.hideInput) {
+    _open.value = !_open.value;
+  } else {
+    _open.value = true;
+    internalInputRef.value?.focus();
+  }
 }
 
 async function checkCreateTag(item: string): Promise<void> {
   if (props.allowCreate && focusedDropDownItem.value) {
-    // If allowCreate is active but a item is focused inside the dropdown do nothing here.
+    // If allowCreate is active but an item is focused inside the dropdown do nothing here.
     return;
   }
 
@@ -175,6 +218,9 @@ async function checkCreateTag(item: string): Promise<void> {
     const newOption: SelectOption = await props.createCallback(item);
 
     addTag(newOption.value);
+    nextTick(() => {
+      internalInputRef.value?.focus();
+    });
   }
 }
 
@@ -190,8 +236,12 @@ function addTagFromOptions(item: string | number) {
     addTag(item);
 
     if (props.autoCloseAfterSelection) {
-      dropDownOpen.value = false;
+      _open.value = false;
     }
+
+    nextTick(() => {
+      internalInputRef.value?.focus();
+    });
   }
 }
 
@@ -216,22 +266,38 @@ function addTag(tagValue: string | number): void {
 
 function removeLastTag() {
   if (tagInput.value === '' && Array.isArray(_modelValue.value) && _modelValue.value.length > 0) {
-    _modelValue.value = _modelValue.value.filter((element) => element !== _modelValue.value?.pop());
+    _modelValue.value = _modelValue.value.slice(0, -1);
   }
 }
 
 function removeTag(tag: string | number) {
   if (_modelValue.value && !props.disabled && !props.skeleton && !props.readonly) {
     _modelValue.value = _modelValue.value.filter((element) => element !== tag);
+
+    nextTick(() => {
+      internalInputRef.value?.focus();
+    });
+  }
+}
+
+function onClickRemoveButton() {
+  if (!props.disabled && !props.readonly) {
+    _modelValue.value = null;
+    tagInput.value = '';
+
+    emit('validate', _modelValue.value);
+    nextTick(() => {
+      internalInputRef.value?.focus();
+    });
   }
 }
 
 function changeFocus() {
-  dropDownOpen.value = true;
+  _open.value = true;
 }
 
 function closeDropdown() {
-  dropDownOpen.value = false;
+  _open.value = false;
 }
 
 function onBlur(e: FocusEvent) {
@@ -239,9 +305,26 @@ function onBlur(e: FocusEvent) {
   emit('blur', e);
 }
 
-/**
- * Validate default value if given after delayed data fetching.
- */
+function handleEnter() {
+  if (!_open.value) {
+    _open.value = true;
+
+    return;
+  }
+
+  if (props.allowCreate && !focusedDropDownItem.value) {
+    checkCreateTag(tagInput.value);
+  } else if (focusedDropDownItem.value !== null && focusedDropDownItem.value !== undefined) {
+    addTagFromOptions(focusedDropDownItem.value);
+  }
+}
+
+function onKeyDownInput(e: KeyboardEvent) {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+    e.stopImmediatePropagation();
+  }
+}
+
 watch(() => props.skeleton, (val) => {
   if (!val && props.modelValue !== null) {
     emit('validate', props.modelValue);
@@ -258,11 +341,26 @@ watch(_modelValue, (val) => {
 }, {
   deep: true,
 });
+watch(internalInputRef, (el) => {
+  _inputRef.value = el;
+}, {
+  immediate: true,
+});
+watch(filteredOptions, (newOptions) => {
+  if (newOptions.length > 0) {
+    const exists = newOptions.some(opt => opt.value === focusedDropDownItem.value);
+
+    if (!exists) {
+      focusedDropDownItem.value = !props.allowCreate ? (newOptions[0]?.value ?? null) : null;
+    }
+  } else {
+    focusedDropDownItem.value = null;
+  }
+}, {
+  immediate: true,
+});
 
 onMounted(() => {
-  /**
-   * Validate default value without delayed data fetching.
-   */
   if (!props.skeleton && props.modelValue !== null) {
     emit('validate', props.modelValue);
   }
@@ -279,87 +377,120 @@ onMounted(() => {
       :state="state"
       :expanded="expanded"
       :messages="messages"
+      label-for="noop"
       data-e2e="tag-input"
+      @click-label="handleContainerClick"
     >
-      <AntSkeleton
-        :visible="skeleton"
-        rounded
-        :grouped="skeletonGrouped"
-        class="w-full"
-      >
-        <div
-          v-on-click-outside="onClickOutside"
-          :class="inputContainerClasses"
-          class="w-full flex items-center"
-        >
-          <div
-            class="flex flex-wrap gap-2.5 items-center"
+      <div class="h-fit flex flex-row w-full">
+        <div class="relative w-full">
+          <AntSelectMenu
+            v-model:open="_open"
+            v-model:focused="focusedDropDownItem"
+            :model-value="null"
+            :auto-select-first-on-open="!allowCreate"
+            :options="filteredOptions"
+            :input-ref="internalInputRef"
+            :size="size as unknown as Size"
+            :state="state"
+            :max-height="dropDownMaxHeight"
+            :focus-on-open="false"
+            :close-on-select-item="false"
+            @select-element="addTagFromOptions"
+            @click-outside="onClickOutside"
           >
-            <AntTag
-              v-for="(tag, index) in _modelValue"
-              :key="`tag-input-tag-${index}`"
-              :size="AntTagSize.xs3"
-              :state="state as unknown as TagState"
-              :dismiss="!readonly"
-              @close="removeTag(tag)"
+            <template #contentBefore>
+              <slot name="contentBefore" />
+            </template>
+
+            <template #empty>
+              <slot name="empty">
+                <span v-if="allowCreate">No tag found, create now</span>
+              </slot>
+            </template>
+
+            <AntSkeleton
+              :visible="skeleton"
+              rounded
+              :grouped="skeletonGrouped"
+              class="w-full"
             >
-              <span
-                :class="{
-                  'line-through': options.find((option: SelectOption) => option.value === tag)?.isDeleted
-                }"
+              <div
+                :class="[inputContainerClasses, { 'cursor-pointer': hideInput && !disabled && !readonly }]"
+                class="w-full"
+                @click="handleContainerClick"
               >
-                {{ options.find((option: SelectOption) => option.value === tag)?.label }}
-              </span>
-            </AntTag>
-          </div>
+                <div
+                  class="flex flex-wrap gap-2 items-center w-full"
+                  :class="{ 'overflow-y-auto': !!maxTagsHeight }"
+                  :style="maxTagsHeight ? { maxHeight: maxTagsHeight } : {}"
+                >
+                  <AntTag
+                    v-for="(tag, index) in _modelValue"
+                    :key="`tag-input-tag-${index}`"
+                    :size="AntTagSize.xs3"
+                    :state="state as unknown as TagState"
+                    :dismiss="!readonly"
+                    @mousedown.prevent
+                    @close="removeTag(tag)"
+                  >
+                    <span :class="{ 'line-through': (allOptions || options).find((option: SelectOption) => option.value === tag)?.isDeleted }">
+                      {{ (allOptions || options).find((option: SelectOption) => option.value === tag)?.label }}
+                    </span>
+                  </AntTag>
 
-          <!-- Input -->
-          <div class="flex items-center w-32 shrink grow">
-            <AntIcon
-              :icon="icon"
-              :size="size === AntTagInputSize.sm ? IconSize.xs : IconSize.sm"
-            />
+                  <span
+                    v-if="hideInput && (!_modelValue || _modelValue.length === 0) && placeholder"
+                    :class="placeholderClasses"
+                  >
+                    {{ placeholder }}
+                  </span>
 
-            <input
-              ref="_inputRef"
-              v-model="tagInput"
-              type="text"
-              :placeholder="placeholder"
-              :class="inputClasses"
-              :disabled="disabled"
-              :readonly="readonly"
-              @click="changeFocus"
-              @focus="changeFocus"
-              @keydown.delete="removeLastTag"
-              @keydown.enter.prevent="checkCreateTag(tagInput)"
-              @keydown.esc.prevent="closeDropdown"
-              @blur="onBlur"
-            >
-          </div>
+                  <div
+                    v-if="!hideInput"
+                    class="flex-1 flex items-center min-w-[60px] gap-1.5"
+                  >
+                    <AntIcon
+                      :icon="icon"
+                      :size="size === AntTagInputSize.sm ? IconSize.xs : IconSize.sm"
+                      class="shrink-0"
+                    />
+
+                    <input
+                      ref="internalInputRef"
+                      v-model="tagInput"
+                      type="text"
+                      :placeholder="placeholder"
+                      :class="inputClasses"
+                      :disabled="disabled"
+                      :readonly="readonly"
+                      @click.stop="changeFocus"
+                      @focus="changeFocus"
+                      @keydown="onKeyDownInput"
+                      @keydown.delete="removeLastTag"
+                      @keydown.enter.stop.prevent="handleEnter"
+                      @keydown.esc.prevent="closeDropdown"
+                      @blur="onBlur"
+                    >
+                  </div>
+                </div>
+              </div>
+            </AntSkeleton>
+          </AntSelectMenu>
         </div>
 
-        <AntSelectMenu
-          v-if="!disabled && !readonly"
-          v-model:focused="focusedDropDownItem"
-          v-model:open="dropDownOpen"
-          :model-value="null"
-          :auto-select-first-on-open="!allowCreate"
-          :options="filteredOptions"
-          :input-ref="_inputRef"
-          :size="size as unknown as Size"
-          :state="state"
-          :max-height="dropDownMaxHeight"
-          :focus-on-open="false"
-          :close-on-select-item="false"
-          @select-element="addTagFromOptions"
-        >
-          <template #empty>
-            <span v-if="allowCreate">
-              No tag found, create now
-            </span>
-          </template>
-        </AntSelectMenu>
-      </AntSkeleton>
+        <AntButton
+          v-if="_isNullableActive"
+          data-e2e="clear-button"
+          :icon-left="faMultiply"
+          :state="state as unknown as State"
+          :grouped="[Grouped.left, Grouped.center].some(item => item === grouped) ? Grouped.center : Grouped.right"
+          :size="size as any"
+          :skeleton="skeleton"
+          :disabled="disabled"
+          @mousedown.prevent
+          @click="onClickRemoveButton"
+        />
+      </div>
     </AntField>
   </div>
 </template>

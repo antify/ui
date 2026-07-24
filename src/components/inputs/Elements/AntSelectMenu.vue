@@ -355,6 +355,7 @@ defineExpose({
                 'flex items-center justify-center p-2 pt-2 bg-white font-medium italic text-center': $slots.contentBefore
               }
             ]"
+            @mousedown.prevent
           >
             <slot name="empty">
               Keine Einträge vorhanden
