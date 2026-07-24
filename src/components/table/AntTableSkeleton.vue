@@ -13,10 +13,12 @@ withDefaults(defineProps<{
   size?: AntTableSize;
   headerColor?: string;
   showLightVersion?: boolean;
+  bordered?: boolean;
 }>(), {
   size: AntTableSize.md,
   headerColor: 'bg-base-200',
   showLightVersion: false,
+  bordered: false,
 });
 </script>
 
@@ -42,6 +44,7 @@ withDefaults(defineProps<{
               type: AntTableRowTypes.slot
             }"
             :size="size"
+            :bordered="bordered"
           >
             <template #headerContent>
               <span class="relative h-4 w-full max-w-24 rounded overflow-hidden">
@@ -68,6 +71,7 @@ withDefaults(defineProps<{
             }"
             :element="{'foo': 'bar'}"
             :size="size"
+            :bordered="bordered"
           >
             <template #cellContent>
               <span class="flex relative h-4 w-full max-w-36 rounded overflow-hidden">

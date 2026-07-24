@@ -56,6 +56,7 @@ const props = withDefaults(defineProps<{
   collapseStrategy?: CollapseStrategy;
   expandedRows?: boolean;
   skeleton?: boolean;
+  bordered?: boolean;
 }>(), {
   rowKey: 'id',
   loading: false,
@@ -67,6 +68,7 @@ const props = withDefaults(defineProps<{
   collapseStrategy: CollapseStrategy.single,
   expandedRows: false,
   skeleton: false,
+  bordered: false,
 });
 const slots = defineSlots();
 const openItems = ref<number[]>([]);
@@ -233,6 +235,7 @@ onMounted(() => {
                 :key="`table-header-${header.identifier}-${index}`"
                 :header="header"
                 :size="size"
+                :bordered="bordered"
                 :class="getHeaderStickyClasses(header)"
                 @sort="sortTable"
               >
@@ -278,6 +281,7 @@ onMounted(() => {
                   :element="elem"
                   :align="header.align"
                   :size="size"
+                  :bordered="bordered"
                   :class="getCellStickyClasses(header)"
                   @click="rowClick(elem)"
                 >
@@ -371,6 +375,7 @@ onMounted(() => {
       :visible="_skeleton"
       :headers="_headers"
       :size="size"
+      :bordered="bordered"
       :get-row-classes="getRowClasses"
       :header-color="headerColor"
       :show-light-version="_showLightVersion"

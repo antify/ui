@@ -76,6 +76,17 @@ const meta: Meta<typeof AntTable> = {
         },
       },
     },
+    bordered: {
+      description: 'If true, displays table cells and header borders.',
+      control: {
+        type: 'boolean',
+      },
+      table: {
+        defaultValue: {
+          summary: 'false',
+        },
+      },
+    },
     // Slots
     afterCellContent: {
       description:
@@ -575,6 +586,14 @@ export const MultipleCollapseStrategy: Story = {
     `,
   }),
   args: Docs.args,
+};
+
+export const Bordered: Story = {
+  render: Docs.render,
+  args: {
+    ...Docs.args,
+    bordered: true,
+  },
 };
 
 export const DefaultCollapseOpen: Story = {
