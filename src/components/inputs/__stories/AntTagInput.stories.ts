@@ -365,7 +365,6 @@ export const CustomSearchAndFilters: Story = {
         value,
         searchTerm,
         filterValue,
-        allOptions,
         filteredOptions,
         setFilter,
         State,
@@ -378,7 +377,6 @@ export const CustomSearchAndFilters: Story = {
           v-model="value"
           v-bind="args"
           :options="filteredOptions"
-          :all-options="allOptions"
           placeholder="Mitarbeiter hinzufügen"
         >
           <template #contentBefore>
@@ -427,7 +425,7 @@ export const CustomSearchAndFilters: Story = {
   }),
   args: {
     label: 'Custom UI Implementation',
-    description: 'Demonstrates custom filters alongside #contentBefore slot.',
+    description: 'Demonstrates custom filters without requiring a separate allOptions prop.',
   },
 };
 

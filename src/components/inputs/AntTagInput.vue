@@ -66,7 +66,6 @@ const props = withDefaults(defineProps<{
   inputRef?: HTMLInputElement | null;
   dropDownMaxHeight?: string;
   open?: boolean;
-  allOptions?: SelectOption[];
   maxTagsHeight?: string;
 }>(), {
   size: AntTagInputSize.md,
@@ -103,6 +102,30 @@ const _isNullableActive = computed(() => props.nullable && !props.readonly && Ar
 
 const localCreatedOptions = ref<SelectOption[]>([]);
 
+const accumulatedOptions = ref<Map<string | number, SelectOption>>(new Map());
+
+function registerOptions(opts: SelectOption[]) {
+  if (!opts) return;
+
+  opts.forEach((opt) => {
+    accumulatedOptions.value.set(opt.value, opt);
+  });
+}
+
+watch(() => props.options, (newOptions) => {
+  registerOptions(newOptions);
+}, {
+  immediate: true,
+  deep: true,
+});
+
+watch(localCreatedOptions, (newCreated) => {
+  registerOptions(newCreated);
+}, {
+  deep: true,
+});
+
+// Доступные опции для меню (включая локально созданные)
 const allAvailableOptions = computed(() => {
   const baseOptions = props.options || [];
   const extraCreated = localCreatedOptions.value.filter((createdOpt) => !baseOptions.some((opt) => opt.value === createdOpt.value));
@@ -113,15 +136,9 @@ const allAvailableOptions = computed(() => {
   ];
 });
 
-const mergedAllOptions = computed(() => {
-  const base = props.allOptions || allAvailableOptions.value;
-  const extraCreated = localCreatedOptions.value.filter((createdOpt) => !base.some((opt) => opt.value === createdOpt.value));
-
-  return [
-    ...base,
-    ...extraCreated,
-  ];
-});
+function getOption(tagValue: string | number): SelectOption | undefined {
+  return accumulatedOptions.value.get(tagValue);
+}
 
 const inputContainerClasses = computed(() => {
   const variants: Record<InputState, string> = {
@@ -223,7 +240,7 @@ async function checkCreateTag(item: string): Promise<void> {
     return;
   }
 
-  const existingOption = allAvailableOptions.value.find((opt) => opt.label.toLowerCase() === trimmed.toLowerCase() || String(opt.value).toLowerCase() === trimmed.toLowerCase());
+  const existingOption = Array.from(accumulatedOptions.value.values()).find((opt) => opt.label.toLowerCase() === trimmed.toLowerCase() || String(opt.value).toLowerCase() === trimmed.toLowerCase());
 
   if (existingOption) {
     if (!props.allowDuplicates && _modelValue.value?.includes(existingOption.value)) {
@@ -247,7 +264,7 @@ async function checkCreateTag(item: string): Promise<void> {
 
   if (!props.allowDuplicates && _modelValue.value && _modelValue.value.length > 0) {
     const isAlreadySelected = _modelValue.value.some((val) => {
-      const opt = mergedAllOptions.value.find((o) => o.value === val);
+      const opt = getOption(val);
 
       return opt ? opt.label.toLowerCase() === trimmed.toLowerCase() : String(val).toLowerCase() === trimmed.toLowerCase();
     });
@@ -533,8 +550,8 @@ onMounted(() => {
                     @click.stop
                     @close="removeTag(tag)"
                   >
-                    <span :class="{ 'line-through': mergedAllOptions.find((option: SelectOption) => option.value === tag)?.isDeleted }">
-                      {{ mergedAllOptions.find((option: SelectOption) => option.value === tag)?.label ?? tag }}
+                    <span :class="{ 'line-through': getOption(tag)?.isDeleted }">
+                      {{ getOption(tag)?.label ?? tag }}
                     </span>
                   </AntTag>
 
