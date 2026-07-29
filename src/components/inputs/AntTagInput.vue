@@ -252,14 +252,21 @@ async function checkCreateTag(item: string): Promise<void> {
 }
 
 function addTagFromOptions(item: string | number) {
-  if (props.allowCreate && !focusedDropDownItem.value) {
-    return;
-  }
-
   const option = allAvailableOptions.value?.find(opt => opt.value === item);
 
   if (option) {
+    const currentIndex = filteredOptions.value.findIndex(opt => opt.value === item);
+
     addTag(item);
+
+    nextTick(() => {
+      if (filteredOptions.value.length > 0) {
+        const nextIndex = Math.min(Math.max(currentIndex, 0), filteredOptions.value.length - 1);
+        focusedDropDownItem.value = filteredOptions.value[nextIndex]?.value ?? null;
+      } else {
+        focusedDropDownItem.value = null;
+      }
+    });
 
     if (props.autoCloseAfterSelection) {
       _open.value = false;
@@ -396,7 +403,11 @@ watch(filteredOptions, (newOptions) => {
     const exists = newOptions.some(opt => opt.value === focusedDropDownItem.value);
 
     if (!exists) {
-      focusedDropDownItem.value = !props.allowCreate ? (newOptions[0]?.value ?? null) : null;
+      if (!props.allowCreate) {
+        focusedDropDownItem.value = newOptions[0]?.value ?? null;
+      } else if (tagInput.value !== '') {
+        focusedDropDownItem.value = null;
+      }
     }
   } else {
     focusedDropDownItem.value = null;
