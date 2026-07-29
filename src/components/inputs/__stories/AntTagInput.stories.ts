@@ -27,10 +27,10 @@ const meta: Meta<typeof AntTagInput> = {
   component: AntTagInput,
   argTypes: {
     modelValue: {
-      control: 'text',
+      control: 'object',
       table: {
         type: {
-          summary: 'string[]|null',
+          summary: '(string | number)[] | null',
         },
       },
     },
@@ -51,24 +51,36 @@ const meta: Meta<typeof AntTagInput> = {
         },
       },
     },
+    readonly: {
+      control: 'boolean',
+      description: 'Disables editing, tag removal, and dropdown menu opening.',
+    },
+    allowCreate: {
+      control: 'boolean',
+      description: 'Allows creating custom tags on Enter press.',
+    },
+    maxTagsHeight: {
+      control: 'text',
+      description: 'Max height for the tags container (e.g. "80px").',
+    },
     placeholder: {
       table: {
         defaultValue: {
-          summary: 'this.label',
+          summary: 'Add new tag',
         },
       },
     },
     createCallback: {
-      description: 'If allowCreate is true the createCallback needs to be specified. It will be called when the user creates a new tag. It should return a promise that resolves to a SelectOption.',
+      description: 'If allowCreate is true, optional callback to handle new option generation. Returns Promise<SelectOption>.',
       table: {
         type: {
           summary: '(item: string) => Promise<SelectOption>',
           detail: `
-Params:
-item: string - the label of the new tag
+              Params:
+              item: string - the label of the new tag
 
-Returns:
-Promise<SelectOption> - the new tag as a SelectOption
+              Returns:
+              Promise<SelectOption> - the new tag as a SelectOption
           `,
         },
       },
@@ -150,6 +162,37 @@ export const Docs: Story = {
   }),
   args: {
     options,
+    label: 'Default Tag Input',
+  },
+};
+
+export const Readonly: Story = {
+  render: (args) => ({
+    components: {
+      AntTagInput,
+    },
+    setup() {
+      const value: Ref<string[]> = ref([
+        '1',
+        '2',
+      ]);
+
+      return {
+        args,
+        value,
+      };
+    },
+    template: `
+      <div style="width: 360px">
+        <AntTagInput v-model="value" v-bind="args"/>
+      </div>
+    `,
+  }),
+  args: {
+    options,
+    readonly: true,
+    label: 'Readonly Mode',
+    description: 'Input is locked, tags cannot be deleted, menu will not open.',
   },
 };
 
@@ -177,6 +220,8 @@ export const withDeleted: Story = {
   }),
   args: {
     options,
+    label: 'With Deleted Options',
+    description: 'Displays strikethrough text for deleted tags.',
   },
 };
 
@@ -185,14 +230,53 @@ export const AllowCreate: Story = {
   args: {
     options,
     allowCreate: true,
+    label: 'Allow Create New Tags',
+    description: 'Type any text and press Enter to create a new tag dynamically.',
     createCallback(item: string): Promise<SelectOption> {
       return new Promise((resolve) => {
         resolve({
           label: item,
-          value: `${Math.random()}-${item}`,
+          value: `custom-${Date.now()}-${item}`,
         });
       });
     },
+  },
+};
+
+export const MaxTagsHeight: Story = {
+  render: (args) => ({
+    components: {
+      AntTagInput,
+    },
+    setup() {
+      const value: Ref<string[]> = ref([
+        '1',
+        '2',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '10',
+        '11',
+      ]);
+
+      return {
+        args,
+        value,
+      };
+    },
+    template: `
+      <div style="width: 360px">
+        <AntTagInput v-model="value" v-bind="args"/>
+      </div>
+    `,
+  }),
+  args: {
+    options,
+    maxTagsHeight: '80px',
+    label: 'Max Tags Container Height',
+    description: 'Constrains container height and enables vertical scrollbar when tags overflow.',
   },
 };
 
@@ -289,13 +373,12 @@ export const CustomSearchAndFilters: Story = {
       };
     },
     template: `
-      <div>
+      <div style="width: 400px">
         <AntTagInput
           v-model="value"
           v-bind="args"
           :options="filteredOptions"
           :all-options="allOptions"
-          hide-input
           placeholder="Mitarbeiter hinzufügen"
         >
           <template #contentBefore>
@@ -344,7 +427,7 @@ export const CustomSearchAndFilters: Story = {
   }),
   args: {
     label: 'Custom UI Implementation',
-    description: 'Demonstrates hide-input behavior alongside #contentBefore slot.',
+    description: 'Demonstrates custom filters alongside #contentBefore slot.',
   },
 };
 
@@ -399,6 +482,7 @@ export const summary: Story = {
                          description="Lorem ipsum dolor sit amet"/>
           </AntFormGroup>
         </AntFormGroup>
+
         <AntFormGroupLabel>Sizes</AntFormGroupLabel>
         <AntFormGroup>
           <AntFormGroup direction="row">
@@ -418,37 +502,38 @@ export const summary: Story = {
                          description="Lorem ipsum dolor sit amet"/>
           </AntFormGroup>
         </AntFormGroup>
+
         <AntFormGroup direction="row">
           <AntFormGroup>
             <AntFormGroupLabel>Disabled</AntFormGroupLabel>
-            <AntTagInput v-bind="args" v-model="noValue" class="w-48" label="Label" value="Value"
+            <AntTagInput v-bind="args" v-model="noValue" class="w-48" label="Label"
                          description="Lorem ipsum dolor sit amet." disabled/>
-            <AntTagInput v-bind="args" v-model="value" class="w-48" label="Label" value="Value"
+            <AntTagInput v-bind="args" v-model="value" class="w-48" label="Label"
                          description="Lorem ipsum dolor sit amet." disabled/>
           </AntFormGroup>
           <AntFormGroup>
             <AntFormGroupLabel>Readonly</AntFormGroupLabel>
-            <!--TODO:: Add readonly prop if it is implemented-->
-            <AntTagInput v-bind="args" v-model="noValue" class="w-48" label="Label" value="Value"
-                         description="Lorem ipsum dolor sit amet."/>
-            <AntTagInput v-bind="args" v-model="value" class="w-48" label="Label" value="Value"
-                         description="Lorem ipsum dolor sit amet."/>
+            <AntTagInput v-bind="args" v-model="noValue" class="w-48" label="Label"
+                         description="Lorem ipsum dolor sit amet." readonly/>
+            <AntTagInput v-bind="args" v-model="value" class="w-48" label="Label"
+                         description="Lorem ipsum dolor sit amet." readonly/>
           </AntFormGroup>
           <AntFormGroup>
             <AntFormGroupLabel>Skeleton</AntFormGroupLabel>
-            <AntTagInput v-bind="args" v-model="noValue" class="w-48" label="Label" value="Value"
+            <AntTagInput v-bind="args" v-model="noValue" class="w-48" label="Label"
                          description="Lorem ipsum dolor sit amet." skeleton/>
           </AntFormGroup>
         </AntFormGroup>
+
         <AntFormGroupLabel>Plain</AntFormGroupLabel>
-        <AntTagInput v-bind="args" v-model="noValue" class="w-48" value="value"/>
+        <AntTagInput v-bind="args" v-model="noValue" class="w-48"/>
         <AntFormGroupLabel>With label</AntFormGroupLabel>
-        <AntTagInput v-bind="args" v-model="noValue" class="w-48" label="Label" value="Value"/>
+        <AntTagInput v-bind="args" v-model="noValue" class="w-48" label="Label"/>
         <AntFormGroupLabel>With description</AntFormGroupLabel>
-        <AntTagInput v-bind="args" v-model="noValue" class="w-48" value="Value"
+        <AntTagInput v-bind="args" v-model="noValue" class="w-48"
                      description="Lorem ipsum dolor sit amet."/>
         <AntFormGroupLabel>With label + description</AntFormGroupLabel>
-        <AntTagInput v-bind="args" v-model="noValue" class="w-48" label="Label" value="Value"
+        <AntTagInput v-bind="args" v-model="noValue" class="w-48" label="Label"
                      description="Lorem ipsum dolor sit amet."/>
       </AntFormGroup>
     `,
