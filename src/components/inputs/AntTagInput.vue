@@ -65,7 +65,6 @@ const props = withDefaults(defineProps<{
   inputRef?: HTMLInputElement | null;
   dropDownMaxHeight?: string;
   open?: boolean;
-  hideInput?: boolean;
   allOptions?: SelectOption[];
   maxTagsHeight?: string;
 }>(), {
@@ -85,7 +84,6 @@ const props = withDefaults(defineProps<{
   inputRef: null,
   dropDownMaxHeight: '350px',
   open: false,
-  hideInput: false,
   maxTagsHeight: undefined,
 });
 
@@ -100,7 +98,8 @@ const focusedDropDownItem: Ref<string | number | null> = ref(null);
 const tagInput = ref('');
 const internalInputRef = ref<HTMLInputElement | null>(null);
 const _inputRef = useVModel(props, 'inputRef', emit);
-const _isNullableActive = computed(() => props.nullable && Array.isArray(_modelValue.value) && _modelValue.value.length > 0);
+const _isNullableActive = computed(() => props.nullable && !props.readonly && Array.isArray(_modelValue.value) && _modelValue.value.length > 0);
+
 const inputContainerClasses = computed(() => {
   const variants: Record<InputState, string> = {
     [InputState.base]: 'outline-base-300 focus-within:outline-base-300 focus-within:ring-primary-200 bg-white',
@@ -131,6 +130,7 @@ const inputContainerClasses = computed(() => {
     invisible: props.skeleton,
   };
 });
+
 const inputClasses = computed(() => {
   const variants: Record<InputState, string> = {
     [InputState.base]: 'placeholder:text-base-500',
@@ -143,9 +143,11 @@ const inputClasses = computed(() => {
   return {
     'outline-0 bg-transparent w-full min-w-0': true,
     'opacity-50 cursor-not-allowed': props.disabled,
+    'cursor-default': props.readonly,
     [variants[props.state]]: true,
   };
 });
+
 const skeletonGrouped = computed(() => {
   if (!_isNullableActive.value) {
     return props.grouped;
@@ -157,6 +159,7 @@ const skeletonGrouped = computed(() => {
     return Grouped.left;
   }
 });
+
 const filteredOptions = computed(() => {
   const searchTerm = tagInput.value.toLowerCase();
 
@@ -172,20 +175,6 @@ const filteredOptions = computed(() => {
     return option.label.toLowerCase().includes(searchTerm);
   });
 });
-const placeholderClasses = computed(() => {
-  const variants: Record<InputState, string> = {
-    [InputState.base]: 'text-base-500',
-    [InputState.danger]: 'text-danger-700',
-    [InputState.info]: 'text-info-700',
-    [InputState.success]: 'text-success-700',
-    [InputState.warning]: 'text-warning-700',
-  };
-
-  return {
-    'truncate select-none pointer-events-none': true,
-    [variants[props.state]]: true,
-  };
-});
 
 function onClickOutside() {
   if (!_open.value) {
@@ -200,17 +189,12 @@ function handleContainerClick() {
     return;
   }
 
-  if (props.hideInput) {
-    _open.value = !_open.value;
-  } else {
-    _open.value = true;
-    internalInputRef.value?.focus();
-  }
+  _open.value = true;
+  internalInputRef.value?.focus();
 }
 
 async function checkCreateTag(item: string): Promise<void> {
   if (props.allowCreate && focusedDropDownItem.value) {
-    // If allowCreate is active but an item is focused inside the dropdown do nothing here.
     return;
   }
 
@@ -226,7 +210,6 @@ async function checkCreateTag(item: string): Promise<void> {
 
 function addTagFromOptions(item: string | number) {
   if (props.allowCreate && !focusedDropDownItem.value) {
-    // If allowCreate is active we don't need to add it here.
     return;
   }
 
@@ -246,6 +229,10 @@ function addTagFromOptions(item: string | number) {
 }
 
 function addTag(tagValue: string | number): void {
+  if (props.readonly || props.disabled) {
+    return;
+  }
+
   if (!props.allowDuplicates && _modelValue.value?.includes(tagValue) || !tagValue) {
     return;
   }
@@ -265,6 +252,10 @@ function addTag(tagValue: string | number): void {
 }
 
 function removeLastTag() {
+  if (props.readonly || props.disabled) {
+    return;
+  }
+
   if (tagInput.value === '' && Array.isArray(_modelValue.value) && _modelValue.value.length > 0) {
     _modelValue.value = _modelValue.value.slice(0, -1);
   }
@@ -293,7 +284,9 @@ function onClickRemoveButton() {
 }
 
 function changeFocus() {
-  _open.value = true;
+  if (!props.readonly && !props.disabled) {
+    _open.value = true;
+  }
 }
 
 function closeDropdown() {
@@ -307,6 +300,10 @@ function onBlur(e: FocusEvent) {
 
 function handleEnter(e: KeyboardEvent) {
   e.stopImmediatePropagation();
+
+  if (props.readonly || props.disabled) {
+    return;
+  }
 
   if (!_open.value) {
     _open.value = true;
@@ -332,6 +329,7 @@ watch(() => props.skeleton, (val) => {
     emit('validate', props.modelValue);
   }
 });
+
 watch(_modelValue, (val) => {
   if ([
     InputState.danger,
@@ -343,11 +341,13 @@ watch(_modelValue, (val) => {
 }, {
   deep: true,
 });
+
 watch(internalInputRef, (el) => {
   _inputRef.value = el;
 }, {
   immediate: true,
 });
+
 watch(filteredOptions, (newOptions) => {
   if (newOptions.length > 0) {
     const exists = newOptions.some(opt => opt.value === focusedDropDownItem.value);
@@ -417,7 +417,7 @@ onMounted(() => {
               class="w-full"
             >
               <div
-                :class="[inputContainerClasses, { 'cursor-pointer': hideInput && !disabled && !readonly }]"
+                :class="[inputContainerClasses, { 'cursor-pointer': !disabled && !readonly }]"
                 class="w-full"
                 @click="handleContainerClick"
               >
@@ -433,6 +433,7 @@ onMounted(() => {
                     :state="state as unknown as TagState"
                     :dismiss="!readonly"
                     @mousedown.prevent
+                    @click.stop
                     @close="removeTag(tag)"
                   >
                     <span :class="{ 'line-through': (allOptions || options).find((option: SelectOption) => option.value === tag)?.isDeleted }">
@@ -440,17 +441,7 @@ onMounted(() => {
                     </span>
                   </AntTag>
 
-                  <span
-                    v-if="hideInput && (!_modelValue || _modelValue.length === 0) && placeholder"
-                    :class="placeholderClasses"
-                  >
-                    {{ placeholder }}
-                  </span>
-
-                  <div
-                    v-if="!hideInput"
-                    class="flex-1 flex items-center min-w-[60px] gap-1.5"
-                  >
+                  <div class="flex-1 flex items-center min-w-[60px] gap-1.5">
                     <AntIcon
                       :icon="icon"
                       :size="size === AntTagInputSize.sm ? IconSize.xs : IconSize.sm"
