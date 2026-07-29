@@ -223,6 +223,42 @@ async function checkCreateTag(item: string): Promise<void> {
     return;
   }
 
+  const existingOption = allAvailableOptions.value.find((opt) => opt.label.toLowerCase() === trimmed.toLowerCase() || String(opt.value).toLowerCase() === trimmed.toLowerCase());
+
+  if (existingOption) {
+    if (!props.allowDuplicates && _modelValue.value?.includes(existingOption.value)) {
+      tagInput.value = '';
+
+      return;
+    }
+
+    addTag(existingOption.value);
+
+    if (props.autoCloseAfterSelection) {
+      _open.value = false;
+    }
+
+    nextTick(() => {
+      internalInputRef.value?.focus();
+    });
+
+    return;
+  }
+
+  if (!props.allowDuplicates && _modelValue.value && _modelValue.value.length > 0) {
+    const isAlreadySelected = _modelValue.value.some((val) => {
+      const opt = mergedAllOptions.value.find((o) => o.value === val);
+
+      return opt ? opt.label.toLowerCase() === trimmed.toLowerCase() : String(val).toLowerCase() === trimmed.toLowerCase();
+    });
+
+    if (isAlreadySelected) {
+      tagInput.value = '';
+
+      return;
+    }
+  }
+
   let newOption: SelectOption;
 
   if (props.createCallback) {
@@ -234,7 +270,13 @@ async function checkCreateTag(item: string): Promise<void> {
     };
   }
 
-  if (!localCreatedOptions.value.some(opt => opt.value === newOption.value)) {
+  if (!props.allowDuplicates && _modelValue.value?.includes(newOption.value)) {
+    tagInput.value = '';
+
+    return;
+  }
+
+  if (!localCreatedOptions.value.some((opt) => opt.value === newOption.value)) {
     localCreatedOptions.value.push(newOption);
   }
 
@@ -252,16 +294,17 @@ async function checkCreateTag(item: string): Promise<void> {
 }
 
 function addTagFromOptions(item: string | number) {
-  const option = allAvailableOptions.value?.find(opt => opt.value === item);
+  const option = allAvailableOptions.value?.find((opt) => opt.value === item);
 
   if (option) {
-    const currentIndex = filteredOptions.value.findIndex(opt => opt.value === item);
+    const currentIndex = filteredOptions.value.findIndex((opt) => opt.value === item);
 
     addTag(item);
 
     nextTick(() => {
       if (filteredOptions.value.length > 0) {
         const nextIndex = Math.min(Math.max(currentIndex, 0), filteredOptions.value.length - 1);
+
         focusedDropDownItem.value = filteredOptions.value[nextIndex]?.value ?? null;
       } else {
         focusedDropDownItem.value = null;
@@ -283,7 +326,7 @@ function addTag(tagValue: string | number): void {
     return;
   }
 
-  if (!props.allowDuplicates && _modelValue.value?.includes(tagValue) || !tagValue) {
+  if ((!props.allowDuplicates && _modelValue.value?.includes(tagValue)) || !tagValue) {
     return;
   }
 
@@ -400,7 +443,7 @@ watch(internalInputRef, (el) => {
 
 watch(filteredOptions, (newOptions) => {
   if (newOptions.length > 0) {
-    const exists = newOptions.some(opt => opt.value === focusedDropDownItem.value);
+    const exists = newOptions.some((opt) => opt.value === focusedDropDownItem.value);
 
     if (!exists) {
       if (!props.allowCreate) {
@@ -530,7 +573,7 @@ onMounted(() => {
           data-e2e="clear-button"
           :icon-left="faMultiply"
           :state="state as unknown as State"
-          :grouped="[Grouped.left, Grouped.center].some(item => item === grouped) ? Grouped.center : Grouped.right"
+          :grouped="[Grouped.left, Grouped.center].some((item) => item === grouped) ? Grouped.center : Grouped.right"
           :size="size as any"
           :skeleton="skeleton"
           :disabled="disabled"
