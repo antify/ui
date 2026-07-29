@@ -154,32 +154,40 @@ function openRowsByDefault() {
   }
 }
 
-function getHeaderStickyClasses(header: TableHeader) {
+function isNextHeaderFixedRight(index: number): boolean {
+  const nextHeader = _headers.value[index + 1];
+
+  return !!nextHeader && nextHeader.fixed === 'right';
+}
+
+function getHeaderStickyClasses(header: TableHeader, index: number) {
   const isLeft = header.fixed === 'left' || header.fixed === true;
   const isRight = header.fixed === 'right';
+  const nextIsRight = isNextHeaderFixedRight(index);
 
   return {
     'sticky top-0': true,
     'z-30': isLeft || isRight,
     'z-20': !isLeft && !isRight,
-    'left-0 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]': isLeft,
-    'right-0 shadow-[-2px_0_5px_-2px_rgba(0,0,0,0.1)]': isRight,
+    'left-0': isLeft,
+    'right-0': isRight,
+    'border-l border-base-300': isRight && props.bordered,
+    '!border-r-0': nextIsRight && props.bordered,
     [props.headerColor]: true,
   };
 }
 
-function getCellStickyClasses(header: TableHeader) {
+function getCellStickyClasses(header: TableHeader, index: number) {
   const isLeft = header.fixed === 'left' || header.fixed === true;
   const isRight = header.fixed === 'right';
-
-  if (!isLeft && !isRight) {
-    return {};
-  }
+  const nextIsRight = isNextHeaderFixedRight(index);
 
   return {
-    'sticky z-10 bg-inherit': true,
-    'left-0 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]': isLeft,
-    'right-0 shadow-[-2px_0_5px_-2px_rgba(0,0,0,0.1)]': isRight,
+    'sticky z-10 bg-inherit': isLeft || isRight,
+    'left-0': isLeft,
+    'right-0': isRight,
+    'border-l border-base-300': isRight && props.bordered,
+    '!border-r-0': nextIsRight && props.bordered,
   };
 }
 
@@ -220,7 +228,7 @@ onMounted(() => {
     >
       <table
         v-bind="$attrs"
-        class="min-w-full max-h-full relative"
+        class="min-w-full max-h-full relative border-separate border-spacing-0"
         :class="{'h-full': data.length === 0 && !_loading}"
       >
         <thead
@@ -236,7 +244,7 @@ onMounted(() => {
                 :header="header"
                 :size="size"
                 :bordered="bordered"
-                :class="getHeaderStickyClasses(header)"
+                :class="getHeaderStickyClasses(header, index)"
                 @sort="sortTable"
               >
                 <template #headerContent>
@@ -282,7 +290,7 @@ onMounted(() => {
                   :align="header.align"
                   :size="size"
                   :bordered="bordered"
-                  :class="getCellStickyClasses(header)"
+                  :class="getCellStickyClasses(header, colIndex)"
                   @click="rowClick(elem)"
                 >
                   <template #beforeCellContent="props">
