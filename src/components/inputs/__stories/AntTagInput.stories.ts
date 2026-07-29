@@ -91,14 +91,6 @@ const options: SelectOption[] = [
   },
   {
     label: 'Tag1',
-    value: '3',
-  },
-  {
-    label: 'Cat',
-    value: '4',
-  },
-  {
-    label: 'Tag',
     value: '5',
   },
   {
@@ -115,7 +107,15 @@ const options: SelectOption[] = [
   },
   {
     label: 'Tag',
-    value: '1',
+    value: '9',
+  },
+  {
+    label: 'Cat',
+    value: '10',
+  },
+  {
+    label: 'Tag',
+    value: '11',
   },
   {
     label: 'Dog',

@@ -305,7 +305,9 @@ function onBlur(e: FocusEvent) {
   emit('blur', e);
 }
 
-function handleEnter() {
+function handleEnter(e: KeyboardEvent) {
+  e.stopImmediatePropagation();
+
   if (!_open.value) {
     _open.value = true;
 
@@ -467,7 +469,7 @@ onMounted(() => {
                       @focus="changeFocus"
                       @keydown="onKeyDownInput"
                       @keydown.delete="removeLastTag"
-                      @keydown.enter.stop.prevent="handleEnter"
+                      @keydown.enter.prevent="handleEnter"
                       @keydown.esc.prevent="closeDropdown"
                       @blur="onBlur"
                     >
