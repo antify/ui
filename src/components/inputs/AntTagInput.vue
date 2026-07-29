@@ -38,6 +38,7 @@ const emit = defineEmits([
   'update:open',
   'blur',
   'validate',
+  'create-tag',
 ]);
 
 const props = withDefaults(defineProps<{
@@ -99,6 +100,28 @@ const tagInput = ref('');
 const internalInputRef = ref<HTMLInputElement | null>(null);
 const _inputRef = useVModel(props, 'inputRef', emit);
 const _isNullableActive = computed(() => props.nullable && !props.readonly && Array.isArray(_modelValue.value) && _modelValue.value.length > 0);
+
+const localCreatedOptions = ref<SelectOption[]>([]);
+
+const allAvailableOptions = computed(() => {
+  const baseOptions = props.options || [];
+  const extraCreated = localCreatedOptions.value.filter((createdOpt) => !baseOptions.some((opt) => opt.value === createdOpt.value));
+
+  return [
+    ...baseOptions,
+    ...extraCreated,
+  ];
+});
+
+const mergedAllOptions = computed(() => {
+  const base = props.allOptions || allAvailableOptions.value;
+  const extraCreated = localCreatedOptions.value.filter((createdOpt) => !base.some((opt) => opt.value === createdOpt.value));
+
+  return [
+    ...base,
+    ...extraCreated,
+  ];
+});
 
 const inputContainerClasses = computed(() => {
   const variants: Record<InputState, string> = {
@@ -163,7 +186,7 @@ const skeletonGrouped = computed(() => {
 const filteredOptions = computed(() => {
   const searchTerm = tagInput.value.toLowerCase();
 
-  return props.options.filter(option => {
+  return allAvailableOptions.value.filter(option => {
     if (option.isDeleted) {
       return false;
     }
@@ -194,18 +217,38 @@ function handleContainerClick() {
 }
 
 async function checkCreateTag(item: string): Promise<void> {
-  if (props.allowCreate && focusedDropDownItem.value) {
+  const trimmed = item.trim();
+
+  if (!trimmed || !props.allowCreate) {
     return;
   }
 
-  if (item && props.allowCreate && props.createCallback) {
-    const newOption: SelectOption = await props.createCallback(item);
+  let newOption: SelectOption;
 
-    addTag(newOption.value);
-    nextTick(() => {
-      internalInputRef.value?.focus();
-    });
+  if (props.createCallback) {
+    newOption = await props.createCallback(trimmed);
+  } else {
+    newOption = {
+      label: trimmed,
+      value: trimmed,
+    };
   }
+
+  if (!localCreatedOptions.value.some(opt => opt.value === newOption.value)) {
+    localCreatedOptions.value.push(newOption);
+  }
+
+  emit('create-tag', newOption);
+
+  addTag(newOption.value);
+
+  if (props.autoCloseAfterSelection) {
+    _open.value = false;
+  }
+
+  nextTick(() => {
+    internalInputRef.value?.focus();
+  });
 }
 
 function addTagFromOptions(item: string | number) {
@@ -213,7 +256,7 @@ function addTagFromOptions(item: string | number) {
     return;
   }
 
-  const option = props.options?.find(option => option.value === item);
+  const option = allAvailableOptions.value?.find(opt => opt.value === item);
 
   if (option) {
     addTag(item);
@@ -436,8 +479,8 @@ onMounted(() => {
                     @click.stop
                     @close="removeTag(tag)"
                   >
-                    <span :class="{ 'line-through': (allOptions || options).find((option: SelectOption) => option.value === tag)?.isDeleted }">
-                      {{ (allOptions || options).find((option: SelectOption) => option.value === tag)?.label }}
+                    <span :class="{ 'line-through': mergedAllOptions.find((option: SelectOption) => option.value === tag)?.isDeleted }">
+                      {{ mergedAllOptions.find((option: SelectOption) => option.value === tag)?.label ?? tag }}
                     </span>
                   </AntTag>
 
