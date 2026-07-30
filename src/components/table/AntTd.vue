@@ -15,9 +15,11 @@ const props =
     header: TableHeader;
     align?: AntTableAlign;
     size?: AntTableSize;
+    bordered?: boolean;
   }>(), {
     align: AntTableAlign.left,
     size: AntTableSize.md,
+    bordered: false,
   });
 
 const cellClasses = computed(() => ({
@@ -27,6 +29,7 @@ const cellClasses = computed(() => ({
   'px-2.5 py-0 h-10': props.size === AntTableSize.lg,
   'px-2 py-0 h-9': props.size === AntTableSize.md,
   'px-1.5 py-0 h-8': props.size === AntTableSize.sm,
+  'border-b border-r border-base-300 last:border-r-0': props.bordered,
 }));
 </script>
 

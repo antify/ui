@@ -56,6 +56,7 @@ const props = withDefaults(defineProps<{
   collapseStrategy?: CollapseStrategy;
   expandedRows?: boolean;
   skeleton?: boolean;
+  bordered?: boolean;
 }>(), {
   rowKey: 'id',
   loading: false,
@@ -67,6 +68,7 @@ const props = withDefaults(defineProps<{
   collapseStrategy: CollapseStrategy.single,
   expandedRows: false,
   skeleton: false,
+  bordered: false,
 });
 const slots = defineSlots();
 const openItems = ref<number[]>([]);
@@ -152,6 +154,43 @@ function openRowsByDefault() {
   }
 }
 
+function isNextHeaderFixedRight(index: number): boolean {
+  const nextHeader = _headers.value[index + 1];
+
+  return !!nextHeader && nextHeader.fixed === 'right';
+}
+
+function getHeaderStickyClasses(header: TableHeader, index: number) {
+  const isLeft = header.fixed === 'left' || header.fixed === true;
+  const isRight = header.fixed === 'right';
+  const nextIsRight = isNextHeaderFixedRight(index);
+
+  return {
+    'sticky top-0': true,
+    'z-30': isLeft || isRight,
+    'z-20': !isLeft && !isRight,
+    'left-0': isLeft,
+    'right-0': isRight,
+    'border-l border-base-300': isRight && props.bordered,
+    '!border-r-0': nextIsRight && props.bordered,
+    [props.headerColor]: true,
+  };
+}
+
+function getCellStickyClasses(header: TableHeader, index: number) {
+  const isLeft = header.fixed === 'left' || header.fixed === true;
+  const isRight = header.fixed === 'right';
+  const nextIsRight = isNextHeaderFixedRight(index);
+
+  return {
+    'sticky z-10 bg-inherit': isLeft || isRight,
+    'left-0': isLeft,
+    'right-0': isRight,
+    'border-l border-base-300': isRight && props.bordered,
+    '!border-r-0': nextIsRight && props.bordered,
+  };
+}
+
 watch(() => props.showLightVersion, (val) => {
   setTimeout(() => _showLightVersion.value = val, val ? 200 : 400);
 });
@@ -189,11 +228,10 @@ onMounted(() => {
     >
       <table
         v-bind="$attrs"
-        class="min-w-full max-h-full relative"
+        class="min-w-full max-h-full relative border-separate border-spacing-0"
         :class="{'h-full': data.length === 0 && !_loading}"
       >
         <thead
-          class="sticky top-0 z-10"
           :class="headerColor"
         >
           <tr>
@@ -205,6 +243,8 @@ onMounted(() => {
                 :key="`table-header-${header.identifier}-${index}`"
                 :header="header"
                 :size="size"
+                :bordered="bordered"
+                :class="getHeaderStickyClasses(header, index)"
                 @sort="sortTable"
               >
                 <template #headerContent>
@@ -249,6 +289,8 @@ onMounted(() => {
                   :element="elem"
                   :align="header.align"
                   :size="size"
+                  :bordered="bordered"
+                  :class="getCellStickyClasses(header, colIndex)"
                   @click="rowClick(elem)"
                 >
                   <template #beforeCellContent="props">
