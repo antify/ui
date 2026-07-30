@@ -38,7 +38,7 @@ const emit = defineEmits([
   'update:open',
   'blur',
   'validate',
-  'create-tag',
+  'createTag',
 ]);
 
 const props = withDefaults(defineProps<{
@@ -99,9 +99,7 @@ const tagInput = ref('');
 const internalInputRef = ref<HTMLInputElement | null>(null);
 const _inputRef = useVModel(props, 'inputRef', emit);
 const _isNullableActive = computed(() => props.nullable && !props.readonly && Array.isArray(_modelValue.value) && _modelValue.value.length > 0);
-
 const localCreatedOptions = ref<SelectOption[]>([]);
-
 const accumulatedOptions = ref<Map<string | number, SelectOption>>(new Map());
 
 function registerOptions(opts: SelectOption[]) {
@@ -118,14 +116,12 @@ watch(() => props.options, (newOptions) => {
   immediate: true,
   deep: true,
 });
-
 watch(localCreatedOptions, (newCreated) => {
   registerOptions(newCreated);
 }, {
   deep: true,
 });
 
-// Доступные опции для меню (включая локально созданные)
 const allAvailableOptions = computed(() => {
   const baseOptions = props.options || [];
   const extraCreated = localCreatedOptions.value.filter((createdOpt) => !baseOptions.some((opt) => opt.value === createdOpt.value));
@@ -170,7 +166,6 @@ const inputContainerClasses = computed(() => {
     invisible: props.skeleton,
   };
 });
-
 const inputClasses = computed(() => {
   const variants: Record<InputState, string> = {
     [InputState.base]: 'placeholder:text-base-500',
@@ -187,7 +182,6 @@ const inputClasses = computed(() => {
     [variants[props.state]]: true,
   };
 });
-
 const skeletonGrouped = computed(() => {
   if (!_isNullableActive.value) {
     return props.grouped;
@@ -199,7 +193,6 @@ const skeletonGrouped = computed(() => {
     return Grouped.left;
   }
 });
-
 const filteredOptions = computed(() => {
   const searchTerm = tagInput.value.toLowerCase();
 
@@ -297,7 +290,7 @@ async function checkCreateTag(item: string): Promise<void> {
     localCreatedOptions.value.push(newOption);
   }
 
-  emit('create-tag', newOption);
+  emit('createTag', newOption);
 
   addTag(newOption.value);
 
@@ -439,7 +432,6 @@ watch(() => props.skeleton, (val) => {
     emit('validate', props.modelValue);
   }
 });
-
 watch(_modelValue, (val) => {
   if ([
     InputState.danger,
@@ -451,13 +443,11 @@ watch(_modelValue, (val) => {
 }, {
   deep: true,
 });
-
 watch(internalInputRef, (el) => {
   _inputRef.value = el;
 }, {
   immediate: true,
 });
-
 watch(filteredOptions, (newOptions) => {
   if (newOptions.length > 0) {
     const exists = newOptions.some((opt) => opt.value === focusedDropDownItem.value);
