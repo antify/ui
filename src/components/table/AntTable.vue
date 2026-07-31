@@ -27,9 +27,6 @@ import {
 import AntButton from '../AntButton.vue';
 import AntIcon from '../AntIcon.vue';
 import AntTableSkeleton from './AntTableSkeleton.vue';
-import {
-  useFlickerProtection,
-} from '../../composables/useFlickerProtection';
 
 defineOptions({
   inheritAttrs: false,
@@ -83,8 +80,8 @@ const _headers = computed(() => {
 
   return props.headers;
 });
-const _skeleton = useFlickerProtection(computed(() => props.skeleton));
-const _loading = useFlickerProtection(computed(() => props.loading));
+const _skeleton = computed(() => props.skeleton);
+const _loading = computed(() => props.loading);
 
 const maxColSpan = computed(() => _headers.value.length + (hasSlotContent(slots['rowFirstCell']) ? 1 : 0) + (hasSlotContent(slots['rowLastCell']) ? 1 : 0));
 
