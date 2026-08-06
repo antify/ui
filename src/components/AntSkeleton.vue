@@ -5,9 +5,6 @@ import {
 import {
   computed,
 } from 'vue';
-import {
-  useFlickerProtection,
-} from '../composables/useFlickerProtection';
 
 defineOptions({
   inheritAttrs: false,
@@ -41,7 +38,7 @@ const classList = computed(() => ({
   'rounded-full': props.roundedFull && props.grouped === Grouped.none,
   ...groupedClassList.value,
 }));
-const _visible = useFlickerProtection(computed(() => props.visible));
+const _visible = computed(() => props.visible);
 </script>
 
 <template>

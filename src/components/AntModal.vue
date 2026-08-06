@@ -105,7 +105,7 @@ onBeforeUnmount(() => {
         <div
           v-if="openModal"
           class="flex flex-col gap-px bg-base-300 overflow-hidden cursor-auto"
-          :class="{'w-full h-full': fullscreen, 'border border-base-300 rounded-md shadow-md': !fullscreen}"
+          :class="{'w-full h-full': fullscreen, 'border border-base-300 rounded-md shadow-md max-h-full min-h-0': !fullscreen}"
           @mousedown.stop
         >
           <div

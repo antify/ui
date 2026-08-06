@@ -49,6 +49,7 @@ const props = withDefaults(defineProps<{
   tooltipInvalidMonth?: string;
   tooltipSelectDayFirst?: string;
   tooltipSelectMonthFirst?: string;
+  tooltipFutureDate?: string;
 }>(), {
   state: InputState.base,
   size: Size.md,
@@ -81,6 +82,7 @@ const props = withDefaults(defineProps<{
   tooltipInvalidMonth: 'You have selected a day (like the 30th or 31st) that does not exist in this month. Please select a different month.',
   tooltipSelectDayFirst: 'To ensure a valid date is formed, please begin by selecting the day before moving on to the month.',
   tooltipSelectMonthFirst: 'You must select a month first. This helps us ensure the final date you select is completely valid.',
+  tooltipFutureDate: 'The date of birth cannot be in the future.',
 });
 
 const emit = defineEmits([
@@ -115,7 +117,10 @@ const isLeapYear = (year: number) => {
 };
 
 const yearsList = computed(() => {
-  const currentYear = new Date().getFullYear();
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth() + 1;
+  const currentDay = now.getDate();
 
   return Array.from({
     length: 120,
@@ -129,6 +134,16 @@ const yearsList = computed(() => {
 
       if (disabled) {
         tooltip = props.tooltipNotLeapYear;
+      }
+    }
+
+    if (!disabled && year === currentYear && selectedMonth.value && selectedDay.value) {
+      const isFutureMonth = selectedMonth.value > currentMonth;
+      const isFutureDayInCurrentMonth = selectedMonth.value === currentMonth && selectedDay.value > currentDay;
+
+      if (isFutureMonth || isFutureDayInCurrentMonth) {
+        disabled = true;
+        tooltip = props.tooltipFutureDate;
       }
     }
 

@@ -76,6 +76,17 @@ const meta: Meta<typeof AntTable> = {
         },
       },
     },
+    bordered: {
+      description: 'If true, displays table cells and header borders.',
+      control: {
+        type: 'boolean',
+      },
+      table: {
+        defaultValue: {
+          summary: 'false',
+        },
+      },
+    },
     // Slots
     afterCellContent: {
       description:
@@ -575,6 +586,114 @@ export const MultipleCollapseStrategy: Story = {
     `,
   }),
   args: Docs.args,
+};
+
+export const Bordered: Story = {
+  render: Docs.render,
+  args: {
+    ...Docs.args,
+    bordered: true,
+  },
+};
+
+export const StickyColumns: Story = {
+  render: (args) => ({
+    components: {
+      AntTable,
+      AntButton,
+    },
+    setup() {
+      const selected = ref();
+
+      return {
+        args,
+        selected,
+      };
+    },
+    template: `
+      <div class="h-96 w-[600px] max-w-full border border-dashed border-base-300">
+        <AntTable
+          v-bind="args"
+          v-model="selected"
+          :selected-row="selected"
+          @row-click="(val) => selected = val"
+        >
+          <template #cellContent="{ element, header }">
+            <div v-if="header.identifier === 'actions'">
+              <AntButton size="xs" state="primary">
+                Edit
+              </AntButton>
+            </div>
+          </template>
+        </AntTable>
+      </div>
+    `,
+  }),
+  args: {
+    bordered: true,
+    headers: [
+      {
+        title: 'Name',
+        identifier: 'name',
+        type: AntTableRowTypes.text,
+        sortable: true,
+        fixed: 'left',
+      },
+      {
+        title: 'Age',
+        identifier: 'age',
+        type: AntTableRowTypes.text,
+        align: AntTableAlign.right,
+      },
+      {
+        title: 'E-Mail',
+        identifier: 'email',
+        type: AntTableRowTypes.text,
+      },
+      {
+        title: 'Phone',
+        identifier: 'phone',
+        type: AntTableRowTypes.text,
+      },
+      {
+        title: 'Company',
+        identifier: 'company',
+        type: AntTableRowTypes.text,
+      },
+      {
+        title: 'Role',
+        identifier: 'role',
+        type: AntTableRowTypes.text,
+      },
+      {
+        title: 'City',
+        identifier: 'city',
+        type: AntTableRowTypes.text,
+      },
+      {
+        title: 'Actions',
+        identifier: 'actions',
+        type: AntTableRowTypes.slot,
+        align: AntTableAlign.center,
+        fixed: 'right',
+      },
+    ],
+    data: Array.from({
+      length: 20,
+    }, () => ({
+      id: faker.string.uuid(),
+      name: `${faker.person.firstName()} ${faker.person.lastName()}`,
+      age: faker.number.int({
+        min: 18,
+        max: 60,
+      }),
+      email: faker.internet.email(),
+      phone: faker.phone.number(),
+      company: faker.company.name(),
+      role: faker.person.jobTitle(),
+      city: faker.location.city(),
+    })),
+  },
 };
 
 export const DefaultCollapseOpen: Story = {

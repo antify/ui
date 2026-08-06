@@ -25,7 +25,7 @@ import {
   BaseInputType,
 } from './Elements/__types';
 import {
-  faMultiply,
+  faMultiply, type IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 
 defineOptions({
@@ -54,6 +54,7 @@ const props = withDefaults(defineProps<{
   max?: number;
   messages?: string[];
   nullable?: boolean;
+  iconLeft?: IconDefinition;
 }>(), {
   state: InputState.base,
   inputRef: null,
@@ -98,6 +99,7 @@ onMounted(() => {
         wrapper-class="grow"
         :state="state"
         :size="size"
+        :icon-left="iconLeft"
         :skeleton="skeleton"
         :disabled="disabled"
         :readonly="readonly"
