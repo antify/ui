@@ -22,7 +22,7 @@ import type {
   Validator,
 } from '@antify/validate';
 import {
-  autoUpdate, flip, offset, useFloating,
+  autoUpdate, flip, offset, useFloating, shift,
 } from '@floating-ui/vue';
 
 const emit = defineEmits([
@@ -63,6 +63,7 @@ const {
   whileElementsMounted: autoUpdate,
   middleware: [
     offset(8),
+    shift(),
     flip({
       fallbackPlacements: [
         'top-start',
@@ -295,7 +296,7 @@ defineExpose({
         ref="floating"
         :class="[
           dropdownClasses,
-          'flex flex-col overflow-hidden',
+          'flex flex-col overflow-hidden max-w-full',
         ]"
         :style="{
           minWidth: `${elementSize.width.value}px`,
