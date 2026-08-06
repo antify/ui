@@ -63,12 +63,12 @@ const {
   whileElementsMounted: autoUpdate,
   middleware: [
     offset(8),
+    shift(),
     flip({
       fallbackPlacements: [
         'top-start',
       ],
     }),
-    shift(),
   ],
 });
 
