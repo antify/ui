@@ -17,6 +17,18 @@ import AntDateSwitcher from './AntDateSwitcher.vue';
 import AntSkeleton from '../AntSkeleton.vue';
 import AntTooltip from '../AntTooltip.vue';
 
+interface DayItem {
+  date: string;
+  label: string;
+  month: number;
+  isCurrentMonth: boolean;
+  isWeekend: boolean;
+  isToday: boolean;
+  isSpecialDay: boolean;
+  specialDayColor?: string;
+  specialDayName?: string | null;
+}
+
 const props = withDefaults(defineProps<{
   /**
    * The date which should be visible when the date picker is opened
@@ -63,11 +75,11 @@ const currentMonthIndex = ref(new Date(props.modelValue).getMonth());
 const currentYear = ref(new Date(props.modelValue).getFullYear());
 const matrix = computed(() => {
   /**
-  * The picker always starts with Monday.
-  * So if the first day of the current month is for example a wednesday,
-  * the first two days (Monday and Tuesday) should be from the previous month.
-  * Also, the last days of the matrix should be filled with the next month's days.
-  */
+   * The picker always starts with Monday.
+   * So if the first day of the current month is for example a wednesday,
+   * the first two days (Monday and Tuesday) should be from the previous month.
+   * Also, the last days of the matrix should be filled with the next month's days.
+   */
   const firstDateOfMonth = new Date(currentYear.value, currentMonthIndex.value, 1);
   const _matrix = [];
 
@@ -80,6 +92,10 @@ const matrix = computed(() => {
 
   // Subtract the gap from the currentDate
   let currentDate = subDays(firstDateOfMonth, weekdayIndexOfFirstDay);
+  const specialDaysMap = new Map(props.specialDays.map(sd => [
+    sd.date,
+    sd,
+  ]));
 
   for (let weekIndex = 0; weekIndex < COUNT_ROWS; weekIndex++) {
     const weekDays = [];
@@ -88,6 +104,7 @@ const matrix = computed(() => {
     for (let weekdayIndex = 0; weekdayIndex < COUNT_COLUMNS; weekdayIndex++) {
       const date = format(currentDate, 'yyyy-MM-dd');
       const isCurrentMonth = getMonth(currentDate) === currentMonthIndex.value;
+      const specialDay = specialDaysMap.get(date);
 
       weekDays.push({
         date,
@@ -96,8 +113,9 @@ const matrix = computed(() => {
         isCurrentMonth,
         isWeekend: weekdayIndex === 5 || weekdayIndex === 6,
         isToday: date === format(Date.now(), 'yyyy-MM-dd') && isCurrentMonth,
-        isSpecialDay: !!props.specialDays.find(sd => sd.date === date),
-        specialDayColor: props.specialDays.find(sd => sd.date === date)?.color,
+        isSpecialDay: !!specialDay,
+        specialDayColor: specialDay?.color,
+        specialDayName: specialDay?.name,
       });
 
       currentDate = addDays(currentDate, 1);
@@ -137,6 +155,36 @@ const weekDays = computed(() => {
 
   return days;
 });
+
+const getDayClasses = (day: DayItem) => {
+  const isSelected = day.date === format(props.modelValue, 'yyyy-MM-dd');
+
+  return {
+    'text-base-500': !day.isCurrentMonth && !day.isSpecialDay,
+    'text-for-white-bg-font': day.isCurrentMonth && !day.isSpecialDay,
+    'opacity-70': !day.isCurrentMonth,
+    'hover:opacity-100': !day.isCurrentMonth,
+    'outline outline-primary-500': day.isToday,
+    'bg-primary-100': day.isWeekend,
+    'hover:bg-base-200 hover:!text-base-200-font': !isSelected,
+    '!bg-primary-500 !text-primary-500-font hover:bg-primary-300 hover:text-primary-300-font': isSelected,
+  };
+};
+
+const getDayStyles = (day: DayItem) => {
+  if (!day.isSpecialDay || !day.specialDayColor) {
+    return {};
+  }
+
+  const colorNumber = getColorNumber(day.specialDayColor);
+
+  return {
+    backgroundColor: `var(--color-${day.specialDayColor})`,
+    color: colorNumber !== null && colorNumber < 500
+      ? 'var(--color-for-white-bg-font)'
+      : '#fff',
+  };
+};
 
 const getColorNumber = (color: string) => {
   const match = color.match(/(\d+)/);
@@ -239,33 +287,19 @@ onMounted(() => {
           >
             <AntTooltip :delay="300">
               <div
-                class="rounded-md flex items-center justify-center p-2 font-semibold cursor-pointer transition-colors w-full h-full"
-                :class="{
-                  'text-base-400': !day.isCurrentMonth,
-                  'text-for-white-bg-font': day.isCurrentMonth,
-                  'outline outline-primary-500': day.isToday,
-                  'bg-primary-100': day.isWeekend,
-                  'hover:bg-base-200 hover:text-base-200-font': day.date !== format(modelValue, 'yyyy-MM-dd'),
-                  '!bg-primary-500 !text-primary-500-font hover:bg-primary-300 hover:text-primary-300-font': day.date === format(modelValue, 'yyyy-MM-dd'),
-                }"
-                :style="{
-                  backgroundColor: day.isSpecialDay ? `var(--color-${day.specialDayColor})` : '',
-                  color: day.isSpecialDay
-                    ? getColorNumber(day.specialDayColor) < 500
-                      ? 'var(--color-for-white-bg-font)'
-                      : '#fff'
-                    : ''
-                }"
+                class="rounded-md flex items-center justify-center p-2 font-semibold cursor-pointer transition-all w-full h-full"
+                :class="getDayClasses(day)"
+                :style="getDayStyles(day)"
                 @click="() => $emit('update:modelValue', new Date(day.date).getTime())"
               >
                 {{ day.label }}
               </div>
 
               <template
-                v-if="day.isSpecialDay && specialDays.find(specialDay => specialDay.date === day.date)?.name"
+                v-if="day.isSpecialDay && day.specialDayName"
                 #content
               >
-                {{ specialDays.find(specialDay => specialDay.date === day.date)?.name }}
+                {{ day.specialDayName }}
               </template>
             </AntTooltip>
           </AntSkeleton>
