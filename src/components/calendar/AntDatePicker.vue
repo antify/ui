@@ -166,7 +166,7 @@ const getDayClasses = (day: DayItem) => {
     'hover:opacity-100': !day.isCurrentMonth,
     'outline outline-primary-500': day.isToday,
     'bg-primary-100': day.isWeekend,
-    'hover:bg-base-200 hover:!text-base-100-font': !isSelected,
+    'hover:bg-base-200 hover:!text-base-200-font': !isSelected,
     '!bg-primary-500 !text-primary-500-font hover:bg-primary-300 hover:text-primary-300-font': isSelected,
   };
 };
