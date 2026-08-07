@@ -165,6 +165,623 @@ export const WeekNumberStyling: Story = {
   }),
 };
 
+const realWorldHolidaysMock = [
+  {
+    name: 'Herbstferien',
+    date: '2026-11-02',
+    color: 'success-100',
+  },
+  {
+    name: 'Herbstferien',
+    date: '2026-11-03',
+    color: 'success-100',
+  },
+  {
+    name: 'Herbstferien',
+    date: '2026-11-04',
+    color: 'success-100',
+  },
+  {
+    name: 'Herbstferien',
+    date: '2026-11-05',
+    color: 'success-100',
+  },
+  {
+    name: 'Herbstferien',
+    date: '2026-11-06',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-03',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-04',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-05',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-06',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-07',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-08',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-09',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-10',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-11',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-12',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-13',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-14',
+    color: 'success-100',
+  },
+  {
+    name: 'Mariä Himmelfahrt',
+    date: '2026-08-15',
+    color: 'success-300',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-16',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-17',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-18',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-19',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-20',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-21',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-22',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-23',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-24',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-25',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-26',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-27',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-28',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-29',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-30',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-08-31',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-09-01',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-09-02',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-09-03',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-09-04',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-09-05',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-09-06',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-09-07',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-09-08',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-09-09',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-09-10',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-09-11',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-09-12',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-09-13',
+    color: 'success-100',
+  },
+  {
+    name: 'Sommerferien',
+    date: '2026-09-14',
+    color: 'success-100',
+  },
+  {
+    name: 'Frühjahrsferien',
+    date: '2026-02-16',
+    color: 'success-100',
+  },
+  {
+    name: 'Frühjahrsferien',
+    date: '2026-02-17',
+    color: 'success-100',
+  },
+  {
+    name: 'Frühjahrsferien',
+    date: '2026-02-18',
+    color: 'success-100',
+  },
+  {
+    name: 'Frühjahrsferien',
+    date: '2026-02-19',
+    color: 'success-100',
+  },
+  {
+    name: 'Frühjahrsferien',
+    date: '2026-02-20',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2025-12-22',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2025-12-23',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2025-12-24',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2025-12-25',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2025-12-26',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2025-12-27',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2025-12-28',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2025-12-29',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2025-12-30',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2025-12-31',
+    color: 'success-100',
+  },
+  {
+    name: 'Neujahr',
+    date: '2026-01-01',
+    color: 'success-300',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2026-01-02',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2026-01-03',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2026-01-04',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2026-01-05',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2026-12-24',
+    color: 'success-100',
+  },
+  {
+    name: '1. Weihnachtstag',
+    date: '2026-12-25',
+    color: 'success-300',
+  },
+  {
+    name: '2. Weihnachtstag',
+    date: '2026-12-26',
+    color: 'success-300',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2026-12-27',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2026-12-28',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2026-12-29',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2026-12-30',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2026-12-31',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2027-01-01',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2027-01-02',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2027-01-03',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2027-01-04',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2027-01-05',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2027-01-06',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2027-01-07',
+    color: 'success-100',
+  },
+  {
+    name: 'Weihnachtsferien',
+    date: '2027-01-08',
+    color: 'success-100',
+  },
+  {
+    name: 'Pfingstferien',
+    date: '2026-05-26',
+    color: 'success-100',
+  },
+  {
+    name: 'Pfingstferien',
+    date: '2026-05-27',
+    color: 'success-100',
+  },
+  {
+    name: 'Pfingstferien',
+    date: '2026-05-28',
+    color: 'success-100',
+  },
+  {
+    name: 'Pfingstferien',
+    date: '2026-05-29',
+    color: 'success-100',
+  },
+  {
+    name: 'Pfingstferien',
+    date: '2026-05-30',
+    color: 'success-100',
+  },
+  {
+    name: 'Pfingstferien',
+    date: '2026-05-31',
+    color: 'success-100',
+  },
+  {
+    name: 'Pfingstferien',
+    date: '2026-06-01',
+    color: 'success-100',
+  },
+  {
+    name: 'Pfingstferien',
+    date: '2026-06-02',
+    color: 'success-100',
+  },
+  {
+    name: 'Pfingstferien',
+    date: '2026-06-03',
+    color: 'success-100',
+  },
+  {
+    name: 'Fronleichnam',
+    date: '2026-06-04',
+    color: 'success-300',
+  },
+  {
+    name: 'Pfingstferien',
+    date: '2026-06-05',
+    color: 'success-100',
+  },
+  {
+    name: 'Osterferien',
+    date: '2026-03-30',
+    color: 'success-100',
+  },
+  {
+    name: 'Osterferien',
+    date: '2026-03-31',
+    color: 'success-100',
+  },
+  {
+    name: 'Osterferien',
+    date: '2026-04-01',
+    color: 'success-100',
+  },
+  {
+    name: 'Osterferien',
+    date: '2026-04-02',
+    color: 'success-100',
+  },
+  {
+    name: 'Karfreitag',
+    date: '2026-04-03',
+    color: 'success-300',
+  },
+  {
+    name: 'Osterferien',
+    date: '2026-04-04',
+    color: 'success-100',
+  },
+  {
+    name: 'Osterferien',
+    date: '2026-04-05',
+    color: 'success-100',
+  },
+  {
+    name: 'Ostermontag',
+    date: '2026-04-06',
+    color: 'success-300',
+  },
+  {
+    name: 'Osterferien',
+    date: '2026-04-07',
+    color: 'success-100',
+  },
+  {
+    name: 'Osterferien',
+    date: '2026-04-08',
+    color: 'success-100',
+  },
+  {
+    name: 'Osterferien',
+    date: '2026-04-09',
+    color: 'success-100',
+  },
+  {
+    name: 'Osterferien',
+    date: '2026-04-10',
+    color: 'success-100',
+  },
+  {
+    name: 'Heilige Drei Könige',
+    date: '2026-01-06',
+    color: 'success-300',
+  },
+  {
+    name: 'Tag der Arbeit',
+    date: '2026-05-01',
+    color: 'success-300',
+  },
+  {
+    name: 'Christi Himmelfahrt',
+    date: '2026-05-14',
+    color: 'success-300',
+  },
+  {
+    name: 'Pfingstmontag',
+    date: '2026-05-25',
+    color: 'success-300',
+  },
+  {
+    name: 'Tag der deutschen Einheit',
+    date: '2026-10-03',
+    color: 'success-300',
+  },
+  {
+    name: 'Allerheiligen',
+    date: '2026-11-01',
+    color: 'success-300',
+  },
+];
+
+export const HolidaysExample: Story = {
+  render: (args) => ({
+    components: {
+      AntCalendar,
+      AntFormGroup,
+      AntFormGroupLabel,
+    },
+    setup() {
+      const value = ref(new Date('2026-08-15').getTime());
+
+      return {
+        value,
+        args,
+      };
+    },
+    template: `
+      <AntFormGroup class="p-4 flex flex-col gap-4 w-fit">
+        <AntFormGroupLabel>Real World Data: School & Legal Holidays (Aug 2026)</AntFormGroupLabel>
+
+        <div class="flex gap-4 mb-2 text-sm">
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded bg-success-100 border border-success-200"></div>
+
+            <span class="text-base-300-font">School Holidays (success-100)</span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded bg-success-300 border border-success-400"></div>
+
+            <span class="text-base-300-font">Legal Holidays (success-300)</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col w-72 gap-2">
+          <AntCalendar
+            v-model="value"
+            :show-weekend="true"
+            :show-week-numbers="true"
+            :special-days="args.specialDays"
+          />
+        </div>
+      </AntFormGroup>
+    `,
+  }),
+  args: {
+    specialDays: realWorldHolidaysMock,
+  },
+};
+
 export const Summary: Story = {
   parameters: {
     chromatic: {
