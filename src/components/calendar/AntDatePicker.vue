@@ -17,6 +17,18 @@ import AntDateSwitcher from './AntDateSwitcher.vue';
 import AntSkeleton from '../AntSkeleton.vue';
 import AntTooltip from '../AntTooltip.vue';
 
+interface DayItem {
+  date: string;
+  label: string;
+  month: number;
+  isCurrentMonth: boolean;
+  isWeekend: boolean;
+  isToday: boolean;
+  isSpecialDay: boolean;
+  specialDayColor?: string;
+  specialDayName?: string | null;
+}
+
 const props = withDefaults(defineProps<{
   /**
    * The date which should be visible when the date picker is opened
@@ -144,6 +156,36 @@ const weekDays = computed(() => {
   return days;
 });
 
+const getDayClasses = (day: DayItem) => {
+  const isSelected = day.date === format(props.modelValue, 'yyyy-MM-dd');
+
+  return {
+    'text-base-500': !day.isCurrentMonth && !day.isSpecialDay,
+    'text-for-white-bg-font': day.isCurrentMonth && !day.isSpecialDay,
+    'opacity-70': !day.isCurrentMonth,
+    'hover:opacity-100': !day.isCurrentMonth,
+    'outline outline-primary-500': day.isToday,
+    'bg-primary-100': day.isWeekend,
+    'hover:bg-base-200 hover:!text-base-100-font': !isSelected,
+    '!bg-primary-500 !text-primary-500-font hover:bg-primary-300 hover:text-primary-300-font': isSelected,
+  };
+};
+
+const getDayStyles = (day: DayItem) => {
+  if (!day.isSpecialDay || !day.specialDayColor) {
+    return {};
+  }
+
+  const colorNumber = getColorNumber(day.specialDayColor);
+
+  return {
+    backgroundColor: `var(--color-${day.specialDayColor})`,
+    color: colorNumber !== null && colorNumber < 500
+      ? 'var(--color-for-white-bg-font)'
+      : '#fff',
+  };
+};
+
 const getColorNumber = (color: string) => {
   const match = color.match(/(\d+)/);
 
@@ -245,22 +287,9 @@ onMounted(() => {
           >
             <AntTooltip :delay="300">
               <div
-                class="text-for-white-bg-font rounded-md flex items-center justify-center p-2 font-semibold cursor-pointer transition-colors w-full h-full"
-                :class="{
-                  'outline outline-primary-500': day.isToday,
-                  'bg-primary-100': day.isWeekend,
-                  'hover:bg-base-200 hover:text-base-200-font': day.date !== format(modelValue, 'yyyy-MM-dd'),
-                  '!bg-primary-500 !text-primary-500-font hover:bg-primary-300 hover:text-primary-300-font': day.date === format(modelValue, 'yyyy-MM-dd'),
-                  'opacity-70': !day.isCurrentMonth,
-                }"
-                :style="{
-                  backgroundColor: day.isSpecialDay ? `var(--color-${day.specialDayColor})` : '',
-                  color: day.isSpecialDay
-                    ? getColorNumber(day.specialDayColor) < 500
-                      ? 'var(--color-for-white-bg-font)'
-                      : '#fff'
-                    : ''
-                }"
+                class="rounded-md flex items-center justify-center p-2 font-semibold cursor-pointer transition-all w-full h-full"
+                :class="getDayClasses(day)"
+                :style="getDayStyles(day)"
                 @click="() => $emit('update:modelValue', new Date(day.date).getTime())"
               >
                 {{ day.label }}
