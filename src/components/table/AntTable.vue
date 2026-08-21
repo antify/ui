@@ -226,7 +226,7 @@ onMounted(() => {
       <table
         v-bind="$attrs"
         class="min-w-full max-h-full relative border-separate border-spacing-0"
-        :class="{'h-full': data.length === 0 && !_loading}"
+        :class="{'h-full': data.length === 0}"
       >
         <thead
           :class="headerColor"
