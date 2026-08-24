@@ -476,8 +476,8 @@ watch(() => props.modelValue, syncFromProps, {
             class="w-[300px] border border-base-300 bg-white shadow-md z-[90] flex flex-col rounded-md"
             :style="floatingStyles"
           >
-            <div class="p-3 flex flex-col">
-              <div class="flex w-full mb-3 -space-x-px">
+            <div class="flex flex-col">
+              <div class="flex p-2 w-full -space-x-px">
                 <AntButton
                   :expanded="true"
                   :grouped="Grouped.left"
@@ -523,7 +523,7 @@ watch(() => props.modelValue, syncFromProps, {
                 </AntButton>
               </div>
 
-              <div class="overflow-y-auto pr-1 max-h-[240px]">
+              <div class="overflow-y-auto p-2 max-h-[240px]">
                 <div
                   v-if="currentView === 'day'"
                   class="grid grid-cols-7 gap-1 h-max"
