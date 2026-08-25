@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.3.35](https://github.com/antify/ui/compare/v4.3.33...v4.3.35) (2026-08-25)
+
+
+### Bug Fixes
+
+* add missing Comment import in utils.ts ([a15eb1a](https://github.com/antify/ui/commit/a15eb1a3e7179c13f4e69727d2a0812a8661ff9e))
+
 ### 4.3.34 (2026-08-25)
 
 
