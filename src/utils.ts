@@ -2,6 +2,7 @@ import type {
   Slot, VNode,
 } from 'vue';
 import {
+  Comment,
   Fragment,
 } from 'vue';
 
