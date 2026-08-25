@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 4.3.36 (2026-08-25)
+
 ### [4.3.35](https://github.com/antify/ui/compare/v4.3.33...v4.3.35) (2026-08-25)
 
 
