@@ -4,6 +4,7 @@ import type {
 import {
   Comment,
   Fragment,
+  Text,
 } from 'vue';
 
 /**
