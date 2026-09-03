@@ -26,6 +26,7 @@ interface DayItem {
   isToday: boolean;
   isSpecialDay: boolean;
   specialDayColor?: string;
+  specialDayWeekendColor?: string;
   specialDayName?: string | null;
 }
 
@@ -46,6 +47,7 @@ const props = withDefaults(defineProps<{
     name: string | null;
     date: string;
     color: string;
+    weekendColor?: string;
   }[];
   /**
    * Color token used for weekNumberTextColor of week number column (e.g., 'base-200-font', 'primary-500-font').
@@ -115,6 +117,7 @@ const matrix = computed(() => {
         isToday: date === format(Date.now(), 'yyyy-MM-dd') && isCurrentMonth,
         isSpecialDay: !!specialDay,
         specialDayColor: specialDay?.color,
+        specialDayWeekendColor: specialDay?.weekendColor,
         specialDayName: specialDay?.name,
       });
 
@@ -172,14 +175,22 @@ const getDayClasses = (day: DayItem) => {
 };
 
 const getDayStyles = (day: DayItem) => {
-  if (!day.isSpecialDay || !day.specialDayColor) {
+  if (!day.isSpecialDay) {
     return {};
   }
 
-  const colorNumber = getColorNumber(day.specialDayColor);
+  const activeColor = (day.isWeekend && day.specialDayWeekendColor)
+    ? day.specialDayWeekendColor
+    : day.specialDayColor;
+
+  if (!activeColor) {
+    return {};
+  }
+
+  const colorNumber = getColorNumber(activeColor);
 
   return {
-    backgroundColor: `var(--color-${day.specialDayColor})`,
+    backgroundColor: `var(--color-${activeColor})`,
     color: colorNumber !== null && colorNumber < 500
       ? 'var(--color-for-white-bg-font)'
       : '#fff',
