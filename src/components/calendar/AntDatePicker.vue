@@ -12,6 +12,7 @@ import {
   computed,
   defineEmits,
   onMounted,
+  nextTick,
 } from 'vue';
 import AntDateSwitcher from './AntDateSwitcher.vue';
 import AntSkeleton from '../AntSkeleton.vue';
@@ -71,6 +72,7 @@ const emit = defineEmits([
   'changeCurrentVisibleMonth',
 ]);
 
+let isPendingEmit = false;
 const COUNT_ROWS = 6;
 const COUNT_COLUMNS = 7;
 const currentMonthIndex = ref(new Date(props.modelValue).getMonth());
@@ -214,18 +216,35 @@ watch(() => props.modelValue, (val) => {
   currentYear.value = date.getFullYear();
 });
 
-watch(() => [
-  currentMonthIndex.value,
-  currentYear.value,
-], ([
-  currentMonthIndex,
-  currentYear,
-]) => {
-  emit('changeCurrentVisibleMonth', {
-    month: currentMonthIndex,
-    year: currentYear,
-  });
-});
+/**
+ * Batches reactive updates for month and year into a single event tick.
+ *
+ * Prevents emitting intermediate states during year transitions (e.g., when `month`
+ * updates to 0 before `year` updates to 2027), avoiding redundant API calls
+ * for invalid year combinations (like Jan 2026).
+ */
+watch(
+  () => [
+    currentMonthIndex.value,
+    currentYear.value,
+  ],
+  () => {
+    if (isPendingEmit) {
+      return;
+    }
+
+    isPendingEmit = true;
+
+    nextTick(() => {
+      isPendingEmit = false;
+
+      emit('changeCurrentVisibleMonth', {
+        month: currentMonthIndex.value,
+        year: currentYear.value,
+      });
+    });
+  },
+);
 
 onMounted(() => {
   emit('changeCurrentVisibleMonth', {
