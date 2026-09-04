@@ -12,6 +12,7 @@ import {
   computed,
   defineEmits,
   onMounted,
+  nextTick,
 } from 'vue';
 import AntDateSwitcher from './AntDateSwitcher.vue';
 import AntSkeleton from '../AntSkeleton.vue';
@@ -26,6 +27,7 @@ interface DayItem {
   isToday: boolean;
   isSpecialDay: boolean;
   specialDayColor?: string;
+  specialDayWeekendColor?: string;
   specialDayName?: string | null;
 }
 
@@ -46,6 +48,7 @@ const props = withDefaults(defineProps<{
     name: string | null;
     date: string;
     color: string;
+    weekendColor?: string;
   }[];
   /**
    * Color token used for weekNumberTextColor of week number column (e.g., 'base-200-font', 'primary-500-font').
@@ -69,6 +72,7 @@ const emit = defineEmits([
   'changeCurrentVisibleMonth',
 ]);
 
+let isPendingEmit = false;
 const COUNT_ROWS = 6;
 const COUNT_COLUMNS = 7;
 const currentMonthIndex = ref(new Date(props.modelValue).getMonth());
@@ -115,6 +119,7 @@ const matrix = computed(() => {
         isToday: date === format(Date.now(), 'yyyy-MM-dd') && isCurrentMonth,
         isSpecialDay: !!specialDay,
         specialDayColor: specialDay?.color,
+        specialDayWeekendColor: specialDay?.weekendColor,
         specialDayName: specialDay?.name,
       });
 
@@ -172,14 +177,22 @@ const getDayClasses = (day: DayItem) => {
 };
 
 const getDayStyles = (day: DayItem) => {
-  if (!day.isSpecialDay || !day.specialDayColor) {
+  if (!day.isSpecialDay) {
     return {};
   }
 
-  const colorNumber = getColorNumber(day.specialDayColor);
+  const activeColor = (day.isWeekend && day.specialDayWeekendColor)
+    ? day.specialDayWeekendColor
+    : day.specialDayColor;
+
+  if (!activeColor) {
+    return {};
+  }
+
+  const colorNumber = getColorNumber(activeColor);
 
   return {
-    backgroundColor: `var(--color-${day.specialDayColor})`,
+    backgroundColor: `var(--color-${activeColor})`,
     color: colorNumber !== null && colorNumber < 500
       ? 'var(--color-for-white-bg-font)'
       : '#fff',
@@ -203,18 +216,35 @@ watch(() => props.modelValue, (val) => {
   currentYear.value = date.getFullYear();
 });
 
-watch(() => [
-  currentMonthIndex.value,
-  currentYear.value,
-], ([
-  currentMonthIndex,
-  currentYear,
-]) => {
-  emit('changeCurrentVisibleMonth', {
-    month: currentMonthIndex,
-    year: currentYear,
-  });
-});
+/**
+ * Batches reactive updates for month and year into a single event tick.
+ *
+ * Prevents emitting intermediate states during year transitions (e.g., when `month`
+ * updates to 0 before `year` updates to 2027), avoiding redundant API calls
+ * for invalid year combinations (like Jan 2026).
+ */
+watch(
+  () => [
+    currentMonthIndex.value,
+    currentYear.value,
+  ],
+  () => {
+    if (isPendingEmit) {
+      return;
+    }
+
+    isPendingEmit = true;
+
+    nextTick(() => {
+      isPendingEmit = false;
+
+      emit('changeCurrentVisibleMonth', {
+        month: currentMonthIndex.value,
+        year: currentYear.value,
+      });
+    });
+  },
+);
 
 onMounted(() => {
   emit('changeCurrentVisibleMonth', {
