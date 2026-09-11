@@ -17,7 +17,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import AntIcon from '../AntIcon.vue';
 import {
-  IconSize,
+  ButtonSize, IconSize,
 } from '../__types';
 import AntButton from '../AntButton.vue';
 import AntSpinner from '../AntSpinner.vue';
@@ -55,6 +55,7 @@ const emit = defineEmits([
   'upload',
   'remove',
 ]);
+const isDisabled = computed(() => props.disabled || props.loading);
 const descriptionFontSize = computed(() => {
   if (props.size === Size.xs2 || props.size === Size.xs) {
     return Size.xs;
@@ -157,15 +158,18 @@ onBeforeUnmount(() => {
     data-e2e="image-input"
   >
     <div
-      class="flex gap-2.5 w-full"
-      :class="{'cursor-pointer': !disabled && !skeleton}"
+      class="flex gap-2.5 w-full relative"
+      :class="{
+        'cursor-pointer': !isDisabled && !skeleton,
+        'cursor-not-allowed': isDisabled && !skeleton,
+      }"
     >
       <div>
         <AntSkeleton
           :visible="skeleton"
           rounded-full
         >
-          <div class="h-[70px] w-[70px] bg-gray-100 rounded-full overflow-hidden flex items-center justify-center">
+          <div class="h-[70px] w-[70px] bg-gray-100 rounded-full overflow-hidden flex items-center justify-center relative">
             <img
               v-if="src"
               :src="src"
@@ -182,7 +186,7 @@ onBeforeUnmount(() => {
 
             <div
               v-if="loading"
-              class="absolute flex items-center justify-center inset-0 bg-base-600/50 rounded-full"
+              class="absolute flex items-center justify-center inset-0 bg-white/50 rounded-full"
             >
               <AntSpinner
                 :state="State.primary"
@@ -196,7 +200,7 @@ onBeforeUnmount(() => {
         <div class="flex items-center relative w-full justify-between gap-2">
           <div class="relative w-full h-full flex items-center">
             <input
-              v-if="!disabled && !skeleton"
+              v-if="!isDisabled && !skeleton"
               ref="fileInput"
               type="file"
               accept="image/*"
@@ -226,10 +230,11 @@ onBeforeUnmount(() => {
           <AntButton
             v-if="src"
             data-e2e="remove-button"
-            :size="Size.lg"
+            :size="ButtonSize.lg"
             :icon-left="faMultiply"
             :skeleton="skeleton"
-            :disabled="disabled"
+            :spinner="loading"
+            :disabled="isDisabled"
             @click.prevent="() => {
               emit('remove');
             }"
@@ -242,10 +247,10 @@ onBeforeUnmount(() => {
           <AntButton
             v-else
             data-e2e="upload-button"
-            :size="Size.lg"
+            :size="ButtonSize.lg"
             :icon-left="faUpload"
             :skeleton="skeleton"
-            :disabled="disabled"
+            :disabled="isDisabled"
             @click="openFileDialog"
           >
             <template #tooltip-content>
