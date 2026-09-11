@@ -80,7 +80,8 @@ const props = withDefaults(defineProps<{
   dataE2e: 'button',
 });
 
-const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
+const isDisabled = computed(() => props.disabled || props.spinner);
+const hasInputState = computed(() => props.skeleton || props.readonly || isDisabled.value);
 const groupedClassList = computed(() => ({
   'rounded-tl-md rounded-bl-md rounded-tr-none rounded-br-none -mr-px': props.grouped === Grouped.left,
   'rounded-none -mx-px': props.grouped === Grouped.center,
@@ -135,7 +136,7 @@ const classes = computed(() => {
   };
 
   return {
-    'transition-all inline-flex items-center justify-center font-medium cursor-pointer select-none h-fit': true,
+    'transition-all inline-flex items-center justify-center font-medium cursor-pointer select-none h-fit relative': true,
     'active:shadow-[inset_0_4px_4px_rgba(0,0,0,0.25)]': !hasInputState.value,
     'p-1 text-2xs gap-1': props.size === ButtonSize.xs3,
     'p-1 text-xs gap-1': props.size === ButtonSize.xs2,
@@ -249,7 +250,7 @@ onMounted(() => {
           :class="classes"
           :type="type"
           :to="to"
-          :disabled="disabled || undefined"
+          :disabled="isDisabled || undefined"
           :tabindex="noFocus || hasInputState ? '-1' : '0'"
           v-bind="$attrs"
           :data-e2e="dataE2e"
@@ -257,15 +258,7 @@ onMounted(() => {
           @click="(e: MouseEvent) => !props.readonly ? $emit('click', e) : null"
           @blur="(e: FocusEvent) => !props.readonly ? $emit('blur', e) : null"
         >
-          <AntSpinner
-            v-if="spinner"
-            :size="spinnerSize"
-            :state="state"
-            :inverted="!filled"
-          />
-
           <slot
-            v-if="!spinner"
             name="icon-left"
           >
             <AntIcon
@@ -276,12 +269,9 @@ onMounted(() => {
             />
           </slot>
 
-          <slot
-            v-if="!spinner"
-          />
+          <slot />
 
           <slot
-            v-if="!spinner"
             name="icon-right"
           >
             <AntIcon
@@ -291,6 +281,18 @@ onMounted(() => {
               :color="iconColor"
             />
           </slot>
+
+          <div
+            v-if="spinner"
+            class="absolute flex w-full h-full justify-center items-center"
+          >
+            <AntSpinner
+              v-if="spinner"
+              :size="spinnerSize"
+              :state="state"
+              :inverted="!filled"
+            />
+          </div>
         </component>
 
         <template #content>

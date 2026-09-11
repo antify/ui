@@ -98,6 +98,7 @@ export const Docs: Story = {
   args: {
     src: '/avatar.jpg',
     label: 'Label',
+    placeholder: 'foo',
     description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod',
   },
 };
@@ -166,6 +167,7 @@ export const Summary: Story = {
        <AntImageInput
          :src="valuedModelValue"
          label="Label"
+         disabled
          description="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod"
        />
      </AntFormGroup>
