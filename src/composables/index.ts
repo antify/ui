@@ -1,2 +1,4 @@
 export * from './useToaster';
-export * from './useAnimatedPlaceholder';
+export {
+  useAnimatedPlaceholder, 
+} from './useAnimatedPlaceholder';

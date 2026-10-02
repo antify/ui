@@ -182,7 +182,6 @@ const arrowClasses = computed(() => {
 
   return variants[props.state];
 });
-const animatedPlaceholder = useAnimatedPlaceholder(() => props.placeholder, () => props.modelValue !== null && props.modelValue !== undefined);
 const selectedCountry = computed(() => {
   if (props.modelValue === null || props.modelValue === undefined) {
     return null;
@@ -202,6 +201,8 @@ const selectedCountry = computed(() => {
     value: country[props.optionValueKey] as string | number,
   };
 });
+// Pause only while a country is displayed; with an unknown country code the placeholder is shown and keeps animating.
+const animatedPlaceholder = useAnimatedPlaceholder(() => props.placeholder, () => selectedCountry.value !== null);
 const skeletonGrouped = computed(() => props.grouped || Grouped.none);
 const iconSize = computed(() => (props.size === Size.lg || props.size === Size.md || props.size === Size.sm ? IconSize.sm : IconSize.xs));
 const fieldProps = computed(() => {

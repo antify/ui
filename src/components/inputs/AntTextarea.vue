@@ -1,15 +1,17 @@
 <script lang="ts" setup>
 import {
-  computed, onMounted, ref, watch,
+  computed, onMounted, ref, useAttrs, watch,
 } from 'vue';
 import {
   Size,
 } from '../../enums/Size.enum';
 import {
-  firstPlaceholder,
   normalizePlaceholder,
   useAnimatedPlaceholder,
 } from '../../composables/useAnimatedPlaceholder';
+import {
+  usePlaceholderHint,
+} from '../../composables/usePlaceholderHint';
 import AntSkeleton from '../AntSkeleton.vue';
 import AntIcon from '../AntIcon.vue';
 import {
@@ -85,8 +87,10 @@ const animatedPlaceholder = useAnimatedPlaceholder(
   () => props.placeholder,
   () => _modelValue.value !== null && _modelValue.value !== undefined && _modelValue.value !== '',
 );
-// Screen readers should read a stable hint instead of the changing intermediate state of the animation.
-const ariaPlaceholder = computed(() => Array.isArray(normalizePlaceholder(props.placeholder)) ? firstPlaceholder(props.placeholder) : undefined);
+const attrs = useAttrs();
+const {
+  hintId, hintText, describedBy,
+} = usePlaceholderHint(() => props.placeholder, () => attrs['aria-describedby'] as string | undefined);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const icons = {
   [InputState.info]: faCircleInfo,
@@ -215,15 +219,21 @@ defineExpose({
       class="block relative w-full h-full"
       :class="{...{'-mr-px': grouped !== Grouped.none}, ..._wrapperClass}"
     >
+      <span
+        v-if="hintText"
+        :id="hintId"
+        class="sr-only"
+      >{{ hintText }}</span>
+
       <textarea
         ref="_inputRef"
         v-model="_modelValue"
         :class="inputClasses"
         :placeholder="normalizePlaceholder(placeholder) !== undefined ? animatedPlaceholder : label"
-        :aria-placeholder="ariaPlaceholder"
         :disabled="disabled || skeleton"
         :readonly="readonly"
         v-bind="$attrs"
+        :aria-describedby="describedBy"
         @blur="onBlur"
       />
 

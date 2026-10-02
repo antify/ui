@@ -18,10 +18,11 @@ import {
   computed, onMounted, nextTick, type Ref, ref, watch,
 } from 'vue';
 import {
-  firstPlaceholder,
-  normalizePlaceholder,
   useAnimatedPlaceholder,
 } from '../../composables/useAnimatedPlaceholder';
+import {
+  usePlaceholderHint,
+} from '../../composables/usePlaceholderHint';
 import AntTag from '../AntTag.vue';
 import AntIcon from '../AntIcon.vue';
 import AntButton from '../AntButton.vue';
@@ -102,8 +103,9 @@ const hasInputState = computed(() => props.skeleton || props.readonly || props.d
 const focusedDropDownItem: Ref<string | number | null> = ref(null);
 const tagInput = ref('');
 const animatedPlaceholder = useAnimatedPlaceholder(() => props.placeholder, () => tagInput.value !== '');
-// Screen readers should read a stable hint instead of the changing intermediate state of the animation.
-const ariaPlaceholder = computed(() => Array.isArray(normalizePlaceholder(props.placeholder)) ? firstPlaceholder(props.placeholder) : undefined);
+const {
+  hintId, hintText, describedBy,
+} = usePlaceholderHint(() => props.placeholder);
 const internalInputRef = ref<HTMLInputElement | null>(null);
 const _inputRef = useVModel(props, 'inputRef', emit);
 const _isNullableActive = computed(() => props.nullable && !props.readonly && Array.isArray(_modelValue.value) && _modelValue.value.length > 0);
@@ -560,12 +562,18 @@ onMounted(() => {
                       class="shrink-0"
                     />
 
+                    <span
+                      v-if="hintText"
+                      :id="hintId"
+                      class="sr-only"
+                    >{{ hintText }}</span>
+
                     <input
                       ref="internalInputRef"
                       v-model="tagInput"
                       type="text"
                       :placeholder="animatedPlaceholder"
-                      :aria-placeholder="ariaPlaceholder"
+                      :aria-describedby="describedBy"
                       :class="inputClasses"
                       :disabled="disabled"
                       :readonly="readonly"

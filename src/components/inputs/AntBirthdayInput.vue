@@ -243,10 +243,18 @@ const daysList = computed(() => {
     tooltip: null,
   }));
 });
-const animatedPlaceholder = useAnimatedPlaceholder(() => props.placeholder, () => !!props.modelValue);
-const isPlaceholder = computed(() => displayValue.value === animatedPlaceholder.value);
+const isValidDate = (year: number, month: number, day: number) => {
+  const date = new Date(year, month - 1, day);
 
-const displayValue = computed(() => {
+  return (
+    date.getFullYear() === year &&
+    date.getMonth() === month - 1 &&
+    date.getDate() === day
+  );
+};
+
+// The formatted date, or null when there is no (valid) value and the placeholder is displayed instead.
+const formattedDate = computed(() => {
   if (props.modelValue) {
     const dateFormatRegex = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -266,18 +274,13 @@ const displayValue = computed(() => {
     }
   }
 
-  return animatedPlaceholder.value;
+  return null;
 });
+// Pause only while a date is displayed; with an invalid value the placeholder is shown and keeps animating.
+const animatedPlaceholder = useAnimatedPlaceholder(() => props.placeholder, () => formattedDate.value !== null);
+const isPlaceholder = computed(() => displayValue.value === animatedPlaceholder.value);
 
-const isValidDate = (year: number, month: number, day: number) => {
-  const date = new Date(year, month - 1, day);
-
-  return (
-    date.getFullYear() === year &&
-    date.getMonth() === month - 1 &&
-    date.getDate() === day
-  );
-};
+const displayValue = computed(() => formattedDate.value ?? animatedPlaceholder.value);
 
 function clearInternalState() {
   selectedYear.value = null;

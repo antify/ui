@@ -1,15 +1,16 @@
 <script lang="ts" setup>
 import {
-  computed, onMounted, watch, useSlots,
+  computed, onMounted, watch, useAttrs, useSlots,
 } from 'vue';
 import {
   Size,
 } from '../../../enums/Size.enum';
 import {
-  firstPlaceholder,
-  normalizePlaceholder,
   useAnimatedPlaceholder,
 } from '../../../composables/useAnimatedPlaceholder';
+import {
+  usePlaceholderHint,
+} from '../../../composables/usePlaceholderHint';
 import AntSkeleton from '../../AntSkeleton.vue';
 import AntIcon from '../../AntIcon.vue';
 import {
@@ -83,8 +84,10 @@ const props = withDefaults(defineProps<{
 const slot = useSlots();
 const hasValue = computed(() => props.modelValue !== null && props.modelValue !== undefined && props.modelValue !== '');
 const animatedPlaceholder = useAnimatedPlaceholder(() => props.placeholder, hasValue);
-// Screen readers should read a stable hint instead of the changing intermediate state of the animation.
-const ariaPlaceholder = computed(() => Array.isArray(normalizePlaceholder(props.placeholder)) ? firstPlaceholder(props.placeholder) : undefined);
+const attrs = useAttrs();
+const {
+  hintId, hintText, describedBy,
+} = usePlaceholderHint(() => props.placeholder, () => attrs['aria-describedby'] as string | undefined);
 const hasInputState = computed(() => props.skeleton || props.disabled);
 const icons = {
   [InputState.info]: faCircleInfo,
@@ -268,13 +271,18 @@ function onClickClearIcon() {
         />
       </div>
 
+      <span
+        v-if="hintText"
+        :id="hintId"
+        class="sr-only"
+      >{{ hintText }}</span>
+
       <input
         ref="_inputRef"
         v-model="_modelValue"
         :class="inputClasses"
         :type="type"
         :placeholder="animatedPlaceholder"
-        :aria-placeholder="ariaPlaceholder"
         :disabled="disabled || skeleton"
         :readonly="readonly"
         :tabindex="hasInputState ? -1 : 0"
@@ -282,6 +290,7 @@ function onClickClearIcon() {
         :max="max"
         title=""
         v-bind="$attrs"
+        :aria-describedby="describedBy"
         :data-e2e-state="state"
         @blur="onBlur"
       >

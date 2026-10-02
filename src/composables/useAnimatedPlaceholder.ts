@@ -22,6 +22,31 @@ export const PLACEHOLDER_DELETE_DELAY = 30;
 export const PLACEHOLDER_PAUSE_DELAY = 400;
 
 /**
+ * Splits a text into user-perceived characters (grapheme clusters), so flags and ZWJ emojis are not cut apart.
+ * Falls back to code points where Intl.Segmenter is not available.
+ */
+function splitGraphemes(text: string): string[] {
+  // Intl.Segmenter is not part of the TypeScript lib target of this package.
+  const Segmenter = (Intl as unknown as {
+    Segmenter?: new (locale?: string, options?: {
+      granularity: 'grapheme';
+    }) => {
+      segment: (input: string) => Iterable<{
+        segment: string;
+      }>;
+    };
+  }).Segmenter;
+
+  if (typeof Segmenter === 'function') {
+    return Array.from(new Segmenter(undefined, {
+      granularity: 'grapheme',
+    }).segment(text), (part) => part.segment);
+  }
+
+  return Array.from(text);
+}
+
+/**
  * Strips empty entries from an array. Strings and undefined are returned unchanged.
  * An array without any usable entry results in undefined (behaves like no placeholder).
  */
@@ -73,10 +98,14 @@ export function useAnimatedPlaceholder(
     }
   }
 
+  function getMediaQuery() {
+    return typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+      ? window.matchMedia('(prefers-reduced-motion: reduce)')
+      : undefined;
+  }
+
   function prefersReducedMotion() {
-    return typeof window !== 'undefined'
-      && typeof window.matchMedia === 'function'
-      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    return getMediaQuery()?.matches === true;
   }
 
   function schedule(fn: () => void, delay: number) {
@@ -109,7 +138,7 @@ export function useAnimatedPlaceholder(
     }
 
     let index = 0;
-    let chars = Array.from(texts[0]);
+    let chars = splitGraphemes(texts[0]);
     let length = 0;
 
     animated.value = '';
@@ -132,7 +161,7 @@ export function useAnimatedPlaceholder(
         schedule(erase, PLACEHOLDER_DELETE_DELAY);
       } else {
         index = (index + 1) % texts.length;
-        chars = Array.from(texts[index]);
+        chars = splitGraphemes(texts[index]);
         schedule(type, PLACEHOLDER_PAUSE_DELAY);
       }
     };
@@ -141,12 +170,18 @@ export function useAnimatedPlaceholder(
   }
 
   if (getCurrentInstance()) {
+    const onMotionChange = () => start();
+    let motionQuery: MediaQueryList | undefined;
+
     onMounted(() => {
       mounted.value = true;
+      motionQuery = getMediaQuery();
+      motionQuery?.addEventListener?.('change', onMotionChange);
       start();
     });
     onBeforeUnmount(() => {
       mounted.value = false;
+      motionQuery?.removeEventListener?.('change', onMotionChange);
       clear();
     });
   }
