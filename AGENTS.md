@@ -49,14 +49,14 @@ There are no tests (no test script, no `*.test`/`*.spec` files). Verify through 
 - `src/install.ts` is a Vue plugin that globally registers every entry of `src/components/index.ts`.
 - `src/components/` holds the components: flat files (`AntButton.vue`, `AntModal.vue`, ...) plus folders `calendar`, `forms`, `inputs`, `layouts`, `navbar`, `table`, `tabs`, `transitions`.
 - `src/components/inputs/` contains all inputs; `inputs/Elements/` holds building blocks (`AntBaseInput`, `AntSelectMenu`, `AntInputLabel`, ...); `inputs/__types/` holds per-component enums/types.
-- Stories live next to components in `<folder>/__stories/<Name>.stories.ts`.
+- Stories live next to components in `<folder>/__stories/<Name>.stories.ts`. Exceptions: `components/Main.stories.ts` and `inputs/AntColorInput/AntColorInput.stories.ts`.
 - `src/enums/` holds shared enums (Size, State, InputState, ...); `src/composables`, `src/constants`, `src/utils.ts` are shared helpers.
 
 ## Adding or changing a component or prop
 
 1. Edit the component's `.vue` file. Components use `<script lang="ts" setup>`, `defineOptions({ inheritAttrs: false })`, `withDefaults(defineProps<{...}>(), {...})` and `useVModel(props, 'modelValue', emit)` for v-model.
 2. For a new prop, add its type in `defineProps` and a default in `withDefaults` if needed. For an enum prop, define the enum in the matching `__types` folder (e.g. `inputs/__types/AntTextInput.types.ts`) and validate it in `onMounted` with `handleEnumValidation(prop, Enum, 'name')`.
-3. Pass it through in the template. Inputs render through `AntBaseInput`; mind `v-bind="$attrs"` because of `inheritAttrs: false`. If several inputs need the prop, change `AntBaseInput` instead.
+3. Pass it through in the template. Date, Number, Password, PhoneNumber, Search, Text and Unit inputs render through `AntBaseInput`; Country, Select and TagInput render through `AntSelectMenu`; almost all inputs (all but `AntRichTextEditor`) wrap their content in `AntField`. Mind `v-bind="$attrs"` because of `inheritAttrs: false`. If several inputs need the prop, change the shared building block (`AntBaseInput`, `AntSelectMenu` or `AntField`) instead.
 4. Update or add the story in `__stories/` (argTypes and an example).
 5. For a new component, add the import and the export entry in `src/components/index.ts`; otherwise it is missing from the package export and from `install.ts`.
 6. Run the checks from the Commands section.
