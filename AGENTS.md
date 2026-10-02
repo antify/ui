@@ -25,6 +25,7 @@ Durations measured on a warm cache (Node 24, pnpm 10.10.0).
 | `pnpm install --frozen-lockfile` | install | ~2 s |
 | `pnpm build` | build `dist/` with unbuild | ~6 s |
 | `pnpm type-check` | `vue-tsc --build --force` (includes `*.stories.ts`) | ~7 s |
+| `pnpm test` | unit tests with vitest (`src/**/__tests__/*.test.ts`) | ~2 s |
 | `pnpm lint` | `eslint src` (no auto-fix) | ~4 s |
 | `pnpm lint:fix` | `eslint src --fix` | ~5 s |
 | `pnpm dev` | Storybook dev server on port 6006 | - |
@@ -34,14 +35,14 @@ Fastest check after a change: `pnpm exec eslint <changed files>` (about 1 s) and
 
 ## Tests
 
-There are no tests (no test script, no `*.test`/`*.spec` files). Verify through `pnpm build`, the type-check of the touched files, lint of the touched files and Storybook.
+Unit tests run with `pnpm test` (vitest, jsdom set per file via `// @vitest-environment jsdom`); so far only composables are covered. Besides, verify through `pnpm build`, the type-check of the touched files, lint of the touched files and Storybook.
 
 ## Known baseline (2026-10-02, main @ 2a83466)
 
 - `pnpm type-check` fails with 60 errors (30 in `src/**/*.vue|ts`, 30 in `*.stories.ts`).
 - `pnpm lint` reports 179 problems (61 errors, 118 warnings).
 - Rule: introduce no new errors in files you touch. Compare the counts before and after your change.
-- The CI workflow `pr.yml` runs type-check and lint as non-blocking steps for this reason; `pnpm build` is blocking.
+- The CI workflow `pr.yml` runs type-check and lint as non-blocking steps for this reason; `pnpm build` and `pnpm test` are blocking.
 
 ## Structure
 

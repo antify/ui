@@ -25,6 +25,9 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Test
+        run: pnpm test
+
       # The type-check and lint baselines on main are not green yet (see AGENTS.md).
       # These steps are informational for now; make them required (remove
       # continue-on-error) once the baseline is green.
