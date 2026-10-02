@@ -101,6 +101,19 @@ export const Docs: Story = {
   },
 };
 
+export const AnimatedPlaceholder: Story = {
+  render: Docs.render,
+  args: {
+    ...Docs.args,
+    label: 'Label',
+    placeholder: [
+      'Enter a name',
+      'Enter an email address',
+      'Enter a phone number',
+    ],
+  },
+};
+
 export const Autofocus: Story = {
   render: (args) => ({
     components: {

@@ -11,6 +11,9 @@ import {
 import {
   faMultiply,
 } from '@fortawesome/free-solid-svg-icons';
+import {
+  useAnimatedPlaceholder,
+} from '../../composables/useAnimatedPlaceholder';
 import AntField from '../forms/AntField.vue';
 import AntButton from '../AntButton.vue';
 import {
@@ -38,7 +41,7 @@ const props = withDefaults(defineProps<{
   skeleton?: boolean;
   messages?: string[];
   nullable?: boolean;
-  placeholder?: string;
+  placeholder?: string | string[];
   monthLabels?: string[];
   tabLabels?: {
     day: string;
@@ -240,7 +243,8 @@ const daysList = computed(() => {
     tooltip: null,
   }));
 });
-const isPlaceholder = computed(() => displayValue.value === props.placeholder);
+const animatedPlaceholder = useAnimatedPlaceholder(() => props.placeholder, () => !!props.modelValue);
+const isPlaceholder = computed(() => displayValue.value === animatedPlaceholder.value);
 
 const displayValue = computed(() => {
   if (props.modelValue) {
@@ -262,7 +266,7 @@ const displayValue = computed(() => {
     }
   }
 
-  return props.placeholder;
+  return animatedPlaceholder.value;
 });
 
 const isValidDate = (year: number, month: number, day: number) => {

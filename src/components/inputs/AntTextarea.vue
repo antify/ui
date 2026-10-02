@@ -5,6 +5,11 @@ import {
 import {
   Size,
 } from '../../enums/Size.enum';
+import {
+  firstPlaceholder,
+  normalizePlaceholder,
+  useAnimatedPlaceholder,
+} from '../../composables/useAnimatedPlaceholder';
 import AntSkeleton from '../AntSkeleton.vue';
 import AntIcon from '../AntIcon.vue';
 import {
@@ -54,7 +59,7 @@ const props = withDefaults(defineProps<{
   wrapperClass?: string | Record<string, boolean>;
   showIcon?: boolean;
   label?: string;
-  placeholder?: string;
+  placeholder?: string | string[];
   description?: string;
   limiter?: boolean;
   max?: number;
@@ -76,6 +81,12 @@ const props = withDefaults(defineProps<{
 });
 
 const _modelValue = useVModel(props, 'modelValue', emit);
+const animatedPlaceholder = useAnimatedPlaceholder(
+  () => props.placeholder,
+  () => _modelValue.value !== null && _modelValue.value !== undefined && _modelValue.value !== '',
+);
+// Screen readers should read a stable hint instead of the changing intermediate state of the animation.
+const ariaPlaceholder = computed(() => Array.isArray(normalizePlaceholder(props.placeholder)) ? firstPlaceholder(props.placeholder) : undefined);
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const icons = {
   [InputState.info]: faCircleInfo,
@@ -208,7 +219,8 @@ defineExpose({
         ref="_inputRef"
         v-model="_modelValue"
         :class="inputClasses"
-        :placeholder="placeholder !== undefined ? placeholder : label"
+        :placeholder="normalizePlaceholder(placeholder) !== undefined ? animatedPlaceholder : label"
+        :aria-placeholder="ariaPlaceholder"
         :disabled="disabled || skeleton"
         :readonly="readonly"
         v-bind="$attrs"

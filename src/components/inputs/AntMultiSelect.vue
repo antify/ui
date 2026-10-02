@@ -19,6 +19,10 @@ import AntIcon from '../AntIcon.vue';
 import {
   faChevronDown, faChevronUp, faMultiply,
 } from '@fortawesome/free-solid-svg-icons';
+import {
+  firstPlaceholder,
+  useAnimatedPlaceholder,
+} from '../../composables/useAnimatedPlaceholder';
 import AntSkeleton from '../AntSkeleton.vue';
 import AntDropdown from '../AntDropdown.vue';
 import AntButton from '../AntButton.vue';
@@ -46,7 +50,7 @@ const props = withDefaults(defineProps<{
   nullable?: boolean;
   label?: string;
   description?: string;
-  placeholder?: string;
+  placeholder?: string | string[];
   size?: Size;
   state?: InputState;
   disabled?: boolean;
@@ -152,13 +156,14 @@ const arrowClasses = computed(() => {
     [variants[props.state]]: true,
   };
 });
+const animatedPlaceholder = useAnimatedPlaceholder(() => props.placeholder, () => actuallyValueLength.value > 0);
 const valueLabel = computed(() => {
   if (!_modelValue.value) {
     return;
   }
 
   if (actuallyValueLength.value === 0) {
-    return props.label || props.placeholder;
+    return props.label || firstPlaceholder(props.placeholder);
   }
 
   if (actuallyValueLength.value === 1) {
@@ -294,10 +299,10 @@ onMounted(() => {
             <slot name="icon" />
 
             <div
-              v-if="(_modelValue === null || actuallyValueLength === 0) && placeholder !== undefined"
+              v-if="(_modelValue === null || actuallyValueLength === 0) && animatedPlaceholder !== undefined"
               :class="placeholderClasses"
             >
-              {{ placeholder }}
+              {{ animatedPlaceholder }}
             </div>
 
             <div

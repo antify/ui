@@ -27,7 +27,7 @@ const emit = defineEmits([
 const props = withDefaults(defineProps<{
   modelValue: string | null;
   label?: string;
-  placeholder?: string;
+  placeholder?: string | string[];
   description?: string;
   size?: Size;
   disabled?: boolean;

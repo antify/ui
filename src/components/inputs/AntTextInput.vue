@@ -4,6 +4,9 @@ import {
 } from 'vue';
 import AntField from '../forms/AntField.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
+import {
+  normalizePlaceholder,
+} from '../../composables/useAnimatedPlaceholder';
 import AntButton from '../AntButton.vue';
 import AntIcon from '../AntIcon.vue';
 import {
@@ -41,7 +44,7 @@ const emit = defineEmits([
 const props = withDefaults(defineProps<{
   modelValue: string | null;
   label?: string;
-  placeholder?: string;
+  placeholder?: string | string[];
   description?: string;
   size?: Size;
   state?: InputState;
@@ -103,7 +106,7 @@ onMounted(() => {
         :skeleton="skeleton"
         :disabled="disabled"
         :readonly="readonly"
-        :placeholder="placeholder !== undefined ? placeholder : label"
+        :placeholder="normalizePlaceholder(placeholder) !== undefined ? normalizePlaceholder(placeholder) : label"
         :show-icon="true"
         v-bind="$attrs"
         :grouped="_nullable ? Grouped.left : Grouped.none"

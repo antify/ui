@@ -32,7 +32,7 @@ const props = withDefaults(defineProps<{
   src: string | null;
   loading?: boolean;
   label?: string;
-  placeholder?: string;
+  placeholder?: string | string[];
   description?: string;
   size?: Size;
   state?: InputState;

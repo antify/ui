@@ -27,6 +27,9 @@ import AntField from '../forms/AntField.vue';
 import AntSelectMenu from './Elements/AntSelectMenu.vue';
 import AntSearch from './AntSearch.vue';
 import AntIcon from '../AntIcon.vue';
+import {
+  useAnimatedPlaceholder,
+} from '../../composables/useAnimatedPlaceholder';
 import AntSkeleton from '../AntSkeleton.vue';
 import AntFlag from '../AntFlag.vue';
 
@@ -35,7 +38,7 @@ const props = withDefaults(defineProps<{
   countries?: Country[];
   label?: string;
   description?: string;
-  placeholder?: string;
+  placeholder?: string | string[];
   size?: Size;
   state?: InputState;
   disabled?: boolean;
@@ -179,6 +182,7 @@ const arrowClasses = computed(() => {
 
   return variants[props.state];
 });
+const animatedPlaceholder = useAnimatedPlaceholder(() => props.placeholder, () => props.modelValue !== null && props.modelValue !== undefined);
 const selectedCountry = computed(() => {
   if (props.modelValue === null || props.modelValue === undefined) {
     return null;
@@ -325,7 +329,7 @@ function closeMenu() {
                 v-else
                 :class="placeholderClasses"
               >
-                {{ placeholder }}
+                {{ animatedPlaceholder }}
               </div>
             </div>
 

@@ -409,6 +409,19 @@ export const withPlaceholder: Story = {
     placeholder: 'Lorem ipsum dolor sit amet',
   },
 };
+export const AnimatedPlaceholder: Story = {
+  render: Docs.render,
+  args: {
+    ...Docs.args,
+    modelValue: null,
+    placeholder: [
+      'Select a patient',
+      'Select a doctor',
+      'Select a room',
+    ],
+  },
+};
+
 export const ellipsisText: Story = {
   render: (args, ctx) => ({
     // @ts-ignore

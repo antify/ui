@@ -4,6 +4,9 @@ import {
 } from 'vue';
 import AntField from '../forms/AntField.vue';
 import AntBaseInput from './Elements/AntBaseInput.vue';
+import {
+  normalizePlaceholder,
+} from '../../composables/useAnimatedPlaceholder';
 import AntIcon from '../AntIcon.vue';
 import {
   Size,
@@ -34,7 +37,7 @@ defineOptions({
 const props = withDefaults(defineProps<{
   modelValue: string | null;
   label?: string;
-  placeholder?: string;
+  placeholder?: string | string[];
   description?: string;
   inputRef?: null | HTMLInputElement;
   size?: Size;
@@ -105,7 +108,7 @@ onMounted(() => {
         :size="size"
         :skeleton="skeleton"
         :disabled="disabled"
-        :placeholder="placeholder || label"
+        :placeholder="normalizePlaceholder(placeholder) || label"
         :show-icon="false"
         v-bind="$attrs"
         @validate="val => $emit('validate', val)"

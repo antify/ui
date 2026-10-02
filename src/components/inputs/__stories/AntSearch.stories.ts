@@ -144,3 +144,15 @@ export const summary: Story = {
     placeholder: 'Search',
   },
 };
+
+export const AnimatedPlaceholder: Story = {
+  render: Docs.render,
+  args: {
+    modelValue: '',
+    placeholder: [
+      'Search for a patient',
+      'Search for an appointment',
+      'Search for an invoice',
+    ],
+  },
+};

@@ -17,6 +17,11 @@ import {
 import {
   computed, onMounted, nextTick, type Ref, ref, watch,
 } from 'vue';
+import {
+  firstPlaceholder,
+  normalizePlaceholder,
+  useAnimatedPlaceholder,
+} from '../../composables/useAnimatedPlaceholder';
 import AntTag from '../AntTag.vue';
 import AntIcon from '../AntIcon.vue';
 import AntButton from '../AntButton.vue';
@@ -46,7 +51,7 @@ const props = withDefaults(defineProps<{
   options: SelectOption[];
   label?: string;
   description?: string;
-  placeholder?: string;
+  placeholder?: string | string[];
   size?: AntTagInputSize;
   state?: InputState;
   disabled?: boolean;
@@ -96,6 +101,9 @@ const _open = useVModel(props, 'open', emit, {
 const hasInputState = computed(() => props.skeleton || props.readonly || props.disabled);
 const focusedDropDownItem: Ref<string | number | null> = ref(null);
 const tagInput = ref('');
+const animatedPlaceholder = useAnimatedPlaceholder(() => props.placeholder, () => tagInput.value !== '');
+// Screen readers should read a stable hint instead of the changing intermediate state of the animation.
+const ariaPlaceholder = computed(() => Array.isArray(normalizePlaceholder(props.placeholder)) ? firstPlaceholder(props.placeholder) : undefined);
 const internalInputRef = ref<HTMLInputElement | null>(null);
 const _inputRef = useVModel(props, 'inputRef', emit);
 const _isNullableActive = computed(() => props.nullable && !props.readonly && Array.isArray(_modelValue.value) && _modelValue.value.length > 0);
@@ -556,7 +564,8 @@ onMounted(() => {
                       ref="internalInputRef"
                       v-model="tagInput"
                       type="text"
-                      :placeholder="placeholder"
+                      :placeholder="animatedPlaceholder"
+                      :aria-placeholder="ariaPlaceholder"
                       :class="inputClasses"
                       :disabled="disabled"
                       :readonly="readonly"

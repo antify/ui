@@ -5,6 +5,11 @@ import {
 import {
   Size,
 } from '../../../enums/Size.enum';
+import {
+  firstPlaceholder,
+  normalizePlaceholder,
+  useAnimatedPlaceholder,
+} from '../../../composables/useAnimatedPlaceholder';
 import AntSkeleton from '../../AntSkeleton.vue';
 import AntIcon from '../../AntIcon.vue';
 import {
@@ -50,7 +55,7 @@ const props = withDefaults(defineProps<{
   state?: InputState;
   disabled?: boolean;
   readonly?: boolean;
-  placeholder?: string;
+  placeholder?: string | string[];
   skeleton?: boolean;
   type?: BaseInputType;
   grouped?: Grouped;
@@ -76,6 +81,10 @@ const props = withDefaults(defineProps<{
   inputRef: null,
 });
 const slot = useSlots();
+const hasValue = computed(() => props.modelValue !== null && props.modelValue !== undefined && props.modelValue !== '');
+const animatedPlaceholder = useAnimatedPlaceholder(() => props.placeholder, hasValue);
+// Screen readers should read a stable hint instead of the changing intermediate state of the animation.
+const ariaPlaceholder = computed(() => Array.isArray(normalizePlaceholder(props.placeholder)) ? firstPlaceholder(props.placeholder) : undefined);
 const hasInputState = computed(() => props.skeleton || props.disabled);
 const icons = {
   [InputState.info]: faCircleInfo,
@@ -264,7 +273,8 @@ function onClickClearIcon() {
         v-model="_modelValue"
         :class="inputClasses"
         :type="type"
-        :placeholder="placeholder"
+        :placeholder="animatedPlaceholder"
+        :aria-placeholder="ariaPlaceholder"
         :disabled="disabled || skeleton"
         :readonly="readonly"
         :tabindex="hasInputState ? -1 : 0"

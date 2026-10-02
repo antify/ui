@@ -32,6 +32,9 @@ import AntIcon from '../AntIcon.vue';
 import {
   faChevronDown, faChevronUp, faMultiply,
 } from '@fortawesome/free-solid-svg-icons';
+import {
+  useAnimatedPlaceholder,
+} from '../../composables/useAnimatedPlaceholder';
 import AntSkeleton from '../AntSkeleton.vue';
 import AntButton from '../AntButton.vue';
 import {
@@ -51,7 +54,7 @@ const props = withDefaults(defineProps<{
   options: SelectOption[];
   label?: string;
   description?: string;
-  placeholder?: string;
+  placeholder?: string | string[];
   size?: Size;
   state?: InputState;
   disabled?: boolean;
@@ -87,6 +90,7 @@ const emit = defineEmits([
 const isOpen = defineModel<boolean>('open', {
   default: false,
 });
+const animatedPlaceholder = useAnimatedPlaceholder(() => props.placeholder, () => props.modelValue !== null);
 const _modelValue = computed({
   get: () => props.modelValue,
   set: (val: string | number | null) => {
@@ -349,10 +353,10 @@ watch(_modelValue, async () => {
               @blur="onBlur"
             >
               <div
-                v-if="_modelValue === null && placeholder !== undefined"
+                v-if="_modelValue === null && animatedPlaceholder !== undefined"
                 :class="placeholderClasses"
               >
-                {{ placeholder }}
+                {{ animatedPlaceholder }}
               </div>
 
               <div
