@@ -1,0 +1,37 @@
+name: pr
+
+on: pull_request
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.14
+
+      - uses: pnpm/action-setup@v3
+        name: Install pnpm
+        with:
+          version: 10.10
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      # The type-check and lint baselines on main are not green yet (see AGENTS.md).
+      # These steps are informational for now; make them required (remove
+      # continue-on-error) once the baseline is green.
+      - name: Type check
+        run: pnpm type-check
+        continue-on-error: true
+
+      - name: Lint
+        run: pnpm lint
+        continue-on-error: true

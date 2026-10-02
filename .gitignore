@@ -32,3 +32,6 @@ coverage
 # claude code personal settings
 .claude/settings.local.json
 .claude/settings.json
+
+# storybook build output
+storybook-static/

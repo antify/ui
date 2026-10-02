@@ -8,6 +8,8 @@
     "build": "unbuild",
     "prepack": "unbuild",
     "type-check": "vue-tsc --build --force",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
     "build-storybook": "storybook build",
     "release": "standard-version && git push --follow-tags && pnpm publish --access public",
     "chromatic": "npx chromatic"
