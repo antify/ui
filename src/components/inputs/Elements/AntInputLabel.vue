@@ -36,6 +36,15 @@ const gapSize = computed(() => ({
   'gap-1': props.size === Size.xs2,
 }));
 
+// The label wraps the slot content, so the browser activates the associated
+// input on any click inside the label box. Only swallow clicks that hit the
+// empty box itself; clicks on the text span or on slot content stay untouched.
+function preventActivationOnEmptyArea(event: MouseEvent) {
+  if (event.target === event.currentTarget) {
+    event.preventDefault();
+  }
+}
+
 onMounted(() => {
   handleEnumValidation(props.size, Size, 'size');
 });
@@ -45,6 +54,7 @@ onMounted(() => {
   <label
     class="flex flex-col w-full"
     :class="gapSize"
+    @click="preventActivationOnEmptyArea"
   >
     <span
       v-if="label"
