@@ -761,3 +761,74 @@ export const DefaultCollapseOpen: Story = {
   }),
   args: Docs.args,
 };
+
+export const Paginated: Story = {
+  render: (args) => ({
+    components: {
+      AntTable,
+      AntButton,
+    },
+    setup() {
+      const createRows = (count: number, prefix: string) => Array.from({
+        length: count,
+      }, (_, index) => ({
+        name: `${prefix} ${index + 1}`,
+        title: faker.person.jobTitle(),
+        email: faker.internet.email(),
+      }));
+      const rows = ref(createRows(30, 'Page 1 row'));
+      const page = ref(1);
+
+      const nextPage = () => {
+        page.value++;
+        rows.value = createRows(30, `Page ${page.value} row`);
+      };
+      const appendRow = () => {
+        rows.value = [
+          ...rows.value,
+          {
+            name: `Appended row ${rows.value.length + 1}`,
+            title: faker.person.jobTitle(),
+            email: faker.internet.email(),
+          },
+        ];
+      };
+
+      return {
+        args,
+        rows,
+        nextPage,
+        appendRow,
+      };
+    },
+    template: `
+      <div class="flex gap-2 mb-2">
+        <AntButton data-e2e="next-page" @click="nextPage">Next page</AntButton>
+        <AntButton data-e2e="append-row" @click="appendRow">Append row</AntButton>
+      </div>
+      <div class="h-64 border border-dashed border-base-300">
+        <AntTable v-bind="args" :data="rows"/>
+      </div>
+    `,
+  }),
+  args: {
+    headers: [
+      {
+        title: 'Name',
+        identifier: 'name',
+        type: AntTableRowTypes.text,
+      },
+      {
+        title: 'Title',
+        identifier: 'title',
+        type: AntTableRowTypes.text,
+      },
+      {
+        title: 'E-Mail',
+        identifier: 'email',
+        type: AntTableRowTypes.text,
+      },
+    ],
+    data: [],
+  },
+};

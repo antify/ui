@@ -3,7 +3,7 @@ import {
   AntTableSize, AntTableSortDirection, type TableHeader,
 } from './__types/TableHeader.types';
 import {
-  computed, onMounted, ref, type Ref, watch,
+  computed, nextTick, onMounted, ref, type Ref, watch,
 } from 'vue';
 import {
   useVModel,
@@ -192,7 +192,21 @@ watch(() => props.showLightVersion, (val) => {
   setTimeout(() => _showLightVersion.value = val, val ? 200 : 400);
 });
 
+const scrollContainer = ref<HTMLElement | null>(null);
+
 watch(() => props.data, (currVal, prevVal) => {
+  // Pagination replaces the list, so scroll back to the top.
+  // Appended rows keep the current scroll position.
+  const isAppend = currVal.length > prevVal.length && prevVal.every((item, index) => currVal[index] === item);
+
+  if (!isAppend) {
+    nextTick(() => {
+      if (scrollContainer.value) {
+        scrollContainer.value.scrollTop = 0;
+      }
+    });
+  }
+
   if (currVal.length > prevVal.length) {
     // Add newest element to the list of open items so it is open by default
     // Necessary when table content is changed dynamically
@@ -221,6 +235,7 @@ onMounted(() => {
   >
     <div
       v-if="!_skeleton"
+      ref="scrollContainer"
       class="overflow-hidden h-full overflow-x-auto overflow-y-auto"
     >
       <table
