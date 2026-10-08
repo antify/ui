@@ -226,7 +226,8 @@ function onKeyPress(event: KeyboardEvent) {
   const target = event.target as HTMLInputElement;
   const currentRawValue = target.value;
 
-  if (event.ctrlKey || event.metaKey || charStr.length > 1) {
+  // Synthetic keypress events (Safari autofill, password managers) carry no key.
+  if (typeof charStr !== 'string' || event.ctrlKey || event.metaKey || charStr.length > 1) {
     return;
   }
 
