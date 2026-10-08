@@ -772,6 +772,7 @@ export const Paginated: Story = {
       const createRows = (count: number, prefix: string) => Array.from({
         length: count,
       }, (_, index) => ({
+        id: faker.string.uuid(),
         name: `${prefix} ${index + 1}`,
         title: faker.person.jobTitle(),
         email: faker.internet.email(),
@@ -787,6 +788,7 @@ export const Paginated: Story = {
         rows.value = [
           ...rows.value,
           {
+            id: faker.string.uuid(),
             name: `Appended row ${rows.value.length + 1}`,
             title: faker.person.jobTitle(),
             email: faker.internet.email(),
@@ -794,17 +796,25 @@ export const Paginated: Story = {
         ];
       };
 
+      const refreshPage = () => {
+        rows.value = rows.value.map((row) => ({
+          ...row,
+        }));
+      };
+
       return {
         args,
         rows,
         nextPage,
         appendRow,
+        refreshPage,
       };
     },
     template: `
       <div class="flex gap-2 mb-2">
         <AntButton data-e2e="next-page" @click="nextPage">Next page</AntButton>
         <AntButton data-e2e="append-row" @click="appendRow">Append row</AntButton>
+        <AntButton data-e2e="refresh-page" @click="refreshPage">Refresh page</AntButton>
       </div>
       <div class="h-64 border border-dashed border-base-300">
         <AntTable v-bind="args" :data="rows"/>

@@ -195,11 +195,21 @@ watch(() => props.showLightVersion, (val) => {
 const scrollContainer = ref<HTMLElement | null>(null);
 
 watch(() => props.data, (currVal, prevVal) => {
-  // Pagination replaces the list, so scroll back to the top.
-  // Appended rows keep the current scroll position.
-  const isAppend = currVal.length > prevVal.length && prevVal.every((item, index) => currVal[index] === item);
+  // A page switch replaces all rows, so scroll back to the top. Refresh, inline edit and
+  // append keep the position. A page switch means disjoint row keys; without keys on all
+  // rows, fall back to comparing object references.
+  const hasKeys = prevVal.concat(currVal).every((row) => row[props.rowKey] !== undefined);
+  let keepPosition: boolean;
 
-  if (!isAppend) {
+  if (hasKeys) {
+    const currKeys = new Set(currVal.map((row) => row[props.rowKey]));
+
+    keepPosition = prevVal.some((row) => currKeys.has(row[props.rowKey]));
+  } else {
+    keepPosition = currVal.length > prevVal.length && prevVal.every((item, index) => currVal[index] === item);
+  }
+
+  if (!keepPosition) {
     nextTick(() => {
       if (scrollContainer.value) {
         scrollContainer.value.scrollTop = 0;
