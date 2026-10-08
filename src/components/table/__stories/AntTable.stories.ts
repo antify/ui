@@ -761,3 +761,84 @@ export const DefaultCollapseOpen: Story = {
   }),
   args: Docs.args,
 };
+
+export const Paginated: Story = {
+  render: (args) => ({
+    components: {
+      AntTable,
+      AntButton,
+    },
+    setup() {
+      const createRows = (count: number, prefix: string) => Array.from({
+        length: count,
+      }, (_, index) => ({
+        id: faker.string.uuid(),
+        name: `${prefix} ${index + 1}`,
+        title: faker.person.jobTitle(),
+        email: faker.internet.email(),
+      }));
+      const rows = ref(createRows(30, 'Page 1 row'));
+      const page = ref(1);
+
+      const nextPage = () => {
+        page.value++;
+        rows.value = createRows(30, `Page ${page.value} row`);
+      };
+      const appendRow = () => {
+        rows.value = [
+          ...rows.value,
+          {
+            id: faker.string.uuid(),
+            name: `Appended row ${rows.value.length + 1}`,
+            title: faker.person.jobTitle(),
+            email: faker.internet.email(),
+          },
+        ];
+      };
+
+      const refreshPage = () => {
+        rows.value = rows.value.map((row) => ({
+          ...row,
+        }));
+      };
+
+      return {
+        args,
+        rows,
+        nextPage,
+        appendRow,
+        refreshPage,
+      };
+    },
+    template: `
+      <div class="flex gap-2 mb-2">
+        <AntButton data-e2e="next-page" @click="nextPage">Next page</AntButton>
+        <AntButton data-e2e="append-row" @click="appendRow">Append row</AntButton>
+        <AntButton data-e2e="refresh-page" @click="refreshPage">Refresh page</AntButton>
+      </div>
+      <div class="h-64 border border-dashed border-base-300">
+        <AntTable v-bind="args" :data="rows"/>
+      </div>
+    `,
+  }),
+  args: {
+    headers: [
+      {
+        title: 'Name',
+        identifier: 'name',
+        type: AntTableRowTypes.text,
+      },
+      {
+        title: 'Title',
+        identifier: 'title',
+        type: AntTableRowTypes.text,
+      },
+      {
+        title: 'E-Mail',
+        identifier: 'email',
+        type: AntTableRowTypes.text,
+      },
+    ],
+    data: [],
+  },
+};
