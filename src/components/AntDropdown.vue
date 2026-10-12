@@ -49,7 +49,7 @@ const {
 });
 
 const _dropdownClasses = computed(() => ({
-  'min-w-[10rem] z-[80]': true,
+  'min-w-[10rem] z-[80] will-change-transform': true,
   ...classesToObjectSyntax(props.dropdownClasses),
 }));
 

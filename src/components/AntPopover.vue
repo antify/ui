@@ -88,7 +88,7 @@ const arrowTransform = computed(() => {
 });
 
 const _popoverClasses = computed(() => ({
-  'z-[90] min-w-[10rem]': true,
+  'z-[90] min-w-[10rem] will-change-transform': true,
   ...classesToObjectSyntax(props.popoverClasses),
 }));
 const itemContainerClasses = computed(() => ({
